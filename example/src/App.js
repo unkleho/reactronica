@@ -1,13 +1,38 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import ExampleComponent from 'reactronica'
+import Reactronica from 'reactronica';
 
 export default class App extends Component {
-  render () {
-    return (
-      <div>
-        <ExampleComponent text='Modern React component module' />
-      </div>
-    )
-  }
+	state = {
+		notes: [],
+	};
+
+	handleNoteDown = (e) => {
+		this.setState({
+			notes: [{ name: 'C3' }],
+		});
+	};
+
+	handleNoteUp = () => {
+		this.setState({
+			notes: [],
+		});
+	};
+
+	render() {
+		return (
+			<div>
+				<div
+					onMouseDown={this.handleNoteDown}
+					onMouseUp={this.handleNoteUp}
+					onTouchStart={this.handleNoteDown}
+					onTouchEnd={this.handleNoteUp}
+				>
+					Play Note
+				</div>
+
+				<Reactronica notes={this.state.notes} />
+			</div>
+		);
+	}
 }

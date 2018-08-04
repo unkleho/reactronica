@@ -17,6 +17,10 @@
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build"
   },
+  "dependencies": {
+    "startaudiocontext": "^1.2.1",
+    "tone": "^0.12.80"
+  },
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^15.0.0 || ^16.0.0",
@@ -31,8 +35,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^5.1.4",
     "eslint": "^5.0.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-config-standard-react": "^6.0.0",
+    "eslint-config-react-app": "^2.1.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
@@ -52,8 +55,5 @@
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "tone": "^0.12.80"
-  }
+  ]
 }
