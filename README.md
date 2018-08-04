@@ -1,6 +1,6 @@
 # reactronica
 
-> React components for making music
+> 
 
 [![NPM](https://img.shields.io/npm/v/reactronica.svg)](https://www.npmjs.com/package/reactronica) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -12,12 +12,12 @@ npm install --save reactronica
 
 ## Usage
 
-```tsx
-import * as React from 'react'
+```jsx
+import React, { Component } from 'react'
 
 import MyComponent from 'reactronica'
 
-class Example extends React.Component {
+class Example extends Component {
   render () {
     return (
       <MyComponent />
