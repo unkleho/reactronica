@@ -5,11 +5,17 @@ import { SongContext } from './Song';
 import { StepType } from '../types/propTypes';
 import { isEqual } from '../lib/utils';
 
+export const TrackContext = React.createContext();
+
 class TrackConsumer extends Component {
 	static propTypes = {
 		steps: PropTypes.arrayOf(StepType),
 		onStepStart: PropTypes.func,
 		interval: PropTypes.string, // react-music = resolution
+	};
+
+	state = {
+		instruments: [],
 	};
 
 	componentDidMount() {
@@ -30,7 +36,7 @@ class TrackConsumer extends Component {
 				(time, step) => {
 					if (step.note) {
 						// Play sound
-						this.props.instruments[0].triggerAttackRelease(
+						this.state.instruments[0].triggerAttackRelease(
 							step.note.name || step.note,
 							step.duration,
 							undefined,
@@ -67,8 +73,22 @@ class TrackConsumer extends Component {
 		}
 	}
 
+	updateInstruments = (instruments) => {
+		this.setState({
+			instruments,
+		});
+	};
+
 	render() {
-		return <div>{this.props.children}</div>;
+		return (
+			<TrackContext.Provider
+				value={{
+					updateInstruments: this.updateInstruments,
+				}}
+			>
+				{this.props.children}
+			</TrackContext.Provider>
+		);
 	}
 }
 

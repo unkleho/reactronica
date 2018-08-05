@@ -41,30 +41,51 @@ export default class App extends Component {
 				</button>
 
 				<Song isPlaying={this.state.isPlaying}>
-					<Track
-						steps={[
-							{
-								note: 'C3',
-								duration: 1,
-								// position: 0,
-							},
-							null,
-							null,
-							null,
-							{
-								note: 'D3',
-								duration: 1,
-								// position: 2,
-							},
-							null,
-							null,
-							null,
-						]}
-					>
-						<Instrument notes={this.state.notes} />
-					</Track>
+					{[stepsA, stepsB].map((steps, i) => (
+						<Track steps={steps} key={i}>
+							<Instrument notes={this.state.notes} />
+						</Track>
+					))}
 				</Song>
 			</div>
 		);
 	}
 }
+
+const stepsA = [
+	{
+		note: 'C3',
+		duration: 1,
+		// position: 0,
+	},
+	null,
+	null,
+	null,
+	{
+		note: 'D3',
+		duration: 1,
+		// position: 2,
+	},
+	null,
+	null,
+	null,
+];
+
+const stepsB = [
+	null,
+	{
+		note: 'C5',
+		duration: 1,
+		// position: 0,
+	},
+	null,
+	null,
+	null,
+	null,
+	{
+		note: 'D5',
+		duration: 1,
+		// position: 2,
+	},
+	null,
+];

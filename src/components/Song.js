@@ -50,12 +50,6 @@ export default class Song extends Component {
 		});
 	};
 
-	updateInstruments = (instruments) => {
-		this.setState({
-			instruments,
-		});
-	};
-
 	render() {
 		const { tracks, instruments } = this.state;
 		const { isPlaying } = this.props;
@@ -66,7 +60,6 @@ export default class Song extends Component {
 					tracks,
 					instruments,
 					updateTracks: this.updateTracks,
-					updateInstruments: this.updateInstruments,
 					isPlaying,
 				}}
 			>

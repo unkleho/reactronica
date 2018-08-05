@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { SongContext } from './Song';
+import { TrackContext } from './Track';
 import { NoteType } from '../types/propTypes';
 
 class InstrumentConsumer extends Component {
 	static propTypes = {
 		notes: PropTypes.arrayOf(NoteType), // Currently played notes.
 		updateInstruments: PropTypes.func,
+		polyphony: PropTypes.number,
+		options: PropTypes.object,
 	};
 
 	static defaultProps = {
 		notes: [],
-		// tracks: [],
 		instruments: [],
+		polyphony: 4,
+		options: {
+			oscillator: {
+				partials: [0, 2, 3, 4],
+			},
+		},
 	};
 
 	componentDidMount() {
 		this.Tone = require('tone'); // eslint-disable-line
 
 		// Build Synth
-		this.synth = new this.Tone.PolySynth(6, this.Tone.Synth, {
-			oscillator: {
-				partials: [0, 2, 3, 4],
-			},
-		}).toMaster();
+		this.synth = new this.Tone.PolySynth(
+			this.props.polyphony,
+			this.Tone.Synth,
+			this.props.options,
+		).toMaster();
 
-		// Add this Track to Song Context
+		// Add this Instrument to Track Context
 		this.props.updateInstruments([this.synth]);
 	}
 
@@ -66,9 +73,14 @@ class InstrumentConsumer extends Component {
 export default class Instrument extends Component {
 	render() {
 		return (
-			<SongContext.Consumer>
-				{(value) => <InstrumentConsumer {...value} {...this.props} />}
-			</SongContext.Consumer>
+			<TrackContext.Consumer>
+				{(trackContextValue) => (
+					<InstrumentConsumer
+						updateInstruments={trackContextValue.updateInstruments}
+						{...this.props}
+					/>
+				)}
+			</TrackContext.Consumer>
 		);
 	}
 }
