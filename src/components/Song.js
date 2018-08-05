@@ -2,19 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StartAudioContext from 'startaudiocontext';
 
-import { NoteType, StepType } from '../types/propTypes';
-import { isEqual } from '../lib/utils';
+import { StepType } from '../types/propTypes';
+// import { isEqual } from '../lib/utils';
 
 export const SongContext = React.createContext();
 
-export class Song extends Component {
+export default class Song extends Component {
 	static propTypes = {
-		notes: PropTypes.arrayOf(NoteType), // Currently played notes.
-		steps: PropTypes.arrayOf(StepType),
 		isPlaying: PropTypes.bool,
+		tempo: PropTypes.number,
+		steps: PropTypes.arrayOf(StepType),
 		onStepStart: PropTypes.func,
 		interval: PropTypes.string, // react-music = resolution
-		tempo: PropTypes.number,
 	};
 
 	static defaultProps = {
@@ -26,68 +25,22 @@ export class Song extends Component {
 
 	state = {
 		tracks: [],
+		instruments: [],
 	};
 
 	componentDidMount() {
 		this.Tone = require('tone'); // eslint-disable-line
+		this.Tone.Transport.bpm.value = this.props.tempo;
 
 		// iOS Web Audio API requires this library.
 		StartAudioContext(this.Tone.context);
 	}
 
 	componentDidUpdate(prevProps) {
-		// console.log(prevProps, this.props);
-
-		// STEPS
-		// -------------------------------------------------------------------------
-
-		// Start/Stop sequencer!
 		if (!prevProps.isPlaying && this.props.isPlaying) {
-			this.stepsToPlay = this.props.steps;
-
-			console.log(this.props.steps);
-
-			this.seq = new this.Tone.Sequence(
-				(time, step) => {
-					if (step.note) {
-						// Play sound
-						this.state.tracks[0].triggerAttackRelease(
-							step.note.name || step.note,
-							step.duration,
-							undefined,
-							step.velocity,
-						);
-					}
-
-					if (typeof this.props.onStepStart === 'function') {
-						this.props.onStepStart(step);
-					}
-				},
-				this.stepsToPlay,
-				this.props.interval,
-			);
-
-			this.Tone.Transport.bpm.value = this.props.tempo;
 			this.Tone.Transport.start();
-			this.seq.start(0);
 		} else if (prevProps.isPlaying && !this.props.isPlaying) {
 			this.Tone.Transport.stop();
-			this.seq.stop();
-		}
-
-		// Update sequencer
-		if (this.props.isPlaying) {
-			// Deep compare prev and new steps, only update if they are different
-			const isStepsNeedUpdating = isEqual(prevProps.steps, this.props.steps);
-
-			if (isStepsNeedUpdating) {
-				this.stepsToPlay = this.props.steps;
-				this.seq.removeAll();
-
-				this.stepsToPlay.forEach((note, i) => {
-					this.seq.add(i, note);
-				});
-			}
 		}
 	}
 
@@ -97,12 +50,26 @@ export class Song extends Component {
 		});
 	};
 
+	updateInstruments = (instruments) => {
+		this.setState({
+			instruments,
+		});
+	};
+
 	render() {
-		const { tracks } = this.state;
-		console.log(tracks);
+		const { tracks, instruments } = this.state;
+		const { isPlaying } = this.props;
 
 		return (
-			<SongContext.Provider value={{ tracks, updateTracks: this.updateTracks }}>
+			<SongContext.Provider
+				value={{
+					tracks,
+					instruments,
+					updateTracks: this.updateTracks,
+					updateInstruments: this.updateInstruments,
+					isPlaying,
+				}}
+			>
 				{this.props.children}
 			</SongContext.Provider>
 		);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Song, Track } from 'reactronica';
+import { Song, Track, Instrument } from 'reactronica';
 
 export default class App extends Component {
 	state = {
@@ -40,26 +40,29 @@ export default class App extends Component {
 					Play Note
 				</button>
 
-				<Song
-					steps={[
-						{
-							note: 'C3',
-							// position: 0,
-						},
-						null,
-						null,
-						null,
-						{
-							note: 'D3',
-							// position: 2,
-						},
-						null,
-						null,
-						null,
-					]}
-					isPlaying={this.state.isPlaying}
-				>
-					<Track notes={this.state.notes} />
+				<Song isPlaying={this.state.isPlaying}>
+					<Track
+						steps={[
+							{
+								note: 'C3',
+								duration: 1,
+								// position: 0,
+							},
+							null,
+							null,
+							null,
+							{
+								note: 'D3',
+								duration: 1,
+								// position: 2,
+							},
+							null,
+							null,
+							null,
+						]}
+					>
+						<Instrument notes={this.state.notes} />
+					</Track>
 				</Song>
 			</div>
 		);
