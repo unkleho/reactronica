@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import Reactronica from 'reactronica';
+import { Song, Track } from 'reactronica';
 
 export default class App extends Component {
 	state = {
 		notes: [],
+		isPlaying: false,
 	};
 
 	handleNoteDown = (e) => {
@@ -19,19 +20,47 @@ export default class App extends Component {
 		});
 	};
 
+	togglePlaying = () => {
+		this.setState({
+			isPlaying: !this.state.isPlaying,
+		});
+	};
+
 	render() {
 		return (
 			<div>
-				<div
+				<button onClick={this.togglePlaying}>Play</button>
+
+				<button
 					onMouseDown={this.handleNoteDown}
 					onMouseUp={this.handleNoteUp}
 					onTouchStart={this.handleNoteDown}
 					onTouchEnd={this.handleNoteUp}
 				>
 					Play Note
-				</div>
+				</button>
 
-				<Reactronica notes={this.state.notes} />
+				<Song
+					steps={[
+						{
+							note: 'C3',
+							// position: 0,
+						},
+						null,
+						null,
+						null,
+						{
+							note: 'D3',
+							// position: 2,
+						},
+						null,
+						null,
+						null,
+					]}
+					isPlaying={this.state.isPlaying}
+				>
+					<Track notes={this.state.notes} />
+				</Song>
 			</div>
 		);
 	}
