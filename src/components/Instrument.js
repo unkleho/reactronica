@@ -10,6 +10,8 @@ class InstrumentConsumer extends Component {
 		updateInstruments: PropTypes.func,
 		polyphony: PropTypes.number,
 		options: PropTypes.object,
+		// An instance of new this.Tone.PanVol()
+		trackChannel: PropTypes.object,
 	};
 
 	static defaultProps = {
@@ -21,23 +23,49 @@ class InstrumentConsumer extends Component {
 				partials: [0, 2, 3, 4],
 			},
 		},
+		trackChannel: null,
 	};
 
-	componentDidMount() {
-		this.Tone = require('tone'); // eslint-disable-line
-
-		// Build Synth
+	initInstrument() {
 		this.synth = new this.Tone.PolySynth(
 			this.props.polyphony,
 			this.Tone.Synth,
 			this.props.options,
-		).toMaster();
+		);
+	}
+
+	connectInstrument(trackChannel) {
+		if (trackChannel) {
+			this.synth.disconnect();
+			this.synth.connect(trackChannel);
+		} else {
+			this.synth.disconnect();
+			this.synth.toMaster();
+		}
+	}
+
+	componentDidMount() {
+		this.Tone = require('tone'); // eslint-disable-line
+
+		// Set up instrument
+		this.initInstrument();
+		this.connectInstrument();
 
 		// Add this Instrument to Track Context
 		this.props.updateInstruments([this.synth]);
 	}
 
 	componentDidUpdate(prevProps) {
+		// -------------------------------------------------------------------------
+		// CONNECT
+		// -------------------------------------------------------------------------
+
+		if (prevProps.trackChannel !== this.props.trackChannel) {
+			// Connect or disconnect instrument to new trackChannel
+			this.connectInstrument(this.props.trackChannel);
+		}
+
+		// -------------------------------------------------------------------------
 		// NOTES
 		// -------------------------------------------------------------------------
 
@@ -77,6 +105,7 @@ export default class Instrument extends Component {
 				{(trackContextValue) => (
 					<InstrumentConsumer
 						updateInstruments={trackContextValue.updateInstruments}
+						trackChannel={trackContextValue.trackChannel}
 						{...this.props}
 					/>
 				)}

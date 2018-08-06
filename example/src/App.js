@@ -6,6 +6,8 @@ export default class App extends Component {
 	state = {
 		notes: [],
 		isPlaying: false,
+		volume: 0,
+		pan: 0,
 	};
 
 	handleNoteDown = (e) => {
@@ -26,7 +28,21 @@ export default class App extends Component {
 		});
 	};
 
+	handleVolumeClick = () => {
+		this.setState({
+			volume: -32,
+		});
+	};
+
+	handlePanClick = () => {
+		this.setState({
+			pan: 1,
+		});
+	};
+
 	render() {
+		const { isPlaying, volume, notes, pan } = this.state;
+
 		return (
 			<div>
 				<button onClick={this.togglePlaying}>Play</button>
@@ -40,10 +56,13 @@ export default class App extends Component {
 					Play Note
 				</button>
 
-				<Song isPlaying={this.state.isPlaying}>
+				<button onClick={this.handleVolumeClick}>change volume</button>
+				<button onClick={this.handlePanClick}>change pan</button>
+
+				<Song isPlaying={isPlaying}>
 					{[stepsA, stepsB].map((steps, i) => (
-						<Track steps={steps} key={i}>
-							<Instrument notes={this.state.notes} />
+						<Track steps={steps} volume={volume} pan={pan} key={i}>
+							<Instrument notes={notes} />
 						</Track>
 					))}
 				</Song>

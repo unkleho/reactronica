@@ -12,19 +12,45 @@ class TrackConsumer extends Component {
 		steps: PropTypes.arrayOf(StepType),
 		onStepStart: PropTypes.func,
 		interval: PropTypes.string, // react-music = resolution
+		volume: PropTypes.number,
+		pan: PropTypes.number,
+	};
+
+	static defaultProps = {
+		volume: 0,
+		pan: 0,
 	};
 
 	state = {
 		instruments: [],
+		track: null,
 	};
 
 	componentDidMount() {
 		this.Tone = require('tone'); // eslint-disable-line
+
+		// Example of chaining
+		// const feedbackDelay = new this.Tone.FeedbackDelay('8n', 0.5);
+		const trackChain = [
+			// feedbackDelay,
+			this.Tone.Master,
+		];
+
+		// Setup new track based on pan and volume component
+		this.trackChannel = new this.Tone.PanVol(
+			this.props.pan,
+			this.props.volume,
+		).chain(...trackChain);
+
+		this.setState({
+			trackChannel: this.trackChannel,
+		});
 	}
 
 	componentDidUpdate(prevProps) {
 		// console.log(prevProps, this.props);
 
+		// -------------------------------------------------------------------------
 		// STEPS
 		// -------------------------------------------------------------------------
 
@@ -71,6 +97,18 @@ class TrackConsumer extends Component {
 				});
 			}
 		}
+
+		// -------------------------------------------------------------------------
+		// VOLUME / PAN
+		// -------------------------------------------------------------------------
+
+		if (prevProps.volume !== this.props.volume) {
+			this.trackChannel.volume.value = this.props.volume;
+		}
+
+		if (prevProps.pan !== this.props.pan) {
+			this.trackChannel.pan.value = this.props.pan;
+		}
 	}
 
 	updateInstruments = (instruments) => {
@@ -84,6 +122,7 @@ class TrackConsumer extends Component {
 			<TrackContext.Provider
 				value={{
 					updateInstruments: this.updateInstruments,
+					trackChannel: this.state.trackChannel,
 				}}
 			>
 				{this.props.children}

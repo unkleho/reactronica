@@ -22,16 +22,23 @@ class Example extends Component {
 		return (
 			<Song tempo={90} isPlaying={false} volume={100}>
 				<Track name="Beats" steps={[]} volume={100} effects={[]}>
-					<Instrument type="sampler" settings={settings} notes={[]} />
+					<Instrument type="sampler" options={options} notes={[]}>
+						<Effect />
+					</Instrument>
+					<Effect />
 				</Track>
 				<Track name="Melody" steps={[]} effects={[]}>
-					<Instrument type="synth" settings={settings} notes={[]} />
+					<Instrument type="synth" options={options} notes={[]} />
 				</Track>
 			</Song>
 		);
 	}
 }
 ```
+
+## Thanks
+
+https://github.com/transitive-bullshit/create-react-library
 
 ## License
 
