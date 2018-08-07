@@ -7,11 +7,11 @@ import { NoteType } from '../types/propTypes';
 class InstrumentConsumer extends Component {
 	static propTypes = {
 		notes: PropTypes.arrayOf(NoteType), // Currently played notes.
-		updateInstruments: PropTypes.func,
 		polyphony: PropTypes.number,
 		options: PropTypes.object,
 		// An instance of new this.Tone.PanVol()
 		trackChannel: PropTypes.object,
+		updateInstruments: PropTypes.func,
 	};
 
 	static defaultProps = {

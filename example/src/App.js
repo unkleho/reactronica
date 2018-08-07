@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Song, Track, Instrument } from 'reactronica';
+import { Song, Track, Instrument, Effect } from 'reactronica';
 
 export default class App extends Component {
 	state = {
@@ -8,6 +8,8 @@ export default class App extends Component {
 		isPlaying: false,
 		volume: 0,
 		pan: 0,
+		hasEffect: false,
+		feedback: 0.2,
 	};
 
 	handleNoteDown = (e) => {
@@ -40,6 +42,18 @@ export default class App extends Component {
 		});
 	};
 
+	handleEffectClick = () => {
+		this.setState({
+			hasEffect: true,
+		});
+	};
+
+	handleFeedbackClick = () => {
+		this.setState({
+			feedback: 0.7,
+		});
+	};
+
 	render() {
 		const { isPlaying, volume, notes, pan } = this.state;
 
@@ -58,10 +72,29 @@ export default class App extends Component {
 
 				<button onClick={this.handleVolumeClick}>change volume</button>
 				<button onClick={this.handlePanClick}>change pan</button>
+				<button onClick={this.handleEffectClick}>Add effect</button>
+				<button onClick={this.handleFeedbackClick}>Add more feedback</button>
 
 				<Song isPlaying={isPlaying}>
 					{[stepsA, stepsB].map((steps, i) => (
-						<Track steps={steps} volume={volume} pan={pan} key={i}>
+						<Track
+							steps={steps}
+							volume={volume}
+							pan={pan}
+							effects={
+								this.state.hasEffect
+									? [
+											<Effect
+												key="effect-1"
+												delayTime={'16n'}
+												feedback={this.state.feedback}
+											/>,
+											// <Effect key="effect-2" />,
+									  ]
+									: []
+							}
+							key={i}
+						>
 							<Instrument notes={notes} />
 						</Track>
 					))}

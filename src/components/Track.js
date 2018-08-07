@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { SongContext } from './Song';
@@ -14,16 +14,19 @@ class TrackConsumer extends Component {
 		interval: PropTypes.string, // react-music = resolution
 		volume: PropTypes.number,
 		pan: PropTypes.number,
+		effects: PropTypes.arrayOf(PropTypes.element), // TODO: Consider accepting Tone effects signals
 	};
 
 	static defaultProps = {
 		volume: 0,
 		pan: 0,
+		effects: [],
 	};
 
 	state = {
 		instruments: [],
 		track: null,
+		effectsChain: [], // An array of Tone effects
 	};
 
 	componentDidMount() {
@@ -31,24 +34,41 @@ class TrackConsumer extends Component {
 
 		// Example of chaining
 		// const feedbackDelay = new this.Tone.FeedbackDelay('8n', 0.5);
-		const trackChain = [
-			// feedbackDelay,
-			this.Tone.Master,
-		];
+		// this.trackChain = [
+		// feedbackDelay,
+		// this.Tone.Master,
+		// ];
 
 		// Setup new track based on pan and volume component
-		this.trackChannel = new this.Tone.PanVol(
+		this.trackChannelBase = new this.Tone.PanVol(
 			this.props.pan,
 			this.props.volume,
-		).chain(...trackChain);
+		);
+		this.updateTrackChannelEffects();
+	}
 
+	updateTrackChannelEffects = (effectsChain = []) => {
+		this.trackChannel = this.trackChannelBase.chain(
+			...effectsChain,
+			this.Tone.Master,
+		);
+
+		// Set this to pass it Instrument
 		this.setState({
 			trackChannel: this.trackChannel,
 		});
-	}
+	};
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps, prevState) {
 		// console.log(prevProps, this.props);
+
+		// -------------------------------------------------------------------------
+		// UPDATE EFFECTS
+		// -------------------------------------------------------------------------
+
+		if (prevState.effectsChain !== this.state.effectsChain) {
+			this.updateTrackChannelEffects(this.state.effectsChain);
+		}
 
 		// -------------------------------------------------------------------------
 		// STEPS
@@ -62,6 +82,7 @@ class TrackConsumer extends Component {
 				(time, step) => {
 					if (step.note) {
 						// Play sound
+						// TODO: Handle multiple instruments
 						this.state.instruments[0].triggerAttackRelease(
 							step.note.name || step.note,
 							step.duration,
@@ -117,15 +138,28 @@ class TrackConsumer extends Component {
 		});
 	};
 
+	updateEffectsChain = (effectsChain) => {
+		this.setState({
+			effectsChain,
+		});
+	};
+
 	render() {
+		const { effectsChain } = this.state;
+
 		return (
 			<TrackContext.Provider
 				value={{
-					updateInstruments: this.updateInstruments,
 					trackChannel: this.state.trackChannel,
+					effectsChain,
+					updateInstruments: this.updateInstruments,
+					updateEffectsChain: this.updateEffectsChain,
 				}}
 			>
-				{this.props.children}
+				<Fragment>
+					{this.props.children}
+					{this.props.effects}
+				</Fragment>
 			</TrackContext.Provider>
 		);
 	}
