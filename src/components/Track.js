@@ -48,6 +48,8 @@ class TrackConsumer extends Component {
 	}
 
 	updateTrackChannelEffects = (effectsChain = []) => {
+		console.log(effectsChain);
+
 		this.trackChannel = this.trackChannelBase.chain(
 			...effectsChain,
 			this.Tone.Master,
@@ -138,10 +140,19 @@ class TrackConsumer extends Component {
 		});
 	};
 
-	updateEffectsChain = (effectsChain) => {
-		this.setState({
-			effectsChain,
+	addToEffectsChain = (effectsChain) => {
+		// Alternative way of setting state, more robust.
+		this.setState((prevState) => {
+			return {
+				...prevState,
+				effectsChain: [...prevState.effectsChain, effectsChain],
+			};
 		});
+	};
+
+	// TODO
+	removeFromEffectsChain = (effectsChain) => {
+		// ETc
 	};
 
 	render() {
@@ -153,7 +164,7 @@ class TrackConsumer extends Component {
 					trackChannel: this.state.trackChannel,
 					effectsChain,
 					updateInstruments: this.updateInstruments,
-					updateEffectsChain: this.updateEffectsChain,
+					addToEffectsChain: this.addToEffectsChain,
 				}}
 			>
 				<Fragment>

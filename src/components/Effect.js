@@ -5,10 +5,11 @@ import { TrackContext } from './Track';
 
 class EffectConsumer extends Component {
 	static propTypes = {
-		delayTime: PropTypes.number,
+		type: PropTypes.string.isRequired,
+		delayTime: PropTypes.string,
 		feedback: PropTypes.number,
-		effectsChain: PropTypes.array, // effectsChain?
-		updateEffectsChain: PropTypes.func,
+		effectsChain: PropTypes.array, // An array of Tone JS effects
+		addToEffectsChain: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -17,19 +18,28 @@ class EffectConsumer extends Component {
 	};
 
 	componentDidMount() {
+		console.log('Effect mount');
+		console.log(this.props.id);
+
 		this.Tone = require('tone'); // eslint-disable-line
 
-		this.effect = new this.Tone.FeedbackDelay(
-			this.props.delayTime,
-			this.props.feedback,
-		);
+		if (this.props.type === 'feedbackDelay') {
+			this.effect = new this.Tone.FeedbackDelay(
+				this.props.delayTime,
+				this.props.feedback,
+			);
+			// Assign unique id
+			// Potentially used uuid
+			this.effect.id = this.props.id;
+		}
 
 		// An array of effects in Track that this Effect belongs to
-		// TODO: Use this to update new chain
+		// TODO: Use this to update new chain.
 		// console.log(this.props.effectsChain);
 
 		// Update effects chain
-		this.props.updateEffectsChain([this.effect]);
+		// TODO: Work out which index to insert current this.effect
+		this.props.addToEffectsChain(this.effect);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -49,7 +59,7 @@ export default class Effect extends Component {
 			<TrackContext.Consumer>
 				{(value) => (
 					<EffectConsumer
-						updateEffectsChain={value.updateEffectsChain}
+						addToEffectsChain={value.addToEffectsChain}
 						effectsChain={value.effectsChain}
 						{...this.props}
 					/>

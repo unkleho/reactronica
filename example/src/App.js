@@ -85,11 +85,17 @@ export default class App extends Component {
 								this.state.hasEffect
 									? [
 											<Effect
+												type="feedbackDelay"
 												key="effect-1"
+												id="effect-1"
 												delayTime={'16n'}
 												feedback={this.state.feedback}
 											/>,
-											// <Effect key="effect-2" />,
+											<Effect
+												type="feedbackDelay"
+												key="effect-2"
+												id="effect-2"
+											/>,
 									  ]
 									: []
 							}
