@@ -44,7 +44,7 @@ export default class App extends Component {
 
 	handleEffectClick = () => {
 		this.setState({
-			hasEffect: true,
+			hasEffect: !this.state.hasEffect,
 		});
 	};
 
@@ -72,11 +72,11 @@ export default class App extends Component {
 
 				<button onClick={this.handleVolumeClick}>change volume</button>
 				<button onClick={this.handlePanClick}>change pan</button>
-				<button onClick={this.handleEffectClick}>Add effect</button>
+				<button onClick={this.handleEffectClick}>Toggle Effect</button>
 				<button onClick={this.handleFeedbackClick}>Add more feedback</button>
 
 				<Song isPlaying={isPlaying}>
-					{[stepsA, stepsB].map((steps, i) => (
+					{[stepsA].map((steps, i) => (
 						<Track
 							steps={steps}
 							volume={volume}
@@ -91,11 +91,11 @@ export default class App extends Component {
 												delayTime={'16n'}
 												feedback={this.state.feedback}
 											/>,
-											<Effect
-												type="feedbackDelay"
-												key="effect-2"
-												id="effect-2"
-											/>,
+											// <Effect
+											// 	type="feedbackDelay"
+											// 	key="effect-2"
+											// 	id="effect-2"
+											// />,
 									  ]
 									: []
 							}

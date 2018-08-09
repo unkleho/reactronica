@@ -35,6 +35,8 @@ class InstrumentConsumer extends Component {
 	}
 
 	connectInstrument(trackChannel) {
+		console.log('<Instrument />', 'connectInstrument', trackChannel);
+
 		if (trackChannel) {
 			this.synth.disconnect();
 			this.synth.connect(trackChannel);
@@ -45,6 +47,8 @@ class InstrumentConsumer extends Component {
 	}
 
 	componentDidMount() {
+		console.log('<Instrument />', 'mount');
+
 		this.Tone = require('tone'); // eslint-disable-line
 
 		// Set up instrument
@@ -62,6 +66,12 @@ class InstrumentConsumer extends Component {
 
 		if (prevProps.trackChannel !== this.props.trackChannel) {
 			// Connect or disconnect instrument to new trackChannel
+			console.log('<Instrument />', 'connectInstrument');
+
+			this.connectInstrument(this.props.trackChannel);
+		}
+
+		if (prevProps.effectsChain !== this.props.effectsChain) {
 			this.connectInstrument(this.props.trackChannel);
 		}
 
@@ -102,10 +112,11 @@ export default class Instrument extends Component {
 	render() {
 		return (
 			<TrackContext.Consumer>
-				{(trackContextValue) => (
+				{(value) => (
 					<InstrumentConsumer
-						updateInstruments={trackContextValue.updateInstruments}
-						trackChannel={trackContextValue.trackChannel}
+						updateInstruments={value.updateInstruments}
+						trackChannel={value.trackChannel}
+						effectsChain={value.effectsChain}
 						{...this.props}
 					/>
 				)}

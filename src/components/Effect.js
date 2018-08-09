@@ -18,8 +18,8 @@ class EffectConsumer extends Component {
 	};
 
 	componentDidMount() {
-		console.log('Effect mount');
-		console.log(this.props.id);
+		console.log('<Effect /> mount');
+		console.log(`id: ${this.props.id}`);
 
 		this.Tone = require('tone'); // eslint-disable-line
 
@@ -48,6 +48,11 @@ class EffectConsumer extends Component {
 		}
 	}
 
+	componentWillUnmount() {
+		console.log('<Effect /> unmount');
+		this.props.removeFromEffectsChain(this.effect);
+	}
+
 	render() {
 		return <p>Effect</p>;
 	}
@@ -59,8 +64,9 @@ export default class Effect extends Component {
 			<TrackContext.Consumer>
 				{(value) => (
 					<EffectConsumer
-						addToEffectsChain={value.addToEffectsChain}
 						effectsChain={value.effectsChain}
+						addToEffectsChain={value.addToEffectsChain}
+						removeFromEffectsChain={value.removeFromEffectsChain}
 						{...this.props}
 					/>
 				)}
