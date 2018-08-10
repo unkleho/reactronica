@@ -116,7 +116,7 @@ class InstrumentConsumer extends Component {
 		// console.log(effectsChain, effect);
 
 		this.synth.disconnect();
-		this.synth.chain(...[trackChannelBase, effectsChain[0]], Tone.Master);
+		this.synth.chain(...[trackChannelBase, ...effectsChain], Tone.Master);
 	};
 
 	connectInstrument = (trackChannel) => {
