@@ -32,15 +32,28 @@ class InstrumentConsumer extends Component {
 
 		// this.Tone = require('tone'); // eslint-disable-line
 
+		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
+
 		// Set up instrument
 		this.initInstrument();
-		this.connectInstrument();
+		this.connectInstrument(this.trackChannelBase);
 
 		// Add this Instrument to Track Context
 		this.props.updateInstruments([this.synth]);
 	}
 
 	componentDidUpdate(prevProps) {
+		if (prevProps.volume !== this.props.volume) {
+			console.log('volume', this.props.volume);
+
+			this.trackChannelBase.volume.value = this.props.volume;
+		}
+
+		if (prevProps.pan !== this.props.pan) {
+			console.log('pan', prevProps.pan, this.props.volume);
+			this.trackChannelBase.pan.value = this.props.pan;
+		}
+
 		// -------------------------------------------------------------------------
 		// CONNECT
 		// -------------------------------------------------------------------------
@@ -105,7 +118,7 @@ class InstrumentConsumer extends Component {
 	updateEffectsChain = (effectsChain) => {
 		console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
-		const trackChannelBase = new Tone.PanVol(1, this.props.volume);
+		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
 		// const effect = new Tone.FeedbackDelay('8n', 0.6);
 
 		// const trackChannel = trackChannelBase.chain(
@@ -115,16 +128,21 @@ class InstrumentConsumer extends Component {
 
 		// console.log(effectsChain, effect);
 
+		// NOTE: Using this.props.trackChannelBase causes effects to not turn off
+
 		this.synth.disconnect();
-		this.synth.chain(...[trackChannelBase, ...effectsChain], Tone.Master);
+		this.synth.chain(...[this.trackChannelBase, ...effectsChain], Tone.Master);
 	};
 
+	// Not used really
 	connectInstrument = (trackChannel) => {
 		console.log('<Instrument />', 'connectInstrument', trackChannel);
 
 		if (trackChannel) {
-			// this.synth.disconnect();
-			// this.synth.connect(trackChannel);
+			this.synth.disconnect();
+			this.synth.chain(trackChannel, Tone.Master);
+			// NOTE
+			// Be careful with this syntax `.connect(trackChannel).toMaster()`
 		} else {
 			this.synth.disconnect();
 			this.synth.toMaster();
@@ -146,6 +164,9 @@ export default class Instrument extends Component {
 						trackChannel={value.trackChannel}
 						trackChannelBase={value.trackChannelBase}
 						effectsChain={value.effectsChain}
+						// TODO: Implement!
+						pan={value.pan}
+						volume={value.volume}
 						{...this.props}
 					/>
 				)}

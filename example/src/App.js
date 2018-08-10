@@ -38,7 +38,7 @@ export default class App extends Component {
 
 	handlePanClick = () => {
 		this.setState({
-			pan: 1,
+			pan: -1,
 		});
 	};
 

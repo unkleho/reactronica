@@ -23,10 +23,10 @@ class EffectConsumer extends Component {
 		console.log(`id: ${this.props.id}`);
 
 		// Tone = require('tone'); // eslint-disable-line
-		let effect;
+		// let effect;
 
 		if (this.props.type === 'feedbackDelay') {
-			effect = new Tone.FeedbackDelay(
+			this.effect = new Tone.FeedbackDelay(
 				this.props.delayTime,
 				this.props.feedback,
 			);
@@ -41,7 +41,7 @@ class EffectConsumer extends Component {
 
 		// Update effects chain
 		// TODO: Work out which index to insert current this.effect
-		this.props.addToEffectsChain(effect);
+		this.props.addToEffectsChain(this.effect);
 	}
 
 	componentDidUpdate(prevProps) {

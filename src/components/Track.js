@@ -47,6 +47,7 @@ class TrackConsumer extends Component {
 
 		// Setup new track based on pan and volume component
 
+		// NOTE: Not used right now because of effect toggle issue
 		this.setState({
 			trackChannelBase: new Tone.PanVol(this.props.pan, this.props.volume),
 		});
@@ -138,13 +139,14 @@ class TrackConsumer extends Component {
 		// VOLUME / PAN
 		// -------------------------------------------------------------------------
 
-		if (prevProps.volume !== this.props.volume) {
-			this.state.trackChannel.volume.value = this.props.volume;
-		}
+		// Not used
+		// if (prevProps.volume !== this.props.volume) {
+		// 	this.state.trackChannel.volume.value = this.props.volume;
+		// }
 
-		if (prevProps.pan !== this.props.pan) {
-			this.state.trackChannel.pan.value = this.props.pan;
-		}
+		// if (prevProps.pan !== this.props.pan) {
+		// 	this.state.trackChannel.pan.value = this.props.pan;
+		// }
 	}
 
 	updateInstruments = (instruments) => {
@@ -189,6 +191,8 @@ class TrackConsumer extends Component {
 					updateInstruments: this.updateInstruments,
 					addToEffectsChain: this.addToEffectsChain,
 					removeFromEffectsChain: this.removeFromEffectsChain,
+					pan: this.props.pan,
+					volume: this.props.volume,
 				}}
 			>
 				<Fragment>
