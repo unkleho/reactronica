@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
+import Tone from '../lib/tone';
 
 class EffectConsumer extends Component {
 	static propTypes = {
@@ -14,23 +15,24 @@ class EffectConsumer extends Component {
 
 	static defaultProps = {
 		delayTime: '8n',
-		feedback: 0,
+		feedback: 0.5,
 	};
 
 	componentDidMount() {
 		console.log('<Effect /> mount');
 		console.log(`id: ${this.props.id}`);
 
-		this.Tone = require('tone'); // eslint-disable-line
+		// Tone = require('tone'); // eslint-disable-line
+		let effect;
 
 		if (this.props.type === 'feedbackDelay') {
-			this.effect = new this.Tone.FeedbackDelay(
+			effect = new Tone.FeedbackDelay(
 				this.props.delayTime,
 				this.props.feedback,
 			);
 			// Assign unique id
 			// Potentially used uuid
-			this.effect.id = this.props.id;
+			// this.effect.id = this.props.id;
 		}
 
 		// An array of effects in Track that this Effect belongs to
@@ -39,7 +41,7 @@ class EffectConsumer extends Component {
 
 		// Update effects chain
 		// TODO: Work out which index to insert current this.effect
-		this.props.addToEffectsChain(this.effect);
+		this.props.addToEffectsChain(effect);
 	}
 
 	componentDidUpdate(prevProps) {

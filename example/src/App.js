@@ -9,7 +9,7 @@ export default class App extends Component {
 		volume: 0,
 		pan: 0,
 		hasEffect: false,
-		feedback: 0.2,
+		feedback: 0.6,
 	};
 
 	handleNoteDown = (e) => {
@@ -50,7 +50,7 @@ export default class App extends Component {
 
 	handleFeedbackClick = () => {
 		this.setState({
-			feedback: 0.7,
+			feedback: 0.9,
 		});
 	};
 

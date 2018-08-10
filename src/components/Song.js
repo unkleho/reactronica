@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import StartAudioContext from 'startaudiocontext';
 
 import { StepType } from '../types/propTypes';
+import Tone from '../lib/tone';
 // import { isEqual } from '../lib/utils';
 
 export const SongContext = React.createContext();
@@ -29,18 +30,18 @@ export default class Song extends Component {
 	};
 
 	componentDidMount() {
-		this.Tone = require('tone'); // eslint-disable-line
-		this.Tone.Transport.bpm.value = this.props.tempo;
+		// Tone = require('tone'); // eslint-disable-line
+		Tone.Transport.bpm.value = this.props.tempo;
 
 		// iOS Web Audio API requires this library.
-		StartAudioContext(this.Tone.context);
+		StartAudioContext(Tone.context);
 	}
 
 	componentDidUpdate(prevProps) {
 		if (!prevProps.isPlaying && this.props.isPlaying) {
-			this.Tone.Transport.start();
+			Tone.Transport.start();
 		} else if (prevProps.isPlaying && !this.props.isPlaying) {
-			this.Tone.Transport.stop();
+			Tone.Transport.stop();
 		}
 	}
 

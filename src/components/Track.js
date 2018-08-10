@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { SongContext } from './Song';
 import { StepType } from '../types/propTypes';
 import { isEqual } from '../lib/utils';
+import Tone from '../lib/tone';
 
 export const TrackContext = React.createContext();
 
@@ -27,40 +28,51 @@ class TrackConsumer extends Component {
 		instruments: [],
 		track: null,
 		effectsChain: [], // An array of Tone effects
+		trackChannelBase: null,
+		trackChannel: {
+			id: null,
+		}, // Tone Signal
+		// effectsChain2: [], // An array of Tone effects for sending to Instrument
 	};
 
 	componentDidMount() {
-		this.Tone = require('tone'); // eslint-disable-line
+		// Tone = require('tone'); // eslint-disable-line
 
 		// Example of chaining
-		// const feedbackDelay = new this.Tone.FeedbackDelay('8n', 0.5);
+		// const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5);
 		// this.trackChain = [
 		// feedbackDelay,
-		// this.Tone.Master,
+		// Tone.Master,
 		// ];
 
 		// Setup new track based on pan and volume component
-		this.trackChannelBase = new this.Tone.PanVol(
-			this.props.pan,
-			this.props.volume,
-		);
-		this.updateTrackChannelEffects();
+
+		this.setState({
+			trackChannelBase: new Tone.PanVol(this.props.pan, this.props.volume),
+		});
+		// this.updateTrackChannelEffects();
 	}
 
-	updateTrackChannelEffects = (effectsChain = []) => {
-		console.log('<Track />', 'updateTrackChannelEffects');
-		console.log(effectsChain);
+	// updateTrackChannelEffects = (effectsChain = []) => {
+	// 	console.log('<Track />', 'updateTrackChannelEffects');
+	// 	console.log(effectsChain);
 
-		this.trackChannel = this.trackChannelBase.chain(
-			...effectsChain,
-			this.Tone.Master,
-		);
+	// 	const trackChannel = this.trackChannelBase.chain(
+	// 		...effectsChain,
+	// 		Tone.Master,
+	// 	);
+	// 	trackChannel.id = Math.random(1000);
+	// 	// console.log(this.trackChannel.id);
 
-		// Set this to pass it Instrument
-		this.setState({
-			trackChannel: this.trackChannel,
-		});
-	};
+	// 	// Set this to pass it Instrument
+	// 	this.setState((prevState) => {
+	// 		return {
+	// 			...prevState,
+	// 			trackChannel,
+	// 			effectsChain2: effectsChain,
+	// 		};
+	// 	});
+	// };
 
 	componentDidUpdate(prevProps, prevState) {
 		// console.log(prevProps, this.props);
@@ -69,9 +81,9 @@ class TrackConsumer extends Component {
 		// UPDATE EFFECTS
 		// -------------------------------------------------------------------------
 
-		if (prevState.effectsChain !== this.state.effectsChain) {
-			this.updateTrackChannelEffects(this.state.effectsChain);
-		}
+		// if (prevState.effectsChain !== this.state.effectsChain) {
+		// 	this.updateTrackChannelEffects(this.state.effectsChain);
+		// }
 
 		// -------------------------------------------------------------------------
 		// STEPS
@@ -81,7 +93,7 @@ class TrackConsumer extends Component {
 		if (!prevProps.isPlaying && this.props.isPlaying) {
 			this.stepsToPlay = this.props.steps;
 
-			this.seq = new this.Tone.Sequence(
+			this.seq = new Tone.Sequence(
 				(time, step) => {
 					if (step.note) {
 						// Play sound
@@ -127,11 +139,11 @@ class TrackConsumer extends Component {
 		// -------------------------------------------------------------------------
 
 		if (prevProps.volume !== this.props.volume) {
-			this.trackChannel.volume.value = this.props.volume;
+			this.state.trackChannel.volume.value = this.props.volume;
 		}
 
 		if (prevProps.pan !== this.props.pan) {
-			this.trackChannel.pan.value = this.props.pan;
+			this.state.trackChannel.pan.value = this.props.pan;
 		}
 	}
 
@@ -172,7 +184,8 @@ class TrackConsumer extends Component {
 			<TrackContext.Provider
 				value={{
 					trackChannel: this.state.trackChannel,
-					effectsChain,
+					trackChannelBase: this.state.trackChannelBase,
+					effectsChain: this.state.effectsChain,
 					updateInstruments: this.updateInstruments,
 					addToEffectsChain: this.addToEffectsChain,
 					removeFromEffectsChain: this.removeFromEffectsChain,
