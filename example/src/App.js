@@ -8,9 +8,8 @@ export default class App extends Component {
 		isPlaying: false,
 		inputVolume: 100,
 		inputPan: 50,
-		hasEffect: false,
 		feedback: 0.6,
-		effects: [
+		defaultEffects: [
 			<Effect
 				type="feedbackDelay"
 				key="effect-1"
@@ -20,6 +19,7 @@ export default class App extends Component {
 			/>,
 			<Effect type="distortion" key="effect-2" id="effect-2" />,
 		],
+		effects: [],
 	};
 
 	handleNoteDown = (e) => {
@@ -37,12 +37,6 @@ export default class App extends Component {
 	togglePlaying = () => {
 		this.setState({
 			isPlaying: !this.state.isPlaying,
-		});
-	};
-
-	handleEffectClick = () => {
-		this.setState({
-			hasEffect: !this.state.hasEffect,
 		});
 	};
 
@@ -64,24 +58,24 @@ export default class App extends Component {
 		});
 	};
 
-	handleRemoveOneEffect = () => {
+	handleEffectClick = () => {
 		this.setState({
-			effects: this.state.effects.slice(1),
+			// hasEffect: !this.state.hasEffect,
+			effects: this.state.defaultEffects,
+		});
+	};
+
+	handleRemoveEffect = (id) => {
+		this.setState({
+			effects: this.state.effects.filter((effect) => effect.props.id !== id),
 		});
 	};
 
 	render() {
-		const {
-			isPlaying,
-			inputVolume,
-			notes,
-			inputPan,
-			effects,
-			hasEffect,
-		} = this.state;
+		const { isPlaying, inputVolume, notes, inputPan, effects } = this.state;
 
 		return (
-			<div>
+			<div className="app">
 				<h1>Reactronica</h1>
 				<p>React components for making music</p>
 
@@ -98,38 +92,53 @@ export default class App extends Component {
 					Play Note
 				</button>
 
-				<button onClick={this.handleEffectClick}>Toggle Effect</button>
+				<button onClick={this.handleEffectClick}>Add Effects</button>
 				<button onClick={this.handleFeedbackClick}>Add more feedback</button>
-				<button onClick={this.handleRemoveOneEffect}>Remove one effect</button>
 
-				<br />
-				<br />
+				<h2>Track</h2>
+				<div className="app__track">
+					<div>
+						<label htmlFor="volume">Volume</label>
+						<br />
+						<input
+							id="volume"
+							type="range"
+							value={inputVolume}
+							onChange={this.handleVolumeRange}
+						/>
+						{inputVolume}
+					</div>
 
-				<div className="">
-					<label htmlFor="volume">Volume</label>
 					<br />
-					<input
-						id="volume"
-						type="range"
-						value={inputVolume}
-						onChange={this.handleVolumeRange}
-					/>
-					{inputVolume}
+
+					<div>
+						<label htmlFor="pan">Pan</label>
+						<br />
+						<input
+							id="pan"
+							type="range"
+							value={inputPan}
+							onChange={this.handlePanRange}
+						/>
+						{inputPan}
+					</div>
 				</div>
 
-				<br />
-
-				<div className="">
-					<label htmlFor="pan">Pan</label>
-					<br />
-					<input
-						id="pan"
-						type="range"
-						value={inputPan}
-						onChange={this.handlePanRange}
-					/>
-					{inputPan}
-				</div>
+				<h3>Effects</h3>
+				{this.state.effects.map((effect) => {
+					return (
+						<div className="app__track__effect" key={effect.props.id}>
+							<p>
+								{effect.props.type}{' '}
+								<button
+									onClick={() => this.handleRemoveEffect(effect.props.id)}
+								>
+									Remove
+								</button>
+							</p>
+						</div>
+					);
+				})}
 
 				<Song isPlaying={isPlaying} tempo={110}>
 					{[stepsA].map((steps, i) => (
@@ -137,7 +146,7 @@ export default class App extends Component {
 							steps={steps}
 							volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
 							pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
-							effects={hasEffect ? effects : []}
+							effects={effects}
 							key={i}
 						>
 							<Instrument notes={notes} />
@@ -175,21 +184,21 @@ const stepsA = [
 	null,
 ];
 
-const stepsB = [
-	null,
-	{
-		note: 'C5',
-		duration: 1,
-		// position: 0,
-	},
-	null,
-	null,
-	null,
-	null,
-	{
-		note: 'D5',
-		duration: 1,
-		// position: 2,
-	},
-	null,
-];
+// const stepsB = [
+// 	null,
+// 	{
+// 		note: 'C5',
+// 		duration: 1,
+// 		// position: 0,
+// 	},
+// 	null,
+// 	null,
+// 	null,
+// 	null,
+// 	{
+// 		note: 'D5',
+// 		duration: 1,
+// 		// position: 2,
+// 	},
+// 	null,
+// ];
