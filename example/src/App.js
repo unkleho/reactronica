@@ -71,12 +71,20 @@ export default class App extends Component {
 	};
 
 	render() {
-		const { isPlaying, inputVolume, notes, inputPan, effects } = this.state;
-
-		console.log(effects);
+		const {
+			isPlaying,
+			inputVolume,
+			notes,
+			inputPan,
+			effects,
+			hasEffect,
+		} = this.state;
 
 		return (
 			<div>
+				<h1>Reactronica</h1>
+				<p>React components for making music</p>
+
 				<button onClick={this.togglePlaying}>
 					{isPlaying ? 'Stop' : 'Play'}
 				</button>
@@ -94,8 +102,12 @@ export default class App extends Component {
 				<button onClick={this.handleFeedbackClick}>Add more feedback</button>
 				<button onClick={this.handleRemoveOneEffect}>Remove one effect</button>
 
+				<br />
+				<br />
+
 				<div className="">
 					<label htmlFor="volume">Volume</label>
+					<br />
 					<input
 						id="volume"
 						type="range"
@@ -105,8 +117,11 @@ export default class App extends Component {
 					{inputVolume}
 				</div>
 
+				<br />
+
 				<div className="">
 					<label htmlFor="pan">Pan</label>
+					<br />
 					<input
 						id="pan"
 						type="range"
@@ -122,7 +137,7 @@ export default class App extends Component {
 							steps={steps}
 							volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
 							pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
-							effects={this.state.hasEffect ? this.state.effects : []}
+							effects={hasEffect ? effects : []}
 							key={i}
 						>
 							<Instrument notes={notes} />

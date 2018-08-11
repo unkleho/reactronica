@@ -7,10 +7,11 @@ import Tone from '../lib/tone';
 class EffectConsumer extends Component {
 	static propTypes = {
 		type: PropTypes.string.isRequired,
+		id: PropTypes.string.isRequired,
 		delayTime: PropTypes.string,
 		feedback: PropTypes.number,
-		effectsChain: PropTypes.array, // An array of Tone JS effects
 		addToEffectsChain: PropTypes.func,
+		removeFromEffectsChain: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -35,10 +36,6 @@ class EffectConsumer extends Component {
 
 		this.effect.id = this.props.id;
 
-		// An array of effects in Track that this Effect belongs to
-		// TODO: Use this to update new chain.
-		// console.log(this.props.effectsChain);
-
 		// Update effects chain
 		// TODO: Work out which index to insert current this.effect
 		this.props.addToEffectsChain(this.effect);
@@ -56,7 +53,7 @@ class EffectConsumer extends Component {
 	}
 
 	render() {
-		return <p>Effect</p>;
+		return null;
 	}
 }
 
@@ -66,7 +63,6 @@ export default class Effect extends Component {
 			<TrackContext.Consumer>
 				{(value) => (
 					<EffectConsumer
-						effectsChain={value.effectsChain}
 						addToEffectsChain={value.addToEffectsChain}
 						removeFromEffectsChain={value.removeFromEffectsChain}
 						{...this.props}

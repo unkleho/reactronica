@@ -43,9 +43,12 @@ class InstrumentConsumer extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
+		// -------------------------------------------------------------------------
+		// VOLUME / PAN
+		// -------------------------------------------------------------------------
+
 		if (prevProps.volume !== this.props.volume) {
 			console.log('volume', this.props.volume);
-
 			this.trackChannelBase.volume.value = this.props.volume;
 		}
 
@@ -58,26 +61,9 @@ class InstrumentConsumer extends Component {
 		// CONNECT
 		// -------------------------------------------------------------------------
 
-		// console.log(prevProps.effectsChain, this.props.effectsChain);
-
-		// console.log(prevProps.trackChannel.id, this.props.trackChannel.id);
-		// if (prevProps.trackChannel.id !== this.props.trackChannel.id) {
 		if (prevProps.effectsChain !== this.props.effectsChain) {
-			// Connect or disconnect instrument to new trackChannel
 			this.updateEffectsChain(this.props.effectsChain);
-			// this.connectInstrument(this.props.trackChannel);
 		}
-
-		// if (prevProps.effectsChain !== this.props.effectsChain) {
-		// 	console.log('yoo', this.props.effectsChain);
-
-		// 	if (this.props.effectsChain.length === 0) {
-		// 		this.connectInstrument();
-		// 	} else {
-		// 		// this.connectInstrument();
-		// 		this.connectInstrument(this.props.trackChannel);
-		// 	}
-		// }
 
 		// -------------------------------------------------------------------------
 		// NOTES
@@ -119,14 +105,6 @@ class InstrumentConsumer extends Component {
 		console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
 		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
-		// const effect = new Tone.FeedbackDelay('8n', 0.6);
-
-		// const trackChannel = trackChannelBase.chain(
-		// 	...effectsChain,
-		// 	this.Tone.Master,
-		// );
-
-		// console.log(effectsChain, effect);
 
 		// NOTE: Using this.props.trackChannelBase causes effects to not turn off
 
@@ -150,7 +128,7 @@ class InstrumentConsumer extends Component {
 	};
 
 	render() {
-		return <p>test</p>;
+		return null;
 	}
 }
 
@@ -161,8 +139,6 @@ export default class Instrument extends Component {
 				{(value) => (
 					<InstrumentConsumer
 						updateInstruments={value.updateInstruments}
-						trackChannel={value.trackChannel}
-						trackChannelBase={value.trackChannelBase}
 						effectsChain={value.effectsChain}
 						// TODO: Implement!
 						pan={value.pan}

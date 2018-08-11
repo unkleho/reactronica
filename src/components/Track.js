@@ -155,39 +155,37 @@ class TrackConsumer extends Component {
 		});
 	};
 
-	addToEffectsChain = (effectsChain) => {
+	addToEffectsChain = (effect) => {
 		console.log('<Track />', 'addToEffectsChain');
 
 		// Alternative way of setting state, more robust.
 		this.setState((prevState) => {
 			return {
 				...prevState,
-				effectsChain: [...prevState.effectsChain, effectsChain],
+				effectsChain: [...prevState.effectsChain, effect],
 			};
 		});
 	};
 
-	// TODO
 	removeFromEffectsChain = (effect) => {
 		console.log('<Track />', 'removeFromEffectsChain', effect);
 
 		this.setState((prevState) => {
 			return {
 				...prevState,
+				// Filter out `effect.id`
 				effectsChain: this.state.effectsChain.filter((e) => e.id !== effect.id),
 			};
 		});
 	};
 
 	render() {
-		const { effectsChain } = this.state;
-
 		return (
 			<TrackContext.Provider
 				value={{
-					trackChannel: this.state.trackChannel,
-					trackChannelBase: this.state.trackChannelBase,
-					effectsChain: this.state.effectsChain,
+					effectsChain: this.state.effectsChain, // Used by Instrument
+					// trackChannel: this.state.trackChannel,
+					// trackChannelBase: this.state.trackChannelBase,
 					updateInstruments: this.updateInstruments,
 					addToEffectsChain: this.addToEffectsChain,
 					removeFromEffectsChain: this.removeFromEffectsChain,

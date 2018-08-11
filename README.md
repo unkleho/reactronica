@@ -20,12 +20,9 @@ import Song, { Track, Instrument } from 'reactronica';
 class Example extends Component {
 	render() {
 		return (
-			<Song tempo={90} isPlaying={false} volume={100}>
+			<Song tempo={90} isPlaying={false}>
 				<Track name="Beats" steps={[]} volume={100} effects={[]}>
-					<Instrument type="sampler" options={options} notes={[]}>
-						<Effect />
-					</Instrument>
-					<Effect />
+					<Instrument type="sampler" options={options} notes={[]} />
 				</Track>
 				<Track name="Melody" steps={[]} effects={[]}>
 					<Instrument type="synth" options={options} notes={[]} />
