@@ -168,13 +168,13 @@ class TrackConsumer extends Component {
 	};
 
 	// TODO
-	removeFromEffectsChain = (effectsChain) => {
-		console.log('<Track />', 'removeFromEffectsChain');
+	removeFromEffectsChain = (effect) => {
+		console.log('<Track />', 'removeFromEffectsChain', effect);
 
 		this.setState((prevState) => {
 			return {
 				...prevState,
-				effectsChain: [],
+				effectsChain: this.state.effectsChain.filter((e) => e.id !== effect.id),
 			};
 		});
 	};

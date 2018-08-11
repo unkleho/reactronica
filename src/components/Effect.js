@@ -23,17 +23,17 @@ class EffectConsumer extends Component {
 		console.log(`id: ${this.props.id}`);
 
 		// Tone = require('tone'); // eslint-disable-line
-		// let effect;
 
 		if (this.props.type === 'feedbackDelay') {
 			this.effect = new Tone.FeedbackDelay(
 				this.props.delayTime,
 				this.props.feedback,
 			);
-			// Assign unique id
-			// Potentially used uuid
-			// this.effect.id = this.props.id;
+		} else if (this.props.type === 'distortion') {
+			this.effect = new Tone.Distortion(0.8);
 		}
+
+		this.effect.id = this.props.id;
 
 		// An array of effects in Track that this Effect belongs to
 		// TODO: Use this to update new chain.

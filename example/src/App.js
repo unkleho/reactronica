@@ -6,10 +6,20 @@ export default class App extends Component {
 	state = {
 		notes: [],
 		isPlaying: false,
-		volume: 0,
-		pan: 0,
+		inputVolume: 100,
+		inputPan: 50,
 		hasEffect: false,
 		feedback: 0.6,
+		effects: [
+			<Effect
+				type="feedbackDelay"
+				key="effect-1"
+				id="effect-1"
+				delayTime={'16n'}
+				feedback={0.6}
+			/>,
+			<Effect type="distortion" key="effect-2" id="effect-2" />,
+		],
 	};
 
 	handleNoteDown = (e) => {
@@ -30,18 +40,6 @@ export default class App extends Component {
 		});
 	};
 
-	handleVolumeClick = () => {
-		this.setState({
-			volume: -32,
-		});
-	};
-
-	handlePanClick = () => {
-		this.setState({
-			pan: -1,
-		});
-	};
-
 	handleEffectClick = () => {
 		this.setState({
 			hasEffect: !this.state.hasEffect,
@@ -54,12 +52,34 @@ export default class App extends Component {
 		});
 	};
 
+	handleVolumeRange = (event) => {
+		this.setState({
+			inputVolume: event.target.value,
+		});
+	};
+
+	handlePanRange = (event) => {
+		this.setState({
+			inputPan: event.target.value,
+		});
+	};
+
+	handleRemoveOneEffect = () => {
+		this.setState({
+			effects: this.state.effects.slice(1),
+		});
+	};
+
 	render() {
-		const { isPlaying, volume, notes, pan } = this.state;
+		const { isPlaying, inputVolume, notes, inputPan, effects } = this.state;
+
+		console.log(effects);
 
 		return (
 			<div>
-				<button onClick={this.togglePlaying}>Play</button>
+				<button onClick={this.togglePlaying}>
+					{isPlaying ? 'Stop' : 'Play'}
+				</button>
 
 				<button
 					onMouseDown={this.handleNoteDown}
@@ -70,35 +90,39 @@ export default class App extends Component {
 					Play Note
 				</button>
 
-				<button onClick={this.handleVolumeClick}>change volume</button>
-				<button onClick={this.handlePanClick}>change pan</button>
 				<button onClick={this.handleEffectClick}>Toggle Effect</button>
 				<button onClick={this.handleFeedbackClick}>Add more feedback</button>
+				<button onClick={this.handleRemoveOneEffect}>Remove one effect</button>
 
-				<Song isPlaying={isPlaying}>
+				<div className="">
+					<label htmlFor="volume">Volume</label>
+					<input
+						id="volume"
+						type="range"
+						value={inputVolume}
+						onChange={this.handleVolumeRange}
+					/>
+					{inputVolume}
+				</div>
+
+				<div className="">
+					<label htmlFor="pan">Pan</label>
+					<input
+						id="pan"
+						type="range"
+						value={inputPan}
+						onChange={this.handlePanRange}
+					/>
+					{inputPan}
+				</div>
+
+				<Song isPlaying={isPlaying} tempo={110}>
 					{[stepsA].map((steps, i) => (
 						<Track
 							steps={steps}
-							volume={volume}
-							pan={pan}
-							effects={
-								this.state.hasEffect
-									? [
-											<Effect
-												type="feedbackDelay"
-												key="effect-1"
-												id="effect-1"
-												delayTime={'16n'}
-												feedback={this.state.feedback}
-											/>,
-											// <Effect
-											// 	type="feedbackDelay"
-											// 	key="effect-2"
-											// 	id="effect-2"
-											// />,
-									  ]
-									: []
-							}
+							volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
+							pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
+							effects={this.state.hasEffect ? this.state.effects : []}
 							key={i}
 						>
 							<Instrument notes={notes} />
@@ -113,16 +137,23 @@ export default class App extends Component {
 const stepsA = [
 	{
 		note: 'C3',
-		duration: 1,
-		// position: 0,
+		duration: 0.5,
 	},
-	null,
-	null,
-	null,
 	{
 		note: 'D3',
+		duration: 0.5,
+	},
+	{
+		note: 'E3',
+		duration: 0.5,
+	},
+	{
+		note: 'G3',
+		duration: 0.5,
+	},
+	{
+		note: 'A3',
 		duration: 1,
-		// position: 2,
 	},
 	null,
 	null,
