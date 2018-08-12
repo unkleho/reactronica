@@ -6,6 +6,8 @@ React components for making music. Uses ToneJS under the hood.
 
 Strongly influenced by [React Music](https://github.com/FormidableLabs/react-music).
 
+Check out the demo - [http://unkleho.github.io/reactronica](http://unkleho.github.io/reactronica).
+
 [![NPM](https://img.shields.io/npm/v/reactronica.svg)](https://www.npmjs.com/package/reactronica)
 
 ## Install
@@ -52,6 +54,10 @@ class Example extends Component {
 }
 ```
 <!-- prettier-ignore-end -->
+
+## Known Bugs
+
+- If multiple effects are added, effects don't update unless they are removed in the order they are added. Could be an issue with `[...prevState.effects, effect]`.
 
 ## Thanks
 

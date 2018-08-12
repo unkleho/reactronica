@@ -7,8 +7,9 @@ import Tone from '../lib/tone';
 
 class InstrumentConsumer extends Component {
 	static propTypes = {
+		type: PropTypes.string,
 		notes: PropTypes.arrayOf(NoteType), // Currently played notes.
-		polyphony: PropTypes.number,
+		// polyphony: PropTypes.number,
 		options: PropTypes.object,
 		// An instance of new this.Tone.PanVol()
 		trackChannel: PropTypes.object,
@@ -16,10 +17,11 @@ class InstrumentConsumer extends Component {
 	};
 
 	static defaultProps = {
+		type: 'polySynth',
 		notes: [],
 		instruments: [],
-		polyphony: 4,
 		options: {
+			polyphony: 4,
 			oscillator: {
 				partials: [0, 2, 3, 4],
 			},
@@ -32,11 +34,11 @@ class InstrumentConsumer extends Component {
 
 		// this.Tone = require('tone'); // eslint-disable-line
 
-		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
+		// this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
 
 		// Set up instrument
-		this.initInstrument();
-		this.connectInstrument(this.trackChannelBase);
+		this.initInstrument(this.props.type);
+		// this.connectInstrument(this.trackChannelBase);
 
 		// Add this Instrument to Track Context
 		this.props.updateInstruments([this.synth]);
@@ -58,11 +60,11 @@ class InstrumentConsumer extends Component {
 		}
 
 		// -------------------------------------------------------------------------
-		// CONNECT
+		// EFFECTS CHAIN
 		// -------------------------------------------------------------------------
 
 		if (prevProps.effectsChain !== this.props.effectsChain) {
-			this.updateEffectsChain(this.props.effectsChain);
+			this.updateEffectsChain(this.props.effectsChain, prevProps.effectsChain);
 		}
 
 		// -------------------------------------------------------------------------
@@ -93,38 +95,34 @@ class InstrumentConsumer extends Component {
 		});
 	}
 
-	initInstrument = () => {
-		this.synth = new Tone.PolySynth(
-			this.props.polyphony,
-			Tone.Synth,
-			this.props.options,
-		);
+	initInstrument = (type) => {
+		if (type === 'polySynth') {
+			this.synth = new Tone.PolySynth(
+				this.props.options.polyphony,
+				Tone.Synth,
+				this.props.options,
+			);
+		} else if (type === 'duoSynth') {
+			this.synth = new Tone.DuoSynth(this.props.options);
+		}
+		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
+		this.synth.chain(this.trackChannelBase, Tone.Master);
 	};
 
-	updateEffectsChain = (effectsChain) => {
-		console.log('<Instrument />', 'updateEffectsChain', effectsChain);
+	updateEffectsChain = (effectsChain, prevEffectsChain) => {
+		console.log(
+			'<Instrument />',
+			'updateEffectsChain',
+			effectsChain,
+			prevEffectsChain,
+		);
 
 		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
 
 		// NOTE: Using this.props.trackChannelBase causes effects to not turn off
 
 		this.synth.disconnect();
-		this.synth.chain(...[this.trackChannelBase, ...effectsChain], Tone.Master);
-	};
-
-	// Not used really
-	connectInstrument = (trackChannel) => {
-		console.log('<Instrument />', 'connectInstrument', trackChannel);
-
-		if (trackChannel) {
-			this.synth.disconnect();
-			this.synth.chain(trackChannel, Tone.Master);
-			// NOTE
-			// Be careful with this syntax `.connect(trackChannel).toMaster()`
-		} else {
-			this.synth.disconnect();
-			this.synth.toMaster();
-		}
+		this.synth.chain(...effectsChain, this.trackChannelBase, Tone.Master);
 	};
 
 	render() {

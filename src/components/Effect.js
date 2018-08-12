@@ -8,6 +8,7 @@ class EffectConsumer extends Component {
 	static propTypes = {
 		type: PropTypes.string.isRequired,
 		id: PropTypes.string.isRequired,
+		options: PropTypes.object,
 		delayTime: PropTypes.string,
 		feedback: PropTypes.number,
 		addToEffectsChain: PropTypes.func,
@@ -31,7 +32,11 @@ class EffectConsumer extends Component {
 				this.props.feedback,
 			);
 		} else if (this.props.type === 'distortion') {
-			this.effect = new Tone.Distortion(0.8);
+			this.effect = new Tone.Distortion(0.5);
+		} else if (this.props.type === 'freeverb') {
+			this.effect = new Tone.Freeverb();
+		} else if (this.props.type === 'panVol') {
+			this.effect = new Tone.PanVol();
 		}
 
 		this.effect.id = this.props.id;

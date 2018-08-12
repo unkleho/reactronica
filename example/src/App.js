@@ -12,12 +12,13 @@ export default class App extends Component {
 		defaultEffects: [
 			<Effect
 				type="feedbackDelay"
-				key="effect-1"
-				id="effect-1"
-				delayTime={'16n'}
+				key="feedbackDelay-1"
+				id="feedbackDelay-1"
+				delayTime={'8n'}
 				feedback={0.6}
 			/>,
-			<Effect type="distortion" key="effect-2" id="effect-2" />,
+			<Effect type="distortion" key="distortion-2" id="distortion-2" />,
+			<Effect type="freeverb" key="freeverb-3" id="freeverb-3" />,
 		],
 		effects: [],
 	};
@@ -40,12 +41,6 @@ export default class App extends Component {
 		});
 	};
 
-	handleFeedbackClick = () => {
-		this.setState({
-			feedback: 0.9,
-		});
-	};
-
 	handleVolumeRange = (event) => {
 		this.setState({
 			inputVolume: event.target.value,
@@ -58,10 +53,9 @@ export default class App extends Component {
 		});
 	};
 
-	handleEffectClick = () => {
+	handleAddEffect = (effect) => {
 		this.setState({
-			// hasEffect: !this.state.hasEffect,
-			effects: this.state.defaultEffects,
+			effects: [...this.state.effects, effect],
 		});
 	};
 
@@ -91,9 +85,6 @@ export default class App extends Component {
 				>
 					Play Note
 				</button>
-
-				<button onClick={this.handleEffectClick}>Add Effects</button>
-				<button onClick={this.handleFeedbackClick}>Add more feedback</button>
 
 				<h2>Track</h2>
 				<div className="app__track">
@@ -125,16 +116,24 @@ export default class App extends Component {
 				</div>
 
 				<h3>Effects</h3>
-				{this.state.effects.map((effect) => {
+				{this.state.defaultEffects.map((effect) => {
 					return (
 						<div className="app__track__effect" key={effect.props.id}>
 							<p>
 								{effect.props.type}{' '}
-								<button
-									onClick={() => this.handleRemoveEffect(effect.props.id)}
-								>
-									Remove
-								</button>
+								{this.state.effects.some((e) => {
+									return e.props.id === effect.props.id;
+								}) ? (
+									<button
+										onClick={() => this.handleRemoveEffect(effect.props.id)}
+									>
+										Remove
+									</button>
+								) : (
+									<button onClick={() => this.handleAddEffect(effect)}>
+										Add
+									</button>
+								)}
 							</p>
 						</div>
 					);
@@ -149,7 +148,7 @@ export default class App extends Component {
 							effects={effects}
 							key={i}
 						>
-							<Instrument notes={notes} />
+							<Instrument type="polySynth" notes={notes} />
 						</Track>
 					))}
 				</Song>

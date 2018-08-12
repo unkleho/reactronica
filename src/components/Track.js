@@ -162,7 +162,7 @@ class TrackConsumer extends Component {
 		this.setState((prevState) => {
 			return {
 				...prevState,
-				effectsChain: [...prevState.effectsChain, effect],
+				effectsChain: [effect, ...prevState.effectsChain],
 			};
 		});
 	};
@@ -184,8 +184,6 @@ class TrackConsumer extends Component {
 			<TrackContext.Provider
 				value={{
 					effectsChain: this.state.effectsChain, // Used by Instrument
-					// trackChannel: this.state.trackChannel,
-					// trackChannelBase: this.state.trackChannelBase,
 					updateInstruments: this.updateInstruments,
 					addToEffectsChain: this.addToEffectsChain,
 					removeFromEffectsChain: this.removeFromEffectsChain,
