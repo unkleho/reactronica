@@ -5,6 +5,7 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 export default class App extends Component {
 	state = {
 		notes: [],
+		steps: stepsA,
 		isPlaying: false,
 		inputVolume: 100,
 		inputPan: 50,
@@ -71,13 +72,67 @@ export default class App extends Component {
 		});
 	};
 
+	handleSequencerClick = (note, i) => {
+		const steps = [...this.state.steps];
+
+		if (steps[i] && steps[i].note === note) {
+			console.log('hi');
+
+			console.log(steps[i].note);
+			steps[i] = null;
+		} else {
+			steps[i] = {
+				note,
+				duration: 0.5,
+			};
+		}
+
+		this.setState({
+			steps,
+		});
+	};
+
 	render() {
-		const { isPlaying, inputVolume, notes, inputPan, effects } = this.state;
+		const {
+			isPlaying,
+			inputVolume,
+			notes,
+			inputPan,
+			effects,
+			steps,
+		} = this.state;
+
+		console.log(steps);
 
 		return (
 			<div className="app">
 				<h1>Reactronica</h1>
 				<p>React components for making music</p>
+
+				<div className="app__sequencer">
+					{['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3'].map((note) => {
+						return (
+							<div className="app__sequencer__row">
+								{[...new Array(8)].map((_, i) => {
+									const isActive = steps[i] && steps[i].note === note;
+
+									// console.log(isActive);
+									return (
+										<button
+											className={[
+												'app__sequencer__step',
+												isActive ? 'app__sequencer__step--is-active' : '',
+											].join(' ')}
+											onClick={() => this.handleSequencerClick(note, i)}
+										>
+											{note} {i + 1} {isActive && 'active'}
+										</button>
+									);
+								})}
+							</div>
+						);
+					})}
+				</div>
 
 				<button onClick={this.togglePlaying}>
 					{isPlaying ? 'Stop' : 'Play'}
@@ -141,17 +196,17 @@ export default class App extends Component {
 				})}
 
 				<Song isPlaying={isPlaying} tempo={110}>
-					{[stepsA].map((steps, i) => (
-						<Track
-							steps={steps}
-							volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
-							pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
-							effects={effects}
-							key={i}
-						>
-							<Instrument notes={notes} />
-						</Track>
-					))}
+					{/* {steps.map((steps, i) => ( */}
+					<Track
+						steps={steps}
+						volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
+						pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
+						effects={effects}
+						// key={i}
+					>
+						<Instrument notes={notes} />
+					</Track>
+					{/* ))} */}
 				</Song>
 			</div>
 		);
