@@ -123,7 +123,9 @@ class TrackConsumer extends Component {
 		// Update sequencer steps
 		if (this.props.isPlaying) {
 			// Deep compare prev and new steps, only update if they are different
-			const doesStepsNeedUpdating = isEqual(prevProps.steps, this.props.steps);
+			// const doesStepsNeedUpdating = isEqual(prevProps.steps, this.props.steps);
+			const doesStepsNeedUpdating =
+				JSON.stringify(prevProps.steps) !== JSON.stringify(this.props.steps);
 
 			if (doesStepsNeedUpdating) {
 				this.stepsToPlay = this.props.steps;
