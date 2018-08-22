@@ -11,7 +11,7 @@ export const TrackContext = React.createContext();
 class TrackConsumer extends Component {
 	static propTypes = {
 		steps: PropTypes.arrayOf(StepType),
-		onStepStart: PropTypes.func,
+		onStepPlay: PropTypes.func,
 		interval: PropTypes.string, // react-music = resolution
 		volume: PropTypes.number,
 		pan: PropTypes.number,
@@ -107,11 +107,17 @@ class TrackConsumer extends Component {
 						);
 					}
 
-					if (typeof this.props.onStepStart === 'function') {
-						this.props.onStepStart(step);
+					if (typeof this.props.onStepPlay === 'function') {
+						this.props.onStepPlay(step);
 					}
 				},
-				this.stepsToPlay,
+				this.stepsToPlay.map((step, i) => {
+					// Make sure every step has index
+					return {
+						...step,
+						index: i,
+					};
+				}),
 				this.props.interval,
 			);
 
@@ -128,7 +134,13 @@ class TrackConsumer extends Component {
 				JSON.stringify(prevProps.steps) !== JSON.stringify(this.props.steps);
 
 			if (doesStepsNeedUpdating) {
-				this.stepsToPlay = this.props.steps;
+				this.stepsToPlay = this.props.steps.map((step, i) => {
+					// Make sure every step has index
+					return {
+						...step,
+						index: i,
+					};
+				});
 				this.seq.removeAll();
 
 				this.stepsToPlay.forEach((note, i) => {

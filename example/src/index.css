@@ -1,7 +1,43 @@
 @import url('https://rsms.me/inter/inter-ui.css');
 
 body {
-	margin: 0;
-	padding: 1em;
+	margin: 2em;
 	font-family: 'Inter UI', sans-serif;
+	color: #333;
+}
+
+h1 {
+	margin-bottom: 0;
+	font-size: 3em;
+	letter-spacing: -0.03em;
+}
+
+.app {
+	margin: 0 auto;
+	max-width: 40em;
+}
+
+.app__sequencer {
+	margin-bottom: 1em;
+}
+
+.app__sequencer__row {
+	display: flex;
+}
+
+.app__sequencer__step {
+	display: inline-block;
+	flex: 1;
+	padding: 0.5em;
+	border: none;
+	cursor: pointer;
+	background-color: #eee;
+	font-size: 0.8em;
+	text-align: center;
+	border-top: 1px solid white;
+	border-right: 1px solid white;
+}
+
+.app__sequencer__step--is-active {
+	background-color: turquoise;
 }

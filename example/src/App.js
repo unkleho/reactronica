@@ -6,6 +6,7 @@ export default class App extends Component {
 	state = {
 		notes: [],
 		steps: stepsA,
+		activeStepIndex: null,
 		isPlaying: false,
 		inputVolume: 100,
 		inputPan: 50,
@@ -92,6 +93,14 @@ export default class App extends Component {
 		});
 	};
 
+	handleStepPlay = (step) => {
+		console.log(step);
+
+		this.setState({
+			activeStepIndex: step.index,
+		});
+	};
+
 	render() {
 		const {
 			isPlaying,
@@ -100,32 +109,50 @@ export default class App extends Component {
 			inputPan,
 			effects,
 			steps,
+			activeStepIndex,
 		} = this.state;
-
-		console.log(steps);
 
 		return (
 			<div className="app">
 				<h1>Reactronica</h1>
-				<p>React components for making music</p>
+				<p>React audio components for making music</p>
 
 				<div className="app__sequencer">
+					<div className="app__sequencer__row">
+						{[...new Array(9)].map((_, i) => {
+							return (
+								<div
+									className={[
+										'app__sequencer__step',
+										activeStepIndex + 1 === i
+											? 'app__sequencer__step--is-active'
+											: '',
+									].join(' ')}
+									key={`header-${i}`}
+								>
+									{i !== 0 && i}
+								</div>
+							);
+						})}
+					</div>
+
 					{['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3'].map((note) => {
 						return (
 							<div className="app__sequencer__row">
-								{[...new Array(8)].map((_, i) => {
-									const isActive = steps[i] && steps[i].note === note;
+								{[...new Array(9)].map((_, i) => {
+									const index = i - 1;
+									const isActive = steps[index] && steps[index].note === note;
 
-									// console.log(isActive);
 									return (
 										<button
 											className={[
 												'app__sequencer__step',
 												isActive ? 'app__sequencer__step--is-active' : '',
 											].join(' ')}
-											onClick={() => this.handleSequencerClick(note, i)}
+											onClick={() => this.handleSequencerClick(note, index)}
+											key={i}
 										>
-											{note} {i + 1} {isActive && 'active'}
+											{i === 0 ? note : null}
 										</button>
 									);
 								})}
@@ -202,6 +229,7 @@ export default class App extends Component {
 						volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
 						pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
 						effects={effects}
+						onStepPlay={this.handleStepPlay}
 						// key={i}
 					>
 						<Instrument notes={notes} />
