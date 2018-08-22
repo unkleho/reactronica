@@ -43,6 +43,8 @@ class Example extends Component {
 						<Effect type="feedbackDelay" />,
 						<Effect type="distortion" />
           ]}
+          // Callback for every tick
+          onStepPlay={}
         >
           <Instrument type="polySynth" notes={[]} />
         </Track>
