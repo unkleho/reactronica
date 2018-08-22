@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.css"],"names":[],"mappings":"gDAEA,KACC,SACA,YACA,+BAAoC","file":"static/css/main.fcdd4934.css","sourcesContent":["@import url('https://rsms.me/inter/inter-ui.css');\n\nbody {\n\tmargin: 0;\n\tpadding: 1em;\n\tfont-family: 'Inter UI', sans-serif;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/index.css"],"sourceRoot":""}
