@@ -115,7 +115,17 @@ export default class App extends Component {
 		return (
 			<div className="app">
 				<h1>Reactronica</h1>
-				<p>React audio components for making music</p>
+				<p>React audio components for making music in the browser.</p>
+
+				<p>
+					Check out the repo:
+					<br />
+					<a href="https://github.com/unkleho/reactronica">
+						https://github.com/unkleho/reactronica
+					</a>
+				</p>
+
+				<br />
 
 				<div className="app__sequencer">
 					<div className="app__sequencer__row">

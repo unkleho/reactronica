@@ -2,7 +2,10 @@
 
 > Warning: Highly experimental. APIs will change.
 
-React components for making music. Uses ToneJS under the hood.
+React audio components for making music in the browser. Uses [ToneJS](https://tonejs.github.io/) under the hood.
+
+Check out the demo:
+https://unkleho.github.io/reactronica/
 
 Strongly influenced by [React Music](https://github.com/FormidableLabs/react-music).
 
@@ -40,8 +43,8 @@ class Example extends Component {
             null,
           ]}
           effects={[
-						<Effect type="feedbackDelay" />,
-						<Effect type="distortion" />
+            <Effect type="feedbackDelay" />,
+            <Effect type="distortion" />
           ]}
           // Callback for every tick
           onStepPlay={}
@@ -54,6 +57,30 @@ class Example extends Component {
 }
 ```
 <!-- prettier-ignore-end -->
+
+## Documentation
+
+### `<Song />`
+
+#### Props
+
+- `tempo` (number): Speed or pace of the song. Measured in beats per minute.
+- `isPlaying` (bool): Whether the song is playing or not. Defaults to `false`.
+
+### `<Track />`
+
+#### Props
+
+- `steps` (array)
+- `effects` (array)
+- `onStepPlay` (func): Called on every tick.
+
+### `<Instrument />`
+
+#### Props
+
+- `type` (string)
+- `notes` (array)
 
 ## Thanks
 
