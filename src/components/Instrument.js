@@ -10,6 +10,7 @@ class InstrumentConsumer extends Component {
 		notes: PropTypes.arrayOf(NoteType), // Currently played notes.
 		polyphony: PropTypes.number,
 		options: PropTypes.object,
+		samples: PropTypes.object,
 		// An instance of new this.Tone.PanVol()
 		trackChannel: PropTypes.object,
 		updateInstruments: PropTypes.func,
@@ -18,6 +19,7 @@ class InstrumentConsumer extends Component {
 	static defaultProps = {
 		notes: [],
 		instruments: [],
+		samples: {},
 		polyphony: 4,
 		options: {
 			oscillator: {
@@ -35,11 +37,11 @@ class InstrumentConsumer extends Component {
 		this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
 
 		// Set up instrument
-		this.initInstrument();
+		this.initInstrument(this.props.type);
 		this.connectInstrument(this.trackChannelBase);
 
 		// Add this Instrument to Track Context
-		this.props.updateInstruments([this.synth]);
+		this.props.updateInstruments([this.instrument]);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -77,7 +79,7 @@ class InstrumentConsumer extends Component {
 
 			// Only play note is it isn't already playing
 			if (!isPlaying) {
-				this.synth.triggerAttack(note.name);
+				this.instrument.triggerAttack(note.name);
 			}
 		});
 
@@ -88,17 +90,21 @@ class InstrumentConsumer extends Component {
 				this.props.notes.filter((n) => n.name === note.name).length > 0;
 
 			if (!isPlaying) {
-				this.synth.triggerRelease(note.name);
+				this.instrument.triggerRelease(note.name);
 			}
 		});
 	}
 
-	initInstrument = () => {
-		this.synth = new Tone.PolySynth(
-			this.props.polyphony,
-			Tone.Synth,
-			this.props.options,
-		);
+	initInstrument = (type) => {
+		if (type === 'sampler') {
+			this.instrument = new Tone.Sampler(this.props.samples);
+		} else {
+			this.instrument = new Tone.PolySynth(
+				this.props.polyphony,
+				Tone.Synth,
+				this.props.options,
+			);
+		}
 	};
 
 	updateEffectsChain = (effectsChain) => {
@@ -108,8 +114,11 @@ class InstrumentConsumer extends Component {
 
 		// NOTE: Using this.props.trackChannelBase causes effects to not turn off
 
-		this.synth.disconnect();
-		this.synth.chain(...[this.trackChannelBase, ...effectsChain], Tone.Master);
+		this.instrument.disconnect();
+		this.instrument.chain(
+			...[this.trackChannelBase, ...effectsChain],
+			Tone.Master,
+		);
 	};
 
 	// Not used really
@@ -117,13 +126,13 @@ class InstrumentConsumer extends Component {
 		console.log('<Instrument />', 'connectInstrument', trackChannel);
 
 		if (trackChannel) {
-			this.synth.disconnect();
-			this.synth.chain(trackChannel, Tone.Master);
+			this.instrument.disconnect();
+			this.instrument.chain(trackChannel, Tone.Master);
 			// NOTE
 			// Be careful with this syntax `.connect(trackChannel).toMaster()`
 		} else {
-			this.synth.disconnect();
-			this.synth.toMaster();
+			this.instrument.disconnect();
+			this.instrument.toMaster();
 		}
 	};
 

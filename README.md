@@ -51,6 +51,13 @@ class Example extends Component {
         >
           <Instrument type="polySynth" notes={[]} />
         </Track>
+        <Track>
+          <Instrument type="sampler" samples={{
+            'C3': 'path/to/kick.mp3',
+            'D3': 'path/to/snare.mp3',
+            'E3': 'path/to/hihat.mp3',
+          }} />
+        </Track>
       </Song>
     );
   }

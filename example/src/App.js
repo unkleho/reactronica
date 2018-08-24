@@ -5,7 +5,8 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 export default class App extends Component {
 	state = {
 		notes: [],
-		steps: stepsA,
+		melodySteps: stepsA,
+		beatSteps: stepsB,
 		activeStepIndex: null,
 		isPlaying: false,
 		inputVolume: 100,
@@ -62,7 +63,6 @@ export default class App extends Component {
 
 	handleEffectClick = () => {
 		this.setState({
-			// hasEffect: !this.state.hasEffect,
 			effects: this.state.defaultEffects,
 		});
 	};
@@ -74,14 +74,13 @@ export default class App extends Component {
 	};
 
 	handleSequencerClick = (note, i) => {
-		const steps = [...this.state.steps];
+		const steps = [...this.state.melodySteps];
 
 		if (steps[i] && steps[i].note === note) {
-			console.log('hi');
-
-			console.log(steps[i].note);
+			// Clear step
 			steps[i] = null;
 		} else {
+			// Assign step
 			steps[i] = {
 				note,
 				duration: 0.5,
@@ -89,13 +88,11 @@ export default class App extends Component {
 		}
 
 		this.setState({
-			steps,
+			melodySteps: steps,
 		});
 	};
 
 	handleStepPlay = (step) => {
-		console.log(step);
-
 		this.setState({
 			activeStepIndex: step.index,
 		});
@@ -108,7 +105,8 @@ export default class App extends Component {
 			notes,
 			inputPan,
 			effects,
-			steps,
+			melodySteps,
+			beatSteps,
 			activeStepIndex,
 		} = this.state;
 
@@ -151,7 +149,8 @@ export default class App extends Component {
 							<div className="app__sequencer__row">
 								{[...new Array(9)].map((_, i) => {
 									const index = i - 1;
-									const isActive = steps[index] && steps[index].note === note;
+									const isActive =
+										melodySteps[index] && melodySteps[index].note === note;
 
 									return (
 										<button
@@ -233,18 +232,25 @@ export default class App extends Component {
 				})}
 
 				<Song isPlaying={isPlaying} tempo={110}>
-					{/* {steps.map((steps, i) => ( */}
 					<Track
-						steps={steps}
+						steps={melodySteps}
 						volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
 						pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
 						effects={effects}
 						onStepPlay={this.handleStepPlay}
-						// key={i}
 					>
 						<Instrument notes={notes} />
 					</Track>
-					{/* ))} */}
+					<Track steps={beatSteps}>
+						<Instrument
+							type="sampler"
+							samples={{
+								C3: '/samples/BD_Blofeld_014.wav',
+								D3: '/samples/SD_Blofeld_03.wav',
+								E3: '/samples/HH_Blofeld_004.wav',
+							}}
+						/>
+					</Track>
 				</Song>
 			</div>
 		);
@@ -277,21 +283,31 @@ const stepsA = [
 	null,
 ];
 
-// const stepsB = [
-// 	null,
-// 	{
-// 		note: 'C5',
-// 		duration: 1,
-// 		// position: 0,
-// 	},
-// 	null,
-// 	null,
-// 	null,
-// 	null,
-// 	{
-// 		note: 'D5',
-// 		duration: 1,
-// 		// position: 2,
-// 	},
-// 	null,
-// ];
+const stepsB = [
+	{
+		note: 'C3',
+		duration: 1,
+	},
+	null,
+	{
+		note: 'D3',
+		duration: 1,
+	},
+	null,
+	{
+		note: 'C3',
+		duration: 1,
+	},
+	{
+		note: 'E3',
+		duration: 1,
+	},
+	{
+		note: 'D3',
+		duration: 1,
+	},
+	{
+		note: 'E3',
+		duration: 1,
+	},
+];
