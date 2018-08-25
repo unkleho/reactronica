@@ -17,6 +17,19 @@ h1 {
 	max-width: 40em;
 }
 
+.app__steps-chooser {
+	margin-bottom: 1em;
+}
+
+.app__steps-chooser__button {
+	text-transform: capitalize;
+}
+
+.app__steps-chooser__button--is-active {
+	/* background-color: aquamarine; */
+	font-weight: bold;
+}
+
 .app__sequencer {
 	margin-bottom: 1em;
 }

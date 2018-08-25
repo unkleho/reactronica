@@ -7,6 +7,7 @@ export default class App extends Component {
 		notes: [],
 		melodySteps: stepsA,
 		beatSteps: stepsB,
+		currentStepsName: 'melodySteps',
 		activeStepIndex: null,
 		isPlaying: false,
 		inputVolume: 100,
@@ -73,8 +74,10 @@ export default class App extends Component {
 		});
 	};
 
-	handleSequencerClick = (note, i) => {
-		const steps = [...this.state.melodySteps];
+	handleSequencerClick = (note, i, currentStepsName) => {
+		console.log(currentStepsName);
+
+		const steps = [...this.state[currentStepsName]];
 
 		if (steps[i] && steps[i].note === note) {
 			// Clear step
@@ -88,13 +91,31 @@ export default class App extends Component {
 		}
 
 		this.setState({
-			melodySteps: steps,
+			[currentStepsName]: steps,
 		});
 	};
 
 	handleStepPlay = (step) => {
 		this.setState({
 			activeStepIndex: step.index,
+		});
+	};
+
+	handleStepsChooserClick = (name) => {
+		this.setState({
+			currentStepsName: name,
+		});
+	};
+
+	handleKeyboardDown = (note) => {
+		this.setState({
+			notes: [{ name: note }],
+		});
+	};
+
+	handleKeyboardUp = () => {
+		this.setState({
+			notes: [],
 		});
 	};
 
@@ -108,6 +129,7 @@ export default class App extends Component {
 			melodySteps,
 			beatSteps,
 			activeStepIndex,
+			currentStepsName,
 		} = this.state;
 
 		return (
@@ -124,6 +146,25 @@ export default class App extends Component {
 				</p>
 
 				<br />
+
+				<div className="app__steps-chooser">
+					{['melody', 'beat'].map((name) => {
+						return (
+							<button
+								className={[
+									'app__steps-chooser__button',
+									`${name}Steps` === currentStepsName
+										? 'app__steps-chooser__button--is-active'
+										: '',
+								].join(' ')}
+								onClick={() => this.handleStepsChooserClick(`${name}Steps`)}
+								key={name}
+							>
+								{name}
+							</button>
+						);
+					})}
+				</div>
 
 				<div className="app__sequencer">
 					<div className="app__sequencer__row">
@@ -145,12 +186,26 @@ export default class App extends Component {
 					</div>
 
 					{['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3'].map((note) => {
+						const steps = this.state[currentStepsName];
+
 						return (
-							<div className="app__sequencer__row">
+							<div className="app__sequencer__row" key={note}>
 								{[...new Array(9)].map((_, i) => {
 									const index = i - 1;
-									const isActive =
-										melodySteps[index] && melodySteps[index].note === note;
+									const isActive = steps[index] && steps[index].note === note;
+
+									// For the first column, show playable keyboard
+									if (i === 0) {
+										return (
+											<button
+												className={['app__sequencer__step'].join(' ')}
+												onMouseDown={() => this.handleKeyboardDown(note)}
+												onMouseUp={() => this.handleKeyboardUp(note)}
+											>
+												{note}
+											</button>
+										);
+									}
 
 									return (
 										<button
@@ -158,11 +213,15 @@ export default class App extends Component {
 												'app__sequencer__step',
 												isActive ? 'app__sequencer__step--is-active' : '',
 											].join(' ')}
-											onClick={() => this.handleSequencerClick(note, index)}
+											onClick={() => {
+												return this.handleSequencerClick(
+													note,
+													index,
+													currentStepsName,
+												);
+											}}
 											key={i}
-										>
-											{i === 0 ? note : null}
-										</button>
+										/>
 									);
 								})}
 							</div>
@@ -241,6 +300,7 @@ export default class App extends Component {
 					>
 						<Instrument notes={notes} />
 					</Track>
+
 					<Track steps={beatSteps}>
 						<Instrument
 							type="sampler"
