@@ -11,16 +11,17 @@ export const TrackContext = React.createContext();
 class TrackConsumer extends Component {
 	static propTypes = {
 		steps: PropTypes.arrayOf(StepType),
-		onStepPlay: PropTypes.func,
-		interval: PropTypes.string, // react-music = resolution
 		volume: PropTypes.number,
 		pan: PropTypes.number,
+		subdivision: PropTypes.string, // react-music = resolution
 		effects: PropTypes.arrayOf(PropTypes.element), // TODO: Consider accepting Tone effects signals
+		onStepPlay: PropTypes.func,
 	};
 
 	static defaultProps = {
 		volume: 0,
 		pan: 0,
+		subdivision: '4n',
 		effects: [],
 	};
 
@@ -36,8 +37,6 @@ class TrackConsumer extends Component {
 	};
 
 	componentDidMount() {
-		// Tone = require('tone'); // eslint-disable-line
-
 		// Example of chaining
 		// const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5);
 		// this.trackChain = [
@@ -118,7 +117,7 @@ class TrackConsumer extends Component {
 						index: i,
 					};
 				}),
-				this.props.interval,
+				this.props.subdivision,
 			);
 
 			this.seq.start(0);

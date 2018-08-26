@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import StartAudioContext from 'startaudiocontext';
 
-import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
 // import { isEqual } from '../lib/utils';
 
@@ -12,16 +11,18 @@ export default class Song extends Component {
 	static propTypes = {
 		isPlaying: PropTypes.bool,
 		tempo: PropTypes.number,
-		steps: PropTypes.arrayOf(StepType),
+		// subdivision: PropTypes.string, // react-music = resolution
+		swing: PropTypes.number,
+		swingSubdivision: PropTypes.string,
 		onStepStart: PropTypes.func,
-		interval: PropTypes.string, // react-music = resolution
 	};
 
 	static defaultProps = {
-		tempo: 90,
-		steps: [],
 		isPlaying: false,
-		interval: '4n',
+		tempo: 90,
+		// subdivision: '4n',
+		swing: 0,
+		swingSubdivision: '8n',
 	};
 
 	state = {
@@ -30,8 +31,9 @@ export default class Song extends Component {
 	};
 
 	componentDidMount() {
-		// Tone = require('tone'); // eslint-disable-line
 		Tone.Transport.bpm.value = this.props.tempo;
+		Tone.Transport.swing = this.props.swing;
+		Tone.Transport.swingSubdivision = this.props.swingSubdivision;
 
 		// iOS Web Audio API requires this library.
 		StartAudioContext(Tone.context);

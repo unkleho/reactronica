@@ -290,18 +290,24 @@ export default class App extends Component {
 					);
 				})}
 
-				<Song isPlaying={isPlaying} tempo={110}>
+				<Song
+					isPlaying={isPlaying}
+					tempo={90}
+					swing={1}
+					swingSubdivision={'8n'}
+				>
 					<Track
 						steps={melodySteps}
 						volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
 						pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
+						subdivision={'4n'}
 						effects={effects}
 						onStepPlay={this.handleStepPlay}
 					>
 						<Instrument notes={notes} />
 					</Track>
 
-					<Track steps={beatSteps}>
+					<Track steps={beatSteps} subdivision={'4n'}>
 						<Instrument
 							type="sampler"
 							samples={{
