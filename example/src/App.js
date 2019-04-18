@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import { Song, Track, Instrument, Effect } from 'reactronica';
+
+import Sequencer from './Sequencer';
 
 export default class App extends Component {
   state = {
@@ -166,68 +167,14 @@ export default class App extends Component {
           })}
         </div>
 
-        <div className="app__sequencer">
-          <div className="app__sequencer__row">
-            {[...new Array(9)].map((_, i) => {
-              return (
-                <div
-                  className={[
-                    'app__sequencer__step',
-                    activeStepIndex + 1 === i
-                      ? 'app__sequencer__step--is-active'
-                      : '',
-                  ].join(' ')}
-                  key={`header-${i}`}
-                >
-                  {i !== 0 && i}
-                </div>
-              );
-            })}
-          </div>
-
-          {['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3'].map((note) => {
-            const steps = this.state[currentStepsName];
-
-            return (
-              <div className="app__sequencer__row" key={note}>
-                {[...new Array(9)].map((_, i) => {
-                  const index = i - 1;
-                  const isActive = steps[index] && steps[index].note === note;
-
-                  // For the first column, show playable keyboard
-                  if (i === 0) {
-                    return (
-                      <button
-                        className={['app__sequencer__step'].join(' ')}
-                        onMouseDown={() => this.handleKeyboardDown(note)}
-                        onMouseUp={() => this.handleKeyboardUp(note)}
-                      >
-                        {note}
-                      </button>
-                    );
-                  }
-
-                  return (
-                    <button
-                      className={[
-                        'app__sequencer__step',
-                        isActive ? 'app__sequencer__step--is-active' : '',
-                      ].join(' ')}
-                      onClick={() => {
-                        return this.handleSequencerClick(
-                          note,
-                          index,
-                          currentStepsName,
-                        );
-                      }}
-                      key={i}
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+        <Sequencer
+          activeStepIndex={activeStepIndex}
+          steps={this.state[currentStepsName]}
+          currentStepsName={currentStepsName}
+          onSequencerClick={this.handleSequencerClick}
+          onKeyboardDown={this.handleKeyboardDown}
+          onKeyboardUp={this.handleKeyboardUp}
+        />
 
         <button onClick={this.togglePlaying}>
           {isPlaying ? 'Stop' : 'Play'}
