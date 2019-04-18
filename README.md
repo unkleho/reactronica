@@ -89,6 +89,16 @@ class Example extends Component {
 - `type` (string)
 - `notes` (array)
 
+## Development
+
+```bash
+# Start Reactronica component build watch
+$ npm start
+# To run example page, in new terminal:
+$ cd example
+$ npm start
+```
+
 ## Thanks
 
 - https://tonejs.github.io/
