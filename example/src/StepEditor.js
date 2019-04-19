@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Sequencer = ({
+// Rename to StepsEditor?
+const StepEditor = ({
   activeStepIndex,
   steps,
-  currentStepsName,
-  onSequencerClick,
+  editorLength = 8,
+  onStepEditorClick,
   onKeyboardDown,
   onKeyboardUp,
 }) => {
   return (
-    <div className="app__sequencer">
-      <div className="app__sequencer__row">
-        {[...new Array(9)].map((_, i) => {
+    <div className="step-editor">
+      <div className="step-editor__row">
+        {[...new Array(1 + editorLength)].map((_, i) => {
           return (
             <div
               className={[
-                'app__sequencer__step',
-                activeStepIndex + 1 === i
-                  ? 'app__sequencer__step--is-active'
-                  : '',
+                'step-editor__step',
+                activeStepIndex + 1 === i ? 'step-editor__step--is-active' : '',
               ].join(' ')}
               key={`header-${i}`}
             >
@@ -30,8 +29,8 @@ const Sequencer = ({
 
       {['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3'].map((note) => {
         return (
-          <div className="app__sequencer__row" key={note}>
-            {[...new Array(9)].map((_, i) => {
+          <div className="step-editor__row" key={note}>
+            {[...new Array(1 + editorLength)].map((_, i) => {
               const index = i - 1;
               const isActive = steps[index] && steps[index].note === note;
 
@@ -39,7 +38,7 @@ const Sequencer = ({
               if (i === 0) {
                 return (
                   <button
-                    className={['app__sequencer__step'].join(' ')}
+                    className={['step-editor__step'].join(' ')}
                     onMouseDown={() => onKeyboardDown(note)}
                     onMouseUp={() => onKeyboardUp(note)}
                   >
@@ -51,12 +50,10 @@ const Sequencer = ({
               return (
                 <button
                   className={[
-                    'app__sequencer__step',
-                    isActive ? 'app__sequencer__step--is-active' : '',
+                    'step-editor__step',
+                    isActive ? 'step-editor__step--is-active' : '',
                   ].join(' ')}
-                  onClick={() => {
-                    return onSequencerClick(note, index, currentStepsName);
-                  }}
+                  onClick={() => onStepEditorClick(note, index)}
                   key={i}
                 />
               );
@@ -68,4 +65,4 @@ const Sequencer = ({
   );
 };
 
-export default Sequencer;
+export default StepEditor;

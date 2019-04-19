@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
-import Sequencer from './Sequencer';
+import StepEditor from './StepEditor';
 
 export default class App extends Component {
   state = {
@@ -75,7 +75,7 @@ export default class App extends Component {
     });
   };
 
-  handleSequencerClick = (note, i, currentStepsName) => {
+  handleStepEditorClick = (note, i, currentStepsName) => {
     console.log(currentStepsName);
 
     const steps = [...this.state[currentStepsName]];
@@ -167,11 +167,13 @@ export default class App extends Component {
           })}
         </div>
 
-        <Sequencer
+        <StepEditor
           activeStepIndex={activeStepIndex}
           steps={this.state[currentStepsName]}
           currentStepsName={currentStepsName}
-          onSequencerClick={this.handleSequencerClick}
+          onStepEditorClick={(note, index) =>
+            this.handleStepEditorClick(note, index, currentStepsName)
+          }
           onKeyboardDown={this.handleKeyboardDown}
           onKeyboardUp={this.handleKeyboardUp}
         />

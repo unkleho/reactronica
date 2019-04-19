@@ -1,56 +1,56 @@
 @import url('https://rsms.me/inter/inter-ui.css');
 
 body {
-	margin: 2em;
-	font-family: 'Inter UI', sans-serif;
-	color: #333;
+  margin: 2em;
+  font-family: 'Inter UI', sans-serif;
+  color: #333;
 }
 
 h1 {
-	margin-bottom: 0;
-	font-size: 3em;
-	letter-spacing: -0.03em;
+  margin-bottom: 0;
+  font-size: 3em;
+  letter-spacing: -0.03em;
 }
 
 .app {
-	margin: 0 auto;
-	max-width: 40em;
+  margin: 0 auto;
+  max-width: 40em;
 }
 
 .app__steps-chooser {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 .app__steps-chooser__button {
-	text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 .app__steps-chooser__button--is-active {
-	/* background-color: aquamarine; */
-	font-weight: bold;
+  /* background-color: aquamarine; */
+  font-weight: bold;
 }
 
-.app__sequencer {
-	margin-bottom: 1em;
+.step-editor {
+  margin-bottom: 1em;
 }
 
-.app__sequencer__row {
-	display: flex;
+.step-editor__row {
+  display: flex;
 }
 
-.app__sequencer__step {
-	display: inline-block;
-	flex: 1;
-	padding: 0.5em;
-	border: none;
-	cursor: pointer;
-	background-color: #eee;
-	font-size: 0.8em;
-	text-align: center;
-	border-top: 1px solid white;
-	border-right: 1px solid white;
+.step-editor__step {
+  display: inline-block;
+  flex: 1;
+  padding: 0.5em;
+  border: none;
+  cursor: pointer;
+  background-color: #eee;
+  font-size: 0.8em;
+  text-align: center;
+  border-top: 1px solid white;
+  border-right: 1px solid white;
 }
 
-.app__sequencer__step--is-active {
-	background-color: turquoise;
+.step-editor__step--is-active {
+  background-color: turquoise;
 }
