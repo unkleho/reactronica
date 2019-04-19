@@ -30,12 +30,19 @@ h1 {
   font-weight: bold;
 }
 
+/* Step Editor */
+
 .step-editor {
   margin-bottom: 1em;
 }
 
 .step-editor__row {
   display: flex;
+}
+
+.step-editor__row--is-accidental .step-editor__step--key {
+  color: #eee;
+  background-color: #000;
 }
 
 .step-editor__step {

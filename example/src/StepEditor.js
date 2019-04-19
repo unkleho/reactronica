@@ -27,9 +27,30 @@ const StepEditor = ({
         })}
       </div>
 
-      {['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3'].map((note) => {
+      {[
+        'C3',
+        'C#3',
+        'D3',
+        'D#3',
+        'E3',
+        'F3',
+        'F#3',
+        'G3',
+        'G#3',
+        'A3',
+        'A#3',
+        'B3',
+      ].map((note) => {
+        const isAccidental = note.includes('#');
+
         return (
-          <div className="step-editor__row" key={note}>
+          <div
+            className={[
+              'step-editor__row',
+              isAccidental ? 'step-editor__row--is-accidental' : '',
+            ].join(' ')}
+            key={note}
+          >
             {[...new Array(1 + editorLength)].map((_, i) => {
               const index = i - 1;
               const isActive = steps[index] && steps[index].note === note;
@@ -38,7 +59,10 @@ const StepEditor = ({
               if (i === 0) {
                 return (
                   <button
-                    className={['step-editor__step'].join(' ')}
+                    className={[
+                      'step-editor__step',
+                      'step-editor__step--key',
+                    ].join(' ')}
                     onMouseDown={() => onKeyboardDown(note)}
                     onMouseUp={() => onKeyboardUp(note)}
                   >
