@@ -15,7 +15,8 @@
     "start": "rollup -c -w",
     "prepare": "npm run build",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "dev": "npm start & cd example/ && npm start"
   },
   "dependencies": {
     "startaudiocontext": "^1.2.1",
