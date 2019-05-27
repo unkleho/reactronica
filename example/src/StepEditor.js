@@ -65,6 +65,7 @@ const StepEditor = ({
                     ].join(' ')}
                     onMouseDown={() => onKeyboardDown(note)}
                     onMouseUp={() => onKeyboardUp(note)}
+                    key={i}
                   >
                     {note}
                   </button>
