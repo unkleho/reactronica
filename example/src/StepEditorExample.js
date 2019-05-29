@@ -2,276 +2,7 @@ import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
 import StepEditor from './StepEditor';
-
-class StepEditorExample extends React.Component {
-  state = {
-    notes: [],
-    melodySteps: stepsA,
-    beatSteps: stepsB,
-    currentStepsName: 'melodySteps',
-    activeStepIndex: null,
-    isPlaying: false,
-    tempo: 90,
-    inputVolume: 100,
-    inputPan: 50,
-    feedback: 0.6,
-    defaultEffects: [
-      <Effect
-        type="feedbackDelay"
-        key="effect-1"
-        id="effect-1"
-        delayTime={'16n'}
-        feedback={0.6}
-      />,
-      <Effect type="distortion" key="effect-2" id="effect-2" />,
-    ],
-    effects: [],
-  };
-
-  handleNoteDown = (e) => {
-    this.setState({
-      notes: [{ name: 'C3' }],
-    });
-  };
-
-  handleNoteUp = () => {
-    this.setState({
-      notes: [],
-    });
-  };
-
-  togglePlaying = () => {
-    this.setState({
-      isPlaying: !this.state.isPlaying,
-    });
-  };
-
-  handleFeedbackClick = () => {
-    this.setState({
-      feedback: 0.9,
-    });
-  };
-
-  handleVolumeRange = (event) => {
-    this.setState({
-      inputVolume: event.target.value,
-    });
-  };
-
-  handlePanRange = (event) => {
-    this.setState({
-      inputPan: event.target.value,
-    });
-  };
-
-  handleEffectClick = () => {
-    this.setState({
-      effects: this.state.defaultEffects,
-    });
-  };
-
-  handleRemoveEffect = (id) => {
-    this.setState({
-      effects: this.state.effects.filter((effect) => effect.props.id !== id),
-    });
-  };
-
-  handleStepEditorClick = (note, i, currentStepsName) => {
-    console.log(currentStepsName);
-
-    const steps = [...this.state[currentStepsName]];
-
-    if (steps[i] && steps[i].note === note) {
-      // Clear step
-      steps[i] = null;
-    } else {
-      // Assign step
-      steps[i] = {
-        note,
-        duration: 0.5,
-      };
-    }
-
-    this.setState({
-      [currentStepsName]: steps,
-    });
-  };
-
-  handleStepPlay = (step) => {
-    this.setState({
-      activeStepIndex: step.index,
-    });
-  };
-
-  handleStepsChooserClick = (name) => {
-    this.setState({
-      currentStepsName: name,
-    });
-  };
-
-  handleKeyboardDown = (note) => {
-    this.setState({
-      notes: [{ name: note }],
-    });
-  };
-
-  handleKeyboardUp = () => {
-    this.setState({
-      notes: [],
-    });
-  };
-
-  render() {
-    const {
-      isPlaying,
-      tempo,
-      inputVolume,
-      notes,
-      inputPan,
-      effects,
-      melodySteps,
-      beatSteps,
-      activeStepIndex,
-      currentStepsName,
-    } = this.state;
-
-    return (
-      <div>
-        <div className="app__steps-chooser">
-          {['melody', 'beat'].map((name) => {
-            return (
-              <button
-                className={[
-                  'app__steps-chooser__button',
-                  `${name}Steps` === currentStepsName
-                    ? 'app__steps-chooser__button--is-active'
-                    : '',
-                ].join(' ')}
-                onClick={() => this.handleStepsChooserClick(`${name}Steps`)}
-                key={name}
-              >
-                {name}
-              </button>
-            );
-          })}
-        </div>
-
-        <StepEditor
-          activeStepIndex={activeStepIndex}
-          steps={this.state[currentStepsName]}
-          currentStepsName={currentStepsName}
-          onStepEditorClick={(note, index) =>
-            this.handleStepEditorClick(note, index, currentStepsName)
-          }
-          onKeyboardDown={this.handleKeyboardDown}
-          onKeyboardUp={this.handleKeyboardUp}
-        />
-
-        <button onClick={this.togglePlaying}>
-          {isPlaying ? 'Stop' : 'Play'}
-        </button>
-
-        <button
-          onMouseDown={this.handleNoteDown}
-          onMouseUp={this.handleNoteUp}
-          onTouchStart={this.handleNoteDown}
-          onTouchEnd={this.handleNoteUp}
-        >
-          Play Note
-        </button>
-
-        <p>
-          Tempo: {tempo}{' '}
-          <button onClick={() => this.setState({ tempo: tempo + 1 })}>
-            Increase Tempo
-          </button>
-          <button onClick={() => this.setState({ tempo: tempo - 1 })}>
-            Decrease Tempo
-          </button>
-        </p>
-
-        <button onClick={this.handleEffectClick}>Add Effects</button>
-        <button onClick={this.handleFeedbackClick}>Add more feedback</button>
-
-        <h2>Track</h2>
-        <div className="app__track">
-          <div>
-            <label htmlFor="volume">Volume</label>
-            <br />
-            <input
-              id="volume"
-              type="range"
-              value={inputVolume}
-              onChange={this.handleVolumeRange}
-            />
-            {inputVolume}
-          </div>
-
-          <br />
-
-          <div>
-            <label htmlFor="pan">Pan</label>
-            <br />
-            <input
-              id="pan"
-              type="range"
-              value={inputPan}
-              onChange={this.handlePanRange}
-            />
-            {inputPan}
-          </div>
-        </div>
-
-        <h3>Effects</h3>
-        {this.state.effects.map((effect) => {
-          return (
-            <div className="app__track__effect" key={effect.props.id}>
-              <p>
-                {effect.props.type}{' '}
-                <button
-                  onClick={() => this.handleRemoveEffect(effect.props.id)}
-                >
-                  Remove
-                </button>
-              </p>
-            </div>
-          );
-        })}
-
-        <Song
-          isPlaying={isPlaying}
-          tempo={tempo}
-          swing={1}
-          swingSubdivision={'8n'}
-        >
-          <Track
-            steps={melodySteps}
-            volume={(parseInt(inputVolume, 10) / 100) * 32 - 32}
-            pan={(parseInt(inputPan, 10) / 100) * 2 - 1}
-            subdivision={'4n'}
-            effects={effects}
-            onStepPlay={this.handleStepPlay}
-          >
-            <Instrument notes={notes} />
-          </Track>
-
-          <Track steps={beatSteps} subdivision={'4n'}>
-            <Instrument
-              type="sampler"
-              samples={{
-                C3: '/samples/BD_Blofeld_014.wav',
-                D3: '/samples/SD_Blofeld_03.wav',
-                E3: '/samples/HH_Blofeld_004.wav',
-              }}
-            />
-          </Track>
-        </Song>
-      </div>
-    );
-  }
-}
-
-export default StepEditorExample;
+import css from './StepEditorExample.module.css';
 
 const stepsA = [
   {
@@ -327,3 +58,281 @@ const stepsB = [
     duration: 1,
   },
 ];
+
+const initialState = {
+  isPlaying: false,
+  tempo: 90,
+  stepsGroup: {
+    melodySteps: stepsA,
+    beatSteps: stepsB,
+  },
+  currentStepsName: 'melodySteps',
+  currentStepIndex: null,
+  notes: [],
+  volume: 100,
+  pan: 50,
+  feedback: 0.6,
+  defaultEffects: [
+    <Effect
+      type="feedbackDelay"
+      key="effect-1"
+      id="effect-1"
+      delayTime={'16n'}
+      feedback={0.6}
+    />,
+    <Effect type="distortion" key="effect-2" id="effect-2" />,
+  ],
+  effects: [],
+};
+
+const StepEditorExample = () => {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const {
+    isPlaying,
+    tempo,
+    stepsGroup,
+    currentStepsName,
+    currentStepIndex,
+    notes,
+    effects,
+    pan,
+    volume,
+  } = state;
+
+  const currentSteps = stepsGroup[currentStepsName];
+
+  return (
+    <div className={css.stepEditorExample}>
+      <div className="app__steps-chooser">
+        {['melody', 'beat'].map((name) => {
+          return (
+            <button
+              className={[
+                'app__steps-chooser__button',
+                `${name}Steps` === currentStepsName
+                  ? 'app__steps-chooser__button--is-active'
+                  : '',
+              ].join(' ')}
+              onClick={() =>
+                dispatch({
+                  type: 'SET_CURRENT_STEPS_NAME',
+                  name: `${name}Steps`,
+                })
+              }
+              key={name}
+            >
+              {name}
+            </button>
+          );
+        })}
+      </div>
+
+      <StepEditor
+        steps={currentSteps}
+        currentStepIndex={currentStepIndex}
+        notes={notes}
+        onStepEditorClick={(note, index) =>
+          dispatch({ type: 'UPDATE_CURRENT_STEPS', note, index })
+        }
+        onKeyboardDown={(note) =>
+          dispatch({ type: 'SET_NOTES', notes: [{ name: note }] })
+        }
+        onKeyboardUp={() => dispatch({ type: 'SET_NOTES', notes: [] })}
+      />
+
+      <button onClick={() => dispatch({ type: 'TOGGLE_PLAYING' })}>
+        {isPlaying ? 'Stop' : 'Play'}
+      </button>
+      <p>
+        Tempo: {tempo}{' '}
+        <button onClick={() => dispatch({ type: 'INCREMENT_TEMPO' })}>
+          Increase Tempo
+        </button>
+        <button onClick={() => dispatch({ type: 'DECREMENT_TEMPO' })}>
+          Decrease Tempo
+        </button>
+      </p>
+
+      <button onClick={() => dispatch({ type: 'ADD_EFFECTS' })}>
+        Add Effects
+      </button>
+      <button onClick={() => dispatch({ type: 'ADD_MORE_FEEDBACK' })}>
+        Add more feedback
+      </button>
+
+      <h2>Track</h2>
+      <div className="app__track">
+        <div>
+          <label htmlFor="volume">Volume</label>
+          <br />
+          <input
+            id="volume"
+            type="range"
+            value={volume}
+            onChange={(event) =>
+              dispatch({ type: 'SET_VOLUME', volume: event.target.value })
+            }
+          />
+          {volume}
+        </div>
+
+        <br />
+
+        <div>
+          <label htmlFor="pan">Pan</label>
+          <br />
+          <input
+            id="pan"
+            type="range"
+            value={pan}
+            onChange={(event) =>
+              dispatch({ type: 'SET_PAN', pan: event.target.value })
+            }
+          />
+          {pan}
+        </div>
+      </div>
+
+      <h3>Effects</h3>
+      {effects.map((effect) => {
+        return (
+          <div className="app__track__effect" key={effect.props.id}>
+            <p>
+              {effect.props.type}{' '}
+              <button
+                onClick={() =>
+                  dispatch({ type: 'REMOVE_EFFECT', id: effect.props.id })
+                }
+              >
+                Remove
+              </button>
+            </p>
+          </div>
+        );
+      })}
+
+      {/* ----------------------------------------------------------------- */}
+      {/* AUDIO */}
+      {/* ----------------------------------------------------------------- */}
+
+      <Song
+        isPlaying={isPlaying}
+        tempo={tempo}
+        swing={1}
+        swingSubdivision={'8n'}
+      >
+        <Track
+          steps={stepsGroup.melodySteps}
+          volume={(parseInt(volume, 10) / 100) * 32 - 32}
+          pan={(parseInt(pan, 10) / 100) * 2 - 1}
+          subdivision={'4n'}
+          effects={effects}
+          onStepPlay={(step) =>
+            dispatch({ type: 'SET_CURRENT_STEP', value: step.index })
+          }
+        >
+          <Instrument notes={notes} />
+        </Track>
+
+        <Track steps={stepsGroup.beatSteps} subdivision={'4n'}>
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: '/samples/BD_Blofeld_014.wav',
+              D3: '/samples/SD_Blofeld_03.wav',
+              E3: '/samples/HH_Blofeld_004.wav',
+            }}
+          />
+        </Track>
+      </Song>
+    </div>
+  );
+};
+
+export default StepEditorExample;
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'TOGGLE_PLAYING':
+      return { ...state, isPlaying: !state.isPlaying };
+
+    case 'INCREMENT_TEMPO':
+      return { ...state, tempo: state.tempo + 1 };
+
+    case 'DECREMENT_TEMPO':
+      return { ...state, tempo: state.tempo - 1 };
+
+    case 'SET_CURRENT_STEP':
+      return { ...state, currentStepIndex: action.value };
+
+    case 'UPDATE_CURRENT_STEPS':
+      const steps = [...state.stepsGroup[state.currentStepsName]];
+      const { note, index: i } = action;
+
+      if (steps[i] && steps[i].note === note) {
+        // Clear step
+        steps[i] = null;
+      } else {
+        // Assign step
+        steps[i] = {
+          note,
+          duration: 0.5,
+        };
+      }
+
+      return {
+        ...state,
+        stepsGroup: {
+          ...state.stepsGroup,
+          [state.currentStepsName]: steps,
+        },
+      };
+
+    case 'SET_CURRENT_STEPS_NAME':
+      return {
+        ...state,
+        currentStepsName: action.name,
+      };
+
+    case 'SET_NOTES':
+      return {
+        ...state,
+        notes: action.notes,
+      };
+
+    case 'ADD_EFFECTS':
+      return {
+        ...state,
+        effects: state.defaultEffects,
+      };
+
+    case 'REMOVE_EFFECT':
+      return {
+        ...state,
+        effects: state.effects.filter(
+          (effect) => effect.props.id !== action.id,
+        ),
+      };
+
+    case 'ADD_MORE_FEEDBACK':
+      return {
+        ...state,
+        feedback: 0.9,
+      };
+
+    case 'SET_VOLUME':
+      return {
+        ...state,
+        volume: action.volume,
+      };
+
+    case 'SET_PAN':
+      return {
+        ...state,
+        pan: action.pan,
+      };
+
+    default:
+      throw new Error();
+  }
+}

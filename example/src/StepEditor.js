@@ -2,7 +2,7 @@ import React from 'react';
 
 // Rename to StepsEditor?
 const StepEditor = ({
-  activeStepIndex,
+  currentStepIndex,
   steps,
   editorLength = 8,
   onStepEditorClick,
@@ -17,7 +17,9 @@ const StepEditor = ({
             <div
               className={[
                 'step-editor__step',
-                activeStepIndex + 1 === i ? 'step-editor__step--is-active' : '',
+                currentStepIndex + 1 === i
+                  ? 'step-editor__step--is-current'
+                  : '',
               ].join(' ')}
               key={`header-${i}`}
             >
@@ -76,9 +78,13 @@ const StepEditor = ({
                 <button
                   className={[
                     'step-editor__step',
-                    isActive ? 'step-editor__step--is-active' : '',
+                    isActive ? 'step-editor__step--is-current' : '',
                   ].join(' ')}
-                  onClick={() => onStepEditorClick(note, index)}
+                  onClick={() => {
+                    if (typeof onStepEditorClick === 'function') {
+                      return onStepEditorClick(note, index);
+                    }
+                  }}
                   key={i}
                 />
               );

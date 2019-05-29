@@ -58,6 +58,6 @@ h1 {
   border-right: 1px solid white;
 }
 
-.step-editor__step--is-active {
+.step-editor__step--is-current {
   background-color: turquoise;
 }
