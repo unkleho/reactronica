@@ -1,3 +1,15 @@
 .stepEditorExample {
   display: block;
 }
+
+.stepsChooser {
+  margin-bottom: 1em;
+}
+
+.stepsChooserButton {
+  text-transform: capitalize;
+}
+
+.stepsChooserButtonActive {
+  font-weight: bold;
+}

@@ -4,7 +4,7 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 import StepEditor from './StepEditor';
 import css from './StepEditorExample.module.css';
 
-const stepsA = [
+const melodySteps = [
   {
     note: 'C3',
     duration: 0.5,
@@ -30,7 +30,7 @@ const stepsA = [
   null,
 ];
 
-const stepsB = [
+const beatSteps = [
   {
     note: 'C3',
     duration: 1,
@@ -60,17 +60,30 @@ const stepsB = [
 ];
 
 const initialState = {
+  // --------------------------------------------------------------------------
+  // TRANSPORT
+  // --------------------------------------------------------------------------
   isPlaying: false,
   tempo: 90,
+  // --------------------------------------------------------------------------
+  // STEPS
+  // --------------------------------------------------------------------------
   stepsGroup: {
-    melodySteps: stepsA,
-    beatSteps: stepsB,
+    melodySteps,
+    beatSteps,
   },
   currentStepsName: 'melodySteps',
+  // Highlighted step that follows the music
   currentStepIndex: null,
-  notes: [],
+  // --------------------------------------------------------------------------
+  // TRACK
+  // --------------------------------------------------------------------------
   volume: 100,
   pan: 50,
+  notes: [],
+  // --------------------------------------------------------------------------
+  // EFFECTS
+  // --------------------------------------------------------------------------
   feedback: 0.6,
   defaultEffects: [
     <Effect
@@ -93,24 +106,24 @@ const StepEditorExample = () => {
     stepsGroup,
     currentStepsName,
     currentStepIndex,
+    volume,
+    pan,
     notes,
     effects,
-    pan,
-    volume,
   } = state;
 
   const currentSteps = stepsGroup[currentStepsName];
 
   return (
     <div className={css.stepEditorExample}>
-      <div className="app__steps-chooser">
+      <div className={css.stepsChooser}>
         {['melody', 'beat'].map((name) => {
           return (
             <button
               className={[
-                'app__steps-chooser__button',
+                css.stepsChooserButton,
                 `${name}Steps` === currentStepsName
-                  ? 'app__steps-chooser__button--is-active'
+                  ? css.stepsChooserButtonActive
                   : '',
               ].join(' ')}
               onClick={() =>
@@ -228,7 +241,10 @@ const StepEditorExample = () => {
           subdivision={'4n'}
           effects={effects}
           onStepPlay={(step) =>
-            dispatch({ type: 'SET_CURRENT_STEP', value: step.index })
+            dispatch({
+              type: 'SET_CURRENT_STEP_INDEX',
+              currentStepIndex: step.index,
+            })
           }
         >
           <Instrument type="polySynth" notes={notes} />
@@ -238,9 +254,9 @@ const StepEditorExample = () => {
           <Instrument
             type="sampler"
             samples={{
-              C3: '/samples/BD_Blofeld_014.wav',
-              D3: '/samples/SD_Blofeld_03.wav',
-              E3: '/samples/HH_Blofeld_004.wav',
+              C3: '/audio/drums/kick15.wav',
+              D3: '/audio/drums/snare-bottom-buttend15.wav',
+              E3: '/audio/drums/chh12.wav',
             }}
           />
         </Track>
@@ -262,8 +278,8 @@ function reducer(state, action) {
     case 'DECREMENT_TEMPO':
       return { ...state, tempo: state.tempo - 1 };
 
-    case 'SET_CURRENT_STEP':
-      return { ...state, currentStepIndex: action.value };
+    case 'SET_CURRENT_STEP_INDEX':
+      return { ...state, currentStepIndex: action.currentStepIndex };
 
     case 'UPDATE_CURRENT_STEPS':
       const steps = [...state.stepsGroup[state.currentStepsName]];

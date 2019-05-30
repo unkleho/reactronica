@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import StartAudioContext from 'startaudiocontext';
 
 import Tone from '../lib/tone';
-// import { isEqual } from '../lib/utils';
 
 export const SongContext = React.createContext();
 
@@ -22,12 +21,9 @@ const Song = ({
       // iOS Web Audio API requires this library.
       StartAudioContext(Tone.context);
     } else {
-
       Tone.Transport.stop();
     }
-
   }, [isPlaying]);
-
 
   useEffect(() => {
     Tone.Transport.bpm.value = tempo;
@@ -38,15 +34,24 @@ const Song = ({
   return (
     <SongContext.Provider
       value={{
+        // NOTE: Not sure what tracks are for...
         // tracks,
-        instruments: [],
         // updateTracks: this.updateTracks,
+        instruments: [],
         isPlaying,
       }}
     >
       {children}
     </SongContext.Provider>
   );
-}
+};
+
+Song.propTypes = {
+  isPlaying: PropTypes.bool,
+  tempo: PropTypes.number,
+  swing: PropTypes.number,
+  swingSubdivision: PropTypes.oneOf(['8n']),
+  children: PropTypes.node,
+};
 
 export default Song;

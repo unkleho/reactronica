@@ -67,9 +67,6 @@ class Example extends Component {
 ```
 <!-- prettier-ignore-end -->
 
-## Known Bugs
-
-- If multiple effects are added, effects don't update unless they are removed in the order they are added. Could be an issue with `[...prevState.effects, effect]`.
 ## Documentation
 
 ### `<Song />`
@@ -105,11 +102,17 @@ $ npm start
 # If you get a babel-eslint issue, create a .env file with SKIP_PREFLIGHT_CHECK=true in ./example
 ```
 
+## Known Bugs
+
+- If you get `Hooks can only be called inside the body of a function component.`, have a look at https://github.com/facebook/react/issues/14721. Try going into the examples folder and running `npm link ../node_modules/react`.
+- If multiple effects are added, effects don't update unless they are removed in the order they are added. Could be an issue with `[...prevState.effects, effect]`.
+
 ## Thanks
 
 - https://tonejs.github.io/
 - https://github.com/FormidableLabs/react-music
 - https://github.com/transitive-bullshit/create-react-library
+- https://github.com/crabacus/the-open-source-drumkit for the drum sounds
 
 ## License
 
