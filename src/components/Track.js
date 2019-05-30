@@ -11,16 +11,17 @@ export const TrackContext = React.createContext();
 class TrackConsumer extends Component {
 	static propTypes = {
 		steps: PropTypes.arrayOf(StepType),
-		onStepStart: PropTypes.func,
-		interval: PropTypes.string, // react-music = resolution
 		volume: PropTypes.number,
 		pan: PropTypes.number,
+		subdivision: PropTypes.string, // react-music = resolution
 		effects: PropTypes.arrayOf(PropTypes.element), // TODO: Consider accepting Tone effects signals
+		onStepPlay: PropTypes.func,
 	};
 
 	static defaultProps = {
 		volume: 0,
 		pan: 0,
+		subdivision: '4n',
 		effects: [],
 	};
 
@@ -36,8 +37,6 @@ class TrackConsumer extends Component {
 	};
 
 	componentDidMount() {
-		// Tone = require('tone'); // eslint-disable-line
-
 		// Example of chaining
 		// const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5);
 		// this.trackChain = [
@@ -107,12 +106,18 @@ class TrackConsumer extends Component {
 						);
 					}
 
-					if (typeof this.props.onStepStart === 'function') {
-						this.props.onStepStart(step);
+					if (typeof this.props.onStepPlay === 'function') {
+						this.props.onStepPlay(step);
 					}
 				},
-				this.stepsToPlay,
-				this.props.interval,
+				this.stepsToPlay.map((step, i) => {
+					// Make sure every step has index
+					return {
+						...step,
+						index: i,
+					};
+				}),
+				this.props.subdivision,
 			);
 
 			this.seq.start(0);
@@ -123,10 +128,18 @@ class TrackConsumer extends Component {
 		// Update sequencer steps
 		if (this.props.isPlaying) {
 			// Deep compare prev and new steps, only update if they are different
-			const doesStepsNeedUpdating = isEqual(prevProps.steps, this.props.steps);
+			// const doesStepsNeedUpdating = isEqual(prevProps.steps, this.props.steps);
+			const doesStepsNeedUpdating =
+				JSON.stringify(prevProps.steps) !== JSON.stringify(this.props.steps);
 
 			if (doesStepsNeedUpdating) {
-				this.stepsToPlay = this.props.steps;
+				this.stepsToPlay = this.props.steps.map((step, i) => {
+					// Make sure every step has index
+					return {
+						...step,
+						index: i,
+					};
+				});
 				this.seq.removeAll();
 
 				this.stepsToPlay.forEach((note, i) => {

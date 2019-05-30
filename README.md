@@ -2,7 +2,10 @@
 
 > Warning: Highly experimental. APIs will change.
 
-React components for making music. Uses ToneJS under the hood.
+React audio components for making music in the browser. Uses [ToneJS](https://tonejs.github.io/) under the hood.
+
+Check out the demo:
+https://unkleho.github.io/reactronica/
 
 Strongly influenced by [React Music](https://github.com/FormidableLabs/react-music).
 
@@ -42,11 +45,20 @@ class Example extends Component {
             null,
           ]}
           effects={[
-						<Effect type="feedbackDelay" />,
-						<Effect type="distortion" />
+            <Effect type="feedbackDelay" />,
+            <Effect type="distortion" />
           ]}
+          // Callback for every tick
+          onStepPlay={}
         >
           <Instrument type="polySynth" notes={[]} />
+        </Track>
+        <Track>
+          <Instrument type="sampler" samples={{
+            'C3': 'path/to/kick.mp3',
+            'D3': 'path/to/snare.mp3',
+            'E3': 'path/to/hihat.mp3',
+          }} />
         </Track>
       </Song>
     );
@@ -58,6 +70,40 @@ class Example extends Component {
 ## Known Bugs
 
 - If multiple effects are added, effects don't update unless they are removed in the order they are added. Could be an issue with `[...prevState.effects, effect]`.
+## Documentation
+
+### `<Song />`
+
+#### Props
+
+- `tempo` (number): Speed or pace of the song. Measured in beats per minute.
+- `isPlaying` (bool): Whether the song is playing or not. Defaults to `false`.
+
+### `<Track />`
+
+#### Props
+
+- `steps` (array)
+- `effects` (array)
+- `onStepPlay` (func): Called on every tick.
+
+### `<Instrument />`
+
+#### Props
+
+- `type` (string)
+- `notes` (array)
+
+## Development
+
+```bash
+# Start Reactronica component build watch
+$ npm start
+# To run example page, in new terminal:
+$ cd example
+$ npm start
+# If you get a babel-eslint issue, create a .env file with SKIP_PREFLIGHT_CHECK=true in ./example
+```
 
 ## Thanks
 

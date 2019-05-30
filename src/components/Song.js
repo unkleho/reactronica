@@ -1,71 +1,52 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import StartAudioContext from 'startaudiocontext';
 
-import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
 // import { isEqual } from '../lib/utils';
 
 export const SongContext = React.createContext();
 
-export default class Song extends Component {
-	static propTypes = {
-		isPlaying: PropTypes.bool,
-		tempo: PropTypes.number,
-		steps: PropTypes.arrayOf(StepType),
-		onStepStart: PropTypes.func,
-		interval: PropTypes.string, // react-music = resolution
-	};
+const Song = ({
+  isPlaying = false,
+  tempo = 90,
+  // subdivision= '4n',
+  swing = 0,
+  swingSubdivision = '8n',
+  children,
+}) => {
+  useEffect(() => {
+    if (isPlaying) {
+      Tone.Transport.start();
 
-	static defaultProps = {
-		tempo: 90,
-		steps: [],
-		isPlaying: false,
-		interval: '4n',
-	};
+      // iOS Web Audio API requires this library.
+      StartAudioContext(Tone.context);
+    } else {
 
-	state = {
-		tracks: [],
-		instruments: [],
-	};
+      Tone.Transport.stop();
+    }
 
-	componentDidMount() {
-		// Tone = require('tone'); // eslint-disable-line
-		Tone.Transport.bpm.value = this.props.tempo;
+  }, [isPlaying]);
 
-		// iOS Web Audio API requires this library.
-		StartAudioContext(Tone.context);
-	}
 
-	componentDidUpdate(prevProps) {
-		if (!prevProps.isPlaying && this.props.isPlaying) {
-			Tone.Transport.start();
-		} else if (prevProps.isPlaying && !this.props.isPlaying) {
-			Tone.Transport.stop();
-		}
-	}
+  useEffect(() => {
+    Tone.Transport.bpm.value = tempo;
+    Tone.Transport.swing = swing;
+    Tone.Transport.swingSubdivision = swingSubdivision;
+  }, [tempo, swing, swingSubdivision]);
 
-	updateTracks = (tracks) => {
-		this.setState({
-			tracks,
-		});
-	};
-
-	render() {
-		const { tracks, instruments } = this.state;
-		const { isPlaying } = this.props;
-
-		return (
-			<SongContext.Provider
-				value={{
-					tracks,
-					instruments,
-					updateTracks: this.updateTracks,
-					isPlaying,
-				}}
-			>
-				{this.props.children}
-			</SongContext.Provider>
-		);
-	}
+  return (
+    <SongContext.Provider
+      value={{
+        // tracks,
+        instruments: [],
+        // updateTracks: this.updateTracks,
+        isPlaying,
+      }}
+    >
+      {children}
+    </SongContext.Provider>
+  );
 }
+
+export default Song;

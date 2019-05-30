@@ -1,59 +1,60 @@
 {
-	"name": "reactronica",
-	"version": "0.0.2",
-	"description": "React components for making music",
-	"author": "unkleho",
-	"license": "MIT",
-	"repository": "unkleho/reactronica",
-	"main": "dist/index.js",
-	"module": "dist/index.es.js",
-	"jsnext:main": "dist/index.es.js",
-	"scripts": {
-		"test": "cross-env CI=1 react-scripts test --env=jsdom",
-		"test:watch": "react-scripts test --env=jsdom",
-		"build": "rollup -c",
-		"start": "rollup -c -w",
-		"prepare": "npm run build",
-		"predeploy": "cd example && npm install && npm run build",
-		"deploy": "gh-pages -d example/build"
-	},
-	"dependencies": {
-		"startaudiocontext": "^1.2.1",
-		"tone": "^0.12.80"
-	},
-	"peerDependencies": {
-		"prop-types": ">=15.5.4",
-		"react": ">=16.3.0",
-		"react-dom": ">=16.3.0"
-	},
-	"devDependencies": {
-		"babel-core": "^6.26.3",
-		"babel-eslint": "^8.2.5",
-		"babel-plugin-external-helpers": "^6.22.0",
-		"babel-preset-env": "^1.7.0",
-		"babel-preset-react": "^6.24.1",
-		"babel-preset-stage-0": "^6.24.1",
-		"cross-env": "^5.1.4",
-		"eslint": "^5.0.1",
-		"eslint-config-react-app": "^2.1.0",
-		"eslint-plugin-import": "^2.13.0",
-		"eslint-plugin-node": "^6.0.1",
-		"eslint-plugin-promise": "^3.8.0",
-		"eslint-plugin-react": "^7.10.0",
-		"eslint-plugin-standard": "^3.1.0",
-		"gh-pages": "^1.2.0",
-		"react": "^16.4.1",
-		"react-dom": "^16.4.1",
-		"react-scripts": "^1.1.4",
-		"rollup": "^0.62.0",
-		"rollup-plugin-babel": "^3.0.7",
-		"rollup-plugin-commonjs": "^9.1.3",
-		"rollup-plugin-node-resolve": "^3.3.0",
-		"rollup-plugin-peer-deps-external": "^2.2.0",
-		"rollup-plugin-postcss": "^1.6.2",
-		"rollup-plugin-url": "^1.4.0"
-	},
-	"files": [
-		"dist"
-	]
+  "name": "reactronica",
+  "version": "0.0.4",
+  "description": "React components for making music",
+  "author": "unkleho",
+  "license": "MIT",
+  "repository": "unkleho/reactronica",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "scripts": {
+    "test": "cross-env CI=1 react-scripts test --env=jsdom",
+    "test:watch": "react-scripts test --env=jsdom",
+    "build": "rollup -c",
+    "start": "rollup -c -w",
+    "prepare": "npm run build",
+    "predeploy": "cd example && npm install && npm run build",
+    "deploy": "gh-pages -d example/build",
+    "dev": "npm start & cd example/ && npm start"
+  },
+  "dependencies": {
+    "startaudiocontext": "^1.2.1",
+    "tone": "^0.12.80"
+  },
+  "peerDependencies": {
+    "prop-types": ">=15.7.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.5",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "cross-env": "^5.1.4",
+    "eslint": "^5.0.1",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-react": "^7.10.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "gh-pages": "^1.2.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "^3.0.1",
+    "rollup": "^0.62.0",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-postcss": "^1.6.2",
+    "rollup-plugin-url": "^1.4.0"
+  },
+  "files": [
+    "dist"
+  ]
 }
