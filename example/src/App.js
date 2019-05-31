@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import StepEditorExample from './StepEditorExample';
+import StepsEditorExample from './StepsEditorExample';
 
 export default class App extends Component {
   render() {
@@ -22,7 +22,7 @@ export default class App extends Component {
         <h2>Examples</h2>
 
         <h3>Keyboard/Beat Editor</h3>
-        <StepEditorExample />
+        <StepsEditorExample />
       </div>
     );
   }

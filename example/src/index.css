@@ -16,35 +16,3 @@ h1 {
   margin: 0 auto;
   max-width: 40em;
 }
-
-/* Step Editor */
-
-.step-editor {
-  margin-bottom: 1em;
-}
-
-.step-editor__row {
-  display: flex;
-}
-
-.step-editor__row--is-accidental .step-editor__step--key {
-  color: #eee;
-  background-color: #000;
-}
-
-.step-editor__step {
-  display: inline-block;
-  flex: 1;
-  padding: 0.5em;
-  border: none;
-  cursor: pointer;
-  background-color: #eee;
-  font-size: 0.8em;
-  text-align: center;
-  border-top: 1px solid white;
-  border-right: 1px solid white;
-}
-
-.step-editor__step--is-current {
-  background-color: turquoise;
-}

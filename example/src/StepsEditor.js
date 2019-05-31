@@ -1,5 +1,7 @@
 import React from 'react';
 
+import css from './StepsEditor.module.css';
+
 // Rename to StepsEditor?
 const StepEditor = ({
   currentStepIndex,
@@ -10,16 +12,14 @@ const StepEditor = ({
   onKeyboardUp,
 }) => {
   return (
-    <div className="step-editor">
-      <div className="step-editor__row">
+    <div className={css.stepsEditor}>
+      <div className={css.row}>
         {[...new Array(1 + editorLength)].map((_, i) => {
           return (
             <div
               className={[
-                'step-editor__step',
-                currentStepIndex + 1 === i
-                  ? 'step-editor__step--is-current'
-                  : '',
+                css.step,
+                currentStepIndex + 1 === i ? css.stepIsCurrent : '',
               ].join(' ')}
               key={`header-${i}`}
             >
@@ -47,24 +47,20 @@ const StepEditor = ({
 
         return (
           <div
-            className={[
-              'step-editor__row',
-              isAccidental ? 'step-editor__row--is-accidental' : '',
-            ].join(' ')}
+            className={[css.row, isAccidental ? css.rowIsAccidental : ''].join(
+              ' ',
+            )}
             key={note}
           >
             {[...new Array(1 + editorLength)].map((_, i) => {
               const index = i - 1;
-              const isActive = steps[index] && steps[index].note === note;
+              const isCurrent = steps[index] && steps[index].note === note;
 
               // For the first column, show playable keyboard
               if (i === 0) {
                 return (
                   <button
-                    className={[
-                      'step-editor__step',
-                      'step-editor__step--key',
-                    ].join(' ')}
+                    className={[css.step, css.stepKey].join(' ')}
                     onMouseDown={() => onKeyboardDown(note)}
                     onMouseUp={() => onKeyboardUp(note)}
                     key={i}
@@ -77,8 +73,8 @@ const StepEditor = ({
               return (
                 <button
                   className={[
-                    'step-editor__step',
-                    isActive ? 'step-editor__step--is-current' : '',
+                    css.step,
+                    isCurrent ? css.stepIsCurrent : '',
                   ].join(' ')}
                   onClick={() => {
                     if (typeof onStepEditorClick === 'function') {

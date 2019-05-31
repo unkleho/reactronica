@@ -1,8 +1,8 @@
 import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
-import StepEditor from './StepEditor';
-import css from './StepEditorExample.module.css';
+import StepsEditor from './StepsEditor';
+import css from './StepsEditorExample.module.css';
 
 const melodySteps = [
   {
@@ -98,7 +98,7 @@ const initialState = {
   effects: [],
 };
 
-const StepEditorExample = () => {
+const StepsEditorExample = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const {
     isPlaying,
@@ -115,7 +115,7 @@ const StepEditorExample = () => {
   const currentSteps = stepsGroup[currentStepsName];
 
   return (
-    <div className={css.stepEditorExample}>
+    <div className={css.stepsEditorExample}>
       <div className={css.stepsChooser}>
         {['melody', 'beat'].map((name) => {
           return (
@@ -140,7 +140,7 @@ const StepEditorExample = () => {
         })}
       </div>
 
-      <StepEditor
+      <StepsEditor
         steps={currentSteps}
         currentStepIndex={currentStepIndex}
         notes={notes}
@@ -265,7 +265,7 @@ const StepEditorExample = () => {
   );
 };
 
-export default StepEditorExample;
+export default StepsEditorExample;
 
 function reducer(state, action) {
   switch (action.type) {
