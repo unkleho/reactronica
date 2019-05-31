@@ -12,6 +12,14 @@ h1 {
   letter-spacing: -0.03em;
 }
 
+button {
+  background-color: #eee;
+  border: none;
+  border-radius: 0;
+  font-size: 1em;
+  padding: 0.6em;
+}
+
 .app {
   margin: 0 auto;
   max-width: 40em;

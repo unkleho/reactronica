@@ -1,0 +1,18 @@
+.transport {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1em;
+}
+
+.play {
+  margin-right: 1em;
+}
+
+.tempo {
+  display: flex;
+  align-items: baseline;
+}
+
+.tempo label {
+  margin-right: 1em;
+}

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
-import StepsEditor from './StepsEditor';
+import StepsEditor from '../StepsEditor';
+import Transport from '../Transport';
+
 import css from './StepsEditorExample.module.css';
 
 const melodySteps = [
@@ -153,18 +155,7 @@ const StepsEditorExample = () => {
         onKeyboardUp={() => dispatch({ type: 'SET_NOTES', notes: [] })}
       />
 
-      <button onClick={() => dispatch({ type: 'TOGGLE_PLAYING' })}>
-        {isPlaying ? 'Stop' : 'Play'}
-      </button>
-      <p>
-        Tempo: {tempo}{' '}
-        <button onClick={() => dispatch({ type: 'INCREMENT_TEMPO' })}>
-          Increase Tempo
-        </button>
-        <button onClick={() => dispatch({ type: 'DECREMENT_TEMPO' })}>
-          Decrease Tempo
-        </button>
-      </p>
+      <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
       <button onClick={() => dispatch({ type: 'ADD_EFFECTS' })}>
         Add Effects
@@ -209,7 +200,7 @@ const StepsEditorExample = () => {
       <h3>Effects</h3>
       {effects.map((effect) => {
         return (
-          <div className="app__track__effect" key={effect.props.id}>
+          <div className={css.trackEffect} key={effect.props.id}>
             <p>
               {effect.props.type}{' '}
               <button

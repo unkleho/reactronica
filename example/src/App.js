@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import StepsEditorExample from './StepsEditorExample';
+import StepsEditorExample from './components/StepsEditorExample';
 
 export default class App extends Component {
   render() {
