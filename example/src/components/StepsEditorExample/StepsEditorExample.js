@@ -3,6 +3,7 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 
 import StepsEditor from '../StepsEditor';
 import Transport from '../Transport';
+import * as types from '../../types';
 
 import css from './StepsEditorExample.module.css';
 
@@ -115,6 +116,7 @@ const StepsEditorExample = () => {
   } = state;
 
   const currentSteps = stepsGroup[currentStepsName];
+  // console.log(volume);
 
   return (
     <div className={css.stepsEditorExample}>
@@ -130,7 +132,7 @@ const StepsEditorExample = () => {
               ].join(' ')}
               onClick={() =>
                 dispatch({
-                  type: 'SET_CURRENT_STEPS_NAME',
+                  type: types.SET_CURRENT_STEPS_NAME,
                   name: `${name}Steps`,
                 })
               }
@@ -147,20 +149,20 @@ const StepsEditorExample = () => {
         currentStepIndex={currentStepIndex}
         notes={notes}
         onStepEditorClick={(note, index) =>
-          dispatch({ type: 'UPDATE_CURRENT_STEPS', note, index })
+          dispatch({ type: types.UPDATE_CURRENT_STEPS, note, index })
         }
         onKeyboardDown={(note) =>
-          dispatch({ type: 'SET_NOTES', notes: [{ name: note }] })
+          dispatch({ type: types.SET_NOTES, notes: [{ name: note }] })
         }
-        onKeyboardUp={() => dispatch({ type: 'SET_NOTES', notes: [] })}
+        onKeyboardUp={() => dispatch({ type: types.SET_NOTES, notes: [] })}
       />
 
       <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
-      <button onClick={() => dispatch({ type: 'ADD_EFFECTS' })}>
+      <button onClick={() => dispatch({ type: types.ADD_EFFECTS })}>
         Add Effects
       </button>
-      <button onClick={() => dispatch({ type: 'ADD_MORE_FEEDBACK' })}>
+      <button onClick={() => dispatch({ type: types.ADD_MORE_FEEDBACK })}>
         Add more feedback
       </button>
 
@@ -174,7 +176,7 @@ const StepsEditorExample = () => {
             type="range"
             value={volume}
             onChange={(event) =>
-              dispatch({ type: 'SET_VOLUME', volume: event.target.value })
+              dispatch({ type: types.SET_VOLUME, volume: event.target.value })
             }
           />
           {volume}
@@ -190,7 +192,7 @@ const StepsEditorExample = () => {
             type="range"
             value={pan}
             onChange={(event) =>
-              dispatch({ type: 'SET_PAN', pan: event.target.value })
+              dispatch({ type: types.SET_PAN, pan: event.target.value })
             }
           />
           {pan}
@@ -205,7 +207,7 @@ const StepsEditorExample = () => {
               {effect.props.type}{' '}
               <button
                 onClick={() =>
-                  dispatch({ type: 'REMOVE_EFFECT', id: effect.props.id })
+                  dispatch({ type: types.REMOVE_EFFECT, id: effect.props.id })
                 }
               >
                 Remove
@@ -233,7 +235,7 @@ const StepsEditorExample = () => {
           effects={effects}
           onStepPlay={(step) =>
             dispatch({
-              type: 'SET_CURRENT_STEP_INDEX',
+              type: types.SET_CURRENT_STEP_INDEX,
               currentStepIndex: step.index,
             })
           }
@@ -260,19 +262,19 @@ export default StepsEditorExample;
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'TOGGLE_PLAYING':
+    case types.TOGGLE_PLAYING:
       return { ...state, isPlaying: !state.isPlaying };
 
-    case 'INCREMENT_TEMPO':
+    case types.INCREASE_TEMPO:
       return { ...state, tempo: state.tempo + 1 };
 
-    case 'DECREMENT_TEMPO':
+    case types.DECREASE_TEMPO:
       return { ...state, tempo: state.tempo - 1 };
 
-    case 'SET_CURRENT_STEP_INDEX':
+    case types.SET_CURRENT_STEP_INDEX:
       return { ...state, currentStepIndex: action.currentStepIndex };
 
-    case 'UPDATE_CURRENT_STEPS':
+    case types.UPDATE_CURRENT_STEPS:
       const steps = [...state.stepsGroup[state.currentStepsName]];
       const { note, index: i } = action;
 
@@ -295,25 +297,25 @@ function reducer(state, action) {
         },
       };
 
-    case 'SET_CURRENT_STEPS_NAME':
+    case types.SET_CURRENT_STEPS_NAME:
       return {
         ...state,
         currentStepsName: action.name,
       };
 
-    case 'SET_NOTES':
+    case types.SET_NOTES:
       return {
         ...state,
         notes: action.notes,
       };
 
-    case 'ADD_EFFECTS':
+    case types.ADD_EFFECTS:
       return {
         ...state,
         effects: state.defaultEffects,
       };
 
-    case 'REMOVE_EFFECT':
+    case types.REMOVE_EFFECT:
       return {
         ...state,
         effects: state.effects.filter(
@@ -321,19 +323,19 @@ function reducer(state, action) {
         ),
       };
 
-    case 'ADD_MORE_FEEDBACK':
+    case types.ADD_MORE_FEEDBACK:
       return {
         ...state,
         feedback: 0.9,
       };
 
-    case 'SET_VOLUME':
+    case types.SET_VOLUME:
       return {
         ...state,
         volume: action.volume,
       };
 
-    case 'SET_PAN':
+    case types.SET_PAN:
       return {
         ...state,
         pan: action.pan,
