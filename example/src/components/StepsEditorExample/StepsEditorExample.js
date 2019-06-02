@@ -4,63 +4,10 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 import StepsEditor from '../StepsEditor';
 import Transport from '../Transport';
 import * as types from '../../types';
+import { melodyClip, beatClip } from '../../sample-data';
+import { buildSteps } from '../../lib/stepUtils';
 
 import css from './StepsEditorExample.module.css';
-
-const melodySteps = [
-  {
-    note: 'C3',
-    duration: 0.5,
-  },
-  {
-    note: 'D3',
-    duration: 0.5,
-  },
-  {
-    note: 'E3',
-    duration: 0.5,
-  },
-  {
-    note: 'G3',
-    duration: 0.5,
-  },
-  {
-    note: 'A3',
-    duration: 1,
-  },
-  null,
-  null,
-  null,
-];
-
-const beatSteps = [
-  {
-    note: 'C3',
-    duration: 1,
-  },
-  null,
-  {
-    note: 'D3',
-    duration: 1,
-  },
-  null,
-  {
-    note: 'C3',
-    duration: 1,
-  },
-  {
-    note: 'E3',
-    duration: 1,
-  },
-  {
-    note: 'D3',
-    duration: 1,
-  },
-  {
-    note: 'E3',
-    duration: 1,
-  },
-];
 
 const initialState = {
   // --------------------------------------------------------------------------
@@ -71,9 +18,10 @@ const initialState = {
   // --------------------------------------------------------------------------
   // STEPS
   // --------------------------------------------------------------------------
+  // Rename to clips?
   stepsGroup: {
-    melodySteps,
-    beatSteps,
+    melodySteps: buildSteps(melodyClip),
+    beatSteps: buildSteps(beatClip),
   },
   currentStepsName: 'melodySteps',
   // Highlighted step that follows the music
@@ -116,7 +64,6 @@ const StepsEditorExample = () => {
   } = state;
 
   const currentSteps = stepsGroup[currentStepsName];
-  // console.log(volume);
 
   return (
     <div className={css.stepsEditorExample}>
@@ -148,6 +95,7 @@ const StepsEditorExample = () => {
         steps={currentSteps}
         currentStepIndex={currentStepIndex}
         notes={notes}
+        subdivision={16}
         onStepEditorClick={(note, index) =>
           dispatch({ type: types.UPDATE_CURRENT_STEPS, note, index })
         }
@@ -231,7 +179,7 @@ const StepsEditorExample = () => {
           steps={stepsGroup.melodySteps}
           volume={(parseInt(volume, 10) / 100) * 32 - 32}
           pan={(parseInt(pan, 10) / 100) * 2 - 1}
-          subdivision={'4n'}
+          subdivision={'16n'}
           effects={effects}
           onStepPlay={(step) =>
             dispatch({
@@ -243,7 +191,7 @@ const StepsEditorExample = () => {
           <Instrument type="polySynth" notes={notes} />
         </Track>
 
-        <Track steps={stepsGroup.beatSteps} subdivision={'4n'}>
+        <Track steps={stepsGroup.beatSteps} subdivision={'16n'}>
           <Instrument
             type="sampler"
             samples={{

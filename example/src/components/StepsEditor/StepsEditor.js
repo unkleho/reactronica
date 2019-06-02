@@ -2,11 +2,10 @@ import React from 'react';
 
 import css from './StepsEditor.module.css';
 
-// Rename to StepsEditor?
-const StepEditor = ({
+const StepsEditor = ({
   currentStepIndex,
   steps,
-  editorLength = 8,
+  subdivision = 8,
   onStepEditorClick,
   onKeyboardDown,
   onKeyboardUp,
@@ -14,7 +13,7 @@ const StepEditor = ({
   return (
     <div className={css.stepsEditor}>
       <div className={css.row}>
-        {[...new Array(1 + editorLength)].map((_, i) => {
+        {[...new Array(1 + subdivision)].map((_, i) => {
           return (
             <div
               className={[
@@ -52,7 +51,7 @@ const StepEditor = ({
             )}
             key={note}
           >
-            {[...new Array(1 + editorLength)].map((_, i) => {
+            {[...new Array(1 + subdivision)].map((_, i) => {
               const index = i - 1;
               const isCurrent = steps[index] && steps[index].note === note;
 
@@ -92,4 +91,4 @@ const StepEditor = ({
   );
 };
 
-export default StepEditor;
+export default StepsEditor;
