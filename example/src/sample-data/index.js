@@ -1,3 +1,4 @@
+// Melody clip with notes that will need to have buildSteps() run on it.
 export const melodyClip = {
   bars: 1,
   notes: [
@@ -29,6 +30,7 @@ export const melodyClip = {
   ],
 };
 
+// Beat clip with notes that will need to have buildSteps() run on it.
 export const beatClip = {
   bars: 1,
   notes: [
@@ -79,58 +81,3 @@ export const beatClip = {
     },
   ],
 };
-
-export const melodySteps = [
-  {
-    note: 'C3',
-    duration: 0.5,
-  },
-  {
-    note: 'D3',
-    duration: 0.5,
-  },
-  {
-    note: 'E3',
-    duration: 0.5,
-  },
-  {
-    note: 'G3',
-    duration: 0.5,
-  },
-  {
-    note: 'A3',
-    duration: 1,
-  },
-  null,
-  null,
-  null,
-];
-
-export const beatSteps = [
-  {
-    note: 'C3',
-    duration: 1,
-  },
-  null,
-  {
-    note: 'D3',
-    duration: 1,
-  },
-  null,
-  {
-    note: 'C3',
-    duration: 1,
-  },
-  {
-    note: 'E3',
-    duration: 1,
-  },
-  {
-    note: 'D3',
-    duration: 1,
-  },
-  {
-    note: 'E3',
-    duration: 1,
-  },
-];
