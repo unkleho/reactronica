@@ -3,7 +3,6 @@ import { render, cleanup } from '@testing-library/react';
 
 import StepsEditor from './StepsEditor';
 import { melodySteps } from '../../__tests__';
-import { exportAllDeclaration } from '@babel/types';
 
 afterEach(cleanup);
 

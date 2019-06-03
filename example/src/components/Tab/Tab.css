@@ -1,0 +1,59 @@
+.tab {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  font-size: 1.4em;
+}
+
+.tab__line {
+  display: flex;
+  flex: 0 0 100%;
+  position: relative;
+  align-items: center;
+}
+
+.tab__line__line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background-color: grey;
+}
+
+.tab__line__steps {
+  display: flex;
+  width: 100%;
+  height: 1.4em;
+}
+
+.tab__step {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.tab__step:first-child {
+  border-left: 1px solid grey;
+}
+
+.tab__step:nth-child(8n) {
+  border-right: 1px solid grey;
+}
+
+.tab__step input {
+  width: 1em;
+  height: 1em;
+  font-size: 1em;
+  text-align: center;
+  margin: 0 auto;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.playhead {
+  height: 1em;
+  background-color: grey;
+  width: 2px;
+  position: relative;
+}
