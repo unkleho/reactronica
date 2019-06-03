@@ -1,7 +1,7 @@
 import { buildSteps } from '../lib/stepUtils';
 import { melodyClip } from '../sample-data';
 
-const melodySteps = [
+export const melodySteps = [
   {
     start: '1.1.1',
     note: 'C3',
