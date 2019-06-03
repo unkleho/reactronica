@@ -27,7 +27,7 @@ const StepsEditor = ({
                 currentStepIndex + 1 === i ? css.stepIsCurrent : '',
               ].join(' ')}
               key={`header-${i}`}
-              data-testid={`header-${i}`}
+              data-testid={`header`}
             >
               {i !== 0 && i}
             </div>
@@ -70,6 +70,7 @@ const StepsEditor = ({
                     onMouseDown={() => onKeyboardDown(note)}
                     onMouseUp={() => onKeyboardUp(note)}
                     key={i}
+                    data-testid="keyboard-button"
                   >
                     {note}
                   </button>
@@ -88,6 +89,7 @@ const StepsEditor = ({
                     }
                   }}
                   key={i}
+                  data-testid="step-button"
                 />
               );
             })}

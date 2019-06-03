@@ -3,6 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 
 import StepsEditor from './StepsEditor';
 import { melodySteps } from '../../__tests__';
+import { exportAllDeclaration } from '@babel/types';
 
 afterEach(cleanup);
 
@@ -11,14 +12,17 @@ describe('StepsEditor', () => {
     render(<StepsEditor />);
   });
 
-  it('should render with grid of steps', () => {
-    const { getByTestId } = render(
+  it('should render with steps and keyboard', () => {
+    const { getByTestId, getAllByTestId } = render(
       <StepsEditor steps={melodySteps} subdivision={16} />,
     );
 
-    [...new Array(17)].map((_, i) => {
-      const result = getByTestId(`header-${i}`);
-      expect(result).toBeDefined();
-    });
+    const headerCells = getAllByTestId('header');
+    const keyboardButtons = getAllByTestId('keyboard-button');
+    const stepButtons = getAllByTestId('step-button');
+
+    expect(headerCells.length).toBe(17);
+    expect(keyboardButtons.length).toBe(12);
+    expect(stepButtons.length).toBe(192);
   });
 });
