@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@testing-library/react": "^8.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -16,6 +17,7 @@
     "dev": "npm start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:watch": "react-scripts test --env=jsdom --watch",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -29,5 +31,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

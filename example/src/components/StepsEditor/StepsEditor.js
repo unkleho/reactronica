@@ -4,16 +4,22 @@ import css from './StepsEditor.module.css';
 
 const StepsEditor = ({
   currentStepIndex,
-  steps,
+  steps = [],
   subdivision = 8,
   onStepEditorClick,
   onKeyboardDown,
   onKeyboardUp,
 }) => {
+  if (steps.length === 0) {
+    return null;
+  }
+
+  const emptyArray = [...new Array(1 + subdivision)];
+
   return (
     <div className={css.stepsEditor}>
       <div className={css.row}>
-        {[...new Array(1 + subdivision)].map((_, i) => {
+        {emptyArray.map((_, i) => {
           return (
             <div
               className={[
@@ -51,7 +57,7 @@ const StepsEditor = ({
             )}
             key={note}
           >
-            {[...new Array(1 + subdivision)].map((_, i) => {
+            {emptyArray.map((_, i) => {
               const index = i - 1;
               const isCurrent = steps[index] && steps[index].note === note;
 

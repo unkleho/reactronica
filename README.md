@@ -102,8 +102,9 @@ $ npm start
 # If you get a babel-eslint issue, create a .env file with SKIP_PREFLIGHT_CHECK=true in ./example
 ```
 
-## Known Bugs
+## Known Issues
 
+- Both Reactronica and example/ have their own test config. Would prefer if Reactronica took care of all tests, however react-scripts only allows testing within a src/ dir. Moving to jest and babel/@core etc is required. (3/6/19)
 - If you get `Hooks can only be called inside the body of a function component.`, have a look at https://github.com/facebook/react/issues/14721. Try going into the examples folder and running `npm link ../node_modules/react`.
 - If multiple effects are added, effects don't update unless they are removed in the order they are added. Could be an issue with `[...prevState.effects, effect]`.
 
