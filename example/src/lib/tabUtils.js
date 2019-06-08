@@ -85,30 +85,21 @@ export function gridToSynthSteps(grid) {
   return result;
 }
 
-// Converts grid to React Music sampler steps
+// Converts grid to Reactronica sampler steps
 export function gridToSamplerSteps(grid) {
-  // TODO: Make 25 dynamic
-  let result = Array(84).fill([]);
+  let result = Array(16).fill([]);
 
   grid.forEach((gridLine) => {
     gridLine.forEach((gridStep) => {
-      const step = gridStep.step;
-      const midi = midiNotes.indexOf(gridStep.note);
-      let stepArray;
+      const { step } = gridStep;
 
-      if (midi === -1) {
-      } else if (result[midi].length === 0) {
-        // If no notes yet, create new array
-        stepArray = [step];
-        result[midi] = stepArray;
-      } else if (result[midi].length > 0) {
-        // If notes exist, push to array
-        stepArray = result[midi];
-        stepArray.push(step);
-        result[midi] = stepArray;
-      }
+      result[step] = {
+        note: gridStep.note,
+        duration: gridStep.duration,
+      };
     });
   });
+
   return result;
 }
 

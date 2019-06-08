@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import StepsEditorExample from './components/StepsEditorExample';
+import TabExample from './components/TabExample';
 
 export default class App extends Component {
   render() {
@@ -23,6 +24,9 @@ export default class App extends Component {
 
         <h3>Keyboard/Beat Editor</h3>
         <StepsEditorExample />
+
+        <h3>Tablature</h3>
+        <TabExample />
       </div>
     );
   }

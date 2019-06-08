@@ -40,7 +40,27 @@ it('converts note (string) to fret (int)', () => {
 });
 
 it('converts grid (array) to sample steps (array)', () => {
-  expect(gridToSamplerSteps(defaultUkeGrid)).toHaveLength(84);
+  const result = gridToSamplerSteps(defaultUkeGrid);
+
+  expect(result).toHaveLength(16);
+  expect(result).toEqual([
+    { note: 'e5', duration: 2 },
+    { note: 'c6', duration: 2 },
+    { note: 'g5', duration: 2 },
+    { note: 'e5', duration: 2 },
+    { note: 'c6', duration: 2 },
+    { note: 'g5', duration: 2 },
+    { note: 'e5', duration: 2 },
+    { note: 'g5', duration: 2 },
+    { note: 'f5', duration: 2 },
+    { note: 'c6', duration: 2 },
+    { note: 'g5', duration: 2 },
+    { note: 'f5', duration: 2 },
+    { note: 'c6', duration: 2 },
+    { note: 'g5', duration: 2 },
+    { note: 'f5', duration: 2 },
+    { note: 'g5', duration: 2 },
+  ]);
 });
 
 // it('converts piano grid (array) to piano roll (array of arrays)', () => {
