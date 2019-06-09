@@ -8,6 +8,7 @@ import { gridToSamplerSteps } from '../../lib/tabUtils';
 const TabExample = () => {
   const [grid, setGrid] = React.useState(defaultUkeGrid);
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState(null);
 
   const steps = gridToSamplerSteps(grid);
 
@@ -15,6 +16,7 @@ const TabExample = () => {
     <div>
       <Tab
         grid={grid}
+        currentIndex={currentIndex}
         onUpdateGrid={(grid) => {
           setGrid(grid);
         }}
@@ -28,7 +30,13 @@ const TabExample = () => {
       {/* ----------------------------------------------------------------- */}
 
       <Song isPlaying={isPlaying} tempo={90}>
-        <Track steps={steps} subdivision={'8n'}>
+        <Track
+          steps={steps}
+          subdivision={'8n'}
+          onStepPlay={(step) => {
+            setCurrentIndex(step.index);
+          }}
+        >
           <Instrument
             type="sampler"
             samples={{

@@ -15,6 +15,7 @@ const Tab = ({
   resolution = 8,
   bars = 2,
   instrument = 'ukulele',
+  currentIndex,
   className,
   onUpdateGrid,
 }) => {
@@ -105,6 +106,10 @@ const Tab = ({
     }
   };
 
+  const handleTabFocus = (event) => {
+    event.target.select();
+  };
+
   return (
     <div className={['tab', className || ''].join(' ')}>
       {tab.map((tabLine, i) => {
@@ -128,7 +133,10 @@ const Tab = ({
                 return (
                   <div
                     key={`step${j}`}
-                    className="tab__step"
+                    className={[
+                      'tab__step',
+                      currentIndex === j ? 'tab__step--is-current' : '',
+                    ].join(' ')}
                     data-testid={'tabSteps'}
                   >
                     <input
@@ -136,6 +144,7 @@ const Tab = ({
                       value={fret === null ? '' : fret}
                       onChange={(event) => handleTabChange(event, i, j)}
                       onKeyDown={(event) => handleKeyPress(event, i, j)}
+                      onFocus={handleTabFocus}
                       ref={(input) => {
                         textInputs[i][j] = input;
                       }}

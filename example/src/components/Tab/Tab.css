@@ -1,7 +1,7 @@
 .tab {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 0 auto 1rem;
   font-size: 1.4em;
 }
 
@@ -14,6 +14,7 @@
 
 .tab__line__line {
   position: absolute;
+  z-index: 0;
   top: 50%;
   left: 0;
   height: 1px;
@@ -28,6 +29,8 @@
 }
 
 .tab__step {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex: 1;
   align-items: center;
@@ -48,7 +51,11 @@
   text-align: center;
   margin: 0 auto;
   border: none;
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: #f6f6f6;
+}
+
+.tab__step--is-current input {
+  background-color: turquoise;
 }
 
 .playhead {
