@@ -52,6 +52,63 @@ const Tab = ({
     }
   };
 
+  const handleTabKeyDown = (event, line, step) => {
+    const keyCode = event.keyCode;
+    const numberOfStrings = 4;
+    const numberOfSteps = resolution * bars;
+    let newLine, newStep, newTextInput;
+
+    if (keyCode === 40) {
+      // Down
+      if (line !== numberOfStrings - 1 || step < numberOfSteps - 1) {
+        // Catch end of inputs
+        newLine = (line + 1) % numberOfStrings;
+        newStep = line + 1 >= numberOfStrings ? step + 1 : step;
+
+        newTextInput = textInputs[newLine][newStep];
+        newTextInput.focus();
+        event.preventDefault();
+        newTextInput.select();
+      }
+    } else if (keyCode === 38) {
+      // Up
+      if (line - 1 >= 0 || step !== 0) {
+        // Catch beginning of inputs
+        newLine =
+          line - 1 < 0 ? numberOfStrings - 1 : (line - 1) % numberOfStrings;
+        newStep = line - 1 < 0 ? step - 1 : step;
+
+        newTextInput = textInputs[newLine][newStep];
+        newTextInput.focus();
+        event.preventDefault();
+        newTextInput.select();
+      }
+    } else if (
+      keyCode === 39 &&
+      event.target.selectionEnd === event.target.value.length
+    ) {
+      // Right
+      if (step < numberOfSteps - 1 || line !== numberOfStrings - 1) {
+        newLine = step + 1 >= numberOfSteps ? line + 1 : line;
+        newStep = (step + 1) % numberOfSteps;
+        newTextInput = textInputs[newLine][newStep];
+        newTextInput.focus();
+        event.preventDefault();
+        newTextInput.select();
+      }
+    } else if (keyCode === 37 && event.target.selectionStart === 0) {
+      // Left
+      if (step - 1 >= 0 || line !== 0) {
+        newLine = step - 1 < 0 ? line - 1 : line;
+        newStep = step - 1 < 0 ? numberOfSteps - 1 : (step - 1) % numberOfSteps;
+        newTextInput = textInputs[newLine][newStep];
+        newTextInput.focus();
+        event.preventDefault();
+        newTextInput.select();
+      }
+    }
+  };
+
   return (
     <div className={['tab', className || ''].join(' ')}>
       {tab.map((tabLine, i) => {
@@ -82,7 +139,7 @@ const Tab = ({
                       type="text"
                       value={fret === null ? '' : fret}
                       onChange={(event) => handleTabChange(event, i, j)}
-                      // onKeyDown={(event) => this.handleTabKeyDown(event, i, j)}
+                      onKeyDown={(event) => handleTabKeyDown(event, i, j)}
                       // onFocus={(event) => this.handleTabFocus(event)}
                       ref={(input) => {
                         textInputs[i][j] = input;
