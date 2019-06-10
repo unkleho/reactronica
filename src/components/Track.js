@@ -108,6 +108,9 @@ class TrackConsumer extends Component {
             this.props.onStepPlay(step, step.index);
           }
         },
+        /*
+         Tone.Sequence can't easily play chords. Any arrays within steps are flattened out and subdivided, however an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
+         */
         this.stepsToPlay.map(buildSequencerStep),
         this.props.subdivision,
       );
