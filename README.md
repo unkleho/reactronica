@@ -32,7 +32,11 @@ class Example extends Component {
     return (
       <Song tempo={90} isPlaying={false}>
         <Track
+          // Array of several types
           steps={[
+            // Note in string format
+            'C3',
+            // Object with note and duration
             {
               note: 'C3',
               duration: 0.5,
@@ -41,7 +45,21 @@ class Example extends Component {
               note: 'D3',
               duration: 0.5,
             },
+            // Array of strings for chords
+            ['C3', 'G3'],
             null,
+            null,
+            // Array of objects for chords
+            [
+              {
+                note: 'C3',
+                duration: 0.5,
+              },
+              {
+                note: 'G3',
+                duration: 0.5,
+              },
+            ],
             null,
           ]}
           effects={[
@@ -49,7 +67,9 @@ class Example extends Component {
             <Effect type="distortion" />
           ]}
           // Callback for every tick
-          onStepPlay={}
+          onStepPlay={(step, index) => {
+            doSomething(step, index);
+          }}
         >
           <Instrument type="polySynth" notes={[]} />
         </Track>

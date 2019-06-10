@@ -5,27 +5,27 @@ export const melodyClip = {
     {
       start: '1.1.1',
       note: 'C3',
-      duration: 0.5,
+      duration: 0.01,
     },
     {
       start: '1.1.3',
       note: 'D3',
-      duration: 0.5,
+      duration: 0.01,
     },
     {
       start: '1.2.1',
       note: 'E3',
-      duration: 0.5,
+      duration: 0.01,
     },
     {
       start: '1.2.3',
       note: 'G3',
-      duration: 0.5,
+      duration: 0.01,
     },
     {
       start: '1.3.1',
       note: 'A3',
-      duration: 0.5,
+      duration: 0.01,
     },
   ],
 };

@@ -93,10 +93,17 @@ export function gridToSamplerSteps(grid) {
     gridLine.forEach((gridStep) => {
       const { step } = gridStep;
 
-      result[step] = {
-        note: gridStep.note,
-        duration: gridStep.duration,
-      };
+      result[step] = [
+        ...(result[step] ? result[step] : []),
+        ...(gridStep.note
+          ? [
+              {
+                note: gridStep.note,
+                duration: gridStep.duration,
+              },
+            ]
+          : []),
+      ];
     });
   });
 
