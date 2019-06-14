@@ -48,7 +48,7 @@ const StepsEditor = ({
         'A3',
         'A#3',
         'B3',
-      ].map((note) => {
+      ].map((note, rowIndex) => {
         const isAccidental = note.includes('#');
 
         return (
@@ -58,18 +58,18 @@ const StepsEditor = ({
             )}
             key={note}
           >
-            {emptyArray.map((_, i) => {
-              const index = i - 1;
+            {emptyArray.map((_, columnIndex) => {
+              const index = columnIndex - 1;
               const isCurrent = steps[index] && steps[index].note === note;
 
               // For the first column, show playable keyboard
-              if (i === 0) {
+              if (columnIndex === 0) {
                 return (
                   <button
                     className={[css.step, css.stepKey].join(' ')}
                     onMouseDown={() => onKeyboardDown(note)}
                     onMouseUp={() => onKeyboardUp(note)}
-                    key={i}
+                    key={columnIndex}
                     data-testid="keyboard-button"
                   >
                     {note}
@@ -88,9 +88,13 @@ const StepsEditor = ({
                       return onStepEditorClick(note, index);
                     }
                   }}
-                  key={i}
-                  data-testid="step-button"
-                />
+                  key={columnIndex}
+                  data-testid={`step-button-${rowIndex}-${columnIndex}${
+                    isCurrent ? '-current' : ''
+                  }`}
+                >
+                  {isCurrent && <span>on</span>}
+                </button>
               );
             })}
           </div>
