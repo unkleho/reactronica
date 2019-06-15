@@ -92,9 +92,7 @@ const StepsEditor = ({
                   data-testid={`step-button-${rowIndex}-${columnIndex}${
                     isCurrent ? '-current' : ''
                   }`}
-                >
-                  {isCurrent && <span>on</span>}
-                </button>
+                />
               );
             })}
           </div>
