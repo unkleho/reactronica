@@ -18,7 +18,7 @@ export function buildSteps(clip, subdivision = 16, notesPerBar = 4) {
     if (result.length === 0) {
       return null;
     } else if (result.length === 1) {
-      return result[0];
+      return result;
     }
 
     return result;

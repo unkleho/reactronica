@@ -8,6 +8,11 @@ export const melodyClip = {
       duration: 0.5,
     },
     {
+      start: '1.1.1',
+      note: 'G3',
+      duration: 0.5,
+    },
+    {
       start: '1.1.3',
       note: 'D3',
       duration: 0.5,

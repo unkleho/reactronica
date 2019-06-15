@@ -4,15 +4,23 @@ import css from './StepsEditor.module.css';
 
 const StepsEditor = ({
   currentStepIndex,
-  steps = [],
+  defaultSteps = [],
   subdivision = 8,
   onStepEditorClick,
   onKeyboardDown,
   onKeyboardUp,
 }) => {
-  if (steps.length === 0) {
+  if (defaultSteps.length === 0) {
     return null;
   }
+
+  const [steps, setSteps] = React.useState(defaultSteps);
+
+  const handleStepClick = (note, index) => {
+    if (typeof onStepEditorClick === 'function') {
+      return onStepEditorClick(note, index);
+    }
+  };
 
   const emptyArray = [...new Array(1 + subdivision)];
 
@@ -60,7 +68,12 @@ const StepsEditor = ({
           >
             {emptyArray.map((_, columnIndex) => {
               const index = columnIndex - 1;
-              const isCurrent = steps[index] && steps[index].note === note;
+
+              const isCurrent =
+                steps[index] &&
+                steps[index].findIndex((step) => {
+                  return step.note === note;
+                }) >= 0;
 
               // For the first column, show playable keyboard
               if (columnIndex === 0) {
@@ -84,12 +97,10 @@ const StepsEditor = ({
                     isCurrent ? css.stepIsCurrent : '',
                   ].join(' ')}
                   onClick={() => {
-                    if (typeof onStepEditorClick === 'function') {
-                      return onStepEditorClick(note, index);
-                    }
+                    handleStepClick(note, index);
                   }}
                   key={columnIndex}
-                  data-testid={`step-button-${rowIndex}-${columnIndex}${
+                  data-testid={`step-button-${columnIndex - 1}-${rowIndex}${
                     isCurrent ? '-current' : ''
                   }`}
                 />
