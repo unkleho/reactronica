@@ -15,7 +15,18 @@ const Song = ({
   children,
 }) => {
   useEffect(() => {
+    Tone.Transport.bpm.value = tempo;
+    Tone.Transport.swing = swing;
+    Tone.Transport.swingSubdivision = swingSubdivision;
+  }, [tempo, swing, swingSubdivision]);
+
+  useEffect(() => {
     if (isPlaying) {
+      // Hack to get Tone to NOT use same settings from another instance
+      Tone.Transport.bpm.value = tempo;
+      Tone.Transport.swing = swing;
+      Tone.Transport.swingSubdivision = swingSubdivision;
+
       Tone.Transport.start();
 
       // iOS Web Audio API requires this library.
@@ -24,12 +35,6 @@ const Song = ({
       Tone.Transport.stop();
     }
   }, [isPlaying]);
-
-  useEffect(() => {
-    Tone.Transport.bpm.value = tempo;
-    Tone.Transport.swing = swing;
-    Tone.Transport.swingSubdivision = swingSubdivision;
-  }, [tempo, swing, swingSubdivision]);
 
   return (
     <SongContext.Provider

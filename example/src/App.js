@@ -18,14 +18,16 @@ export default class App extends Component {
           </a>
         </p>
 
-        <br />
+        <p>
+          By <a href="https://twitter.com/unkleho">@unkleho</a>
+        </p>
 
         <h2>Examples</h2>
 
-        <h3>Keyboard/Beat Editor</h3>
+        <h3>Melody/Beat Editor</h3>
         <StepsEditorExample />
 
-        <h3>Tablature</h3>
+        <h3>Ukulele Tab</h3>
         <TabExample />
       </div>
     );

@@ -54,6 +54,28 @@ describe('StepsEditor', () => {
     expect(getByTestId('step-button-0-5-current')).toBeDefined();
   });
 
+  it('should add current step on index without notes', () => {
+    const { getByTestId } = render(
+      <StepsEditor
+        defaultSteps={melodySteps}
+        subdivision={16}
+        // onStepEditorClick={(steps, note, index) => {
+        //   expect(steps[0]).toEqual([
+        //     { note: 'C3', duration: 0.5 },
+        //     { note: 'G3', duration: 0.5 },
+        //     { note: 'F3', duration: 0.5 },
+        //   ]);
+        //   expect(steps.length).toBe(16);
+        //   expect(note.note).toEqual('F3');
+        //   expect(index).toEqual(0);
+        // }}
+      />,
+    );
+
+    fireEvent.click(getByTestId('step-button-1-5'));
+    expect(getByTestId('step-button-1-5-current')).toBeDefined();
+  });
+
   it('should remove current step after click and send new steps in callback', () => {
     const { getByTestId } = render(
       <StepsEditor

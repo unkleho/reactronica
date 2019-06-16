@@ -8,8 +8,23 @@ body {
 
 h1 {
   margin-bottom: 0;
-  font-size: 3em;
+  font-size: 3.5em;
   letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 2.5em;
+  margin-top: 1.2em;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin-top: 1.7em;
+}
+
+h4 {
+  font-size: 1.2em;
+  margin-top: 1.5em;
 }
 
 button {
@@ -18,9 +33,10 @@ button {
   border-radius: 0;
   font-size: 1em;
   padding: 0.6em;
+  margin-right: 1em;
 }
 
 .app {
   margin: 0 auto;
-  max-width: 40em;
+  max-width: 50em;
 }

@@ -14,7 +14,7 @@ const initialState = {
   // TRANSPORT
   // --------------------------------------------------------------------------
   isPlaying: false,
-  tempo: 90,
+  tempo: 70,
   // --------------------------------------------------------------------------
   // STEPS
   // --------------------------------------------------------------------------
@@ -114,7 +114,7 @@ const StepsEditorExample = () => {
         Add more feedback
       </button>
 
-      <h2>Track</h2>
+      <h4>Track</h4>
       <div className="app__track">
         <div>
           <label htmlFor="volume">Volume</label>
@@ -147,7 +147,7 @@ const StepsEditorExample = () => {
         </div>
       </div>
 
-      <h3>Effects</h3>
+      {effects.length > 0 && <h4>Effects</h4>}
       {effects.map((effect) => {
         return (
           <div className={css.trackEffect} key={effect.props.id}>

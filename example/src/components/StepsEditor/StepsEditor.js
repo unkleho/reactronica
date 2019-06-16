@@ -19,11 +19,9 @@ const StepsEditor = ({
     return null;
   }
 
-  // console.log(steps);
-
   const handleStepClick = (note, index) => {
     // Append note to stepRow
-    const stepRow = [...steps[index], note];
+    const stepRow = [...(steps[index] ? steps[index] : []), note];
     const shouldRemove =
       stepRow.filter((s) => s.note === note.note).length >= 2;
     const newStepRow = shouldRemove
