@@ -93,6 +93,10 @@ const StepsEditor = ({
                   return step.note === note;
                 }) >= 0;
 
+              const dataTestId = `step-button-${columnIndex - 1}-${rowIndex}${
+                isCurrent ? '-current' : ''
+              }`;
+
               // For the first column, show playable keyboard
               if (columnIndex === 0) {
                 return (
@@ -118,9 +122,7 @@ const StepsEditor = ({
                     handleStepClick({ note, duration: 0.5 }, index);
                   }}
                   key={columnIndex}
-                  data-testid={`step-button-${columnIndex - 1}-${rowIndex}${
-                    isCurrent ? '-current' : ''
-                  }`}
+                  data-testid={dataTestId}
                 />
               );
             })}

@@ -73,10 +73,8 @@ describe('StepsEditor', () => {
   });
 
   it('should change all steps when defaultSteps is updated', () => {
-    let steps = melodySteps;
-
-    const { getAllByTestId, rerender } = render(
-      <StepsEditor defaultSteps={steps} subdivision={16} />,
+    const { getAllByTestId, getByTestId, rerender } = render(
+      <StepsEditor defaultSteps={melodySteps} subdivision={16} />,
     );
 
     const currentStepButtonsPrev = getAllByTestId(/-current/);
@@ -113,5 +111,6 @@ describe('StepsEditor', () => {
 
     const currentStepButtonsNext = getAllByTestId(/-current/);
     expect(currentStepButtonsNext.length).toBe(1);
+    expect(getByTestId('step-button-0-2-current')).toBeDefined();
   });
 });
