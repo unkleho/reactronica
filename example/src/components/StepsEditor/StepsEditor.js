@@ -10,15 +10,33 @@ const StepsEditor = ({
   onKeyboardDown,
   onKeyboardUp,
 }) => {
-  if (defaultSteps.length === 0) {
+  const [steps, setSteps] = React.useState(defaultSteps);
+  React.useEffect(() => {
+    setSteps(defaultSteps);
+  }, [defaultSteps]);
+
+  if (steps.length === 0) {
     return null;
   }
 
-  const [steps, setSteps] = React.useState(defaultSteps);
+  // console.log(steps);
 
   const handleStepClick = (note, index) => {
+    // Append note to stepRow
+    const stepRow = [...steps[index], note];
+    const shouldRemove =
+      stepRow.filter((s) => s.note === note.note).length >= 2;
+    const newStepRow = shouldRemove
+      ? stepRow.filter((s) => s.note !== note.note)
+      : stepRow;
+
+    const newSteps = [...steps];
+    newSteps[index] = newStepRow;
+
+    setSteps(newSteps);
+
     if (typeof onStepEditorClick === 'function') {
-      return onStepEditorClick(note, index);
+      return onStepEditorClick(newSteps, note, index);
     }
   };
 
@@ -97,7 +115,7 @@ const StepsEditor = ({
                     isCurrent ? css.stepIsCurrent : '',
                   ].join(' ')}
                   onClick={() => {
-                    handleStepClick(note, index);
+                    handleStepClick({ note, duration: 0.5 }, index);
                   }}
                   key={columnIndex}
                   data-testid={`step-button-${columnIndex - 1}-${rowIndex}${

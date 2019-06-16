@@ -32,12 +32,86 @@ describe('StepsEditor', () => {
     expect(getByTestId('step-button-4-4-current')).toBeDefined();
   });
 
-  // it('should update current steps after clicks', () => {
-  //   const { getAllByTestId, getByTestId } = render(
-  //     <StepsEditor defaultSteps={melodySteps} subdivision={16} />,
-  //   );
+  it('should add current step after click and send new steps in callback', () => {
+    const { getByTestId } = render(
+      <StepsEditor
+        defaultSteps={melodySteps}
+        subdivision={16}
+        onStepEditorClick={(steps, note, index) => {
+          expect(steps[0]).toEqual([
+            { note: 'C3', duration: 0.5 },
+            { note: 'G3', duration: 0.5 },
+            { note: 'F3', duration: 0.5 },
+          ]);
+          expect(steps.length).toBe(16);
+          expect(note.note).toEqual('F3');
+          expect(index).toEqual(0);
+        }}
+      />,
+    );
 
-  //   fireEvent.click(getByTestId('step-button-0-2'));
-  //   expect(getByTestId('step-button-0-2-current')).toBeDefined();
-  // });
+    fireEvent.click(getByTestId('step-button-0-5'));
+    expect(getByTestId('step-button-0-5-current')).toBeDefined();
+  });
+
+  it('should remove current step after click and send new steps in callback', () => {
+    const { getByTestId } = render(
+      <StepsEditor
+        defaultSteps={melodySteps}
+        subdivision={16}
+        onStepEditorClick={(steps, note, index) => {
+          expect(steps[0]).toEqual([{ note: 'G3', duration: 0.5 }]);
+          expect(steps.length).toBe(16);
+          expect(note.note).toEqual('C3');
+          expect(index).toEqual(0);
+        }}
+      />,
+    );
+
+    fireEvent.click(getByTestId('step-button-0-0-current'));
+    expect(getByTestId('step-button-0-0')).toBeDefined();
+  });
+
+  it('should change all steps when defaultSteps is updated', () => {
+    let steps = melodySteps;
+
+    const { getAllByTestId, rerender } = render(
+      <StepsEditor defaultSteps={steps} subdivision={16} />,
+    );
+
+    const currentStepButtonsPrev = getAllByTestId(/-current/);
+    expect(currentStepButtonsPrev.length).toBe(6);
+
+    rerender(
+      <StepsEditor
+        defaultSteps={[
+          [
+            {
+              note: 'D3',
+              duration: 0.5,
+            },
+          ],
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+        ]}
+        subdivision={16}
+      />,
+    );
+
+    const currentStepButtonsNext = getAllByTestId(/-current/);
+    expect(currentStepButtonsNext.length).toBe(1);
+  });
 });

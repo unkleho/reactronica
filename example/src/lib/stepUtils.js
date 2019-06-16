@@ -11,14 +11,19 @@ export function buildSteps(clip, subdivision = 16, notesPerBar = 4) {
     const timeKey = `${barKey}.${noteKey}.${sixteenthsKey}`;
     // console.log(timeKey);
 
-    const result = notes.filter((note) => {
-      return note.start === timeKey;
-    });
+    const result = notes
+      .filter((note) => {
+        return note.start === timeKey;
+      })
+      .map((note) => {
+        return {
+          note: note.note,
+          duration: note.duration,
+        };
+      });
 
     if (result.length === 0) {
       return null;
-    } else if (result.length === 1) {
-      return result;
     }
 
     return result;

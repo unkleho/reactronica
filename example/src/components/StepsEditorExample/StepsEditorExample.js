@@ -92,12 +92,12 @@ const StepsEditorExample = () => {
       </div>
 
       <StepsEditor
-        steps={currentSteps}
+        defaultSteps={currentSteps}
         currentStepIndex={currentStepIndex}
         notes={notes}
         subdivision={16}
-        onStepEditorClick={(note, index) =>
-          dispatch({ type: types.UPDATE_CURRENT_STEPS, note, index })
+        onStepEditorClick={(steps) =>
+          dispatch({ type: types.UPDATE_CURRENT_STEPS, steps })
         }
         onKeyboardDown={(note) =>
           dispatch({ type: types.SET_NOTES, notes: [{ name: note }] })
@@ -223,19 +223,7 @@ function reducer(state, action) {
       return { ...state, currentStepIndex: action.currentStepIndex };
 
     case types.UPDATE_CURRENT_STEPS:
-      const steps = [...state.stepsGroup[state.currentStepsName]];
-      const { note, index: i } = action;
-
-      if (steps[i] && steps[i].note === note) {
-        // Clear step
-        steps[i] = null;
-      } else {
-        // Assign step
-        steps[i] = {
-          note,
-          duration: 0.5,
-        };
-      }
+      const { steps } = action;
 
       return {
         ...state,
