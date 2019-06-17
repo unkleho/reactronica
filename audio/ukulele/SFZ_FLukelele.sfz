@@ -1,0 +1,188 @@
+//-----------------------------------------------------------------------------------
+// sfz Definition File
+// 
+// SFZ FLukelele SFZ by Chad@patcharena.com
+// www.patcharena.com
+//-----------------------------------------------------------------------------------
+
+<global>
+trigger=attack
+
+ampeg_attack=0 
+ampeg_decay=0
+ampeg_hold=0
+ampeg_sustain=100
+ampeg_release=0.480
+
+<group>
+lovel=0
+hivel=127
+
+seq_length=5
+seq_position=1
+
+<region> pitch_keycenter=60 lokey=60 hikey=60 sample=Fluke_Uke_060_c3.wav
+<region> pitch_keycenter=61 lokey=61 hikey=61 sample=Fluke_Uke_061_c#3.wav
+<region> pitch_keycenter=62 lokey=62 hikey=62 sample=Fluke_Uke_062_d3.wav
+<region> pitch_keycenter=63 lokey=63 hikey=63 sample=Fluke_Uke_063_d#3.wav
+<region> pitch_keycenter=64 lokey=64 hikey=64 sample=Fluke_Uke_064_e3.wav
+<region> pitch_keycenter=65 lokey=65 hikey=65 sample=Fluke_Uke_065_f3.wav
+<region> pitch_keycenter=66 lokey=66 hikey=66 sample=Fluke_Uke_066_f#3.wav
+<region> pitch_keycenter=67 lokey=67 hikey=67 sample=Fluke_Uke_067_g3.wav
+<region> pitch_keycenter=68 lokey=68 hikey=68 sample=Fluke_Uke_068_g#3.wav
+<region> pitch_keycenter=69 lokey=69 hikey=69 sample=Fluke_Uke_069_a3.wav
+<region> pitch_keycenter=70 lokey=70 hikey=70 sample=Fluke_Uke_070_a#3.wav
+<region> pitch_keycenter=71 lokey=71 hikey=71 sample=Fluke_Uke_071_b3.wav
+<region> pitch_keycenter=72 lokey=72 hikey=72 sample=Fluke_Uke_072_c4.wav
+<region> pitch_keycenter=73 lokey=73 hikey=73 sample=Fluke_Uke_073_c#4.wav
+<region> pitch_keycenter=74 lokey=74 hikey=74 sample=Fluke_Uke_074_d4.wav
+<region> pitch_keycenter=75 lokey=75 hikey=75 sample=Fluke_Uke_075_d#4.wav
+<region> pitch_keycenter=76 lokey=76 hikey=76 sample=Fluke_Uke_076_e4.wav
+<region> pitch_keycenter=77 lokey=77 hikey=77 sample=Fluke_Uke_077_f4.wav
+<region> pitch_keycenter=78 lokey=78 hikey=78 sample=Fluke_Uke_078_f#4.wav
+<region> pitch_keycenter=79 lokey=79 hikey=79 sample=Fluke_Uke_079_g4.wav
+<region> pitch_keycenter=80 lokey=80 hikey=80 sample=Fluke_Uke_080_g#4.wav
+<region> pitch_keycenter=81 lokey=81 hikey=81 sample=Fluke_Uke_081_a4.wav
+<region> pitch_keycenter=82 lokey=82 hikey=82 sample=Fluke_Uke_082_a#4.wav
+<region> pitch_keycenter=83 lokey=83 hikey=83 sample=Fluke_Uke_083_b4.wav
+<region> pitch_keycenter=84 lokey=84 hikey=84 sample=Fluke_Uke_084_c5.wav
+
+
+<group>
+lovel=0
+hivel=127
+
+seq_length=5
+seq_position=2
+
+<region> pitch_keycenter=61 lokey=60 hikey=60 sample=Fluke_Uke_061_c#3.wav
+<region> pitch_keycenter=62 lokey=61 hikey=61 sample=Fluke_Uke_062_d3.wav
+<region> pitch_keycenter=63 lokey=62 hikey=62 sample=Fluke_Uke_063_d#3.wav
+<region> pitch_keycenter=64 lokey=63 hikey=63 sample=Fluke_Uke_064_e3.wav
+<region> pitch_keycenter=65 lokey=64 hikey=64 sample=Fluke_Uke_065_f3.wav
+<region> pitch_keycenter=66 lokey=65 hikey=65 sample=Fluke_Uke_066_f#3.wav
+<region> pitch_keycenter=67 lokey=66 hikey=66 sample=Fluke_Uke_067_g3.wav
+<region> pitch_keycenter=68 lokey=67 hikey=67 sample=Fluke_Uke_068_g#3.wav
+<region> pitch_keycenter=69 lokey=68 hikey=68 sample=Fluke_Uke_069_a3.wav
+<region> pitch_keycenter=70 lokey=69 hikey=69 sample=Fluke_Uke_070_a#3.wav
+<region> pitch_keycenter=71 lokey=70 hikey=70 sample=Fluke_Uke_071_b3.wav
+<region> pitch_keycenter=72 lokey=71 hikey=71 sample=Fluke_Uke_072_c4.wav
+<region> pitch_keycenter=73 lokey=72 hikey=72 sample=Fluke_Uke_073_c#4.wav
+<region> pitch_keycenter=74 lokey=73 hikey=73 sample=Fluke_Uke_074_d4.wav
+<region> pitch_keycenter=75 lokey=74 hikey=74 sample=Fluke_Uke_075_d#4.wav
+<region> pitch_keycenter=76 lokey=75 hikey=75 sample=Fluke_Uke_076_e4.wav
+<region> pitch_keycenter=77 lokey=76 hikey=76 sample=Fluke_Uke_077_f4.wav
+<region> pitch_keycenter=78 lokey=77 hikey=77 sample=Fluke_Uke_078_f#4.wav
+<region> pitch_keycenter=79 lokey=78 hikey=78 sample=Fluke_Uke_079_g4.wav
+<region> pitch_keycenter=80 lokey=79 hikey=79 sample=Fluke_Uke_080_g#4.wav
+<region> pitch_keycenter=81 lokey=80 hikey=80 sample=Fluke_Uke_081_a4.wav
+<region> pitch_keycenter=82 lokey=81 hikey=81 sample=Fluke_Uke_082_a#4.wav
+<region> pitch_keycenter=83 lokey=82 hikey=82 sample=Fluke_Uke_083_b4.wav
+<region> pitch_keycenter=84 lokey=83 hikey=83 sample=Fluke_Uke_084_c5.wav
+<region> pitch_keycenter=82 lokey=84 hikey=84 sample=Fluke_Uke_082_a#4.wav
+
+
+
+<group>
+lovel=0
+hivel=127
+
+seq_length=5
+seq_position=3
+
+<region> pitch_keycenter=62 lokey=60 hikey=60 sample=Fluke_Uke_062_d3.wav
+<region> pitch_keycenter=60 lokey=61 hikey=61 sample=Fluke_Uke_060_c3.wav
+<region> pitch_keycenter=61 lokey=62 hikey=62 sample=Fluke_Uke_061_c#3.wav
+<region> pitch_keycenter=62 lokey=63 hikey=63 sample=Fluke_Uke_062_d3.wav
+<region> pitch_keycenter=63 lokey=64 hikey=64 sample=Fluke_Uke_063_d#3.wav
+<region> pitch_keycenter=64 lokey=65 hikey=65 sample=Fluke_Uke_064_e3.wav
+<region> pitch_keycenter=65 lokey=66 hikey=66 sample=Fluke_Uke_065_f3.wav
+<region> pitch_keycenter=66 lokey=67 hikey=67 sample=Fluke_Uke_066_f#3.wav
+<region> pitch_keycenter=67 lokey=68 hikey=68 sample=Fluke_Uke_067_g3.wav
+<region> pitch_keycenter=68 lokey=69 hikey=69 sample=Fluke_Uke_068_g#3.wav
+<region> pitch_keycenter=69 lokey=70 hikey=70 sample=Fluke_Uke_069_a3.wav
+<region> pitch_keycenter=70 lokey=71 hikey=71 sample=Fluke_Uke_070_a#3.wav
+<region> pitch_keycenter=71 lokey=72 hikey=72 sample=Fluke_Uke_071_b3.wav
+<region> pitch_keycenter=72 lokey=73 hikey=73 sample=Fluke_Uke_072_c4.wav
+<region> pitch_keycenter=73 lokey=74 hikey=74 sample=Fluke_Uke_073_c#4.wav
+<region> pitch_keycenter=74 lokey=75 hikey=75 sample=Fluke_Uke_074_d4.wav
+<region> pitch_keycenter=75 lokey=76 hikey=76 sample=Fluke_Uke_075_d#4.wav
+<region> pitch_keycenter=76 lokey=77 hikey=77 sample=Fluke_Uke_076_e4.wav
+<region> pitch_keycenter=77 lokey=78 hikey=78 sample=Fluke_Uke_077_f4.wav
+<region> pitch_keycenter=78 lokey=79 hikey=79 sample=Fluke_Uke_078_f#4.wav
+<region> pitch_keycenter=79 lokey=80 hikey=80 sample=Fluke_Uke_079_g4.wav
+<region> pitch_keycenter=80 lokey=81 hikey=81 sample=Fluke_Uke_080_g#4.wav
+<region> pitch_keycenter=81 lokey=82 hikey=82 sample=Fluke_Uke_081_a4.wav
+<region> pitch_keycenter=82 lokey=83 hikey=83 sample=Fluke_Uke_082_a#4.wav
+<region> pitch_keycenter=83 lokey=84 hikey=84 sample=Fluke_Uke_083_b4.wav
+
+
+
+<group>
+lovel=0
+hivel=127
+
+seq_length=5
+seq_position=4
+
+<region> pitch_keycenter=62 lokey=60 hikey=60 sample=Fluke_Uke_062_d3.wav
+<region> pitch_keycenter=63 lokey=61 hikey=61 sample=Fluke_Uke_063_d#3.wav
+<region> pitch_keycenter=64 lokey=62 hikey=62 sample=Fluke_Uke_064_e3.wav
+<region> pitch_keycenter=65 lokey=63 hikey=63 sample=Fluke_Uke_065_f3.wav
+<region> pitch_keycenter=66 lokey=64 hikey=64 sample=Fluke_Uke_066_f#3.wav
+<region> pitch_keycenter=67 lokey=65 hikey=65 sample=Fluke_Uke_067_g3.wav
+<region> pitch_keycenter=68 lokey=66 hikey=66 sample=Fluke_Uke_068_g#3.wav
+<region> pitch_keycenter=69 lokey=67 hikey=67 sample=Fluke_Uke_069_a3.wav
+<region> pitch_keycenter=70 lokey=68 hikey=68 sample=Fluke_Uke_070_a#3.wav
+<region> pitch_keycenter=71 lokey=69 hikey=69 sample=Fluke_Uke_071_b3.wav
+<region> pitch_keycenter=72 lokey=70 hikey=70 sample=Fluke_Uke_072_c4.wav
+<region> pitch_keycenter=73 lokey=71 hikey=71 sample=Fluke_Uke_073_c#4.wav
+<region> pitch_keycenter=74 lokey=72 hikey=72 sample=Fluke_Uke_074_d4.wav
+<region> pitch_keycenter=75 lokey=73 hikey=73 sample=Fluke_Uke_075_d#4.wav
+<region> pitch_keycenter=76 lokey=74 hikey=74 sample=Fluke_Uke_076_e4.wav
+<region> pitch_keycenter=77 lokey=75 hikey=75 sample=Fluke_Uke_077_f4.wav
+<region> pitch_keycenter=78 lokey=76 hikey=76 sample=Fluke_Uke_078_f#4.wav
+<region> pitch_keycenter=79 lokey=77 hikey=77 sample=Fluke_Uke_079_g4.wav
+<region> pitch_keycenter=80 lokey=78 hikey=78 sample=Fluke_Uke_080_g#4.wav
+<region> pitch_keycenter=81 lokey=79 hikey=79 sample=Fluke_Uke_081_a4.wav
+<region> pitch_keycenter=82 lokey=80 hikey=80 sample=Fluke_Uke_082_a#4.wav
+<region> pitch_keycenter=83 lokey=81 hikey=81 sample=Fluke_Uke_083_b4.wav
+<region> pitch_keycenter=84 lokey=82 hikey=82 sample=Fluke_Uke_084_c5.wav
+<region> pitch_keycenter=83 lokey=83 hikey=83 sample=Fluke_Uke_083_b4.wav
+<region> pitch_keycenter=84 lokey=84 hikey=84 sample=Fluke_Uke_084_c5.wav
+
+
+<group>
+lovel=0
+hivel=127
+
+seq_length=5
+seq_position=5
+
+<region> pitch_keycenter=60 lokey=60 hikey=60 sample=Fluke_Uke_060_c3.wav
+<region> pitch_keycenter=61 lokey=61 hikey=61 sample=Fluke_Uke_061_c#3.wav
+<region> pitch_keycenter=60 lokey=62 hikey=62 sample=Fluke_Uke_060_c3.wav
+<region> pitch_keycenter=61 lokey=63 hikey=63 sample=Fluke_Uke_061_c#3.wav
+<region> pitch_keycenter=62 lokey=64 hikey=64 sample=Fluke_Uke_062_d3.wav
+<region> pitch_keycenter=63 lokey=65 hikey=65 sample=Fluke_Uke_063_d#3.wav
+<region> pitch_keycenter=64 lokey=66 hikey=66 sample=Fluke_Uke_064_e3.wav
+<region> pitch_keycenter=65 lokey=67 hikey=67 sample=Fluke_Uke_065_f3.wav
+<region> pitch_keycenter=66 lokey=68 hikey=68 sample=Fluke_Uke_066_f#3.wav
+<region> pitch_keycenter=67 lokey=69 hikey=69 sample=Fluke_Uke_067_g3.wav
+<region> pitch_keycenter=68 lokey=70 hikey=70 sample=Fluke_Uke_068_g#3.wav
+<region> pitch_keycenter=69 lokey=71 hikey=71 sample=Fluke_Uke_069_a3.wav
+<region> pitch_keycenter=70 lokey=72 hikey=72 sample=Fluke_Uke_070_a#3.wav
+<region> pitch_keycenter=71 lokey=73 hikey=73 sample=Fluke_Uke_071_b3.wav
+<region> pitch_keycenter=72 lokey=74 hikey=74 sample=Fluke_Uke_072_c4.wav
+<region> pitch_keycenter=73 lokey=75 hikey=75 sample=Fluke_Uke_073_c#4.wav
+<region> pitch_keycenter=74 lokey=76 hikey=76 sample=Fluke_Uke_074_d4.wav
+<region> pitch_keycenter=75 lokey=77 hikey=77 sample=Fluke_Uke_075_d#4.wav
+<region> pitch_keycenter=76 lokey=78 hikey=78 sample=Fluke_Uke_076_e4.wav
+<region> pitch_keycenter=77 lokey=79 hikey=79 sample=Fluke_Uke_077_f4.wav
+<region> pitch_keycenter=78 lokey=80 hikey=80 sample=Fluke_Uke_078_f#4.wav
+<region> pitch_keycenter=79 lokey=81 hikey=81 sample=Fluke_Uke_079_g4.wav
+<region> pitch_keycenter=80 lokey=82 hikey=82 sample=Fluke_Uke_080_g#4.wav
+<region> pitch_keycenter=81 lokey=83 hikey=83 sample=Fluke_Uke_081_a4.wav
+<region> pitch_keycenter=82 lokey=84 hikey=84 sample=Fluke_Uke_082_a#4.wav
+
+

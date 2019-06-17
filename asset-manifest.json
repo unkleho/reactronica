@@ -1,6 +1,15 @@
 {
-  "main.css": "static/css/main.462b9241.css",
-  "main.css.map": "static/css/main.462b9241.css.map",
-  "main.js": "static/js/main.676d2207.js",
-  "main.js.map": "static/js/main.676d2207.js.map"
+  "files": {
+    "main.css": "/reactronica/static/css/main.b31bea18.chunk.css",
+    "main.js": "/reactronica/static/js/main.695cc7be.chunk.js",
+    "main.js.map": "/reactronica/static/js/main.695cc7be.chunk.js.map",
+    "runtime~main.js": "/reactronica/static/js/runtime~main.3154ff2f.js",
+    "runtime~main.js.map": "/reactronica/static/js/runtime~main.3154ff2f.js.map",
+    "static/js/2.300175dc.chunk.js": "/reactronica/static/js/2.300175dc.chunk.js",
+    "static/js/2.300175dc.chunk.js.map": "/reactronica/static/js/2.300175dc.chunk.js.map",
+    "index.html": "/reactronica/index.html",
+    "precache-manifest.7e1226fbc0a541b0e617dd7e6bac635c.js": "/reactronica/precache-manifest.7e1226fbc0a541b0e617dd7e6bac635c.js",
+    "service-worker.js": "/reactronica/service-worker.js",
+    "static/css/main.b31bea18.chunk.css.map": "/reactronica/static/css/main.b31bea18.chunk.css.map"
+  }
 }
