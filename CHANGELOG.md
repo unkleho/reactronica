@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.5] - 2019-06-17
 
+- Update <Track> steps to enable chords to be played
 - Refactor example page
 - Add ukulele tab example
 - Update step editor example
