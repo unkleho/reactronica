@@ -195,9 +195,11 @@ const StepsEditorExample = () => {
           <Instrument
             type="sampler"
             samples={{
-              C3: '/audio/drums/kick15.wav',
-              D3: '/audio/drums/snare-bottom-buttend15.wav',
-              E3: '/audio/drums/chh12.wav',
+              C3: `${process.env.PUBLIC_URL}/audio/drums/kick15.wav`,
+              D3: `${
+                process.env.PUBLIC_URL
+              }/audio/drums/snare-bottom-buttend15.wav`,
+              E3: `${process.env.PUBLIC_URL}/audio/drums/chh12.wav`,
             }}
           />
         </Track>
