@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 
-// NOTE: Remove?
 export const NoteType = PropTypes.shape({
   name: PropTypes.string.isRequired,
   pitch: PropTypes.string,
