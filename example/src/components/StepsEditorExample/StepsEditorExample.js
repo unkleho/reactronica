@@ -12,30 +12,39 @@ import css from './StepsEditorExample.module.css';
 const initialState = {
   // --------------------------------------------------------------------------
   // TRANSPORT
+
   // --------------------------------------------------------------------------
   isPlaying: false,
   tempo: 70,
   // --------------------------------------------------------------------------
   // STEPS
   // --------------------------------------------------------------------------
-  // Rename to clips?
-  stepsGroup: {
-    melodySteps: buildSteps(melodyClip),
-    beatSteps: buildSteps(beatClip),
-  },
-  currentStepsName: 'melodySteps',
   // Highlighted step that follows the music
   currentStepIndex: null,
   // --------------------------------------------------------------------------
   // TRACK
   // --------------------------------------------------------------------------
-  volume: 100,
-  pan: 50,
-  notes: [],
+  currentTrackName: 'melody',
+  tracks: {
+    melody: {
+      volume: 100,
+      pan: 50,
+      steps: buildSteps(melodyClip),
+      notes: [],
+      effects: [],
+    },
+    beat: {
+      volume: 100,
+      pan: 50,
+      steps: buildSteps(beatClip),
+      notes: [],
+      effects: [],
+    },
+  },
   // --------------------------------------------------------------------------
   // EFFECTS
   // --------------------------------------------------------------------------
-  feedback: 0.6,
+  // feedback: 0.6,
   defaultEffects: [
     <Effect
       type="feedbackDelay"
@@ -46,7 +55,7 @@ const initialState = {
     />,
     <Effect type="distortion" key="effect-2" id="effect-2" />,
   ],
-  effects: [],
+  // effects: [],
 };
 
 const StepsEditorExample = () => {
@@ -54,16 +63,16 @@ const StepsEditorExample = () => {
   const {
     isPlaying,
     tempo,
-    stepsGroup,
-    currentStepsName,
+    currentTrackName,
     currentStepIndex,
+    tracks,
     volume,
     pan,
     notes,
-    effects,
   } = state;
 
-  const currentSteps = stepsGroup[currentStepsName];
+  const currentTrack = tracks[currentTrackName];
+  const currentSteps = currentTrack.steps;
 
   return (
     <div className={css.stepsEditorExample}>
@@ -73,14 +82,12 @@ const StepsEditorExample = () => {
             <button
               className={[
                 css.stepsChooserButton,
-                `${name}Steps` === currentStepsName
-                  ? css.stepsChooserButtonActive
-                  : '',
+                name === currentTrackName ? css.stepsChooserButtonActive : '',
               ].join(' ')}
               onClick={() =>
                 dispatch({
-                  type: types.SET_CURRENT_STEPS_NAME,
-                  name: `${name}Steps`,
+                  type: types.SET_CURRENT_TRACK_NAME,
+                  name,
                 })
               }
               key={name}
@@ -110,9 +117,10 @@ const StepsEditorExample = () => {
       <button onClick={() => dispatch({ type: types.ADD_EFFECTS })}>
         Add Effects
       </button>
-      <button onClick={() => dispatch({ type: types.ADD_MORE_FEEDBACK })}>
+      {/* WIP */}
+      {/* <button onClick={() => dispatch({ type: types.ADD_MORE_FEEDBACK })}>
         Add more feedback
-      </button>
+      </button> */}
 
       <h4>Track</h4>
       <div className="app__track">
@@ -122,7 +130,7 @@ const StepsEditorExample = () => {
           <input
             id="volume"
             type="range"
-            value={volume}
+            value={currentTrack.volume}
             onChange={(event) =>
               dispatch({ type: types.SET_VOLUME, volume: event.target.value })
             }
@@ -138,7 +146,7 @@ const StepsEditorExample = () => {
           <input
             id="pan"
             type="range"
-            value={pan}
+            value={currentTrack.pan}
             onChange={(event) =>
               dispatch({ type: types.SET_PAN, pan: event.target.value })
             }
@@ -147,8 +155,8 @@ const StepsEditorExample = () => {
         </div>
       </div>
 
-      {effects.length > 0 && <h4>Effects</h4>}
-      {effects.map((effect) => {
+      {currentTrack.effects.length > 0 && <h4>Effects</h4>}
+      {currentTrack.effects.map((effect) => {
         return (
           <div className={css.trackEffect} key={effect.props.id}>
             <p>
@@ -176,11 +184,11 @@ const StepsEditorExample = () => {
         swingSubdivision={'8n'}
       >
         <Track
-          steps={stepsGroup.melodySteps}
-          volume={(parseInt(volume, 10) / 100) * 32 - 32}
-          pan={(parseInt(pan, 10) / 100) * 2 - 1}
+          steps={tracks.melody.steps}
+          volume={(parseInt(tracks.melody.volume, 10) / 100) * 32 - 32}
+          pan={(parseInt(tracks.melody.pan, 10) / 100) * 2 - 1}
           subdivision={'16n'}
-          effects={effects}
+          effects={tracks.melody.effects}
           onStepPlay={(step) =>
             dispatch({
               type: types.SET_CURRENT_STEP_INDEX,
@@ -188,10 +196,16 @@ const StepsEditorExample = () => {
             })
           }
         >
-          <Instrument type="polySynth" notes={notes} />
+          <Instrument type="polySynth" notes={tracks.melody.notes} />
         </Track>
 
-        <Track steps={stepsGroup.beatSteps} subdivision={'16n'}>
+        <Track
+          steps={tracks.beat.steps}
+          volume={(parseInt(tracks.beat.volume, 10) / 100) * 32 - 32}
+          pan={(parseInt(tracks.beat.pan, 10) / 100) * 2 - 1}
+          subdivision={'16n'}
+          effects={tracks.beat.effects}
+        >
           <Instrument
             type="sampler"
             samples={{
@@ -201,6 +215,7 @@ const StepsEditorExample = () => {
               }/audio/drums/snare-bottom-buttend15.wav`,
               E3: `${process.env.PUBLIC_URL}/audio/drums/chh12.wav`,
             }}
+            notes={tracks.beat.notes}
           />
         </Track>
       </Song>
@@ -229,54 +244,93 @@ function reducer(state, action) {
 
       return {
         ...state,
-        stepsGroup: {
-          ...state.stepsGroup,
-          [state.currentStepsName]: steps,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            steps,
+          },
         },
       };
 
-    case types.SET_CURRENT_STEPS_NAME:
+    case types.SET_CURRENT_TRACK_NAME:
       return {
         ...state,
-        currentStepsName: action.name,
+        currentTrackName: action.name,
       };
 
     case types.SET_NOTES:
       return {
         ...state,
-        notes: action.notes,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            notes: action.notes,
+          },
+        },
       };
 
     case types.ADD_EFFECTS:
       return {
         ...state,
-        effects: state.defaultEffects,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            effects: state.defaultEffects,
+          },
+        },
       };
 
     case types.REMOVE_EFFECT:
       return {
         ...state,
-        effects: state.effects.filter(
-          (effect) => effect.props.id !== action.id,
-        ),
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            effects: state.tracks[state.currentTrackName].effects.filter(
+              (effect) => effect.props.id !== action.id,
+            ),
+          },
+        },
       };
 
     case types.ADD_MORE_FEEDBACK:
       return {
         ...state,
-        feedback: 0.9,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            feedback: 0.9,
+          },
+        },
       };
 
     case types.SET_VOLUME:
       return {
         ...state,
-        volume: action.volume,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            volume: action.volume,
+          },
+        },
       };
 
     case types.SET_PAN:
       return {
         ...state,
-        pan: action.pan,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            pan: action.pan,
+          },
+        },
       };
 
     default:

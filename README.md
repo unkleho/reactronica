@@ -118,6 +118,9 @@ class Example extends Component {
 $ npm start
 # To run example page, in new terminal:
 $ cd example
+# Link local version of Reactronica to example
+$ npm link ../node_modules/react
+# Start up!
 $ npm start
 # If you get a babel-eslint issue, create a .env file with SKIP_PREFLIGHT_CHECK=true in ./example
 ```

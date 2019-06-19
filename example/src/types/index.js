@@ -10,7 +10,7 @@ export const DECREASE_TEMPO = 'DECREASE_TEMPO';
 // ----------------------------------------------------------------------------
 export const SET_CURRENT_STEP_INDEX = 'SET_CURRENT_STEP_INDEX';
 export const UPDATE_CURRENT_STEPS = 'UPDATE_CURRENT_STEPS';
-export const SET_CURRENT_STEPS_NAME = 'SET_CURRENT_STEPS_NAME';
+export const SET_CURRENT_TRACK_NAME = 'SET_CURRENT_TRACK_NAME';
 export const SET_NOTES = 'SET_NOTES';
 
 // ----------------------------------------------------------------------------
