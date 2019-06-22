@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { SongContext } from './Song';
@@ -73,16 +73,16 @@ const TrackConsumer = ({
     }
   }, [steps]);
 
-  const addToEffectsChain = (effect) => {
-    // console.log('<Track />', 'addToEffectsChain');
+  const onAddToEffectsChain = (effect) => {
+    // console.log('<Track />', 'onAddToEffectsChain');
 
     setEffectsChain((prevEffectsChain) => {
       return [effect, ...prevEffectsChain];
     });
   };
 
-  const removeFromEffectsChain = (effect) => {
-    // console.log('<Track />', 'removeFromEffectsChain', effect);
+  const onRemoveFromEffectsChain = (effect) => {
+    // console.log('<Track />', 'onRemoveFromEffectsChain', effect);
 
     setEffectsChain((prevEffectsChain) => {
       return prevEffectsChain.filter((e) => e.id !== effect.id);
@@ -96,8 +96,8 @@ const TrackConsumer = ({
           setInstruments(newInstruments);
         },
         effectsChain, // Used by Instrument
-        addToEffectsChain: addToEffectsChain,
-        removeFromEffectsChain: removeFromEffectsChain,
+        onAddToEffectsChain: onAddToEffectsChain,
+        onRemoveFromEffectsChain: onRemoveFromEffectsChain,
         pan,
         volume,
       }}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
 import Tone from '../lib/tone';
+import { effects } from '../constants';
 
 const EffectConsumer = ({
   type,
@@ -10,14 +11,14 @@ const EffectConsumer = ({
   // options,
   delayTime = '8n',
   feedback = 0.5,
-  addToEffectsChain,
-  removeFromEffectsChain,
+  onAddToEffectsChain,
+  onRemoveFromEffectsChain,
 }) => {
   const effect = useRef();
 
   useEffect(() => {
-    console.log('<Effect /> mount');
-    console.log(`id: ${id}`);
+    // console.log('<Effect /> mount');
+    // console.log(`id: ${id}`);
 
     if (type === 'feedbackDelay') {
       effect.current = new Tone.FeedbackDelay(delayTime, feedback);
@@ -33,11 +34,11 @@ const EffectConsumer = ({
 
     // Update effects chain
     // TODO: Work out which index to insert current this.effect
-    addToEffectsChain(effect.current);
+    onAddToEffectsChain(effect.current);
 
     return () => {
-      console.log('<Effect /> unmount');
-      removeFromEffectsChain(effect.current);
+      // console.log('<Effect /> unmount');
+      onRemoveFromEffectsChain(effect.current);
     };
   }, [type]);
 
@@ -57,19 +58,19 @@ const EffectConsumer = ({
 };
 
 EffectConsumer.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(effects).isRequired,
   id: PropTypes.string.isRequired,
   options: PropTypes.object,
   delayTime: PropTypes.string,
   feedback: PropTypes.number,
-  addToEffectsChain: PropTypes.func,
-  removeFromEffectsChain: PropTypes.func,
+  onAddToEffectsChain: PropTypes.func,
+  onRemoveFromEffectsChain: PropTypes.func,
 };
 
 const Effect = (props) => {
   const value = useContext(TrackContext);
 
-  return <EffectConsumerNew {...value} {...props} />;
+  return <EffectConsumer {...value} {...props} />;
 };
 
 export default Effect;

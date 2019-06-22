@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
 import { NoteType } from '../types/propTypes';
+import { instruments } from '../constants';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 
-const InstrumentConsumerNew = ({
+const InstrumentConsumer = ({
   // <Instrument /> Props
   type = 'polySynth',
   options = {
@@ -97,7 +98,7 @@ const InstrumentConsumerNew = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
-    console.log('<Instrument />', 'updateEffectsChain', effectsChain);
+    // console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
     trackChannelBase.current = new Tone.PanVol(pan, volume);
 
@@ -109,9 +110,9 @@ const InstrumentConsumerNew = ({
   return null;
 };
 
-InstrumentConsumerNew.propTypes = {
+InstrumentConsumer.propTypes = {
   // <Instrument /> Props
-  type: PropTypes.oneOf(['polySynth', 'duoSynth', 'sampler']),
+  type: PropTypes.oneOf(instruments),
   options: PropTypes.object,
   notes: PropTypes.arrayOf(NoteType), // Currently played notes.
   samples: PropTypes.object,
@@ -127,7 +128,7 @@ InstrumentConsumerNew.propTypes = {
 const Instrument = (props) => {
   const value = useContext(TrackContext);
 
-  return <InstrumentConsumerNew {...value} {...props} />;
+  return <InstrumentConsumer {...value} {...props} />;
 };
 
 export default Instrument;
