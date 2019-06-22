@@ -1,79 +1,75 @@
-import React, { Component } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
 import Tone from '../lib/tone';
 
-class EffectConsumer extends Component {
-  static propTypes = {
-    type: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    options: PropTypes.object,
-    delayTime: PropTypes.string,
-    feedback: PropTypes.number,
-    addToEffectsChain: PropTypes.func,
-    removeFromEffectsChain: PropTypes.func,
-  };
+const EffectConsumer = ({
+  type,
+  id,
+  // options,
+  delayTime = '8n',
+  feedback = 0.5,
+  addToEffectsChain,
+  removeFromEffectsChain,
+}) => {
+  const effect = useRef();
 
-  static defaultProps = {
-    delayTime: '8n',
-    feedback: 0.5,
-  };
-
-  componentDidMount() {
+  useEffect(() => {
     console.log('<Effect /> mount');
-    console.log(`id: ${this.props.id}`);
+    console.log(`id: ${id}`);
 
-    // Tone = require('tone'); // eslint-disable-line
-
-    if (this.props.type === 'feedbackDelay') {
-      this.effect = new Tone.FeedbackDelay(
-        this.props.delayTime,
-        this.props.feedback,
-      );
-    } else if (this.props.type === 'distortion') {
-      this.effect = new Tone.Distortion(0.5);
-    } else if (this.props.type === 'freeverb') {
-      this.effect = new Tone.Freeverb();
-    } else if (this.props.type === 'panVol') {
-      this.effect = new Tone.PanVol();
+    if (type === 'feedbackDelay') {
+      effect.current = new Tone.FeedbackDelay(delayTime, feedback);
+    } else if (type === 'distortion') {
+      effect.current = new Tone.Distortion(0.5);
+    } else if (type === 'freeverb') {
+      effect.current = new Tone.Freeverb();
+    } else if (type === 'panVol') {
+      effect.current = new Tone.PanVol();
     }
 
-    this.effect.id = this.props.id;
+    effect.current.id = id;
 
     // Update effects chain
     // TODO: Work out which index to insert current this.effect
-    this.props.addToEffectsChain(this.effect);
-  }
+    addToEffectsChain(effect.current);
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.feedback !== this.props.feedback) {
-      this.effect.feedback.value = this.props.feedback;
+    return () => {
+      console.log('<Effect /> unmount');
+      removeFromEffectsChain(effect.current);
+    };
+  }, [type]);
+
+  useEffect(() => {
+    if (effect.current.feedback) {
+      effect.current.feedback.value = feedback;
     }
-  }
+  }, [feedback]);
 
-  componentWillUnmount() {
-    console.log('<Effect /> unmount');
-    this.props.removeFromEffectsChain(this.effect);
-  }
+  useEffect(() => {
+    if (effect.current.delayTime) {
+      effect.current.delayTime.value = delayTime;
+    }
+  }, [delayTime]);
 
-  render() {
-    return null;
-  }
-}
+  return null;
+};
 
-export default class Effect extends Component {
-  render() {
-    return (
-      <TrackContext.Consumer>
-        {(value) => (
-          <EffectConsumer
-            addToEffectsChain={value.addToEffectsChain}
-            removeFromEffectsChain={value.removeFromEffectsChain}
-            {...this.props}
-          />
-        )}
-      </TrackContext.Consumer>
-    );
-  }
-}
+EffectConsumer.propTypes = {
+  type: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  options: PropTypes.object,
+  delayTime: PropTypes.string,
+  feedback: PropTypes.number,
+  addToEffectsChain: PropTypes.func,
+  removeFromEffectsChain: PropTypes.func,
+};
+
+const Effect = (props) => {
+  const value = useContext(TrackContext);
+
+  return <EffectConsumerNew {...value} {...props} />;
+};
+
+export default Effect;
