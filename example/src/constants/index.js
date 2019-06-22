@@ -140,6 +140,7 @@ export const defaultPianoGrid = [
 ];
 
 export const defaultUkeGrid = [
+  // A String
   [
     {
       step: 1,
@@ -164,6 +165,7 @@ export const defaultUkeGrid = [
       note: 'c6',
     },
   ],
+  // E String
   [
     {
       step: 0,
@@ -195,8 +197,42 @@ export const defaultUkeGrid = [
       duration: 2,
       note: 'f5',
     },
+
+    // 3rd Bar
+    // {
+    //   step: 16 + 0,
+    //   duration: 2,
+    //   note: 'e5',
+    // },
+    // {
+    //   step: 16 + 3,
+    //   duration: 2,
+    //   note: 'e5',
+    // },
+    // {
+    //   step: 16 + 6,
+    //   duration: 2,
+    //   note: 'e5',
+    // },
+    // {
+    //   step: 16 + 8,
+    //   duration: 2,
+    //   note: 'f5',
+    // },
+    // {
+    //   step: 16 + 11,
+    //   duration: 2,
+    //   note: 'f5',
+    // },
+    // {
+    //   step: 16 + 14,
+    //   duration: 2,
+    //   note: 'f5',
+    // },
   ],
+  // C String
   [],
+  // G String
   [
     {
       step: 2,

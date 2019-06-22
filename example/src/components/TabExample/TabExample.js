@@ -32,7 +32,6 @@ const TabExample = () => {
       <Song isPlaying={isPlaying} tempo={90}>
         <Track
           steps={steps}
-          // steps={[['C4', 'G4'], null, null, null]}
           subdivision={'8n'}
           onStepPlay={(_, i) => {
             setCurrentIndex(i);
