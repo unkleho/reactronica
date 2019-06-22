@@ -45,16 +45,16 @@ const initialState = {
   // EFFECTS
   // --------------------------------------------------------------------------
   // feedback: 0.6,
-  defaultEffects: [
-    <Effect
-      type="feedbackDelay"
-      key="effect-1"
-      id="effect-1"
-      delayTime={'16n'}
-      feedback={0.6}
-    />,
-    <Effect type="distortion" key="effect-2" id="effect-2" />,
-  ],
+  // defaultEffects: [
+  //   <Effect
+  //     type="feedbackDelay"
+  //     key="effect-1"
+  //     id="effect-1"
+  //     delayTime={'16n'}
+  //     feedback={0.6}
+  //   />,
+  //   <Effect type="distortion" key="effect-2" id="effect-2" />,
+  // ],
   // effects: [],
 };
 
@@ -70,6 +70,8 @@ const StepsEditorExample = () => {
     pan,
     notes,
   } = state;
+
+  // console.log(tracks.beat);
 
   const currentTrack = tracks[currentTrackName];
   const currentSteps = currentTrack.steps;
@@ -158,12 +160,12 @@ const StepsEditorExample = () => {
       {currentTrack.effects.length > 0 && <h4>Effects</h4>}
       {currentTrack.effects.map((effect) => {
         return (
-          <div className={css.trackEffect} key={effect.props.id}>
+          <div className={css.trackEffect} key={effect.id}>
             <p>
-              {effect.props.type}{' '}
+              {effect.type}{' '}
               <button
                 onClick={() =>
-                  dispatch({ type: types.REMOVE_EFFECT, id: effect.props.id })
+                  dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
                 }
               >
                 Remove
@@ -188,7 +190,17 @@ const StepsEditorExample = () => {
           volume={(parseInt(tracks.melody.volume, 10) / 100) * 32 - 32}
           pan={(parseInt(tracks.melody.pan, 10) / 100) * 2 - 1}
           subdivision={'16n'}
-          effects={tracks.melody.effects}
+          effects={tracks.melody.effects.map((effect, i) => {
+            return (
+              <Effect
+                type={effect.type}
+                key={`${effect.id}-${i}-melody`}
+                id={`${effect.id}-${i}-melody`}
+                delayTime={effect.delayTime || '16n'}
+                feedback={effect.feedback || 0.6}
+              />
+            );
+          })}
           onStepPlay={(step) =>
             dispatch({
               type: types.SET_CURRENT_STEP_INDEX,
@@ -204,7 +216,17 @@ const StepsEditorExample = () => {
           volume={(parseInt(tracks.beat.volume, 10) / 100) * 32 - 32}
           pan={(parseInt(tracks.beat.pan, 10) / 100) * 2 - 1}
           subdivision={'16n'}
-          effects={tracks.beat.effects}
+          effects={tracks.beat.effects.map((effect, i) => {
+            return (
+              <Effect
+                type={effect.type}
+                key={`${effect.id}-${i}-beat`}
+                id={`${effect.id}-${i}-beat`}
+                delayTime={effect.delayTime || '16n'}
+                feedback={effect.feedback || 0.6}
+              />
+            );
+          })}
         >
           <Instrument
             type="sampler"
@@ -278,7 +300,16 @@ function reducer(state, action) {
           ...state.tracks,
           [state.currentTrackName]: {
             ...state.tracks[state.currentTrackName],
-            effects: state.defaultEffects,
+            effects: [
+              {
+                id: 'effect-1',
+                type: 'feedbackDelay',
+              },
+              {
+                id: 'effect-2',
+                type: 'distortion',
+              },
+            ],
           },
         },
       };
@@ -291,7 +322,7 @@ function reducer(state, action) {
           [state.currentTrackName]: {
             ...state.tracks[state.currentTrackName],
             effects: state.tracks[state.currentTrackName].effects.filter(
-              (effect) => effect.props.id !== action.id,
+              (effect) => effect.id !== action.id,
             ),
           },
         },
