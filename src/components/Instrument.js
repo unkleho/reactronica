@@ -22,10 +22,10 @@ const InstrumentConsumer = ({
   volume,
   pan,
   effectsChain,
-  updateInstruments,
+  onInstrumentsUpdate,
 }) => {
   const synth = useRef();
-  const trackChannelBase = useRef();
+  const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
   const prevNotes = usePrevious(notes);
 
   // -------------------------------------------------------------------------
@@ -33,6 +33,12 @@ const InstrumentConsumer = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
+    // console.log(type);
+
+    // if (synth.current) {
+    //   synth.current.disconnect();
+    // }
+
     if (type === 'polySynth') {
       synth.current = new Tone.PolySynth(
         options.polyphony,
@@ -45,11 +51,14 @@ const InstrumentConsumer = ({
       synth.current = new Tone.Sampler(samples);
     }
 
-    trackChannelBase.current = new Tone.PanVol(pan, volume);
-    synth.current.chain(trackChannelBase.current, Tone.Master);
+    // trackChannelBase.current = new Tone.PanVol(pan, volume);
+    // synth.current.chain(trackChannelBase.current, Tone.Master);
+
+    // synth.current.disconnect();
+    synth.current.chain(...effectsChain, trackChannelBase.current, Tone.Master);
 
     // Add this Instrument to Track Context
-    updateInstruments([synth.current]);
+    onInstrumentsUpdate([synth.current]);
   }, [type]);
 
   // -------------------------------------------------------------------------
@@ -100,7 +109,7 @@ const InstrumentConsumer = ({
   useEffect(() => {
     // console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
-    trackChannelBase.current = new Tone.PanVol(pan, volume);
+    // trackChannelBase.current = new Tone.PanVol(pan, volume);
 
     // NOTE: Using trackChannelBase causes effects to not turn off
     synth.current.disconnect();
@@ -122,7 +131,7 @@ InstrumentConsumer.propTypes = {
   volume: PropTypes.number,
   pan: PropTypes.number,
   effectsChain: PropTypes.array,
-  updateInstruments: PropTypes.func,
+  onInstrumentsUpdate: PropTypes.func,
 };
 
 const Instrument = (props) => {

@@ -10,7 +10,6 @@ export const DECREASE_TEMPO = 'DECREASE_TEMPO';
 // ----------------------------------------------------------------------------
 export const SET_CURRENT_STEP_INDEX = 'SET_CURRENT_STEP_INDEX';
 export const UPDATE_CURRENT_STEPS = 'UPDATE_CURRENT_STEPS';
-export const SET_CURRENT_TRACK_NAME = 'SET_CURRENT_TRACK_NAME';
 export const SET_NOTES = 'SET_NOTES';
 
 // ----------------------------------------------------------------------------
@@ -23,5 +22,7 @@ export const ADD_MORE_FEEDBACK = 'ADD_MORE_FEEDBACK ';
 // ----------------------------------------------------------------------------
 // TRACK SETTINGS
 // ----------------------------------------------------------------------------
+export const SET_CURRENT_TRACK_NAME = 'SET_CURRENT_TRACK_NAME';
+export const UPDATE_INSTRUMENT = 'UPDATE_INSTRUMENT';
 export const SET_VOLUME = 'SET_VOLUME';
 export const SET_PAN = 'SET_PAN';

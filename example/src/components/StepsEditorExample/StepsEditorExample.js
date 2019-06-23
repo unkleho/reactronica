@@ -12,7 +12,6 @@ import css from './StepsEditorExample.module.css';
 const initialState = {
   // --------------------------------------------------------------------------
   // TRANSPORT
-
   // --------------------------------------------------------------------------
   isPlaying: false,
   tempo: 70,
@@ -27,6 +26,7 @@ const initialState = {
   currentTrackName: 'melody',
   tracks: {
     melody: {
+      instrumentType: 'polySynth',
       volume: 100,
       pan: 50,
       steps: buildSteps(melodyClip),
@@ -34,6 +34,7 @@ const initialState = {
       effects: [],
     },
     beat: {
+      instrumentType: 'sampler',
       volume: 100,
       pan: 50,
       steps: buildSteps(beatClip),
@@ -103,49 +104,6 @@ const StepsEditorExample = () => {
 
       <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-
-          if (selectedEffect) {
-            dispatch({
-              type: types.ADD_EFFECT,
-              effectId: selectedEffect.id,
-              effectType: selectedEffect.type,
-            });
-
-            setSelectedEffect(null);
-          }
-        }}
-      >
-        <select
-          onChange={(event) => {
-            const selectedOption = event.target[event.target.selectedIndex];
-            const id = selectedOption.getAttribute('data-id');
-            const type = selectedOption.getAttribute('data-type');
-
-            setSelectedEffect({ id, type });
-          }}
-        >
-          <option>None</option>
-          {constants.effects.map((effect, i) => {
-            const id = `${effect.id}-${i}`;
-
-            return (
-              <option
-                key={id}
-                data-id={id}
-                data-type={effect.id}
-                selected={selectedEffect && id === selectedEffect.id}
-              >
-                {effect.name}
-              </option>
-            );
-          })}
-        </select>{' '}
-        <button type="submit">Add Effect</button>
-      </form>
-
       {/* WIP */}
       {/* <button onClick={() => dispatch({ type: types.ADD_MORE_FEEDBACK })}>
         Add more feedback
@@ -153,6 +111,37 @@ const StepsEditorExample = () => {
 
       <h4>Track</h4>
       <div className="app__track">
+        <p>
+          Instrument:{' '}
+          <select
+            onChange={(event) => {
+              const selectedOption = event.target[event.target.selectedIndex];
+              const type = selectedOption.getAttribute('data-type');
+
+              dispatch({
+                type: types.UPDATE_INSTRUMENT,
+                instrumentType: type,
+              });
+            }}
+            value={tracks[currentTrackName].instrumentType}
+          >
+            {constants.instruments.map((instrument, i) => {
+              const id = `${instrument.id}-${i}`;
+
+              return (
+                <option
+                  key={id}
+                  // data-id={id}
+                  data-type={instrument.id}
+                  value={instrument.id}
+                  // selected={tracks[currentTrackName].instrumentType === id}
+                >
+                  {instrument.name}
+                </option>
+              );
+            })}
+          </select>
+        </p>
         <div>
           <label htmlFor="volume">Volume</label>
           <br />
@@ -166,9 +155,7 @@ const StepsEditorExample = () => {
           />
           {volume}
         </div>
-
         <br />
-
         <div>
           <label htmlFor="pan">Pan</label>
           <br />
@@ -182,25 +169,66 @@ const StepsEditorExample = () => {
           />
           {pan}
         </div>
-      </div>
+        {<h4>Effects</h4>}
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
 
-      {currentTrack.effects.length > 0 && <h4>Effects</h4>}
-      {currentTrack.effects.map((effect) => {
-        return (
-          <div className={css.trackEffect} key={effect.id}>
-            <p>
-              {effect.type}{' '}
-              <button
-                onClick={() =>
-                  dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
-                }
-              >
-                Remove
-              </button>
-            </p>
-          </div>
-        );
-      })}
+            if (selectedEffect) {
+              dispatch({
+                type: types.ADD_EFFECT,
+                effectId: selectedEffect.id,
+                effectType: selectedEffect.type,
+              });
+
+              setSelectedEffect(null);
+            }
+          }}
+        >
+          <select
+            onChange={(event) => {
+              const selectedOption = event.target[event.target.selectedIndex];
+              const id = selectedOption.getAttribute('data-id');
+              const type = selectedOption.getAttribute('data-type');
+
+              setSelectedEffect({ id, type });
+            }}
+          >
+            <option>None</option>
+            {constants.effects.map((effect, i) => {
+              const id = `${effect.id}-${i}`;
+
+              return (
+                <option
+                  key={id}
+                  data-id={id}
+                  data-type={effect.id}
+                  selected={selectedEffect && id === selectedEffect.id}
+                >
+                  {effect.name}
+                </option>
+              );
+            })}
+          </select>{' '}
+          <button type="submit">Add Effect</button>
+        </form>
+        {currentTrack.effects.map((effect) => {
+          return (
+            <div className={css.trackEffect} key={effect.id}>
+              <p>
+                {effect.type}{' '}
+                <button
+                  onClick={() =>
+                    dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
+                  }
+                >
+                  Remove
+                </button>
+              </p>
+            </div>
+          );
+        })}
+      </div>
 
       {/* ----------------------------------------------------------------- */}
       {/* AUDIO */}
@@ -235,7 +263,10 @@ const StepsEditorExample = () => {
             })
           }
         >
-          <Instrument type="polySynth" notes={tracks.melody.notes} />
+          <Instrument
+            type={tracks.melody.instrumentType}
+            notes={tracks.melody.notes}
+          />
         </Track>
 
         <Track
@@ -256,7 +287,7 @@ const StepsEditorExample = () => {
           })}
         >
           <Instrument
-            type="sampler"
+            type={tracks.beat.instrumentType}
             samples={{
               C3: `${process.env.PUBLIC_URL}/audio/drums/kick15.wav`,
               D3: `${
@@ -330,6 +361,18 @@ function reducer(state, action) {
       return {
         ...state,
         currentTrackName: action.name,
+      };
+
+    case types.UPDATE_INSTRUMENT:
+      return {
+        ...state,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            instrumentType: action.instrumentType,
+          },
+        },
       };
 
     case types.SET_VOLUME:

@@ -23,6 +23,11 @@ const TrackConsumer = ({
   const [effectsChain, setEffectsChain] = useState([]);
   const [instruments, setInstruments] = useState([]);
   const sequencer = useRef();
+  const instrumentsRef = useRef(instruments);
+
+  useEffect(() => {
+    instrumentsRef.current = instruments;
+  }, [instruments]);
 
   /*
   Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
@@ -39,12 +44,14 @@ const TrackConsumer = ({
       sequencer.current = new Tone.Sequence(
         (time, step) => {
           step.notes.forEach((note) => {
-            instruments[0].triggerAttackRelease(
-              note.note,
-              note.duration,
-              undefined,
-              note.velocity,
-            );
+            instrumentsRef.current.map((instrument) => {
+              instrument.triggerAttackRelease(
+                note.note,
+                note.duration,
+                undefined,
+                note.velocity,
+              );
+            });
           });
 
           if (typeof onStepPlay === 'function') {
@@ -73,7 +80,7 @@ const TrackConsumer = ({
     }
   }, [steps]);
 
-  const onAddToEffectsChain = (effect) => {
+  const handleAddToEffectsChain = (effect) => {
     // console.log('<Track />', 'onAddToEffectsChain');
 
     setEffectsChain((prevEffectsChain) => {
@@ -81,7 +88,7 @@ const TrackConsumer = ({
     });
   };
 
-  const onRemoveFromEffectsChain = (effect) => {
+  const handleRemoveFromEffectsChain = (effect) => {
     // console.log('<Track />', 'onRemoveFromEffectsChain', effect);
 
     setEffectsChain((prevEffectsChain) => {
@@ -89,15 +96,17 @@ const TrackConsumer = ({
     });
   };
 
+  const handleInstrumentsUpdate = (newInstruments) => {
+    setInstruments(newInstruments);
+  };
+
   return (
     <TrackContext.Provider
       value={{
-        updateInstruments: (newInstruments) => {
-          setInstruments(newInstruments);
-        },
         effectsChain, // Used by Instrument
-        onAddToEffectsChain: onAddToEffectsChain,
-        onRemoveFromEffectsChain: onRemoveFromEffectsChain,
+        onInstrumentsUpdate: handleInstrumentsUpdate,
+        onAddToEffectsChain: handleAddToEffectsChain,
+        onRemoveFromEffectsChain: handleRemoveFromEffectsChain,
         pan,
         volume,
       }}
