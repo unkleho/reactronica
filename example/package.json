@@ -10,7 +10,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1",
-    "reactronica": "0.0.5"
+    "reactronica": "0.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
