@@ -1,154 +1,134 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
-import { NoteType } from '../types/propTypes';
+import { NoteType, InstrumentTypes } from '../types/propTypes';
+import { instruments } from '../constants';
 import Tone from '../lib/tone';
+import { usePrevious } from '../lib/hooks';
 
-class InstrumentConsumer extends Component {
-  static propTypes = {
-    type: PropTypes.string,
-    notes: PropTypes.arrayOf(NoteType), // Currently played notes.
-    // polyphony: PropTypes.number,
-    options: PropTypes.object,
-    samples: PropTypes.object,
-    // An instance of new this.Tone.PanVol()
-    trackChannel: PropTypes.object,
-    updateInstruments: PropTypes.func,
-  };
-
-  static defaultProps = {
-    type: 'polySynth',
-    notes: [],
-    instruments: [],
-    options: {
-      polyphony: 4,
-      oscillator: {
-        partials: [0, 2, 3, 4],
-      },
+const InstrumentConsumer = ({
+  // <Instrument /> Props
+  type = 'polySynth',
+  options = {
+    polyphony: 4,
+    oscillator: {
+      partials: [0, 2, 3, 4],
     },
-    trackChannel: null,
-  };
+  },
+  notes = [],
+  samples,
+  // <Track /> Props
+  volume,
+  pan,
+  effectsChain,
+  updateInstruments,
+}) => {
+  const synth = useRef();
+  const trackChannelBase = useRef();
+  const prevNotes = usePrevious(notes);
 
-  componentDidMount() {
-    console.log('<Instrument />', 'mount');
+  // -------------------------------------------------------------------------
+  // INSTRUMENT TYPE
+  // -------------------------------------------------------------------------
 
-    // this.Tone = require('tone'); // eslint-disable-line
+  useEffect(() => {
+    if (type === 'polySynth') {
+      synth.current = new Tone.PolySynth(
+        options.polyphony,
+        Tone.Synth,
+        options,
+      );
+    } else if (type === 'duoSynth') {
+      synth.current = new Tone.DuoSynth(options);
+    } else if (type === 'sampler') {
+      synth.current = new Tone.Sampler(samples);
+    }
 
-    // this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
-
-    // Set up instrument
-    this.initInstrument(this.props.type);
-    // this.connectInstrument(this.trackChannelBase);
+    trackChannelBase.current = new Tone.PanVol(pan, volume);
+    synth.current.chain(trackChannelBase.current, Tone.Master);
 
     // Add this Instrument to Track Context
-    this.props.updateInstruments([this.synth]);
-  }
+    updateInstruments([synth.current]);
+  }, [type]);
 
-  componentDidUpdate(prevProps) {
-    // -------------------------------------------------------------------------
-    // VOLUME / PAN
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // VOLUME / PAN
+  // -------------------------------------------------------------------------
 
-    if (prevProps.volume !== this.props.volume) {
-      console.log('volume', this.props.volume);
-      this.trackChannelBase.volume.value = this.props.volume;
-    }
+  useEffect(() => {
+    trackChannelBase.current.volume.value = volume;
+  }, [volume]);
 
-    if (prevProps.pan !== this.props.pan) {
-      console.log('pan', prevProps.pan, this.props.volume);
-      this.trackChannelBase.pan.value = this.props.pan;
-    }
+  useEffect(() => {
+    trackChannelBase.current.pan.value = pan;
+  }, [pan]);
 
-    // -------------------------------------------------------------------------
-    // EFFECTS CHAIN
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // NOTES
+  // -------------------------------------------------------------------------
 
-    if (prevProps.effectsChain !== this.props.effectsChain) {
-      this.updateEffectsChain(this.props.effectsChain, prevProps.effectsChain);
-    }
-
-    // -------------------------------------------------------------------------
-    // NOTES
-    // -------------------------------------------------------------------------
-
+  useEffect(() => {
     // Loop through all current notes
-    this.props.notes.forEach((note) => {
+    notes.forEach((note) => {
       // Check if note is playing
       const isPlaying =
-        prevProps.notes.filter((n) => n.name === note.name).length > 0;
+        prevNotes.filter((n) => n.name === note.name).length > 0;
 
       // Only play note is it isn't already playing
       if (!isPlaying) {
-        this.synth.triggerAttack(note.name);
+        synth.current.triggerAttack(note.name);
       }
     });
 
     // Loop through all previous notes
-    prevProps.notes.forEach((note) => {
-      // Check if note is still playing
-      const isPlaying =
-        this.props.notes.filter((n) => n.name === note.name).length > 0;
+    prevNotes &&
+      prevNotes.forEach((note) => {
+        // Check if note is still playing
+        const isPlaying = notes.filter((n) => n.name === note.name).length > 0;
 
-      if (!isPlaying) {
-        this.synth.triggerRelease(note.name);
-      }
-    });
-  }
+        if (!isPlaying) {
+          synth.current.triggerRelease(note.name);
+        }
+      });
+  }, [notes]);
 
-  initInstrument = (type) => {
-    if (type === 'polySynth') {
-      this.synth = new Tone.PolySynth(
-        this.props.options.polyphony,
-        Tone.Synth,
-        this.props.options,
-      );
-    } else if (type === 'duoSynth') {
-      this.synth = new Tone.DuoSynth(this.props.options);
-    } if (type === 'sampler') {
-      this.synth = new Tone.Sampler(this.props.samples);
-    }
+  // -------------------------------------------------------------------------
+  // EFFECTS CHAIN
+  // -------------------------------------------------------------------------
 
-    this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
-    this.synth.chain(this.trackChannelBase, Tone.Master);
-  };
+  useEffect(() => {
+    // console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
-  updateEffectsChain = (effectsChain, prevEffectsChain) => {
-    console.log(
-      '<Instrument />',
-      'updateEffectsChain',
-      effectsChain,
-      prevEffectsChain,
-    );
+    trackChannelBase.current = new Tone.PanVol(pan, volume);
 
-    this.trackChannelBase = new Tone.PanVol(this.props.pan, this.props.volume);
+    // NOTE: Using trackChannelBase causes effects to not turn off
+    synth.current.disconnect();
+    synth.current.chain(...effectsChain, trackChannelBase.current, Tone.Master);
+  }, [effectsChain]);
 
-    // NOTE: Using this.props.trackChannelBase causes effects to not turn off
+  return null;
+};
 
-    this.synth.disconnect();
-    this.synth.chain(...effectsChain, this.trackChannelBase, Tone.Master);
-  };
+InstrumentConsumer.propTypes = {
+  // <Instrument /> Props
+  type: InstrumentTypes.isRequired,
+  options: PropTypes.object,
+  notes: PropTypes.arrayOf(NoteType), // Currently played notes.
+  samples: PropTypes.object,
+  trackChannel: PropTypes.object, // An instance of new this.Tone.PanVol()
+  // polyphony: PropTypes.number,
+  // <Track /> Props
+  volume: PropTypes.number,
+  pan: PropTypes.number,
+  effectsChain: PropTypes.array,
+  updateInstruments: PropTypes.func,
+};
 
-  render() {
-    return null;
-  }
-}
+const Instrument = (props) => {
+  const value = useContext(TrackContext);
 
-export default class Instrument extends Component {
-  render() {
-    return (
-      <TrackContext.Consumer>
-        {(value) => (
-          <InstrumentConsumer
-            updateInstruments={value.updateInstruments}
-            effectsChain={value.effectsChain}
-            // TODO: Implement!
-            pan={value.pan}
-            volume={value.volume}
-            {...this.props}
-          />
-        )}
-      </TrackContext.Consumer>
-    );
-  }
-}
+  return <InstrumentConsumer {...value} {...props} />;
+};
+
+export default Instrument;

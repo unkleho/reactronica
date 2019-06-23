@@ -42,7 +42,7 @@ const Song = ({
         // NOTE: Not sure what tracks are for...
         // tracks,
         // updateTracks: this.updateTracks,
-        instruments: [],
+        // instruments: [],
         isPlaying,
       }}
     >

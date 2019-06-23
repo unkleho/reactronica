@@ -19,6 +19,8 @@ Check out the demo - [http://unkleho.github.io/reactronica](http://unkleho.githu
 npm install --save reactronica
 ```
 
+Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.html) are used internally.
+
 ## Usage
 
 <!-- prettier-ignore-start -->
@@ -118,6 +120,9 @@ class Example extends Component {
 $ npm start
 # To run example page, in new terminal:
 $ cd example
+# Link local version of Reactronica to example
+$ npm link ../node_modules/react
+# Start up!
 $ npm start
 # If you get a babel-eslint issue, create a .env file with SKIP_PREFLIGHT_CHECK=true in ./example
 ```
