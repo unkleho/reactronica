@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
-import { NoteType } from '../types/propTypes';
+import { NoteType, InstrumentTypes } from '../types/propTypes';
 import { instruments } from '../constants';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
@@ -112,7 +112,7 @@ const InstrumentConsumer = ({
 
 InstrumentConsumer.propTypes = {
   // <Instrument /> Props
-  type: PropTypes.oneOf(instruments),
+  type: InstrumentTypes.isRequired,
   options: PropTypes.object,
   notes: PropTypes.arrayOf(NoteType), // Currently played notes.
   samples: PropTypes.object,

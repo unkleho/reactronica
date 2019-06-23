@@ -1,6 +1,17 @@
-export const effects = ['feedbackDelay', 'distortion', 'freeverb', 'panVol'];
+// NOTE: Is constants the best name for this file?
 
-export const instruments = ['polySynth', 'duoSynth', 'sampler'];
+export const effects = [
+  { id: 'feedbackDelay', name: 'Feedback delay' },
+  { id: 'distortion', name: 'Distortion' },
+  { id: 'freeverb', name: 'Freeverb' },
+  { id: 'panVol', name: 'Volume/Pan' },
+];
+
+export const instruments = [
+  { id: 'polySynth', name: 'Poly synth' },
+  { id: 'duoSynth', name: 'Duo synth' },
+  { id: 'sampler', name: 'Sampler' },
+];
 
 const constants = {
   effects,

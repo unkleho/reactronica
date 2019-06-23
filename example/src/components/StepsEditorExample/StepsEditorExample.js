@@ -129,16 +129,16 @@ const StepsEditorExample = () => {
         >
           <option>None</option>
           {constants.effects.map((effect, i) => {
-            const id = `${effect}-${i}`;
+            const id = `${effect.id}-${i}`;
 
             return (
               <option
                 key={id}
                 data-id={id}
-                data-type={effect}
+                data-type={effect.id}
                 selected={selectedEffect && id === selectedEffect.id}
               >
-                {effect}
+                {effect.name}
               </option>
             );
           })}

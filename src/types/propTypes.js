@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { instruments, effects } from '../constants';
 
 export const NoteType = PropTypes.shape({
   name: PropTypes.string.isRequired,
@@ -20,3 +21,9 @@ export const StepType = PropTypes.oneOfType([
   PropTypes.arrayOf(StepNoteType),
   PropTypes.string,
 ]);
+
+export const InstrumentTypes = PropTypes.oneOf(
+  instruments.map((effect) => effect.id),
+);
+
+export const EffectTypes = PropTypes.oneOf(effects.map((effect) => effect.id));

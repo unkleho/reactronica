@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
 import Tone from '../lib/tone';
-import { effects } from '../constants';
+import { EffectTypes } from '../types/propTypes';
 
 const EffectConsumer = ({
   type,
@@ -58,7 +58,7 @@ const EffectConsumer = ({
 };
 
 EffectConsumer.propTypes = {
-  type: PropTypes.oneOf(effects).isRequired,
+  type: EffectTypes.isRequired,
   id: PropTypes.string.isRequired,
   options: PropTypes.object,
   delayTime: PropTypes.string,
