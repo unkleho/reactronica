@@ -1,5 +1,5 @@
 import React from 'react';
-import { Song, Track, Instrument, Effect } from 'reactronica';
+import { Song, Track, Instrument, Effect, constants } from 'reactronica';
 
 import StepsEditor from '../StepsEditor';
 import Transport from '../Transport';
@@ -41,21 +41,6 @@ const initialState = {
       effects: [],
     },
   },
-  // --------------------------------------------------------------------------
-  // EFFECTS
-  // --------------------------------------------------------------------------
-  // feedback: 0.6,
-  // defaultEffects: [
-  //   <Effect
-  //     type="feedbackDelay"
-  //     key="effect-1"
-  //     id="effect-1"
-  //     delayTime={'16n'}
-  //     feedback={0.6}
-  //   />,
-  //   <Effect type="distortion" key="effect-2" id="effect-2" />,
-  // ],
-  // effects: [],
 };
 
 const StepsEditorExample = () => {
@@ -70,8 +55,10 @@ const StepsEditorExample = () => {
     pan,
     notes,
   } = state;
-
-  // console.log(tracks.beat);
+  const [selectedEffect, setSelectedEffect] = React.useState(null);
+  React.useEffect(() => {
+    setSelectedEffect(null);
+  }, [currentTrackName]);
 
   const currentTrack = tracks[currentTrackName];
   const currentSteps = currentTrack.steps;
@@ -116,9 +103,49 @@ const StepsEditorExample = () => {
 
       <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
-      <button onClick={() => dispatch({ type: types.ADD_EFFECTS })}>
-        Add Effects
-      </button>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+
+          if (selectedEffect) {
+            dispatch({
+              type: types.ADD_EFFECT,
+              effectId: selectedEffect.id,
+              effectType: selectedEffect.type,
+            });
+
+            setSelectedEffect(null);
+          }
+        }}
+      >
+        <select
+          onChange={(event) => {
+            const selectedOption = event.target[event.target.selectedIndex];
+            const id = selectedOption.getAttribute('data-id');
+            const type = selectedOption.getAttribute('data-type');
+
+            setSelectedEffect({ id, type });
+          }}
+        >
+          <option>None</option>
+          {constants.effects.map((effect, i) => {
+            const id = `${effect}-${i}`;
+
+            return (
+              <option
+                key={id}
+                data-id={id}
+                data-type={effect}
+                selected={selectedEffect && id === selectedEffect.id}
+              >
+                {effect}
+              </option>
+            );
+          })}
+        </select>{' '}
+        <button type="submit">Add Effect</button>
+      </form>
+
       {/* WIP */}
       {/* <button onClick={() => dispatch({ type: types.ADD_MORE_FEEDBACK })}>
         Add more feedback
@@ -249,6 +276,10 @@ export default StepsEditorExample;
 
 function reducer(state, action) {
   switch (action.type) {
+    // ------------------------------------------------------------------------
+    // TRANSPORT
+    // ------------------------------------------------------------------------
+
     case types.TOGGLE_PLAYING:
       return { ...state, isPlaying: !state.isPlaying };
 
@@ -257,6 +288,10 @@ function reducer(state, action) {
 
     case types.DECREASE_TEMPO:
       return { ...state, tempo: state.tempo - 1 };
+
+    // ------------------------------------------------------------------------
+    // STEPS / NOTES
+    // ------------------------------------------------------------------------
 
     case types.SET_CURRENT_STEP_INDEX:
       return { ...state, currentStepIndex: action.currentStepIndex };
@@ -275,12 +310,6 @@ function reducer(state, action) {
         },
       };
 
-    case types.SET_CURRENT_TRACK_NAME:
-      return {
-        ...state,
-        currentTrackName: action.name,
-      };
-
     case types.SET_NOTES:
       return {
         ...state,
@@ -293,51 +322,14 @@ function reducer(state, action) {
         },
       };
 
-    case types.ADD_EFFECTS:
-      return {
-        ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            effects: [
-              {
-                id: 'effect-1',
-                type: 'feedbackDelay',
-              },
-              {
-                id: 'effect-2',
-                type: 'distortion',
-              },
-            ],
-          },
-        },
-      };
+    // ------------------------------------------------------------------------
+    // TRACKS
+    // ------------------------------------------------------------------------
 
-    case types.REMOVE_EFFECT:
+    case types.SET_CURRENT_TRACK_NAME:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            effects: state.tracks[state.currentTrackName].effects.filter(
-              (effect) => effect.id !== action.id,
-            ),
-          },
-        },
-      };
-
-    case types.ADD_MORE_FEEDBACK:
-      return {
-        ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            feedback: 0.9,
-          },
-        },
+        currentTrackName: action.name,
       };
 
     case types.SET_VOLUME:
@@ -363,6 +355,54 @@ function reducer(state, action) {
           },
         },
       };
+
+    // ------------------------------------------------------------------------
+    // EFFECTS
+    // ------------------------------------------------------------------------
+
+    case types.ADD_EFFECT:
+      return {
+        ...state,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            effects: [
+              ...state.tracks[state.currentTrackName].effects,
+              {
+                id: action.effectId,
+                type: action.effectType,
+              },
+            ],
+          },
+        },
+      };
+
+    case types.REMOVE_EFFECT:
+      return {
+        ...state,
+        tracks: {
+          ...state.tracks,
+          [state.currentTrackName]: {
+            ...state.tracks[state.currentTrackName],
+            effects: state.tracks[state.currentTrackName].effects.filter(
+              (effect) => effect.id !== action.id,
+            ),
+          },
+        },
+      };
+
+    // case types.ADD_MORE_FEEDBACK:
+    //   return {
+    //     ...state,
+    //     tracks: {
+    //       ...state.tracks,
+    //       [state.currentTrackName]: {
+    //         ...state.tracks[state.currentTrackName],
+    //         feedback: 0.9,
+    //       },
+    //     },
+    //   };
 
     default:
       throw new Error();

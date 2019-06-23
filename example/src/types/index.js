@@ -16,7 +16,7 @@ export const SET_NOTES = 'SET_NOTES';
 // ----------------------------------------------------------------------------
 // EFFECTS
 // ----------------------------------------------------------------------------
-export const ADD_EFFECTS = 'ADD_EFFECTS';
+export const ADD_EFFECT = 'ADD_EFFECT';
 export const REMOVE_EFFECT = 'REMOVE_EFFECT';
 export const ADD_MORE_FEEDBACK = 'ADD_MORE_FEEDBACK ';
 
