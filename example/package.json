@@ -16,6 +16,7 @@
     "start": "react-scripts start",
     "dev": "npm start",
     "build": "react-scripts build",
+    "deploy": "now",
     "now-build": "npm run build",
     "test": "react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom --watch",
