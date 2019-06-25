@@ -20,9 +20,11 @@ export const REMOVE_EFFECT = 'REMOVE_EFFECT';
 export const ADD_MORE_FEEDBACK = 'ADD_MORE_FEEDBACK ';
 
 // ----------------------------------------------------------------------------
-// TRACK SETTINGS
+// TRACKS
 // ----------------------------------------------------------------------------
-export const SET_CURRENT_TRACK_NAME = 'SET_CURRENT_TRACK_NAME';
+export const ADD_TRACK = 'ADD_TRACK';
+export const REMOVE_TRACK = 'REMOVE_TRACK';
+export const SET_CURRENT_TRACK_ID = 'SET_CURRENT_TRACK_ID';
 export const UPDATE_INSTRUMENT = 'UPDATE_INSTRUMENT';
 export const SET_VOLUME = 'SET_VOLUME';
 export const SET_PAN = 'SET_PAN';

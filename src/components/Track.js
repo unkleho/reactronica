@@ -68,6 +68,12 @@ const TrackConsumer = ({
         sequencer.current.stop();
       }
     }
+
+    return function cleanup() {
+      if (sequencer.current) {
+        sequencer.current.dispose();
+      }
+    };
   }, [isPlaying]);
 
   useEffect(() => {

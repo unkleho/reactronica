@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Song, Track, Instrument, Effect, constants } from 'reactronica';
 
 import StepsEditor from '../StepsEditor';
@@ -23,9 +23,10 @@ const initialState = {
   // --------------------------------------------------------------------------
   // TRACK
   // --------------------------------------------------------------------------
-  currentTrackName: 'melody',
-  tracks: {
-    melody: {
+  currentTrackId: 'melody',
+  tracks: [
+    {
+      id: 'melody',
       instrumentType: 'polySynth',
       volume: 100,
       pan: 50,
@@ -33,7 +34,8 @@ const initialState = {
       notes: [],
       effects: [],
     },
-    beat: {
+    {
+      id: 'beat',
       instrumentType: 'sampler',
       volume: 100,
       pan: 50,
@@ -41,7 +43,7 @@ const initialState = {
       notes: [],
       effects: [],
     },
-  },
+  ],
 };
 
 const StepsEditorExample = () => {
@@ -49,7 +51,7 @@ const StepsEditorExample = () => {
   const {
     isPlaying,
     tempo,
-    currentTrackName,
+    currentTrackId,
     currentStepIndex,
     tracks,
     volume,
@@ -59,33 +61,57 @@ const StepsEditorExample = () => {
   const [selectedEffect, setSelectedEffect] = React.useState(null);
   React.useEffect(() => {
     setSelectedEffect(null);
-  }, [currentTrackName]);
+  }, [currentTrackId]);
 
-  const currentTrack = tracks[currentTrackName];
-  const currentSteps = currentTrack.steps;
+  const currentTrack = tracks.find((track) => track.id === currentTrackId);
+  const currentSteps = currentTrack ? currentTrack.steps : [];
 
   return (
     <div className={css.stepsEditorExample}>
       <div className={css.stepsChooser}>
-        {['melody', 'beat'].map((name) => {
+        {tracks.map((track) => {
           return (
-            <button
-              className={[
-                css.stepsChooserButton,
-                name === currentTrackName ? css.stepsChooserButtonActive : '',
-              ].join(' ')}
-              onClick={() =>
-                dispatch({
-                  type: types.SET_CURRENT_TRACK_NAME,
-                  name,
-                })
-              }
-              key={name}
-            >
-              {name}
-            </button>
+            <Fragment key={track.id}>
+              <button
+                className={[
+                  css.stepsChooserButton,
+                  track.id === currentTrackId
+                    ? css.stepsChooserButtonActive
+                    : '',
+                ].join(' ')}
+                onClick={() =>
+                  dispatch({
+                    type: types.SET_CURRENT_TRACK_ID,
+                    trackId: track.id,
+                  })
+                }
+              >
+                {track.id}
+              </button>
+              <button
+                onClick={() => {
+                  dispatch({
+                    type: types.REMOVE_TRACK,
+                    trackId: track.id,
+                  });
+                }}
+              >
+                Remove
+              </button>
+            </Fragment>
           );
         })}
+
+        <button
+          onClick={() => {
+            dispatch({
+              type: types.ADD_TRACK,
+              trackId: 'test',
+            });
+          }}
+        >
+          Add
+        </button>
       </div>
 
       <StepsEditor
@@ -104,131 +130,128 @@ const StepsEditorExample = () => {
 
       <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
-      {/* WIP */}
-      {/* <button onClick={() => dispatch({ type: types.ADD_MORE_FEEDBACK })}>
-        Add more feedback
-      </button> */}
-
       <h4>Track</h4>
-      <div className="app__track">
-        <p>
-          Instrument:{' '}
-          <select
-            onChange={(event) => {
-              const selectedOption = event.target[event.target.selectedIndex];
-              const type = selectedOption.getAttribute('data-type');
 
-              dispatch({
-                type: types.UPDATE_INSTRUMENT,
-                instrumentType: type,
-              });
-            }}
-            value={tracks[currentTrackName].instrumentType}
-          >
-            {constants.instruments.map((instrument, i) => {
-              const id = `${instrument.id}-${i}`;
+      {currentTrack && (
+        <div className="app__track">
+          <p>
+            Instrument:{' '}
+            <select
+              onChange={(event) => {
+                const selectedOption = event.target[event.target.selectedIndex];
+                const type = selectedOption.getAttribute('data-type');
 
-              return (
-                <option
-                  key={id}
-                  // data-id={id}
-                  data-type={instrument.id}
-                  value={instrument.id}
-                  // selected={tracks[currentTrackName].instrumentType === id}
-                >
-                  {instrument.name}
-                </option>
-              );
-            })}
-          </select>
-        </p>
-        <div>
-          <label htmlFor="volume">Volume</label>
+                dispatch({
+                  type: types.UPDATE_INSTRUMENT,
+                  instrumentType: type,
+                });
+              }}
+              value={currentTrack.instrumentType}
+            >
+              {constants.instruments.map((instrument, i) => {
+                const id = `${instrument.id}-${i}`;
+
+                return (
+                  <option
+                    key={id}
+                    // data-id={id}
+                    data-type={instrument.id}
+                    value={instrument.id}
+                  >
+                    {instrument.name}
+                  </option>
+                );
+              })}
+            </select>
+          </p>
+          <div>
+            <label htmlFor="volume">Volume</label>
+            <br />
+            <input
+              id="volume"
+              type="range"
+              value={currentTrack.volume}
+              onChange={(event) =>
+                dispatch({ type: types.SET_VOLUME, volume: event.target.value })
+              }
+            />
+            {volume}
+          </div>
           <br />
-          <input
-            id="volume"
-            type="range"
-            value={currentTrack.volume}
-            onChange={(event) =>
-              dispatch({ type: types.SET_VOLUME, volume: event.target.value })
-            }
-          />
-          {volume}
-        </div>
-        <br />
-        <div>
-          <label htmlFor="pan">Pan</label>
-          <br />
-          <input
-            id="pan"
-            type="range"
-            value={currentTrack.pan}
-            onChange={(event) =>
-              dispatch({ type: types.SET_PAN, pan: event.target.value })
-            }
-          />
-          {pan}
-        </div>
-        {<h4>Effects</h4>}
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
+          <div>
+            <label htmlFor="pan">Pan</label>
+            <br />
+            <input
+              id="pan"
+              type="range"
+              value={currentTrack.pan}
+              onChange={(event) =>
+                dispatch({ type: types.SET_PAN, pan: event.target.value })
+              }
+            />
+            {pan}
+          </div>
+          {<h4>Effects</h4>}
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
 
-            if (selectedEffect) {
-              dispatch({
-                type: types.ADD_EFFECT,
-                effectId: selectedEffect.id,
-                effectType: selectedEffect.type,
-              });
+              if (selectedEffect) {
+                dispatch({
+                  type: types.ADD_EFFECT,
+                  effectId: selectedEffect.id,
+                  effectType: selectedEffect.type,
+                });
 
-              setSelectedEffect(null);
-            }
-          }}
-        >
-          <select
-            onChange={(event) => {
-              const selectedOption = event.target[event.target.selectedIndex];
-              const id = selectedOption.getAttribute('data-id');
-              const type = selectedOption.getAttribute('data-type');
-
-              setSelectedEffect({ id, type });
+                setSelectedEffect(null);
+              }
             }}
           >
-            <option>None</option>
-            {constants.effects.map((effect, i) => {
-              const id = `${effect.id}-${i}`;
+            <select
+              onChange={(event) => {
+                const selectedOption = event.target[event.target.selectedIndex];
+                const id = selectedOption.getAttribute('data-id');
+                const type = selectedOption.getAttribute('data-type');
 
-              return (
-                <option
-                  key={id}
-                  data-id={id}
-                  data-type={effect.id}
-                  selected={selectedEffect && id === selectedEffect.id}
-                >
-                  {effect.name}
-                </option>
-              );
-            })}
-          </select>{' '}
-          <button type="submit">Add Effect</button>
-        </form>
-        {currentTrack.effects.map((effect) => {
-          return (
-            <div className={css.trackEffect} key={effect.id}>
-              <p>
-                {effect.type}{' '}
-                <button
-                  onClick={() =>
-                    dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
-                  }
-                >
-                  Remove
-                </button>
-              </p>
-            </div>
-          );
-        })}
-      </div>
+                setSelectedEffect({ id, type });
+              }}
+            >
+              <option>None</option>
+              {constants.effects.map((effect, i) => {
+                const id = `${effect.id}-${i}`;
+
+                return (
+                  <option
+                    key={id}
+                    data-id={id}
+                    data-type={effect.id}
+                    selected={selectedEffect && id === selectedEffect.id}
+                  >
+                    {effect.name}
+                  </option>
+                );
+              })}
+            </select>{' '}
+            <button type="submit">Add Effect</button>
+          </form>
+          {currentTrack.effects.map((effect) => {
+            return (
+              <div className={css.trackEffect} key={effect.id}>
+                <p>
+                  {effect.type}{' '}
+                  <button
+                    onClick={() =>
+                      dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
+                    }
+                  >
+                    Remove
+                  </button>
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* ----------------------------------------------------------------- */}
       {/* AUDIO */}
@@ -240,64 +263,50 @@ const StepsEditorExample = () => {
         swing={1}
         swingSubdivision={'8n'}
       >
-        <Track
-          steps={tracks.melody.steps}
-          volume={(parseInt(tracks.melody.volume, 10) / 100) * 32 - 32}
-          pan={(parseInt(tracks.melody.pan, 10) / 100) * 2 - 1}
-          subdivision={'16n'}
-          effects={tracks.melody.effects.map((effect, i) => {
-            return (
-              <Effect
-                type={effect.type}
-                key={`${effect.id}-${i}-melody`}
-                id={`${effect.id}-${i}-melody`}
-                delayTime={effect.delayTime || '16n'}
-                feedback={effect.feedback || 0.6}
-              />
-            );
-          })}
-          onStepPlay={(step) =>
-            dispatch({
-              type: types.SET_CURRENT_STEP_INDEX,
-              currentStepIndex: step.index,
-            })
-          }
-        >
-          <Instrument
-            type={tracks.melody.instrumentType}
-            notes={tracks.melody.notes}
-          />
-        </Track>
-
-        <Track
-          steps={tracks.beat.steps}
-          volume={(parseInt(tracks.beat.volume, 10) / 100) * 32 - 32}
-          pan={(parseInt(tracks.beat.pan, 10) / 100) * 2 - 1}
-          subdivision={'16n'}
-          effects={tracks.beat.effects.map((effect, i) => {
-            return (
-              <Effect
-                type={effect.type}
-                key={`${effect.id}-${i}-beat`}
-                id={`${effect.id}-${i}-beat`}
-                delayTime={effect.delayTime || '16n'}
-                feedback={effect.feedback || 0.6}
-              />
-            );
-          })}
-        >
-          <Instrument
-            type={tracks.beat.instrumentType}
-            samples={{
-              C3: `${process.env.PUBLIC_URL}/audio/drums/kick15.wav`,
-              D3: `${
-                process.env.PUBLIC_URL
-              }/audio/drums/snare-bottom-buttend15.wav`,
-              E3: `${process.env.PUBLIC_URL}/audio/drums/chh12.wav`,
-            }}
-            notes={tracks.beat.notes}
-          />
-        </Track>
+        {tracks.map((track) => {
+          return (
+            <Track
+              steps={track.steps}
+              volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
+              pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
+              subdivision={'16n'}
+              effects={track.effects.map((effect, i) => {
+                return (
+                  <Effect
+                    type={effect.type}
+                    key={`${effect.id}-${i}-melody`}
+                    id={`${effect.id}-${i}-melody`}
+                    delayTime={effect.delayTime || '16n'}
+                    feedback={effect.feedback || 0.6}
+                  />
+                );
+              })}
+              onStepPlay={(step) =>
+                dispatch({
+                  type: types.SET_CURRENT_STEP_INDEX,
+                  currentStepIndex: step.index,
+                })
+              }
+              key={track.id}
+            >
+              {track.instrumentType === 'sampler' ? (
+                <Instrument
+                  type={track.instrumentType}
+                  samples={{
+                    C3: `${process.env.PUBLIC_URL}/audio/drums/kick15.wav`,
+                    D3: `${
+                      process.env.PUBLIC_URL
+                    }/audio/drums/snare-bottom-buttend15.wav`,
+                    E3: `${process.env.PUBLIC_URL}/audio/drums/chh12.wav`,
+                  }}
+                  notes={track.notes}
+                />
+              ) : (
+                <Instrument type={track.instrumentType} notes={track.notes} />
+              )}
+            </Track>
+          );
+        })}
       </Song>
     </div>
   );
@@ -332,71 +341,142 @@ function reducer(state, action) {
 
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            steps,
-          },
-        },
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              steps,
+            };
+          }
+
+          return track;
+        }),
+        // tracks: {
+        //   ...state.tracks,
+        //   [state.currentTrackId]: {
+        //     ...state.tracks[state.currentTrackId],
+        //     steps,
+        //   },
+        // },
       };
 
     case types.SET_NOTES:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            notes: action.notes,
-          },
-        },
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              notes: action.notes,
+            };
+          }
+
+          return track;
+        }),
       };
 
     // ------------------------------------------------------------------------
     // TRACKS
     // ------------------------------------------------------------------------
 
-    case types.SET_CURRENT_TRACK_NAME:
+    case types.SET_CURRENT_TRACK_ID:
       return {
         ...state,
-        currentTrackName: action.name,
+        currentTrackId: action.trackId,
       };
+
+    case types.ADD_TRACK: {
+      return {
+        ...state,
+        tracks: [
+          ...state.tracks,
+          {
+            id: 'newTrack',
+            instrumentType: 'polySynth',
+            volume: 100,
+            pan: 50,
+            steps: [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ],
+            // steps: buildSteps(melodyClip),
+            notes: [],
+            effects: [],
+          },
+        ],
+      };
+    }
+
+    case types.REMOVE_TRACK: {
+      const tracks = state.tracks.filter(
+        (track) => track.id !== action.trackId,
+      );
+
+      return {
+        ...state,
+        tracks,
+        // Current track may be removed, so we reset the current track
+        currentTrackId: tracks.length > 0 ? tracks[0].id : null,
+      };
+    }
 
     case types.UPDATE_INSTRUMENT:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            instrumentType: action.instrumentType,
-          },
-        },
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              instrumentType: action.instrumentType,
+            };
+          }
+
+          return track;
+        }),
       };
 
     case types.SET_VOLUME:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            volume: action.volume,
-          },
-        },
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              volume: action.volume,
+            };
+          }
+
+          return track;
+        }),
       };
 
     case types.SET_PAN:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            pan: action.pan,
-          },
-        },
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              pan: action.pan,
+            };
+          }
+
+          return track;
+        }),
       };
 
     // ------------------------------------------------------------------------
@@ -406,46 +486,40 @@ function reducer(state, action) {
     case types.ADD_EFFECT:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            effects: [
-              ...state.tracks[state.currentTrackName].effects,
-              {
-                id: action.effectId,
-                type: action.effectType,
-              },
-            ],
-          },
-        },
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              effects: [
+                ...track.effects,
+                {
+                  id: action.effectId,
+                  type: action.effectType,
+                },
+              ],
+            };
+          }
+
+          return track;
+        }),
       };
 
     case types.REMOVE_EFFECT:
       return {
         ...state,
-        tracks: {
-          ...state.tracks,
-          [state.currentTrackName]: {
-            ...state.tracks[state.currentTrackName],
-            effects: state.tracks[state.currentTrackName].effects.filter(
-              (effect) => effect.id !== action.id,
-            ),
-          },
-        },
-      };
+        tracks: state.tracks.map((track) => {
+          if (track.id === state.currentTrackId) {
+            return {
+              ...track,
+              effects: track.effects.filter(
+                (effect) => effect.id !== action.id,
+              ),
+            };
+          }
 
-    // case types.ADD_MORE_FEEDBACK:
-    //   return {
-    //     ...state,
-    //     tracks: {
-    //       ...state.tracks,
-    //       [state.currentTrackName]: {
-    //         ...state.tracks[state.currentTrackName],
-    //         feedback: 0.9,
-    //       },
-    //     },
-    //   };
+          return track;
+        }),
+      };
 
     default:
       throw new Error();

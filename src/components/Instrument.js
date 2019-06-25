@@ -59,6 +59,12 @@ const InstrumentConsumer = ({
 
     // Add this Instrument to Track Context
     onInstrumentsUpdate([synth.current]);
+
+    return function cleanup() {
+      if (synth.current) {
+        synth.current.dispose();
+      }
+    };
   }, [type]);
 
   // -------------------------------------------------------------------------
