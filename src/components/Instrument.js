@@ -62,7 +62,7 @@ const InstrumentConsumer = ({
 
     return function cleanup() {
       if (synth.current) {
-        synth.current.dispose();
+        // synth.current.dispose();
       }
     };
   }, [type]);

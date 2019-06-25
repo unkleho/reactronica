@@ -69,11 +69,13 @@ const TrackConsumer = ({
       }
     }
 
-    return function cleanup() {
-      if (sequencer.current) {
-        sequencer.current.dispose();
-      }
-    };
+    // return function cleanup() {
+    //   if (sequencer.current) {
+    //     console.log('cleanup');
+
+    //     sequencer.current.dispose();
+    //   }
+    // };
   }, [isPlaying]);
 
   useEffect(() => {
@@ -85,6 +87,14 @@ const TrackConsumer = ({
       });
     }
   }, [steps]);
+
+  useEffect(() => {
+    return function cleanup() {
+      if (sequencer.current) {
+        sequencer.current.dispose();
+      }
+    };
+  }, []);
 
   const handleAddToEffectsChain = (effect) => {
     // console.log('<Track />', 'onAddToEffectsChain');
