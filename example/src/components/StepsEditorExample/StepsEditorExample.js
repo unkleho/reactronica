@@ -31,6 +31,7 @@ const initialState = {
       volume: 100,
       pan: 50,
       steps: buildSteps(melodyClip),
+      sequences: [],
       notes: [],
       effects: [],
     },
@@ -40,10 +41,12 @@ const initialState = {
       volume: 100,
       pan: 50,
       steps: buildSteps(beatClip),
+      sequences: [],
       notes: [],
       effects: [],
     },
   ],
+  clips: [melodyClip, beatClip],
 };
 
 const StepsEditorExample = () => {

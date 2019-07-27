@@ -1,5 +1,6 @@
 // Melody clip with notes that will need to have buildSteps() run on it.
 export const melodyClip = {
+  id: 'melody',
   bars: 1,
   notes: [
     {
@@ -37,6 +38,7 @@ export const melodyClip = {
 
 // Beat clip with notes that will need to have buildSteps() run on it.
 export const beatClip = {
+  id: 'beat',
   bars: 1,
   notes: [
     {
