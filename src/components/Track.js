@@ -47,7 +47,7 @@ const TrackConsumer = ({
             instrumentsRef.current.map((instrument) => {
               instrument.triggerAttackRelease(
                 note.note,
-                note.duration,
+                note.duration || 0.2,
                 undefined,
                 note.velocity,
               );
@@ -139,6 +139,10 @@ TrackConsumer.propTypes = {
 
 const Track = (props) => {
   const value = React.useContext(SongContext);
+
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
   return <TrackConsumer {...value} {...props} />;
 };

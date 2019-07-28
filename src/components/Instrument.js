@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { SongContext } from './Song';
 import { TrackContext } from './Track';
 import { NoteType, InstrumentTypes } from '../types/propTypes';
 import { instruments } from '../constants';
@@ -8,6 +9,8 @@ import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 
 const InstrumentConsumer = ({
+  // <Song /> Props
+  // Tone,
   // <Instrument /> Props
   type = 'polySynth',
   options = {
@@ -142,6 +145,11 @@ InstrumentConsumer.propTypes = {
 
 const Instrument = (props) => {
   const value = useContext(TrackContext);
+  // const { Tone } = useContext(SongContext);
+
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
   return <InstrumentConsumer {...value} {...props} />;
 };
