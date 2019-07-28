@@ -19,13 +19,13 @@
     "dev": "npm start"
   },
   "dependencies": {
-    "startaudiocontext": "^1.2.1",
-    "tone": "^0.12.80"
+    "startaudiocontext": "^1.2.1"
   },
   "peerDependencies": {
     "prop-types": ">=15.7.0",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "tone": "^13.4.9"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
