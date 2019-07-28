@@ -47,7 +47,7 @@ const TrackConsumer = ({
             instrumentsRef.current.map((instrument) => {
               instrument.triggerAttackRelease(
                 note.note,
-                note.duration || 0.2,
+                note.duration,
                 undefined,
                 note.velocity,
               );
@@ -78,7 +78,7 @@ const TrackConsumer = ({
         sequencer.current.add(i, note);
       });
     }
-  }, [steps]);
+  }, [sequencerSteps]);
 
   useEffect(() => {
     return function cleanup() {
