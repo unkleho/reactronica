@@ -3,6 +3,9 @@ import { Song, Track, Instrument, Effect, constants } from 'reactronica';
 
 import StepsEditor from '../StepsEditor';
 import Transport from '../Transport';
+import Sequencer from '../Sequencer';
+import TrackInfo from '../TrackInfo';
+
 import * as types from '../../types';
 import { melodyClip, beatClip } from '../../sample-data';
 import { buildSteps } from '../../lib/stepUtils';
@@ -71,51 +74,13 @@ const StepsEditorExample = () => {
 
   return (
     <div className={css.stepsEditorExample}>
-      <div className={css.stepsChooser}>
-        {tracks.map((track) => {
-          return (
-            <Fragment key={track.id}>
-              <button
-                className={[
-                  css.stepsChooserButton,
-                  track.id === currentTrackId
-                    ? css.stepsChooserButtonActive
-                    : '',
-                ].join(' ')}
-                onClick={() =>
-                  dispatch({
-                    type: types.SET_CURRENT_TRACK_ID,
-                    trackId: track.id,
-                  })
-                }
-              >
-                {track.id}
-              </button>
-              <button
-                onClick={() => {
-                  dispatch({
-                    type: types.REMOVE_TRACK,
-                    trackId: track.id,
-                  });
-                }}
-              >
-                Remove
-              </button>
-            </Fragment>
-          );
-        })}
+      <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
-        <button
-          onClick={() => {
-            dispatch({
-              type: types.ADD_TRACK,
-              trackId: 'test',
-            });
-          }}
-        >
-          Add
-        </button>
-      </div>
+      <Sequencer
+        tracks={tracks}
+        currentTrackId={currentTrackId}
+        dispatch={dispatch}
+      />
 
       <StepsEditor
         defaultSteps={currentSteps}
@@ -131,130 +96,13 @@ const StepsEditorExample = () => {
         onKeyboardUp={() => dispatch({ type: types.SET_NOTES, notes: [] })}
       />
 
-      <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
-
-      <h4>Track</h4>
-
-      {currentTrack && (
-        <div className="app__track">
-          <p>
-            Instrument:{' '}
-            <select
-              onChange={(event) => {
-                const selectedOption = event.target[event.target.selectedIndex];
-                const type = selectedOption.getAttribute('data-type');
-
-                dispatch({
-                  type: types.UPDATE_INSTRUMENT,
-                  instrumentType: type,
-                });
-              }}
-              value={currentTrack.instrumentType}
-            >
-              {constants.instruments.map((instrument, i) => {
-                const id = `${instrument.id}-${i}`;
-
-                return (
-                  <option
-                    key={id}
-                    // data-id={id}
-                    data-type={instrument.id}
-                    value={instrument.id}
-                  >
-                    {instrument.name}
-                  </option>
-                );
-              })}
-            </select>
-          </p>
-          <div>
-            <label htmlFor="volume">Volume</label>
-            <br />
-            <input
-              id="volume"
-              type="range"
-              value={currentTrack.volume}
-              onChange={(event) =>
-                dispatch({ type: types.SET_VOLUME, volume: event.target.value })
-              }
-            />
-            {volume}
-          </div>
-          <br />
-          <div>
-            <label htmlFor="pan">Pan</label>
-            <br />
-            <input
-              id="pan"
-              type="range"
-              value={currentTrack.pan}
-              onChange={(event) =>
-                dispatch({ type: types.SET_PAN, pan: event.target.value })
-              }
-            />
-            {pan}
-          </div>
-          {<h4>Effects</h4>}
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-
-              if (selectedEffect) {
-                dispatch({
-                  type: types.ADD_EFFECT,
-                  effectId: selectedEffect.id,
-                  effectType: selectedEffect.type,
-                });
-
-                setSelectedEffect(null);
-              }
-            }}
-          >
-            <select
-              onChange={(event) => {
-                const selectedOption = event.target[event.target.selectedIndex];
-                const id = selectedOption.getAttribute('data-id');
-                const type = selectedOption.getAttribute('data-type');
-
-                setSelectedEffect({ id, type });
-              }}
-            >
-              <option>None</option>
-              {constants.effects.map((effect, i) => {
-                const id = `${effect.id}-${i}`;
-
-                return (
-                  <option
-                    key={id}
-                    data-id={id}
-                    data-type={effect.id}
-                    selected={selectedEffect && id === selectedEffect.id}
-                  >
-                    {effect.name}
-                  </option>
-                );
-              })}
-            </select>{' '}
-            <button type="submit">Add Effect</button>
-          </form>
-          {currentTrack.effects.map((effect) => {
-            return (
-              <div className={css.trackEffect} key={effect.id}>
-                <p>
-                  {effect.type}{' '}
-                  <button
-                    onClick={() =>
-                      dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
-                    }
-                  >
-                    Remove
-                  </button>
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <TrackInfo
+        currentTrack={currentTrack}
+        volume={volume}
+        pan={pan}
+        selectedEffect={selectedEffect}
+        dispatch={dispatch}
+      />
 
       {/* ----------------------------------------------------------------- */}
       {/* AUDIO */}
