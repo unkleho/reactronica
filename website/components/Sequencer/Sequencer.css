@@ -1,0 +1,13 @@
+.stepsChooser {
+  /* display: flex;
+  flex-direction: column; */
+  margin-bottom: 1em;
+}
+
+.stepsChooserButton {
+  text-transform: capitalize;
+}
+
+.stepsChooserButtonActive {
+  font-weight: bold;
+}
