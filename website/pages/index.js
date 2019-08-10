@@ -45,7 +45,7 @@ const HomePage = () => {
             null,
           ]}
           onStepPlay={(step) => {
-            console.log(step);
+            // console.log(step);
           }}
         >
           <Instrument type={'polySynth'} notes={[]} />
