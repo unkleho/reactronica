@@ -6,5 +6,9 @@ const withMDX = require('@next/mdx')({
 module.exports = withCSS(
   withMDX({
     pageExtensions: ['js', 'jsx', 'mdx'],
+    cssModules: true,
+    cssLoaderOptions: {
+      localIdentName: '[name]_[local]_[hash:base64:5]',
+    },
   }),
 );

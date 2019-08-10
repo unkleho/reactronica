@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-
 import { Song, Track, Instrument } from 'reactronica';
+
+import StepsEditorExample from '../components/StepsEditorExample';
+
+import './index.css';
 
 const HomePage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -8,6 +11,8 @@ const HomePage = () => {
   return (
     <div>
       <h1>Reactronica</h1>
+
+      <StepsEditorExample />
 
       <button onClick={() => setIsPlaying(!isPlaying)}>Play</button>
 
