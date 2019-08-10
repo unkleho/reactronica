@@ -3,7 +3,7 @@ to: components/<%= name %>/<%= name %>.tsx
 ---
 import * as React from 'react';
 
-import css from './<%= name %>.scss';
+import css from './<%= name %>.css';
 
 type Props = {
   className?: string;

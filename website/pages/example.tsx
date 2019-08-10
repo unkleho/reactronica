@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 
-import StepsEditorExample from '../components/StepsEditorExample';
-
 import './index.css';
 
 const HomePage = () => {
@@ -10,8 +8,6 @@ const HomePage = () => {
 
   return (
     <div>
-      <StepsEditorExample />
-
       <button onClick={() => setIsPlaying(!isPlaying)}>Play</button>
 
       <Song tempo={90} isPlaying={isPlaying} swing={1} swingSubdivision={'8n'}>

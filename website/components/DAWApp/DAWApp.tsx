@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
 import { Song, Track, Instrument, Effect, constants } from 'reactronica';
 
-import StepsEditor from '../StepsEditor';
-import Transport from '../Transport';
-import Sequencer from '../Sequencer';
-import TrackInfo from '../TrackInfo';
+import StepsEditor from '../DAWStepsEditor';
+import Transport from '../DAWTransport';
+import Sequencer from '../DAWSequencer';
+import TrackInfo from '../DAWTrackInfo';
 
 import * as types from '../../types';
 import { melodyClip, beatClip } from '../../sample-data';
 import { buildSteps } from '../../lib/stepUtils';
 
-import css from './StepsEditorExample.module.css';
+import css from './DAWApp.css';
 
 const initialState = {
   // --------------------------------------------------------------------------
@@ -73,7 +73,7 @@ const StepsEditorExample = () => {
   const currentSteps = currentTrack ? currentTrack.steps : [];
 
   return (
-    <div className={css.stepsEditorExample}>
+    <div className={css.dawApp}>
       <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
       <Sequencer
