@@ -21,6 +21,7 @@
     "tone": "^13.4.9"
   },
   "devDependencies": {
+    "@types/react": "^16.9.1",
     "hygen": "^4.0.8"
   }
 }

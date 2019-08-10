@@ -19,7 +19,8 @@
     "dev": "npm start"
   },
   "dependencies": {
-    "startaudiocontext": "^1.2.1"
+    "startaudiocontext": "^1.2.1",
+    "tone": "^13.4.9"
   },
   "peerDependencies": {
     "prop-types": ">=15.7.0",
