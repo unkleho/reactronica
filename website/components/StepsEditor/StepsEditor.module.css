@@ -1,0 +1,30 @@
+.stepsEditor {
+  margin-bottom: 1em;
+}
+
+.row {
+  display: flex;
+}
+
+.rowIsAccidental .stepKey {
+  color: #eee;
+  background-color: #000;
+}
+
+.step {
+  display: inline-block;
+  margin-right: 0;
+  flex: 1;
+  padding: 0.5em 0;
+  border: none;
+  cursor: pointer;
+  background-color: #eee;
+  font-size: 0.8em;
+  text-align: center;
+  border-top: 1px solid white;
+  border-right: 1px solid white;
+}
+
+.stepIsCurrent {
+  background-color: turquoise;
+}
