@@ -12,10 +12,15 @@
   "author": "unkleho",
   "license": "ISC",
   "dependencies": {
+    "@mdx-js/loader": "^1.2.2",
+    "@next/mdx": "^9.0.3",
     "@zeit/next-css": "^1.0.1",
     "next": "^9.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "tone": "^13.4.9"
+  },
+  "devDependencies": {
+    "hygen": "^4.0.8"
   }
 }
