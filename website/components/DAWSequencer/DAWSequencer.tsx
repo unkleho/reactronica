@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import * as types from '../../types';
 
-import css from './Sequencer.css';
+import css from './DAWSequencer.css';
 
 const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
   return (

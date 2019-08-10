@@ -1,7 +1,7 @@
 ---
-to: components/<%= name %>/<%= name %>.scss
+to: components/<%= name %>/<%= name %>.css
 ---
-@import '../../styles/global.scss';
+@import '../../styles/global.css';
 
 .<%= h.changeCase.camel(name) %> {
   display: block;

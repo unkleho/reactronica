@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as types from '../../types';
 
-import css from './Transport.module.css';
+import css from './DAWTransport.css';
 
 const Transport = ({ isPlaying, tempo, dispatch }) => {
   return (

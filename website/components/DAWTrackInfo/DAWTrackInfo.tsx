@@ -3,7 +3,7 @@ import { constants } from 'reactronica';
 
 import * as types from '../../types';
 
-import css from './TrackInfo.css';
+import css from './DAWTrackInfo.css';
 
 const TrackInfo = ({ currentTrack, volume, pan, selectedEffect, dispatch }) => {
   return (

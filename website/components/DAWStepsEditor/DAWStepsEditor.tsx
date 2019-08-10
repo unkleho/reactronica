@@ -1,6 +1,6 @@
 import React from 'react';
 
-import css from './StepsEditor.module.css';
+import css from './DAWStepsEditor.css';
 
 const StepsEditor = ({
   currentStepIndex,
