@@ -1,3 +1,11 @@
-## Notes
+# Reactronica Website
 
-- Get `Module not found: Can't resolve 'tone' in '/Users/.../reactronica/dist'` if trying to use TypeScript. However, maybe due to Tone not installed as dependency in `reactronica/` (currently peerDependency).
+## Install
+
+```bash
+$ npm install
+# Ensure npm link has already been run at ../, then
+$ npm link reactronica
+# Stop invariant error
+$ npm link ../node_modules/react
+```
