@@ -1,14 +1,15 @@
 import React from 'react';
 
+import App from '../components/App';
 import DAWApp from '../components/DAWApp';
 
-import './index.css';
+import './daw.css';
 
 const DAWPage = () => {
   return (
-    <div>
+    <App>
       <DAWApp />
-    </div>
+    </App>
   );
 };
 

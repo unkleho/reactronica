@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import * as types from '../../types';
 
@@ -6,10 +6,10 @@ import css from './DAWSequencer.css';
 
 const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
   return (
-    <div className={css.stepsChooser}>
+    <div className={css.dawSequencer}>
       {tracks.map((track) => {
         return (
-          <Fragment key={track.id}>
+          <div className={css.track} key={track.id}>
             <button
               className={[
                 css.stepsChooserButton,
@@ -34,7 +34,7 @@ const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
             >
               Remove
             </button>
-          </Fragment>
+          </div>
         );
       })}
 

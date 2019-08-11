@@ -1,7 +1,6 @@
-.stepsChooser {
-  /* display: flex;
-  flex-direction: column; */
-  margin-bottom: 1em;
+.dawSequencer {
+  display: flex;
+  flex-direction: column;
 }
 
 .stepsChooserButton {
