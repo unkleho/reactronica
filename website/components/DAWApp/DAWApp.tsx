@@ -88,6 +88,8 @@ const DAWApp = () => {
   //   return clip.id === currentClipId;
   // });
   // const currentSteps = buildSteps(currentClip);
+  // 1. StepsEditor - dispatch UPDATE_CURRENT_CLIP
+  // 2. Convert clip to steps
 
   return (
     <div className={css.dawApp}>
@@ -116,6 +118,10 @@ const DAWApp = () => {
         notes={notes}
         subdivision={16}
         onStepEditorClick={(steps) =>
+          // WIP
+          // Convert steps to clip
+          // dispatch({ type: types.UPDATE_CLIP, clip })
+          // This should update currentSteps and track[].clips
           dispatch({ type: types.UPDATE_CURRENT_STEPS, steps })
         }
         onKeyboardDown={(note) =>
@@ -137,6 +143,7 @@ const DAWApp = () => {
         {tracks.map((track) => {
           return (
             <Track
+              // WIP - build from track.clips?
               steps={track.steps}
               volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
               pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
