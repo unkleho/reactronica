@@ -4,7 +4,7 @@ import {
   noteToFret,
   gridToSamplerSteps,
   pianoGridToRoll,
-} from './tabUtils.js';
+} from './tabUtils';
 import { defaultUkeGrid, defaultPianoGrid } from '../constants';
 
 const gridLine = [
