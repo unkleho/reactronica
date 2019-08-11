@@ -1,4 +1,6 @@
-export function buildSteps(clip, subdivision = 16, notesPerBar = 4) {
+import { Clip } from '../types/typescript';
+
+export function buildSteps(clip: Clip, subdivision = 16, notesPerBar = 4) {
   const { bars, notes } = clip;
   const totalSteps = bars * subdivision;
   const emptyArray = [...new Array(totalSteps)].fill(null);

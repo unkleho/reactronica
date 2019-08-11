@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { Song, Track, Instrument, Effect, constants } from 'reactronica';
+import React from 'react';
+import { Song, Track, Instrument, Effect } from 'reactronica';
 
 import StepsEditor from '../DAWStepsEditor';
 import Transport from '../DAWTransport';
@@ -7,7 +7,12 @@ import Sequencer from '../DAWSequencer';
 import TrackInfo from '../DAWTrackInfo';
 
 import * as types from '../../types';
-import { melodyClip, beatClip } from '../../sample-data';
+import {
+  melodyClip1,
+  melodyClip2,
+  beatClip1,
+  beatClip2,
+} from '../../sample-data';
 import { buildSteps } from '../../lib/stepUtils';
 
 import css from './DAWApp.css';
@@ -33,8 +38,8 @@ const initialState = {
       instrumentType: 'polySynth',
       volume: 100,
       pan: 50,
-      steps: buildSteps(melodyClip),
-      sequences: [],
+      steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
+      clips: [{ id: 'melody1' }, { id: 'melody2' }],
       notes: [],
       effects: [],
     },
@@ -43,13 +48,13 @@ const initialState = {
       instrumentType: 'sampler',
       volume: 100,
       pan: 50,
-      steps: buildSteps(beatClip),
-      sequences: [],
+      steps: [...buildSteps(beatClip1), ...buildSteps(beatClip2)],
+      clips: [{ id: 'beat1' }, { id: 'beat2' }],
       notes: [],
       effects: [],
     },
   ],
-  clips: [melodyClip, beatClip],
+  clips: [melodyClip1, melodyClip2, beatClip1, beatClip2],
 };
 
 const DAWApp = () => {
