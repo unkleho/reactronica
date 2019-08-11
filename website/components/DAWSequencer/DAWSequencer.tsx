@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as types from '../../types';
 
-import css from './DAWSequencer.css';
+const css = require('./DAWSequencer.css');
 
 const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
   return (
@@ -34,6 +34,22 @@ const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
             >
               Remove
             </button>
+
+            {track.clips.map((clip) => {
+              return (
+                <button
+                  key={clip.id}
+                  onClick={() => {
+                    dispatch({
+                      type: types.SET_CURRENT_TRACK_ID,
+                      trackId: track.id,
+                    });
+                  }}
+                >
+                  {clip.id}
+                </button>
+              );
+            })}
           </div>
         );
       })}
