@@ -54,6 +54,9 @@
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-url": "^1.4.0",
+    "stylelint": "^10.1.0",
+    "stylelint-config-rational-order": "0.0.4",
+    "stylelint-config-standard": "^18.3.0",
     "typescript": "^3.5.3"
   },
   "files": [
