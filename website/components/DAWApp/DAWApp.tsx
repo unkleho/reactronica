@@ -29,6 +29,11 @@ const initialState = {
   // Highlighted step that follows the music
   currentStepIndex: null,
   // --------------------------------------------------------------------------
+  // CLIPS
+  // --------------------------------------------------------------------------
+  currentClipId: 'melody1',
+  clips: [melodyClip1, melodyClip2, beatClip1, beatClip2],
+  // --------------------------------------------------------------------------
   // TRACK
   // --------------------------------------------------------------------------
   currentTrackId: 'melody',
@@ -54,7 +59,6 @@ const initialState = {
       effects: [],
     },
   ],
-  clips: [melodyClip1, melodyClip2, beatClip1, beatClip2],
 };
 
 const DAWApp = () => {
@@ -62,6 +66,8 @@ const DAWApp = () => {
   const {
     isPlaying,
     tempo,
+    currentClipId,
+    clips,
     currentTrackId,
     currentStepIndex,
     tracks,
@@ -76,6 +82,12 @@ const DAWApp = () => {
 
   const currentTrack = tracks.find((track) => track.id === currentTrackId);
   const currentSteps = currentTrack ? currentTrack.steps : [];
+
+  // WIP
+  // const currentClip = clips.find((clip) => {
+  //   return clip.id === currentClipId;
+  // });
+  // const currentSteps = buildSteps(currentClip);
 
   return (
     <div className={css.dawApp}>
@@ -93,6 +105,7 @@ const DAWApp = () => {
         <Sequencer
           tracks={tracks}
           currentTrackId={currentTrackId}
+          currentClipId={currentClipId}
           dispatch={dispatch}
         />
       </div>
@@ -229,6 +242,16 @@ function reducer(state, action) {
 
           return track;
         }),
+      };
+
+    // ------------------------------------------------------------------------
+    // CLIPS
+    // ------------------------------------------------------------------------
+
+    case types.SET_CURRENT_CLIP_ID:
+      return {
+        ...state,
+        currentClipId: action.clipId,
       };
 
     // ------------------------------------------------------------------------

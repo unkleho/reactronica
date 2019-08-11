@@ -4,7 +4,7 @@ import * as types from '../../types';
 
 const css = require('./DAWSequencer.css');
 
-const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
+const Sequencer = ({ tracks, currentClipId, currentTrackId, dispatch }) => {
   return (
     <div className={css.dawSequencer}>
       {tracks.map((track) => {
@@ -38,8 +38,17 @@ const Sequencer = ({ tracks, currentTrackId, dispatch }) => {
             {track.clips.map((clip) => {
               return (
                 <button
+                  className={[
+                    css.clip,
+                    clip.id === currentClipId ? css.clipCurrent : '',
+                  ].join(' ')}
                   key={clip.id}
                   onClick={() => {
+                    dispatch({
+                      type: types.SET_CURRENT_CLIP_ID,
+                      clipId: clip.id,
+                    });
+
                     dispatch({
                       type: types.SET_CURRENT_TRACK_ID,
                       trackId: track.id,

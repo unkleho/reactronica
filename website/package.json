@@ -7,7 +7,7 @@
     "dev": "next -p 3001",
     "start": "next start",
     "build": "next build",
-    "test": "npm run test",
+    "test": "jest",
     "link": "npm link reactronica && npm link ../node_modules/react"
   },
   "author": "unkleho",
