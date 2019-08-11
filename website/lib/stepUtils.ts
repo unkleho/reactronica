@@ -3,15 +3,13 @@ import { Clip } from '../types/typescript';
 export function buildSteps(clip: Clip, subdivision = 16, notesPerBar = 4) {
   const { bars, notes } = clip;
   const totalSteps = bars * subdivision;
+
+  // To pass ts-jest test
+  // @ts-ignore
   const emptyArray = [...new Array(totalSteps)].fill(null);
 
   const steps = emptyArray.map((_, i) => {
-    const barKey = Math.ceil((i + 1) / subdivision);
-    const noteKey =
-      Math.ceil((i + 1) / notesPerBar) % notesPerBar || notesPerBar;
-    const sixteenthsKey = (i % notesPerBar) + 1;
-    const timeKey = `${barKey}.${noteKey}.${sixteenthsKey}`;
-    // console.log(timeKey);
+    const timeKey = buildTimeKey(i, subdivision, notesPerBar);
 
     const result = notes
       .filter((note) => {
@@ -32,4 +30,34 @@ export function buildSteps(clip: Clip, subdivision = 16, notesPerBar = 4) {
   });
 
   return steps;
+}
+
+export function buildClip(steps, id, subdivision = 16, notesPerBar = 4) {
+  const notes = steps.reduce((prev, curr, i) => {
+    const timeKey = buildTimeKey(i, subdivision, notesPerBar);
+
+    return [
+      ...prev,
+      ...(curr
+        ? curr.map((note) => {
+            return { start: timeKey, ...note };
+          })
+        : []),
+    ];
+  }, []);
+
+  return {
+    id,
+    bars: 1,
+    notes,
+  };
+}
+
+function buildTimeKey(i, subdivision, notesPerBar) {
+  const barKey = Math.ceil((i + 1) / subdivision);
+  const noteKey = Math.ceil((i + 1) / notesPerBar) % notesPerBar || notesPerBar;
+  const sixteenthsKey = (i % notesPerBar) + 1;
+  const timeKey = `${barKey}.${noteKey}.${sixteenthsKey}`;
+
+  return timeKey;
 }
