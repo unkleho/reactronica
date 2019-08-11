@@ -8,10 +8,9 @@ import css from './DAWTrackInfo.css';
 const TrackInfo = ({ currentTrack, volume, pan, selectedEffect, dispatch }) => {
   return (
     <Fragment>
-      <h4>Track</h4>
-
       {currentTrack && (
         <div className="app__track">
+          <h4>Track</h4>
           <p>
             Instrument:{' '}
             <select

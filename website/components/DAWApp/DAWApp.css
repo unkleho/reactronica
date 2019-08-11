@@ -1,3 +1,7 @@
 .dawApp {
   display: block;
 }
+
+.trackSequencer {
+  display: flex;
+}

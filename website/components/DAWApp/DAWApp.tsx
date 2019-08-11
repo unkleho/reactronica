@@ -52,7 +52,7 @@ const initialState = {
   clips: [melodyClip, beatClip],
 };
 
-const StepsEditorExample = () => {
+const DAWApp = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const {
     isPlaying,
@@ -76,11 +76,21 @@ const StepsEditorExample = () => {
     <div className={css.dawApp}>
       <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
 
-      <Sequencer
-        tracks={tracks}
-        currentTrackId={currentTrackId}
-        dispatch={dispatch}
-      />
+      <div className={css.trackSequencer}>
+        <TrackInfo
+          currentTrack={currentTrack}
+          volume={volume}
+          pan={pan}
+          selectedEffect={selectedEffect}
+          dispatch={dispatch}
+        />
+
+        <Sequencer
+          tracks={tracks}
+          currentTrackId={currentTrackId}
+          dispatch={dispatch}
+        />
+      </div>
 
       <StepsEditor
         defaultSteps={currentSteps}
@@ -94,14 +104,6 @@ const StepsEditorExample = () => {
           dispatch({ type: types.SET_NOTES, notes: [{ name: note }] })
         }
         onKeyboardUp={() => dispatch({ type: types.SET_NOTES, notes: [] })}
-      />
-
-      <TrackInfo
-        currentTrack={currentTrack}
-        volume={volume}
-        pan={pan}
-        selectedEffect={selectedEffect}
-        dispatch={dispatch}
       />
 
       {/* ----------------------------------------------------------------- */}
@@ -161,7 +163,7 @@ const StepsEditorExample = () => {
   );
 };
 
-export default StepsEditorExample;
+export default DAWApp;
 
 function reducer(state, action) {
   switch (action.type) {
