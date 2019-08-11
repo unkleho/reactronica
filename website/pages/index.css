@@ -2,8 +2,8 @@
 
 body {
   margin: 2em;
-  font-family: 'Inter UI', sans-serif;
   color: #333;
+  font-family: 'Inter UI', sans-serif;
 }
 
 h1 {
@@ -13,30 +13,30 @@ h1 {
 }
 
 h2 {
-  font-size: 2.5em;
   margin-top: 1.2em;
+  font-size: 2.5em;
 }
 
 h3 {
-  font-size: 1.5em;
   margin-top: 1.7em;
+  font-size: 1.5em;
 }
 
 h4 {
-  font-size: 1.2em;
   margin-top: 1.5em;
+  font-size: 1.2em;
 }
 
 button {
+  margin-right: 1em;
+  padding: 0.6em;
+  font-size: 1em;
   background-color: #eee;
   border: none;
   border-radius: 0;
-  font-size: 1em;
-  padding: 0.6em;
-  margin-right: 1em;
 }
 
 .app {
-  margin: 0 auto;
   max-width: 50em;
+  margin: 0 auto;
 }
