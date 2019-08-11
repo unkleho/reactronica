@@ -20,6 +20,12 @@ export const REMOVE_EFFECT = 'REMOVE_EFFECT';
 export const ADD_MORE_FEEDBACK = 'ADD_MORE_FEEDBACK ';
 
 // ----------------------------------------------------------------------------
+// CLIPS
+// ----------------------------------------------------------------------------
+export const SET_CURRENT_CLIP_ID = 'SET_CURRENT_CLIP_ID';
+export const UPDATE_CLIP = 'UPDATE_CLIP';
+
+// ----------------------------------------------------------------------------
 // TRACKS
 // ----------------------------------------------------------------------------
 export const ADD_TRACK = 'ADD_TRACK';
