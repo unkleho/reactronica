@@ -13,7 +13,7 @@ import {
   beatClip1,
   beatClip2,
 } from '../../sample-data';
-import { buildSteps } from '../../lib/stepUtils';
+import { buildSteps, buildClip } from '../../lib/stepUtils';
 
 import css from './DAWApp.css';
 
@@ -81,15 +81,17 @@ const DAWApp = () => {
   }, [currentTrackId]);
 
   const currentTrack = tracks.find((track) => track.id === currentTrackId);
-  const currentSteps = currentTrack ? currentTrack.steps : [];
+  // const currentSteps = currentTrack ? currentTrack.steps : [];
 
-  // WIP
-  // const currentClip = clips.find((clip) => {
-  //   return clip.id === currentClipId;
-  // });
-  // const currentSteps = buildSteps(currentClip);
-  // 1. StepsEditor - dispatch UPDATE_CURRENT_CLIP
-  // 2. Convert clip to steps
+  console.log(clips);
+
+  const currentClip = clips.find((clip) => {
+    return clip.id === currentClipId;
+  });
+
+  // For StepsEditor, only of currentClip
+  const currentSteps = buildSteps(currentClip);
+  console.log(currentSteps);
 
   return (
     <div className={css.dawApp}>
@@ -113,17 +115,20 @@ const DAWApp = () => {
       </div>
 
       <StepsEditor
+        // Need steps range eg. 0 - 15, 16 - 32.
         defaultSteps={currentSteps}
         currentStepIndex={currentStepIndex}
         notes={notes}
         subdivision={16}
-        onStepEditorClick={(steps) =>
+        onStepEditorClick={(steps) => {
           // WIP
           // Convert steps to clip
-          // dispatch({ type: types.UPDATE_CLIP, clip })
+          const clip = buildClip(steps, currentClipId);
+
+          dispatch({ type: types.UPDATE_CLIP, clip });
           // This should update currentSteps and track[].clips
-          dispatch({ type: types.UPDATE_CURRENT_STEPS, steps })
-        }
+          // dispatch({ type: types.UPDATE_CURRENT_STEPS, steps });
+        }}
         onKeyboardDown={(note) =>
           dispatch({ type: types.SET_NOTES, notes: [{ name: note }] })
         }
@@ -141,10 +146,23 @@ const DAWApp = () => {
         swingSubdivision={'8n'}
       >
         {tracks.map((track) => {
+          const trackClips = track.clips.map((trackClip) => {
+            return clips.find((clip) => {
+              return clip.id === trackClip.id;
+            });
+          });
+
+          const trackSteps = trackClips.reduce((prev, curr) => {
+            return [...prev, ...buildSteps(curr)];
+          }, []);
+
+          console.log(trackSteps);
+
           return (
             <Track
               // WIP - build from track.clips?
-              steps={track.steps}
+              // steps={track.steps}
+              steps={trackSteps}
               volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
               pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
               subdivision={'16n'}
@@ -259,6 +277,18 @@ function reducer(state, action) {
       return {
         ...state,
         currentClipId: action.clipId,
+      };
+
+    case types.UPDATE_CLIP:
+      return {
+        ...state,
+        clips: state.clips.map((clip) => {
+          if (clip.id === action.clip.id) {
+            return action.clip;
+          }
+
+          return clip;
+        }),
       };
 
     // ------------------------------------------------------------------------
