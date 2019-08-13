@@ -2,8 +2,9 @@ import React from 'react';
 
 import css from './DAWStepsEditor.css';
 
-const StepsEditor = ({
+const DAWStepsEditor = ({
   currentStepIndex,
+  stepIndexOffset = 0,
   defaultSteps = [],
   subdivision = 8,
   onStepEditorClick,
@@ -48,12 +49,14 @@ const StepsEditor = ({
             <div
               className={[
                 css.step,
-                currentStepIndex + 1 === i ? css.stepIsCurrent : '',
+                currentStepIndex + 1 === i + stepIndexOffset
+                  ? css.stepIsCurrent
+                  : '',
               ].join(' ')}
               key={`header-${i}`}
               data-testid={`header`}
             >
-              {i !== 0 && i}
+              {i !== 0 && i + stepIndexOffset}
             </div>
           );
         })}
@@ -131,4 +134,4 @@ const StepsEditor = ({
   );
 };
 
-export default StepsEditor;
+export default DAWStepsEditor;
