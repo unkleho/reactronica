@@ -69,52 +69,20 @@ const DAWApp = () => {
     currentClipId,
     clips,
     currentTrackId,
+    currentTrack,
     currentStepIndex,
+    stepIndexOffset,
+    currentSteps,
     tracks,
     volume,
     pan,
     notes,
-  } = state;
+  } = appSelector(state);
+
   const [selectedEffect, setSelectedEffect] = React.useState(null);
   React.useEffect(() => {
     setSelectedEffect(null);
   }, [currentTrackId]);
-
-  const currentTrack = tracks.find((track) => track.id === currentTrackId);
-
-  const currentTrackIndex = currentTrack.clips.findIndex((clip) => {
-    return clip.id === currentClipId;
-  });
-
-  const clipsBeforeCurrentClip = currentTrack.clips.filter((clip, i) => {
-    if (i < currentTrackIndex) {
-      return clip;
-    }
-
-    return null;
-  });
-
-  const stepIndexOffset = clipsBeforeCurrentClip.reduce((prev, curr) => {
-    const bars = clips.find((clip) => clip.id === curr.id).bars;
-
-    return bars * 16 + prev;
-  }, 0);
-
-  // const stepIndexOffset = 0;
-
-  console.log(stepIndexOffset);
-
-  // const currentSteps = currentTrack ? currentTrack.steps : [];
-
-  // console.log(clips);
-
-  const currentClip = clips.find((clip) => {
-    return clip.id === currentClipId;
-  });
-
-  // For StepsEditor, only of currentClip
-  const currentSteps = buildSteps(currentClip);
-  // console.log(currentSteps);
 
   return (
     <div className={css.dawApp}>
@@ -138,7 +106,6 @@ const DAWApp = () => {
       </div>
 
       <StepsEditor
-        // Need steps range eg. 0 - 15, 16 - 32.
         defaultSteps={currentSteps}
         currentStepIndex={currentStepIndex}
         stepIndexOffset={stepIndexOffset}
@@ -184,8 +151,6 @@ const DAWApp = () => {
 
           return (
             <Track
-              // WIP - build from track.clips?
-              // steps={track.steps}
               steps={trackSteps}
               volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
               pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
@@ -232,6 +197,56 @@ const DAWApp = () => {
 
 export default DAWApp;
 
+function appSelector(state) {
+  // --------------------------------------------------------------------------
+  // Current Track
+  // --------------------------------------------------------------------------
+  const currentTrack = state.tracks.find(
+    (track) => track.id === state.currentTrackId,
+  );
+
+  // --------------------------------------------------------------------------
+  // Step Index Offset
+  // --------------------------------------------------------------------------
+  const currentTrackIndex = currentTrack.clips.findIndex((clip) => {
+    return clip.id === state.currentClipId;
+  });
+
+  const clipsBeforeCurrentClip = currentTrack.clips.filter((clip, i) => {
+    if (i < currentTrackIndex) {
+      return clip;
+    }
+
+    return null;
+  });
+
+  const stepIndexOffset = clipsBeforeCurrentClip.reduce((prev, curr) => {
+    const bars = state.clips.find((clip) => clip.id === curr.id).bars;
+
+    return bars * 16 + prev;
+  }, 0);
+
+  // --------------------------------------------------------------------------
+  // Current Clip
+  // --------------------------------------------------------------------------
+  const currentClip = state.clips.find((clip) => {
+    return clip.id === state.currentClipId;
+  });
+
+  // --------------------------------------------------------------------------
+  // Current Steps
+  // --------------------------------------------------------------------------
+  const currentSteps = buildSteps(currentClip);
+
+  return {
+    ...state,
+    currentTrack,
+    stepIndexOffset,
+    currentClip,
+    currentSteps,
+  };
+}
+
 function reducer(state, action) {
   switch (action.type) {
     // ------------------------------------------------------------------------
@@ -269,13 +284,6 @@ function reducer(state, action) {
 
           return track;
         }),
-        // tracks: {
-        //   ...state.tracks,
-        //   [state.currentTrackId]: {
-        //     ...state.tracks[state.currentTrackId],
-        //     steps,
-        //   },
-        // },
       };
 
     case types.SET_NOTES:
