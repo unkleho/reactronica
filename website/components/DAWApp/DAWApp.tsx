@@ -81,9 +81,32 @@ const DAWApp = () => {
   }, [currentTrackId]);
 
   const currentTrack = tracks.find((track) => track.id === currentTrackId);
+
+  const currentTrackIndex = currentTrack.clips.findIndex((clip) => {
+    return clip.id === currentClipId;
+  });
+
+  const clipsBeforeCurrentClip = currentTrack.clips.filter((clip, i) => {
+    if (i < currentTrackIndex) {
+      return clip;
+    }
+
+    return null;
+  });
+
+  const stepIndexOffset = clipsBeforeCurrentClip.reduce((prev, curr) => {
+    const bars = clips.find((clip) => clip.id === curr.id).bars;
+
+    return bars * 16 + prev;
+  }, 0);
+
+  // const stepIndexOffset = 0;
+
+  console.log(stepIndexOffset);
+
   // const currentSteps = currentTrack ? currentTrack.steps : [];
 
-  console.log(clips);
+  // console.log(clips);
 
   const currentClip = clips.find((clip) => {
     return clip.id === currentClipId;
@@ -91,7 +114,7 @@ const DAWApp = () => {
 
   // For StepsEditor, only of currentClip
   const currentSteps = buildSteps(currentClip);
-  console.log(currentSteps);
+  // console.log(currentSteps);
 
   return (
     <div className={css.dawApp}>
@@ -118,6 +141,7 @@ const DAWApp = () => {
         // Need steps range eg. 0 - 15, 16 - 32.
         defaultSteps={currentSteps}
         currentStepIndex={currentStepIndex}
+        stepIndexOffset={stepIndexOffset}
         notes={notes}
         subdivision={16}
         onStepEditorClick={(steps) => {
@@ -156,7 +180,7 @@ const DAWApp = () => {
             return [...prev, ...buildSteps(curr)];
           }, []);
 
-          console.log(trackSteps);
+          // console.log(trackSteps);
 
           return (
             <Track

@@ -4,7 +4,24 @@ import * as types from '../../types';
 
 const css = require('./DAWSequencer.css');
 
-const Sequencer = ({ tracks, currentClipId, currentTrackId, dispatch }) => {
+type Props = {
+  tracks: Track[];
+  currentClipId: string;
+  currentTrackId: string;
+  dispatch: Function;
+};
+
+type Track = {
+  id: string;
+  clips: any[];
+};
+
+const Sequencer: React.FC<Props> = ({
+  tracks = [],
+  currentClipId,
+  currentTrackId,
+  dispatch,
+}) => {
   return (
     <div className={css.dawSequencer}>
       {tracks.map((track) => {
