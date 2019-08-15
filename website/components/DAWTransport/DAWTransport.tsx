@@ -4,22 +4,34 @@ import * as types from '../../types';
 
 import css from './DAWTransport.css';
 
-const Transport = ({ isPlaying, tempo, dispatch }) => {
+type Props = {
+  isPlaying?: boolean;
+  tempo?: number;
+  dispatch?: Function;
+  className?: string;
+};
+
+const Transport: React.FC<Props> = ({
+  isPlaying,
+  tempo,
+  dispatch,
+  className,
+}) => {
   return (
-    <div className={css.transport}>
+    <div className={[css.transport, className || ''].join(' ')}>
       <div className={css.play}>
         <button onClick={() => dispatch({ type: types.TOGGLE_PLAYING })}>
-          {isPlaying ? 'Stop' : 'Play'}
+          <ion-icon name={isPlaying ? 'stop' : 'play'} />
         </button>
       </div>
 
       <div className={css.tempo}>
-        <label>Tempo: {tempo}</label>
+        <label>{tempo} bpm</label>
         <button onClick={() => dispatch({ type: types.INCREASE_TEMPO })}>
-          +
+          <ion-icon name="add" />
         </button>
         <button onClick={() => dispatch({ type: types.DECREASE_TEMPO })}>
-          -
+          <ion-icon name="remove" />
         </button>
       </div>
     </div>

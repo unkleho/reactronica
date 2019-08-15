@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Head from 'next/head';
 
 import '../../node_modules/normalize.css/normalize.css';
 import '../../styles/base.css';
@@ -10,7 +11,15 @@ type Props = {
 };
 
 const App: React.FunctionComponent<Props> = ({ className, children }) => {
-  return <div className={[css.app, className || ''].join(' ')}>{children}</div>;
+  return (
+    <div className={[css.app, className || ''].join(' ')}>
+      <Head>
+        <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js" />
+      </Head>
+
+      {children}
+    </div>
+  );
 };
 
 export default App;

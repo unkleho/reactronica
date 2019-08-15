@@ -2,6 +2,43 @@
   display: block;
 }
 
+header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  & h1 {
+    position: relative;
+    margin-top: 0;
+    margin-right: 1rem;
+    font-size: 2rem;
+    line-height: 1;
+
+    & span:first-child {
+      background: linear-gradient(
+        160deg,
+        var(--colour-primary),
+        var(--colour-secondary)
+      );
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    & span:nth-child(2) {
+      position: absolute;
+      right: 0;
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.transport {
+  display: flex;
+}
+
 .trackSequencer {
   display: flex;
 }
