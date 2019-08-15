@@ -1,9 +1,10 @@
 @import url('https://rsms.me/inter/inter-ui.css');
 
 body {
-  margin: 2em;
-  color: #333;
+  margin: 1em;
+  color: var(--colour-text);
   font-family: 'Inter UI', sans-serif;
+  background-color: var(--colour-bg);
 }
 
 h1 {
@@ -28,10 +29,13 @@ h4 {
 }
 
 button {
-  margin-right: 1em;
+  /* margin-right: 1em; */
   padding: 0.6em;
+  color: var(--colour-text);
   font-size: 1em;
-  background-color: #eee;
+  background-color: var(--colour-button);
   border: none;
-  border-radius: 0;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  border-radius: 2px;
 }

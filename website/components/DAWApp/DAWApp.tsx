@@ -86,7 +86,18 @@ const DAWApp = () => {
 
   return (
     <div className={css.dawApp}>
-      <Transport isPlaying={isPlaying} tempo={tempo} dispatch={dispatch} />
+      <header>
+        <h1>
+          <span>Reactronica</span> <span>DAW Demo</span>
+        </h1>
+
+        <Transport
+          isPlaying={isPlaying}
+          tempo={tempo}
+          dispatch={dispatch}
+          className={css.transport}
+        />
+      </header>
 
       <div className={css.trackSequencer}>
         <TrackInfo
