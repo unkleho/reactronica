@@ -9,6 +9,7 @@ type Props = {
   currentClipId: string;
   currentTrackId: string;
   dispatch: Function;
+  className: string;
 };
 
 type Track = {
@@ -21,9 +22,10 @@ const Sequencer: React.FC<Props> = ({
   currentClipId,
   currentTrackId,
   dispatch,
+  className,
 }) => {
   return (
-    <div className={css.dawSequencer}>
+    <div className={[css.dawSequencer, className || ''].join(' ')}>
       {tracks.map((track) => {
         return (
           <div className={css.track} key={track.id}>

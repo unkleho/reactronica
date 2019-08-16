@@ -4,4 +4,10 @@
   --colour-button: #222;
   --colour-primary: #5f0fd1;
   --colour-secondary: #0fa6d1;
+
+  /* Fonts */
+  --font-size-xs: 0.7rem;
+  --font-size-sm: 0.8rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.2rem;
 }

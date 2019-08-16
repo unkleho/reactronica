@@ -5,45 +5,68 @@ import * as types from '../../types';
 
 import css from './DAWTrackInfo.css';
 
-const TrackInfo = ({ currentTrack, volume, pan, selectedEffect, dispatch }) => {
+type Props = {
+  currentTrack?: {
+    id: string;
+    instrumentType: string;
+    volume: number;
+    pan: number;
+  };
+  volume?: number;
+  pan?: number;
+  selectedEffect?: {};
+  dispatch?: Function;
+  className?: string;
+};
+
+const TrackInfo: React.FC<Props> = ({
+  currentTrack,
+  volume,
+  pan,
+  selectedEffect,
+  dispatch,
+  className,
+}) => {
   return (
     <Fragment>
       {currentTrack && (
-        <div className="app__track">
-          <h4>Track</h4>
-          <p>
-            Instrument:{' '}
-            <select
-              onChange={(event) => {
-                const selectedOption = event.target[event.target.selectedIndex];
-                const type = selectedOption.getAttribute('data-type');
+        <div className={[css.trackInfo, className || ''].join(' ')}>
+          <h2>Track</h2>
+          <p className={css.name}>{currentTrack.id}</p>
 
-                dispatch({
-                  type: types.UPDATE_INSTRUMENT,
-                  instrumentType: type,
-                });
-              }}
-              value={currentTrack.instrumentType}
-            >
-              {constants.instruments.map((instrument, i) => {
-                const id = `${instrument.id}-${i}`;
+          <h3>Instrument</h3>
+          <select
+            onChange={(event) => {
+              const selectedOption = event.target[event.target.selectedIndex];
+              const type = selectedOption.getAttribute('data-type');
 
-                return (
-                  <option
-                    key={id}
-                    // data-id={id}
-                    data-type={instrument.id}
-                    value={instrument.id}
-                  >
-                    {instrument.name}
-                  </option>
-                );
-              })}
-            </select>
-          </p>
+              dispatch({
+                type: types.UPDATE_INSTRUMENT,
+                instrumentType: type,
+              });
+            }}
+            value={currentTrack.instrumentType}
+          >
+            {constants.instruments.map((instrument, i) => {
+              const id = `${instrument.id}-${i}`;
+
+              return (
+                <option
+                  key={id}
+                  // data-id={id}
+                  data-type={instrument.id}
+                  value={instrument.id}
+                >
+                  {instrument.name}
+                </option>
+              );
+            })}
+          </select>
+
           <div>
-            <label htmlFor="volume">Volume</label>
-            <br />
+            <h3>
+              <label htmlFor="volume">Volume</label>
+            </h3>
             <input
               id="volume"
               type="range"
@@ -54,10 +77,11 @@ const TrackInfo = ({ currentTrack, volume, pan, selectedEffect, dispatch }) => {
             />
             {volume}
           </div>
-          <br />
+
           <div>
-            <label htmlFor="pan">Pan</label>
-            <br />
+            <h3>
+              <label htmlFor="pan">Pan</label>
+            </h3>
             <input
               id="pan"
               type="range"
@@ -68,7 +92,8 @@ const TrackInfo = ({ currentTrack, volume, pan, selectedEffect, dispatch }) => {
             />
             {pan}
           </div>
-          {<h4>Effects</h4>}
+
+          <h3>Effects</h3>
           <form
             onSubmit={(event) => {
               event.preventDefault();
@@ -108,7 +133,9 @@ const TrackInfo = ({ currentTrack, volume, pan, selectedEffect, dispatch }) => {
                   </option>
                 );
               })}
-            </select>{' '}
+            </select>
+            <br />
+            <br />
             <button type="submit">Add Effect</button>
           </form>
           {currentTrack.effects.map((effect) => {
