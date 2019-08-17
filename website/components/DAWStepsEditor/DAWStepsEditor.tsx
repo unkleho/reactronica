@@ -7,6 +7,7 @@ const DAWStepsEditor = ({
   stepIndexOffset = 0,
   defaultSteps = [],
   subdivision = 8,
+  className,
   onStepEditorClick,
   onKeyboardDown,
   onKeyboardUp,
@@ -42,7 +43,7 @@ const DAWStepsEditor = ({
   const emptyArray = [...new Array(1 + subdivision)];
 
   return (
-    <div className={css.stepsEditor}>
+    <div className={[css.stepsEditor, className || ''].join(' ')}>
       <div className={css.row}>
         {emptyArray.map((_, i) => {
           return (
