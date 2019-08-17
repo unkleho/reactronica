@@ -3,12 +3,25 @@
   flex-direction: column;
 }
 
+.track {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.trackSummary {
+  width: 13ch;
+}
+
 .stepsChooserButton {
   text-transform: capitalize;
 }
 
 .stepsChooserButtonActive {
   font-weight: bold;
+}
+
+.clip {
+  width: 10rem;
 }
 
 .clipCurrent {
