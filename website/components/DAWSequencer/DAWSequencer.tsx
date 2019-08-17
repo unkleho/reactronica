@@ -29,30 +29,34 @@ const Sequencer: React.FC<Props> = ({
       {tracks.map((track) => {
         return (
           <div className={css.track} key={track.id}>
-            <button
-              className={[
-                css.stepsChooserButton,
-                track.id === currentTrackId ? css.stepsChooserButtonActive : '',
-              ].join(' ')}
-              onClick={() =>
-                dispatch({
-                  type: types.SET_CURRENT_TRACK_ID,
-                  trackId: track.id,
-                })
-              }
-            >
-              {track.id}
-            </button>
-            <button
-              onClick={() => {
-                dispatch({
-                  type: types.REMOVE_TRACK,
-                  trackId: track.id,
-                });
-              }}
-            >
-              Remove
-            </button>
+            <div className={css.trackSummary}>
+              <button
+                className={[
+                  css.stepsChooserButton,
+                  track.id === currentTrackId
+                    ? css.stepsChooserButtonActive
+                    : '',
+                ].join(' ')}
+                onClick={() =>
+                  dispatch({
+                    type: types.SET_CURRENT_TRACK_ID,
+                    trackId: track.id,
+                  })
+                }
+              >
+                {track.id}
+              </button>
+              <button
+                onClick={() => {
+                  dispatch({
+                    type: types.REMOVE_TRACK,
+                    trackId: track.id,
+                  });
+                }}
+              >
+                Remove
+              </button>
+            </div>
 
             {track.clips.map((clip) => {
               return (
@@ -82,16 +86,18 @@ const Sequencer: React.FC<Props> = ({
         );
       })}
 
-      <button
-        onClick={() => {
-          dispatch({
-            type: types.ADD_TRACK,
-            trackId: 'test',
-          });
-        }}
-      >
-        Add
-      </button>
+      <div className={css.track}>
+        <button
+          onClick={() => {
+            dispatch({
+              type: types.ADD_TRACK,
+              trackId: 'test',
+            });
+          }}
+        >
+          Add
+        </button>
+      </div>
     </div>
   );
 };

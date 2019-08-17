@@ -6,25 +6,30 @@
   display: flex;
 }
 
+.step.stepKey {
+  color: var(--colour-bg);
+  background-color: var(--colour-white);
+}
+
 .rowIsAccidental .stepKey {
-  color: #eee;
+  color: var(--colour-white);
   background-color: #000;
 }
 
 .step {
   display: inline-block;
-  margin-right: 0;
   flex: 1;
+  margin-right: 0;
   padding: 0.5em 0;
-  border: none;
-  cursor: pointer;
-  background-color: #eee;
   font-size: 0.8em;
   text-align: center;
-  border-top: 1px solid white;
-  border-right: 1px solid white;
+  background-color: var(--colour-button);
+  border: none;
+  border-top: 1px solid var(--colour-bg);
+  border-right: 1px solid var(--colour-bg);
+  cursor: pointer;
 }
 
 .stepIsCurrent {
-  background-color: turquoise;
+  background-color: var(--colour-secondary);
 }
