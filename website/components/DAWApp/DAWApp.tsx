@@ -99,15 +99,16 @@ const DAWApp = () => {
         />
       </header>
 
-      <div className={css.trackSequencer}>
-        <TrackInfo
-          currentTrack={currentTrack}
-          volume={volume}
-          pan={pan}
-          selectedEffect={selectedEffect}
-          dispatch={dispatch}
-        />
+      <TrackInfo
+        currentTrack={currentTrack}
+        volume={volume}
+        pan={pan}
+        selectedEffect={selectedEffect}
+        dispatch={dispatch}
+        className={css.trackInfo}
+      />
 
+      <div className={css.trackSequencer}>
         <Sequencer
           tracks={tracks}
           currentTrackId={currentTrackId}
@@ -122,6 +123,7 @@ const DAWApp = () => {
         stepIndexOffset={stepIndexOffset}
         notes={notes}
         subdivision={16}
+        className={css.stepsEditor}
         onStepEditorClick={(steps) => {
           // WIP
           // Convert steps to clip

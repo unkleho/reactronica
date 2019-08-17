@@ -1,9 +1,15 @@
 .dawApp {
-  display: block;
+  display: grid;
+  grid-template:
+    'header header' auto
+    'trackInfo trackSequencer' auto
+    'trackInfo stepsEditor ' auto /
+    12rem auto;
 }
 
 header {
   display: flex;
+  grid-area: header;
   align-items: center;
   margin-bottom: 1rem;
 
@@ -39,6 +45,15 @@ header {
   display: flex;
 }
 
+.trackInfo {
+  grid-area: trackInfo;
+}
+
 .trackSequencer {
   display: flex;
+  grid-area: trackSequencer;
+}
+
+.stepsEditor {
+  grid-area: stepsEditor;
 }
