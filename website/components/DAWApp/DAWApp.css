@@ -2,9 +2,10 @@
   display: grid;
   grid-template:
     'header header' auto
-    'trackInfo trackSequencer' auto
+    'trackInfo trackSequencer' 1fr
     'trackInfo stepsEditor ' auto /
     12rem auto;
+  height: calc(100vh - 2rem);
 }
 
 header {
@@ -12,11 +13,13 @@ header {
   grid-area: header;
   align-items: center;
   margin-bottom: 1rem;
+  padding-bottom: var(--baseline-2);
+  /* border-bottom: 2px dotted var(--colour-grey); */
 
   & h1 {
     position: relative;
     margin-top: 0;
-    margin-right: 1rem;
+    margin-right: var(--baseline-2);
     font-size: 2rem;
     line-height: 1;
 

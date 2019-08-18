@@ -2,6 +2,9 @@
 
 .trackInfo {
   display: block;
+  margin-right: var(--baseline);
+  padding: var(--baseline);
+  background-color: var(--colour-black);
 
   & h2,
   & h3 {
@@ -9,10 +12,19 @@
   }
 
   & h3 {
+    padding-top: var(--baseline);
     font-size: var(--font-size-xs);
+    border-top: 1px solid var(--colour-bg);
+  }
+
+  & select,
+  & input {
+    width: 100%;
   }
 }
 
 .name {
+  font-weight: 500;
   font-size: var(--font-size-lg);
+  text-transform: capitalize;
 }

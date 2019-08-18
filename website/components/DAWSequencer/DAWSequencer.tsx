@@ -1,5 +1,8 @@
 import React from 'react';
 
+import DAWBeatTimeRuler from '../DAWBeatTimeRuler';
+import DAWClip from '../DAWClip';
+
 import * as types from '../../types';
 
 const css = require('./DAWSequencer.css');
@@ -26,6 +29,8 @@ const Sequencer: React.FC<Props> = ({
 }) => {
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
+      <DAWBeatTimeRuler />
+
       {tracks.map((track) => {
         return (
           <div className={css.track} key={track.id}>
@@ -54,34 +59,22 @@ const Sequencer: React.FC<Props> = ({
                   });
                 }}
               >
-                Remove
+                <ion-icon name="trash" />
               </button>
             </div>
 
-            {track.clips.map((clip) => {
-              return (
-                <button
-                  className={[
-                    css.clip,
-                    clip.id === currentClipId ? css.clipCurrent : '',
-                  ].join(' ')}
-                  key={clip.id}
-                  onClick={() => {
-                    dispatch({
-                      type: types.SET_CURRENT_CLIP_ID,
-                      clipId: clip.id,
-                    });
-
-                    dispatch({
-                      type: types.SET_CURRENT_TRACK_ID,
-                      trackId: track.id,
-                    });
-                  }}
-                >
-                  {clip.id}
-                </button>
-              );
-            })}
+            <div className={css.trackClips}>
+              {track.clips.map((clip) => {
+                return (
+                  <DAWClip
+                    id={clip.id}
+                    trackId={track.id}
+                    isSelected={clip.id === currentClipId}
+                    dispatch={dispatch}
+                  />
+                );
+              })}
+            </div>
           </div>
         );
       })}

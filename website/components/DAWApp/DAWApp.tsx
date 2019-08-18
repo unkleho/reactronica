@@ -15,6 +15,7 @@ import {
 } from '../../sample-data';
 import { buildSteps, buildClip } from '../../lib/stepUtils';
 
+import '../../node_modules/normalize.css/normalize.css';
 import css from './DAWApp.css';
 
 const initialState = {
