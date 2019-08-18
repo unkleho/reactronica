@@ -1,0 +1,10 @@
+@import '../../styles/global.css';
+
+.dawClip {
+  display: block;
+  width: 16rem;
+}
+
+.clipCurrent {
+  font-weight: bold;
+}

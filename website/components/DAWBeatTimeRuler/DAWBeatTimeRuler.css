@@ -1,0 +1,26 @@
+@import '../../styles/global.css';
+
+.dawBeatTimeRuler {
+  display: flex;
+  margin-left: 6rem;
+  color: #666;
+  font-size: var(--font-size-xs);
+  border-bottom: 4px solid var(--colour-bg);
+
+  & p {
+    position: relative;
+    width: 4rem;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 4px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      height: 100%;
+      border-left: 1px solid var(--colour-secondary);
+    }
+  }
+}

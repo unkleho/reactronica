@@ -5,12 +5,20 @@
   --colour-primary: #5f0fd1;
   --colour-secondary: #0fa6d1;
   --colour-white: #eee;
+  --colour-black: #050505;
+  --colour-grey: #222;
 
   /* Fonts */
   --font-size-xs: 0.7rem;
   --font-size-sm: 0.8rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.2rem;
+
+  /* Baseline */
+  --baseline: 0.5rem;
+  --baseline-1: var(--baseline);
+  --baseline-2: calc(var(--baseline) * 2);
+  --baseline-3: calc(var(--baseline) * 3);
 }
 
 .text-uppercase {

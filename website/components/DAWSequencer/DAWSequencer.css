@@ -1,15 +1,43 @@
 .dawSequencer {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin-bottom: var(--baseline-1);
+  background-color: var(--colour-black);
+  background-image: linear-gradient(
+    90deg,
+    var(--colour-bg) 3.13%,
+    var(--colour-black) 3.13%,
+    var(--colour-black) 50%,
+    var(--colour-bg) 50%,
+    var(--colour-bg) 53.13%,
+    var(--colour-black) 53.13%,
+    var(--colour-black) 100%
+  );
+  background-size: 32px 32px;
 }
 
 .track {
   display: flex;
-  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-top: var(--baseline);
+    margin-left: var(--baseline);
+  }
 }
 
 .trackSummary {
-  width: 13ch;
+  display: flex;
+  flex-direction: column;
+  width: 7rem;
+  background-color: var(--colour-bg);
+  border-bottom: 2px solid var(--colour-black);
+}
+
+.trackClips {
+  display: flex;
+  width: 100%;
+  border-bottom: 2px solid var(--colour-bg);
 }
 
 .stepsChooserButton {
@@ -17,13 +45,5 @@
 }
 
 .stepsChooserButtonActive {
-  font-weight: bold;
-}
-
-.clip {
-  width: 10rem;
-}
-
-.clipCurrent {
   font-weight: bold;
 }
