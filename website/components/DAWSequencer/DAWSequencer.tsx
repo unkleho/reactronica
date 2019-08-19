@@ -4,15 +4,18 @@ import DAWBeatTimeRuler from '../DAWBeatTimeRuler';
 import DAWClip from '../DAWClip';
 
 import * as types from '../../types';
+import DAWPlayhead from '../DAWPlayhead';
 
 const css = require('./DAWSequencer.css');
 
 type Props = {
+  isPlaying: Boolean;
+  tempo?: number;
   tracks: Track[];
   currentClipId: string;
   currentTrackId: string;
   dispatch: Function;
-  className: string;
+  className?: string;
 };
 
 type Track = {
@@ -21,6 +24,8 @@ type Track = {
 };
 
 const Sequencer: React.FC<Props> = ({
+  isPlaying,
+  tempo,
   tracks = [],
   currentClipId,
   currentTrackId,
@@ -30,6 +35,8 @@ const Sequencer: React.FC<Props> = ({
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
       <DAWBeatTimeRuler />
+
+      <DAWPlayhead isPlaying={isPlaying} tempo={tempo} />
 
       {tracks.map((track) => {
         return (

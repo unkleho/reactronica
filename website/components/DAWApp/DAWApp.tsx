@@ -3,7 +3,7 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 
 import StepsEditor from '../DAWStepsEditor';
 import Transport from '../DAWTransport';
-import Sequencer from '../DAWSequencer';
+import DAWSequencer from '../DAWSequencer';
 import TrackInfo from '../DAWTrackInfo';
 
 import * as types from '../../types';
@@ -110,7 +110,9 @@ const DAWApp = () => {
       />
 
       <div className={css.trackSequencer}>
-        <Sequencer
+        <DAWSequencer
+          isPlaying={isPlaying}
+          tempo={tempo}
           tracks={tracks}
           currentTrackId={currentTrackId}
           currentClipId={currentClipId}
