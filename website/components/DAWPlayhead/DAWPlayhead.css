@@ -1,0 +1,10 @@
+@import '../../styles/global.css';
+
+.dawPlayhead {
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 100%;
+  margin-left: 6rem;
+  background-color: var(--colour-primary);
+}

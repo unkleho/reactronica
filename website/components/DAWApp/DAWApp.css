@@ -12,7 +12,7 @@ header {
   display: flex;
   grid-area: header;
   align-items: center;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   padding-bottom: var(--baseline-2);
   /* border-bottom: 2px dotted var(--colour-grey); */
 
