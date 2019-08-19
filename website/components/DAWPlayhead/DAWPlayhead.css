@@ -7,4 +7,6 @@
   height: 100%;
   margin-left: 6rem;
   background-color: var(--colour-primary);
+  /* transform: translate(0, 0);
+  transition: transform; */
 }
