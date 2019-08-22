@@ -12,7 +12,7 @@ const TrackConsumer = ({
   // <Song /> props
   isPlaying,
   // <Track /> props
-  steps,
+  steps = [],
   volume = 0,
   pan = 0,
   subdivision = '4n',
@@ -78,7 +78,7 @@ const TrackConsumer = ({
         sequencer.current.add(i, note);
       });
     }
-  }, [sequencerSteps]);
+  }, [JSON.stringify(sequencerSteps)]);
 
   useEffect(() => {
     return function cleanup() {
