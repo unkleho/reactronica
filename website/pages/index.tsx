@@ -25,7 +25,6 @@ const HomePage = () => {
 
       <Song>
         <Track>
-          {/* <Instrument notes={notes} /> */}
           <Instrument
             type="sampler"
             notes={notes}
