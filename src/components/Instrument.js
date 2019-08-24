@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { SongContext } from './Song';
+// import { SongContext } from './Song';
 import { TrackContext } from './Track';
 import { NoteType, InstrumentTypes } from '../types/propTypes';
-import { instruments } from '../constants';
+// import { instruments } from '../constants';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 
@@ -18,6 +18,8 @@ const InstrumentConsumer = ({
     oscillator: {
       partials: [0, 2, 3, 4],
     },
+    // release,
+    // curve,
   },
   notes = [],
   samples,
@@ -52,6 +54,14 @@ const InstrumentConsumer = ({
       synth.current = new Tone.DuoSynth(options);
     } else if (type === 'sampler') {
       synth.current = new Tone.Sampler(samples);
+
+      if (options.curve) {
+        synth.current.curve = options.curve;
+      }
+
+      if (options.release) {
+        synth.current.release = options.release;
+      }
     }
 
     // trackChannelBase.current = new Tone.PanVol(pan, volume);
@@ -65,7 +75,7 @@ const InstrumentConsumer = ({
 
     return function cleanup() {
       if (synth.current) {
-        // synth.current.dispose();
+        synth.current.dispose();
       }
     };
   }, [type]);

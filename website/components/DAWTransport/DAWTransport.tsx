@@ -21,7 +21,7 @@ const Transport: React.FC<Props> = ({
     <div className={[css.transport, className || ''].join(' ')}>
       <div className={css.play}>
         <button onClick={() => dispatch({ type: types.TOGGLE_PLAYING })}>
-          <ion-icon name={isPlaying ? 'stop' : 'play'} />
+          <ion-icon name={isPlaying ? 'square' : 'play'} />
         </button>
       </div>
 
