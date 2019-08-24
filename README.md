@@ -23,7 +23,6 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 
 ## Usage
 
-<!-- prettier-ignore-start -->
 ```jsx
 import React, { Component } from 'react';
 
@@ -66,28 +65,36 @@ class Example extends Component {
           ]}
           effects={[
             <Effect type="feedbackDelay" />,
-            <Effect type="distortion" />
+            <Effect type="distortion" />,
           ]}
           // Callback for every tick
           onStepPlay={(step, index) => {
             doSomething(step, index);
           }}
         >
-          <Instrument type="polySynth" notes={[]} />
+          <Instrument type="polySynth" />
         </Track>
         <Track>
-          <Instrument type="sampler" samples={{
-            'C3': 'path/to/kick.mp3',
-            'D3': 'path/to/snare.mp3',
-            'E3': 'path/to/hihat.mp3',
-          }} />
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: 'path/to/kick.mp3',
+              D3: 'path/to/snare.mp3',
+              E3: 'path/to/hihat.mp3',
+            }}
+            // Add some notes here to play
+            notes={[
+              {
+                name: 'C3',
+              },
+            ]}
+          />
         </Track>
       </Song>
     );
   }
 }
 ```
-<!-- prettier-ignore-end -->
 
 ## Documentation
 
@@ -130,7 +137,7 @@ $ npm start
 ## Known Issues
 
 - Tone installed as dependency due to `Module not found: Can't resolve 'tone' in '/Users/kcheung/Development/unkleho/reactronica/dist'` issue in `website/`. Keep as both dependency and peer for now.
-- Latest Tone (13.4.9) has this issue `Cannot assign to read only property 'listener' of object '#<AudioContext>'` due to `https://stackoverflow.com/questions/55039122/why-does-tone-js-not-play-nice-in-a-svelte-component`. Sticking with 0.12.80 for now.
+- Latest Tone (13.4.9) has this issue `Cannot assign to read only property 'listener' of object '#<AudioContext>'` due to `https://stackoverflow.com/questions/55039122/why-does-tone-js-not-play-nice-in-a-svelte-component`. Tone cannot be bundled with Reactronica and has to be a peer dependency for now.
 - Both Reactronica and example/ have their own test config. Would prefer if Reactronica took care of all tests, however react-scripts only allows testing within a src/ dir. Moving to jest and babel/@core etc is required. (3/6/19)
 - If you get `Hooks can only be called inside the body of a function component.`, have a look at https://github.com/facebook/react/issues/14721. Try going into the examples folder and running `npm link ../node_modules/react`.
 - If multiple effects are added, effects don't update unless they are removed in the order they are added. Could be an issue with `[...prevState.effects, effect]`.

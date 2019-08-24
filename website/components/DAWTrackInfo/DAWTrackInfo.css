@@ -28,3 +28,7 @@
   font-size: var(--font-size-lg);
   text-transform: capitalize;
 }
+
+.effect {
+  margin-bottom: 1rem;
+}
