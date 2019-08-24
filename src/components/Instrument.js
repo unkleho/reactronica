@@ -88,22 +88,24 @@ const InstrumentConsumer = ({
 
   useEffect(() => {
     // Loop through all current notes
-    notes.forEach((note) => {
-      // Check if note is playing
-      const isPlaying =
-        prevNotes.filter((n) => n.name === note.name).length > 0;
+    notes &&
+      notes.forEach((note) => {
+        // Check if note is playing
+        const isPlaying =
+          prevNotes && prevNotes.filter((n) => n.name === note.name).length > 0;
 
-      // Only play note is it isn't already playing
-      if (!isPlaying) {
-        synth.current.triggerAttack(note.name);
-      }
-    });
+        // Only play note is it isn't already playing
+        if (!isPlaying) {
+          synth.current.triggerAttack(note.name);
+        }
+      });
 
     // Loop through all previous notes
     prevNotes &&
       prevNotes.forEach((note) => {
         // Check if note is still playing
-        const isPlaying = notes.filter((n) => n.name === note.name).length > 0;
+        const isPlaying =
+          notes && notes.filter((n) => n.name === note.name).length > 0;
 
         if (!isPlaying) {
           synth.current.triggerRelease(note.name);
