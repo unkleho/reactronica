@@ -25,7 +25,17 @@ const HomePage = () => {
 
       <Song>
         <Track>
-          <Instrument notes={notes} />
+          {/* <Instrument notes={notes} /> */}
+          <Instrument
+            type="sampler"
+            notes={notes}
+            samples={{
+              C3: '/static/audio/ukulele/Fluke_Uke_060.wav',
+            }}
+            options={{
+              release: 3,
+            }}
+          />
         </Track>
       </Song>
     </div>
