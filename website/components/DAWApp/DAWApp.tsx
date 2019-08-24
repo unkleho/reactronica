@@ -80,11 +80,6 @@ const DAWApp = () => {
     notes,
   } = appSelector(state);
 
-  const [selectedEffect, setSelectedEffect] = React.useState(null);
-  React.useEffect(() => {
-    setSelectedEffect(null);
-  }, [currentTrackId]);
-
   return (
     <div className={css.dawApp}>
       <header>
@@ -104,7 +99,7 @@ const DAWApp = () => {
         currentTrack={currentTrack}
         volume={volume}
         pan={pan}
-        selectedEffect={selectedEffect}
+        // selectedEffect={selectedEffect}
         dispatch={dispatch}
         className={css.trackInfo}
       />
@@ -380,6 +375,7 @@ function reducer(state, action) {
             // steps: buildSteps(melodyClip),
             notes: [],
             effects: [],
+            clips: [],
           },
         ],
       };

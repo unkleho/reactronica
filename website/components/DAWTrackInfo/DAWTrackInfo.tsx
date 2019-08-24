@@ -11,10 +11,11 @@ type Props = {
     instrumentType: string;
     volume: number;
     pan: number;
+    effects: any[];
   };
   volume?: number;
   pan?: number;
-  selectedEffect?: {};
+  // selectedEffect?: {};
   dispatch?: Function;
   className?: string;
 };
@@ -23,10 +24,15 @@ const TrackInfo: React.FC<Props> = ({
   currentTrack,
   volume,
   pan,
-  selectedEffect,
+  // selectedEffect,
   dispatch,
   className,
 }) => {
+  const [selectedEffect, setSelectedEffect] = React.useState(null);
+  // React.useEffect(() => {
+  //   setSelectedEffect(null);
+  // }, [currentTrackId]);
+
   if (!currentTrack) {
     return null;
   }
@@ -136,19 +142,20 @@ const TrackInfo: React.FC<Props> = ({
         <br />
         <button type="submit">Add Effect</button>
       </form>
+
+      <br />
+
       {currentTrack.effects.map((effect) => {
         return (
-          <div className={css.trackEffect} key={effect.id}>
-            <p>
-              {effect.type}{' '}
-              <button
-                onClick={() =>
-                  dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
-                }
-              >
-                Remove
-              </button>
-            </p>
+          <div className={css.effect} key={effect.id}>
+            <p>{effect.type}</p>
+            <button
+              onClick={() =>
+                dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
+              }
+            >
+              Remove
+            </button>
           </div>
         );
       })}
