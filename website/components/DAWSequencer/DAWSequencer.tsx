@@ -9,7 +9,7 @@ import DAWPlayhead from '../DAWPlayhead';
 const css = require('./DAWSequencer.css');
 
 type Props = {
-  isPlaying: Boolean;
+  isPlaying: boolean;
   tempo?: number;
   tracks: Track[];
   currentClipId: string;
@@ -78,6 +78,7 @@ const Sequencer: React.FC<Props> = ({
                     trackId={track.id}
                     isSelected={clip.id === currentClipId}
                     dispatch={dispatch}
+                    key={clip.id}
                   />
                 );
               })}
