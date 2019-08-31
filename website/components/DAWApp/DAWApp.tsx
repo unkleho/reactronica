@@ -251,6 +251,20 @@ function appSelector(state) {
 
   return {
     ...state,
+    tracks: state.tracks.map((track) => {
+      return {
+        ...track,
+        clips: track.clips.map((trackClip) => {
+          return {
+            ...trackClip,
+            notes: state.clips.find((clip) => clip.id === trackClip.id).notes,
+            steps: buildSteps(
+              state.clips.find((clip) => clip.id === trackClip.id),
+            ),
+          };
+        }),
+      };
+    }),
     currentTrack,
     stepIndexOffset,
     currentClip,

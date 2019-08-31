@@ -3,3 +3,8 @@ export type Clip = {
   bars: number;
   notes: any[];
 };
+
+export type Step = {
+  note: string;
+  duration: number;
+}[];
