@@ -6,12 +6,15 @@ import DAWClip from '../DAWClip';
 import * as types from '../../types';
 import DAWPlayhead from '../DAWPlayhead';
 
+import { Clip } from '../../types/typescript';
+
 const css = require('./DAWSequencer.css');
 
 type Props = {
   isPlaying: boolean;
   tempo?: number;
   tracks: Track[];
+  // clips: Clip[];
   currentClipId: string;
   currentTrackId: string;
   dispatch: Function;
@@ -20,13 +23,17 @@ type Props = {
 
 type Track = {
   id: string;
-  clips: any[];
+  clips: Clip[];
+  // clips: {
+  //   id: string;
+  // }[];
 };
 
 const Sequencer: React.FC<Props> = ({
   isPlaying,
   tempo,
   tracks = [],
+  // clips = [],
   currentClipId,
   currentTrackId,
   dispatch,
@@ -72,9 +79,13 @@ const Sequencer: React.FC<Props> = ({
 
             <div className={css.trackClips}>
               {track.clips.map((clip) => {
+                // console.log(clip);
+
                 return (
                   <DAWClip
                     id={clip.id}
+                    steps={clip.steps}
+                    bars={clip.bars}
                     trackId={track.id}
                     isSelected={clip.id === currentClipId}
                     dispatch={dispatch}

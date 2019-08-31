@@ -1,11 +1,14 @@
 import * as React from 'react';
 
 import * as types from '../../types';
+import { Step } from '../../types/typescript';
 
 import css from './DAWClip.css';
 
 type Props = {
   id: string;
+  steps: Step[];
+  bars: number;
   trackId: string;
   isSelected?: boolean;
   className?: string;
@@ -14,13 +17,15 @@ type Props = {
 
 const DAWClip: React.FunctionComponent<Props> = ({
   id,
+  steps,
   trackId,
   isSelected = false,
   className,
   dispatch,
 }) => {
+  // console.log(steps);
   return (
-    <button
+    <div
       className={[
         css.dawClip,
         isSelected ? css.clipCurrent : '',
@@ -38,8 +43,52 @@ const DAWClip: React.FunctionComponent<Props> = ({
         });
       }}
     >
-      {id}
-    </button>
+      {[
+        'C3',
+        'C#3',
+        'D3',
+        'D#3',
+        'E3',
+        'F3',
+        'F#3',
+        'G3',
+        'G#3',
+        'A3',
+        'A#3',
+        'B3',
+      ].map((note, rowIndex) => {
+        const isAccidental = note.includes('#');
+
+        return (
+          <div
+            className={[css.row, isAccidental ? css.rowIsAccidental : ''].join(
+              ' ',
+            )}
+            key={note}
+          >
+            {[...new Array(steps.length)].map((_, columnIndex) => {
+              const index = columnIndex - 1;
+
+              const isCurrent =
+                steps[index] &&
+                steps[index].findIndex((step) => {
+                  return step.note === note;
+                }) >= 0;
+
+              return (
+                <div
+                  className={[
+                    css.step,
+                    isCurrent ? css.stepIsCurrent : '',
+                  ].join(' ')}
+                  key={columnIndex}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
   );
 
   // return <div className={[css.dawClip, className || ''].join(' ')}></div>;

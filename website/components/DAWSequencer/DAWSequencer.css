@@ -1,5 +1,7 @@
 .dawSequencer {
   position: relative;
+
+  /* Use Grid! */
   display: flex;
   flex-direction: column;
   width: 100%;
