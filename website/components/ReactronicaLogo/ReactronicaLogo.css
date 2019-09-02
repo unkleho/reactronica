@@ -1,0 +1,32 @@
+@import '../../styles/global.css';
+
+.reactronicaLogo {
+  display: block;
+}
+
+.logo {
+  position: relative;
+  margin-top: 0;
+  margin-right: var(--baseline-2);
+  font-size: 2rem;
+  line-height: 1;
+
+  & span:first-child {
+    background: linear-gradient(
+      160deg,
+      var(--colour-primary),
+      var(--colour-secondary)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  & span:nth-child(2) {
+    position: absolute;
+    right: 0;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+}

@@ -26,4 +26,5 @@
 
 .stepIsCurrent {
   background-color: var(--colour-secondary);
+  border-radius: var(--border-radius);
 }
