@@ -2,7 +2,6 @@
 
 .dawBeatTimeRuler {
   display: flex;
-  margin-left: 6rem;
   color: #666;
   font-size: var(--font-size-xs);
   border-bottom: 4px solid var(--colour-bg);

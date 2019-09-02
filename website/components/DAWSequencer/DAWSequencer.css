@@ -2,8 +2,12 @@
   position: relative;
 
   /* Use Grid! */
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas:
+    'none ruler'
+    'summaries clips';
+  grid-template-columns: 8rem auto;
+  grid-template-rows: 2rem auto;
   width: 100%;
   margin-bottom: var(--baseline-1);
   background-color: var(--colour-black);
@@ -20,6 +24,18 @@
   background-size: 32px 32px;
 }
 
+.ruler {
+  grid-area: ruler;
+}
+
+.trackSummaries {
+  grid-area: summaries;
+}
+
+.clips {
+  grid-area: clips;
+}
+
 .track {
   display: flex;
 
@@ -32,7 +48,7 @@
 .trackSummary {
   display: flex;
   flex-direction: column;
-  width: 7rem;
+  height: 8rem;
   background-color: var(--colour-bg);
   border-bottom: 2px solid var(--colour-black);
 }
@@ -40,6 +56,7 @@
 .trackClips {
   display: flex;
   width: 100%;
+  height: 8rem;
   border-bottom: 2px solid var(--colour-bg);
 }
 
