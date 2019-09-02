@@ -62,7 +62,7 @@ button {
   font-size: 1em;
   background-color: var(--colour-button);
   border: none;
-  border-right: 2px solid black;
-  border-bottom: 2px solid black;
-  border-radius: 2px;
+  border-right: 2px solid var(--colour-black);
+  border-bottom: 2px solid var(--colour-black);
+  border-radius: var(--border-radius);
 }

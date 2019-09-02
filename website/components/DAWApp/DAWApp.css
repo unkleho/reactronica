@@ -46,6 +46,8 @@ header {
 
 .transport {
   display: flex;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .trackInfo {

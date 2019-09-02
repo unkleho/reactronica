@@ -19,6 +19,9 @@
   --baseline-1: var(--baseline);
   --baseline-2: calc(var(--baseline) * 2);
   --baseline-3: calc(var(--baseline) * 3);
+
+  /* Border Radius */
+  --border-radius: 2px;
 }
 
 .text-uppercase {
