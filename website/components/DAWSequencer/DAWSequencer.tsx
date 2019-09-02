@@ -41,13 +41,14 @@ const Sequencer: React.FC<Props> = ({
 }) => {
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
-      <DAWBeatTimeRuler />
+      <DAWBeatTimeRuler className={css.ruler} />
 
       <DAWPlayhead isPlaying={isPlaying} tempo={tempo} />
 
-      {tracks.map((track) => {
-        return (
-          <div className={css.track} key={track.id}>
+      <div className={css.trackSummaries}>
+        {tracks.map((track) => {
+          return (
+            // <div className={css.track} key={track.id}>
             <div className={css.trackSummary}>
               <button
                 className={[
@@ -76,11 +77,16 @@ const Sequencer: React.FC<Props> = ({
                 <ion-icon name="trash" />
               </button>
             </div>
+            // </div>
+          );
+        })}
+      </div>
 
+      <div className={css.clips}>
+        {tracks.map((track) => {
+          return (
             <div className={css.trackClips}>
               {track.clips.map((clip) => {
-                // console.log(clip);
-
                 return (
                   <DAWClip
                     id={clip.id}
@@ -94,11 +100,11 @@ const Sequencer: React.FC<Props> = ({
                 );
               })}
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
-      <div className={css.track}>
+      {/* <div className={css.track}>
         <button
           onClick={() => {
             dispatch({
@@ -109,7 +115,7 @@ const Sequencer: React.FC<Props> = ({
         >
           Add
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
