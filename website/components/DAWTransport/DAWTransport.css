@@ -4,14 +4,17 @@
 }
 
 .play {
-  margin-right: 1em;
+  margin-right: 2em;
 }
 
 .tempo {
   display: flex;
   align-items: baseline;
-}
+  padding-left: 1rem;
+  background-color: var(--colour-black);
+  border-radius: var(--border-radius);
 
-.tempo label {
-  margin-right: 1em;
+  & label {
+    margin-right: 1em;
+  }
 }
