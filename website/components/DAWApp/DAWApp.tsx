@@ -1,6 +1,7 @@
 import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
+import ReactronicaLogo from '../ReactronicaLogo';
 import StepsEditor from '../DAWStepsEditor';
 import Transport from '../DAWTransport';
 import DAWSequencer from '../DAWSequencer';
@@ -83,9 +84,7 @@ const DAWApp = () => {
   return (
     <div className={css.dawApp}>
       <header>
-        <h1>
-          <span>Reactronica</span> <span>DAW Demo</span>
-        </h1>
+        <ReactronicaLogo subText="DAW Demo" />
 
         <Transport
           isPlaying={isPlaying}
