@@ -1,5 +1,9 @@
 .stepsEditor {
   margin-bottom: 0;
+  border-top: 1px solid var(--colour-black);
+  border-right: 1px solid var(--colour-black);
+  border-bottom: 2px solid var(--colour-black);
+  border-left: 2px solid var(--colour-black);
 }
 
 .row {
@@ -13,7 +17,7 @@
 
 .rowIsAccidental .stepKey {
   color: var(--colour-white);
-  background-color: #000;
+  background-color: var(--colour-black);
 }
 
 .step {
@@ -25,8 +29,8 @@
   text-align: center;
   background-color: var(--colour-button);
   border: none;
-  border-top: 1px solid var(--colour-bg);
-  border-right: 1px solid var(--colour-bg);
+  border-top: 1px solid var(--colour-black);
+  border-right: 1px solid var(--colour-black);
   cursor: pointer;
 }
 

@@ -9,11 +9,12 @@
   & h2,
   & h3 {
     @extend .text-uppercase;
+
+    font-size: var(--font-size-xs);
   }
 
   & h3 {
-    padding-top: var(--baseline);
-    font-size: var(--font-size-xs);
+    padding-top: var(--baseline-1);
     border-top: 1px solid var(--colour-bg);
   }
 

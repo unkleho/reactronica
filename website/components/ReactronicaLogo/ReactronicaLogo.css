@@ -22,10 +22,11 @@
   }
 
   & span:nth-child(2) {
-    position: absolute;
-    right: 0;
+    display: inline-block;
+    width: 4ch;
     font-weight: 300;
     font-size: 0.7rem;
+    line-height: 1.2;
     letter-spacing: 0.15em;
     text-transform: uppercase;
   }

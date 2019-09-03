@@ -4,7 +4,7 @@
     'header header' auto
     'trackInfo trackSequencer' 1fr
     'trackInfo stepsEditor ' auto /
-    12rem auto;
+    15rem auto;
   height: calc(100vh - 2rem);
 }
 
