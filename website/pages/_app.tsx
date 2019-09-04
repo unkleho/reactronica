@@ -1,8 +1,10 @@
 import React from 'react';
 import NextApp from 'next/app';
+import { MDXProvider } from '@mdx-js/react';
 
 import DocApp from '../components/DocApp';
 import DAWApp from '../components/DAWApp';
+import CodeBlock from '../components/CodeBlock';
 
 class MyApp extends NextApp {
   render() {
@@ -16,10 +18,18 @@ class MyApp extends NextApp {
       AppComponent = DocApp;
     }
 
+    const components = {
+      pre: (props) => <div {...props} />,
+      // code: (props) => <pre style={{ color: 'tomato' }} {...props} />,
+      code: CodeBlock,
+    };
+
     return (
-      <AppComponent>
-        <Component {...pageProps} />
-      </AppComponent>
+      <MDXProvider components={components}>
+        <AppComponent>
+          <Component {...pageProps} />
+        </AppComponent>
+      </MDXProvider>
     );
   }
 }
