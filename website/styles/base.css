@@ -18,17 +18,6 @@ body {
   background-color: var(--colour-bg);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  &:first-child {
-    margin-top: 0;
-  }
-}
-
 h1 {
   margin-bottom: 0;
   font-size: 3.5em;
@@ -50,6 +39,17 @@ h4 {
   font-size: 1.2em;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
 p {
   margin-top: 0;
   margin-bottom: 1rem;
@@ -65,4 +65,10 @@ button {
   border-right: 2px solid var(--colour-black);
   border-bottom: 2px solid var(--colour-black);
   border-radius: var(--border-radius);
+}
+
+a:link,
+a:visited {
+  color: var(--colour-secondary);
+  text-decoration: none;
 }

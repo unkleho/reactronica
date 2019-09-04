@@ -22,7 +22,6 @@ const HomePage = () => {
       >
         Play
       </button>
-
       <Song>
         <Track>
           <Instrument

@@ -1,0 +1,10 @@
+@import '../../styles/global.css';
+
+.drumPads {
+  display: block;
+}
+
+.pad {
+  width: 6rem;
+  height: 6rem;
+}

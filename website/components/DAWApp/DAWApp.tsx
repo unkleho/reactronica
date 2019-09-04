@@ -1,6 +1,7 @@
 import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
+import App from '../App';
 import ReactronicaLogo from '../ReactronicaLogo';
 import StepsEditor from '../DAWStepsEditor';
 import Transport from '../DAWTransport';
@@ -82,126 +83,128 @@ const DAWApp = () => {
   } = appSelector(state);
 
   return (
-    <div className={css.dawApp}>
-      <header>
-        <ReactronicaLogo subText="DAW Demo" />
+    <App>
+      <div className={css.dawApp}>
+        <header>
+          <ReactronicaLogo subText="DAW Demo" />
 
-        <Transport
+          <Transport
+            isPlaying={isPlaying}
+            tempo={tempo}
+            dispatch={dispatch}
+            className={css.transport}
+          />
+        </header>
+
+        <TrackInfo
+          currentTrack={currentTrack}
+          volume={volume}
+          pan={pan}
+          // selectedEffect={selectedEffect}
+          dispatch={dispatch}
+          className={css.trackInfo}
+        />
+
+        <div className={css.trackSequencer}>
+          <DAWSequencer
+            isPlaying={isPlaying}
+            tempo={tempo}
+            tracks={tracks}
+            currentTrackId={currentTrackId}
+            currentClipId={currentClipId}
+            dispatch={dispatch}
+          />
+        </div>
+
+        <StepsEditor
+          defaultSteps={currentSteps}
+          currentStepIndex={currentStepIndex}
+          stepIndexOffset={stepIndexOffset}
+          notes={notes}
+          subdivision={16}
+          className={css.stepsEditor}
+          onStepEditorClick={(steps) => {
+            // WIP
+            // Convert steps to clip
+            const clip = buildClip(steps, currentClipId);
+
+            dispatch({ type: types.UPDATE_CLIP, clip });
+            // This should update currentSteps and track[].clips
+            // dispatch({ type: types.UPDATE_CURRENT_STEPS, steps });
+          }}
+          onKeyboardDown={(note) =>
+            dispatch({ type: types.SET_NOTES, notes: [{ name: note }] })
+          }
+          onKeyboardUp={() => dispatch({ type: types.SET_NOTES, notes: [] })}
+        />
+
+        {/* ----------------------------------------------------------------- */}
+        {/* AUDIO */}
+        {/* ----------------------------------------------------------------- */}
+
+        <Song
           isPlaying={isPlaying}
           tempo={tempo}
-          dispatch={dispatch}
-          className={css.transport}
-        />
-      </header>
-
-      <TrackInfo
-        currentTrack={currentTrack}
-        volume={volume}
-        pan={pan}
-        // selectedEffect={selectedEffect}
-        dispatch={dispatch}
-        className={css.trackInfo}
-      />
-
-      <div className={css.trackSequencer}>
-        <DAWSequencer
-          isPlaying={isPlaying}
-          tempo={tempo}
-          tracks={tracks}
-          currentTrackId={currentTrackId}
-          currentClipId={currentClipId}
-          dispatch={dispatch}
-        />
-      </div>
-
-      <StepsEditor
-        defaultSteps={currentSteps}
-        currentStepIndex={currentStepIndex}
-        stepIndexOffset={stepIndexOffset}
-        notes={notes}
-        subdivision={16}
-        className={css.stepsEditor}
-        onStepEditorClick={(steps) => {
-          // WIP
-          // Convert steps to clip
-          const clip = buildClip(steps, currentClipId);
-
-          dispatch({ type: types.UPDATE_CLIP, clip });
-          // This should update currentSteps and track[].clips
-          // dispatch({ type: types.UPDATE_CURRENT_STEPS, steps });
-        }}
-        onKeyboardDown={(note) =>
-          dispatch({ type: types.SET_NOTES, notes: [{ name: note }] })
-        }
-        onKeyboardUp={() => dispatch({ type: types.SET_NOTES, notes: [] })}
-      />
-
-      {/* ----------------------------------------------------------------- */}
-      {/* AUDIO */}
-      {/* ----------------------------------------------------------------- */}
-
-      <Song
-        isPlaying={isPlaying}
-        tempo={tempo}
-        swing={1}
-        swingSubdivision={'8n'}
-      >
-        {tracks.map((track) => {
-          const trackClips = track.clips.map((trackClip) => {
-            return clips.find((clip) => {
-              return clip.id === trackClip.id;
+          swing={1}
+          swingSubdivision={'8n'}
+        >
+          {tracks.map((track) => {
+            const trackClips = track.clips.map((trackClip) => {
+              return clips.find((clip) => {
+                return clip.id === trackClip.id;
+              });
             });
-          });
 
-          const trackSteps = trackClips.reduce((prev, curr) => {
-            return [...prev, ...buildSteps(curr)];
-          }, []);
+            const trackSteps = trackClips.reduce((prev, curr) => {
+              return [...prev, ...buildSteps(curr)];
+            }, []);
 
-          // console.log(trackSteps);
+            // console.log(trackSteps);
 
-          return (
-            <Track
-              steps={trackSteps}
-              volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
-              pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
-              subdivision={'16n'}
-              effects={track.effects.map((effect, i) => {
-                return (
-                  <Effect
-                    type={effect.type}
-                    key={`${effect.id}-${i}-melody`}
-                    id={`${effect.id}-${i}-melody`}
-                    delayTime={effect.delayTime || '16n'}
-                    feedback={effect.feedback || 0.6}
+            return (
+              <Track
+                steps={trackSteps}
+                volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
+                pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
+                subdivision={'16n'}
+                effects={track.effects.map((effect, i) => {
+                  return (
+                    <Effect
+                      type={effect.type}
+                      key={`${effect.id}-${i}-melody`}
+                      id={`${effect.id}-${i}-melody`}
+                      delayTime={effect.delayTime || '16n'}
+                      feedback={effect.feedback || 0.6}
+                    />
+                  );
+                })}
+                onStepPlay={(step) =>
+                  dispatch({
+                    type: types.SET_CURRENT_STEP_INDEX,
+                    currentStepIndex: step.index,
+                  })
+                }
+                key={track.id}
+              >
+                {track.instrumentType === 'sampler' ? (
+                  <Instrument
+                    type={track.instrumentType}
+                    samples={{
+                      C3: `/static/audio/drums/kick15.wav`,
+                      D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
+                      E3: `/static/audio/drums/chh12.wav`,
+                    }}
+                    notes={track.notes}
                   />
-                );
-              })}
-              onStepPlay={(step) =>
-                dispatch({
-                  type: types.SET_CURRENT_STEP_INDEX,
-                  currentStepIndex: step.index,
-                })
-              }
-              key={track.id}
-            >
-              {track.instrumentType === 'sampler' ? (
-                <Instrument
-                  type={track.instrumentType}
-                  samples={{
-                    C3: `/static/audio/drums/kick15.wav`,
-                    D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
-                    E3: `/static/audio/drums/chh12.wav`,
-                  }}
-                  notes={track.notes}
-                />
-              ) : (
-                <Instrument type={track.instrumentType} notes={track.notes} />
-              )}
-            </Track>
-          );
-        })}
-      </Song>
-    </div>
+                ) : (
+                  <Instrument type={track.instrumentType} notes={track.notes} />
+                )}
+              </Track>
+            );
+          })}
+        </Song>
+      </div>
+    </App>
   );
 };
 
