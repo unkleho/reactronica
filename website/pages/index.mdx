@@ -1,0 +1,49 @@
+import DrumPads from '../components/DrumPads';
+
+> Warning: Highly experimental. APIs will change.
+
+React audio components for making music in the browser. Uses [ToneJS](https://tonejs.github.io/) under the hood.
+
+## Install
+
+```bash
+npm install --save reactronica tone
+```
+
+Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.html) are used internally.
+
+## Examples
+
+### Drum Pads
+
+<DrumPads />
+
+```jsx
+const [notes, setNotes] = React.useState(null);
+
+return (
+  <>
+    <button
+      onMouseDown={() => setNotes([{ name: 'C3' }])}
+      onMouseUp={() => setNotes(null)}
+    >
+      Kick
+    </button>
+    {/* + other pads */}
+
+    <Song>
+      <Track>
+        <Instrument
+          type="sampler"
+          notes={notes}
+          samples={{
+            C3: '/static/audio/drums/kick15.wav',
+            D3: '/static/audio/drums/snare-bottom-buttend15.wav',
+            E3: '/static/audio/drums/chh12.wav',
+          }}
+        />
+      </Track>
+    </Song>
+  </>
+);
+```

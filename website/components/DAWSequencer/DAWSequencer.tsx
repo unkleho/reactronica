@@ -49,7 +49,7 @@ const Sequencer: React.FC<Props> = ({
         {tracks.map((track) => {
           return (
             // <div className={css.track} key={track.id}>
-            <div className={css.trackSummary}>
+            <div className={css.trackSummary} key={track.id}>
               <button
                 className={[
                   css.stepsChooserButton,
@@ -85,7 +85,7 @@ const Sequencer: React.FC<Props> = ({
       <div className={css.clips}>
         {tracks.map((track) => {
           return (
-            <div className={css.trackClips}>
+            <div className={css.trackClips} key={track.id}>
               {track.clips.map((clip) => {
                 return (
                   <DAWClip
