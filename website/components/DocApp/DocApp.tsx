@@ -13,10 +13,15 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
   return (
     <App className={[css.docApp, className || ''].join(' ')}>
       <header>
-        <ReactronicaLogo subText="Docs"></ReactronicaLogo>
+        <div className={css.headerInside}>
+          <ReactronicaLogo
+            subText="Docs"
+            logoClassName={css.logo}
+          ></ReactronicaLogo>
+        </div>
       </header>
 
-      {children}
+      <main className={css.main}>{children}</main>
     </App>
   );
 };

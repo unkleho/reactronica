@@ -1,5 +1,34 @@
 @import '../../styles/global.css';
 
 .docApp {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & main {
+    width: 100%;
+    max-width: var(--container-md);
+  }
+
+  & header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: var(--baseline-4);
+    border-bottom: 2px solid var(--colour-black);
+  }
+
+  & h2 {
+    margin-top: var(--baseline-8);
+  }
+}
+
+.headerInside {
+  width: 100%;
+  max-width: var(--container-md);
+  padding: var(--baseline-2) 0;
+}
+
+.logo {
+  font-size: var(--font-size-xxxlg);
 }

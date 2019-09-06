@@ -2,8 +2,9 @@ import Highlight, { defaultProps } from 'prism-react-renderer';
 
 import DrumPads from '../components/DrumPads';
 import CodeBlock from '../components/CodeBlock';
+import DAWStepsEditor from '../components/DAWStepsEditor';
 
-> Warning: Highly experimental. APIs will change.
+<!-- > Warning: Highly experimental. APIs will change. -->
 
 React audio components for making music in the browser. Uses [ToneJS](https://tonejs.github.io/) under the hood.
 
@@ -50,3 +51,28 @@ return (
   </>
 );
 ```
+
+### Piano Roll
+
+<DAWStepsEditor
+  subdivision={8}
+  defaultSteps={[
+    [
+      {
+        note: 'C3',
+      },
+    ],
+    [
+      {
+        note: 'D3',
+      },
+    ],
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  ]}
+/>

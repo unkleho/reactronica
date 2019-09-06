@@ -21,6 +21,8 @@ const DAWStepsEditor = ({
     return null;
   }
 
+  // console.log(steps);
+
   const handleStepClick = (note, index) => {
     // Append note to stepRow
     const stepRow = [...(steps[index] ? steps[index] : []), note];
@@ -41,6 +43,8 @@ const DAWStepsEditor = ({
   };
 
   const emptyArray = [...new Array(1 + subdivision)];
+
+  // console.log(steps);
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
