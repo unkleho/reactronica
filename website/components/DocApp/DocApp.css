@@ -1,5 +1,9 @@
 @import '../../styles/global.css';
 
+body {
+  margin: 0;
+}
+
 .docApp {
   display: flex;
   flex-direction: column;
@@ -15,15 +19,31 @@
     justify-content: center;
     width: 100%;
     margin-bottom: var(--baseline-4);
-    border-bottom: 2px solid var(--colour-black);
+    padding-top: var(--baseline-4);
+    padding-bottom: var(--baseline-2);
+    background-color: var(--colour-black);
+    /* border-bottom: 2px solid var(--colour-black); */
+
+    & ion-icon {
+      width: 2rem;
+      height: 2rem;
+    }
   }
 
   & h2 {
     margin-top: var(--baseline-8);
   }
+
+  & footer {
+    margin-top: var(--baseline-8);
+    margin-bottom: var(--baseline-4);
+  }
 }
 
 .headerInside {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   max-width: var(--container-md);
   padding: var(--baseline-2) 0;

@@ -2,7 +2,7 @@ import Highlight, { defaultProps } from 'prism-react-renderer';
 
 import DrumPads from '../components/DrumPads';
 import CodeBlock from '../components/CodeBlock';
-import DAWStepsEditor from '../components/DAWStepsEditor';
+import StepsEditorExample from '../components/StepsEditorExample';
 
 <!-- > Warning: Highly experimental. APIs will change. -->
 
@@ -23,56 +23,85 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 <DrumPads />
 
 ```jsx
-const [notes, setNotes] = React.useState(null);
+// Simplified Drum Pads
 
-return (
-  <>
-    <button
-      onMouseDown={() => setNotes([{ name: 'C3' }])}
-      onMouseUp={() => setNotes(null)}
-    >
-      Kick
-    </button>
-    {/* ...other pads */}
+const DrumPads = () => {
+  const [notes, setNotes] = React.useState(null);
 
-    <Song>
-      <Track>
-        <Instrument
-          type="sampler"
-          notes={notes}
-          samples={{
-            C3: '/static/audio/drums/kick15.wav',
-            D3: '/static/audio/drums/snare-bottom-buttend15.wav',
-            E3: '/static/audio/drums/chh12.wav',
-          }}
-        />
-      </Track>
-    </Song>
-  </>
-);
+  return (
+    <>
+      <button
+        onMouseDown={() => setNotes([{ name: 'C3' }])}
+        onMouseUp={() => setNotes(null)}
+      >
+        Kick
+      </button>
+      {/* ...other pads */}
+
+      {/* Reactronica Components */}
+      <Song>
+        <Track>
+          <Instrument
+            type="sampler"
+            notes={notes}
+            samples={{
+              C3: '/drums/kick.wav',
+              D3: '/drums/snare.wav',
+              E3: '/drums/hat.wav',
+            }}
+          />
+        </Track>
+      </Song>
+    </>
+  );
+};
 ```
 
 ### Piano Roll
 
-<DAWStepsEditor
-  subdivision={8}
-  defaultSteps={[
-    [
-      {
-        note: 'C3',
-      },
-    ],
-    [
-      {
-        note: 'D3',
-      },
-    ],
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ]}
-/>
+<StepsEditorExample />
+
+```jsx
+// Simplified Piano Roll
+
+const PianoRollExample = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [steps, setSteps] = useState([
+    ['C3', 'E3', 'A3'],
+    null,
+    ['C3', 'E3', 'G3', 'B3'],
+    null,
+    ['C3', 'F3', 'A3'],
+    null,
+    ['D3', 'G3', 'B3'],
+    null,
+  ]);
+
+  return (
+    <>
+      <button onClick={() => setIsPlaying(!isPlaying)}>
+        {isPlaying ? 'Play' : 'Stop'}
+      </button>
+
+      <PianoRoll
+        currentStepIndex={currentStepIndex}
+        onClick={(steps) => setSteps(steps)}
+      />
+
+      {/* Reactronica Components */}
+      <Song isPlaying={isPlaying}>
+        <Track
+          steps={steps}
+          // Callback triggers on every step
+          onStepPlay={(_, index) => {
+            setCurrentStepIndex(index);
+          }}
+        >
+          <Instrument type="polySynth" />
+        </Track>
+      </Song>
+    </>
+  );
+};
+```

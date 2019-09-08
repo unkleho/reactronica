@@ -6,15 +6,15 @@
     'trackInfo stepsEditor ' auto /
     15rem auto;
   height: calc(100vh - 2rem);
-}
 
-header {
-  display: flex;
-  grid-area: header;
-  align-items: center;
-  /* margin-bottom: 1rem; */
-  padding-bottom: var(--baseline-2);
-  /* border-bottom: 2px dotted var(--colour-grey); */
+  & header {
+    display: flex;
+    grid-area: header;
+    align-items: center;
+    /* margin-bottom: 1rem; */
+    padding-bottom: var(--baseline-2);
+    /* border-bottom: 2px dotted var(--colour-grey); */
+  }
 }
 
 .transport {

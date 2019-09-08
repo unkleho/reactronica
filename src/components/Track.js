@@ -47,7 +47,7 @@ const TrackConsumer = ({
             instrumentsRef.current.map((instrument) => {
               instrument.triggerAttackRelease(
                 note.note,
-                note.duration,
+                note.duration || 0.5,
                 undefined,
                 note.velocity,
               );
