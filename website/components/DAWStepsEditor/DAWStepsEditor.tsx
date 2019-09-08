@@ -2,7 +2,18 @@ import React from 'react';
 
 import css from './DAWStepsEditor.css';
 
-const DAWStepsEditor = ({
+type Props = {
+  currentStepIndex: number;
+  stepIndexOffset: number;
+  defaultSteps: any[];
+  subdivision: number;
+  className: string;
+  onStepEditorClick: Function;
+  onKeyboardDown: Function;
+  onKeyboardUp: Function;
+};
+
+const DAWStepsEditor: React.FC<Props> = ({
   currentStepIndex,
   stepIndexOffset = 0,
   defaultSteps = [],
@@ -108,8 +119,16 @@ const DAWStepsEditor = ({
                 return (
                   <button
                     className={[css.step, css.stepKey].join(' ')}
-                    onMouseDown={() => onKeyboardDown(note)}
-                    onMouseUp={() => onKeyboardUp(note)}
+                    onMouseDown={() => {
+                      if (typeof onKeyboardDown === 'function') {
+                        onKeyboardDown(note);
+                      }
+                    }}
+                    onMouseUp={() => {
+                      if (typeof onKeyboardUp === 'function') {
+                        onKeyboardUp(note);
+                      }
+                    }}
                     key={columnIndex}
                     data-testid="keyboard-button"
                   >

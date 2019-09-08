@@ -44,14 +44,22 @@ const InstrumentConsumer = ({
     //   synth.current.disconnect();
     // }
 
-    if (type === 'polySynth') {
+    if (type === 'AMSynth') {
+      synth.current = new Tone.AMSynth(options);
+    } else if (type === 'duoSynth') {
+      synth.current = new Tone.DuoSynth(options);
+    } else if (type === 'FMSynth') {
+      synth.current = new Tone.FMSynth(options);
+    } else if (type === 'membraneSynth') {
+      synth.current = new Tone.MembraneSynth(options);
+    } else if (type === 'monoSynth') {
+      synth.current = new Tone.MonoSynth(options);
+    } else if (type === 'polySynth') {
       synth.current = new Tone.PolySynth(
         options.polyphony,
         Tone.Synth,
         options,
       );
-    } else if (type === 'duoSynth') {
-      synth.current = new Tone.DuoSynth(options);
     } else if (type === 'sampler') {
       synth.current = new Tone.Sampler(samples);
 
@@ -62,6 +70,8 @@ const InstrumentConsumer = ({
       if (options.release) {
         synth.current.release = options.release;
       }
+    } else if (type === 'synth') {
+      synth.current = new Tone.Synth(options);
     }
 
     // trackChannelBase.current = new Tone.PanVol(pan, volume);

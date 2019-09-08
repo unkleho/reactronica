@@ -12,26 +12,28 @@ const DrumPads: React.FunctionComponent<Props> = ({ className }) => {
 
   return (
     <div className={[css.drumPads, className || ''].join(' ')}>
-      {[{ note: 'C3', name: 'Kick' }, { note: 'D3', name: 'Snare' }].map(
-        (pad) => (
-          <button
-            onMouseDown={() =>
-              setNotes([
-                {
-                  name: pad.note,
-                },
-              ])
-            }
-            onMouseUp={() => {
-              setNotes(null);
-            }}
-            className={css.pad}
-            key={pad.note}
-          >
-            {pad.name}
-          </button>
-        ),
-      )}
+      {[
+        { note: 'C3', name: 'Kick' },
+        { note: 'D3', name: 'Snare' },
+        { note: 'E3', name: 'Hat' },
+      ].map((pad) => (
+        <button
+          onMouseDown={() =>
+            setNotes([
+              {
+                name: pad.note,
+              },
+            ])
+          }
+          onMouseUp={() => {
+            setNotes(null);
+          }}
+          className={css.pad}
+          key={pad.note}
+        >
+          {pad.name}
+        </button>
+      ))}
       <Song>
         <Track>
           <Instrument

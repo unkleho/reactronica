@@ -18,10 +18,14 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
             subText="Docs"
             logoClassName={css.logo}
           ></ReactronicaLogo>
+
+          <ion-icon name="logo-github"></ion-icon>
         </div>
       </header>
 
       <main className={css.main}>{children}</main>
+
+      <footer>By @unkleho</footer>
     </App>
   );
 };
