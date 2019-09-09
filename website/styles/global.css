@@ -6,7 +6,9 @@
   --colour-secondary: #0fa6d1;
   --colour-white: #eee;
   --colour-black: #050505;
+  --colour-grey-dark: #111;
   --colour-grey: #222;
+  --colour-grey-light: #333;
   --colour-pink: #d10fc9;
   --colour-purple: var(--colour-primary);
   --colour-blue: #0fa6d1;
@@ -25,6 +27,7 @@
 
   /* Baseline */
   --baseline: 0.5rem;
+  --baseline-half: calc(var(--baseline) * 0.5);
   --baseline-1: var(--baseline);
   --baseline-2: calc(var(--baseline) * 2);
   --baseline-3: calc(var(--baseline) * 3);
@@ -32,11 +35,13 @@
   --baseline-8: calc(var(--baseline) * 8);
 
   /* Border Radius */
-  --border-radius: 2px;
+  --border-radius: 4px;
 
   /* Containers */
   --container-md: 45rem;
 }
+
+@custom-media --viewport-sm (min-width: 50rem);
 
 .text-uppercase {
   font-weight: 300;

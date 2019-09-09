@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import App from '../App';
 import ReactronicaLogo from '../ReactronicaLogo';
+// import DAWBeatTimerRuler from '../DAWBeatTimeRuler';
 
 import css from './DocApp.css';
 
@@ -13,6 +14,8 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
   return (
     <App className={[css.docApp, className || ''].join(' ')}>
       <header>
+        {/* <DAWBeatTimerRuler /> */}
+
         <div className={css.headerInside}>
           <ReactronicaLogo
             subText="Docs"
@@ -25,7 +28,9 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
 
       <main className={css.main}>{children}</main>
 
-      <footer>By @unkleho</footer>
+      <footer>
+        By <a href="https://twitter.com/unkleho">@unkleho</a>
+      </footer>
     </App>
   );
 };

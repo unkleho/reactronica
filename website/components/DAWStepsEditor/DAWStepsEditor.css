@@ -31,9 +31,14 @@
   border: none;
   border-top: 1px solid var(--colour-black);
   border-right: 1px solid var(--colour-black);
+  border-radius: 0;
   cursor: pointer;
 }
 
-.stepIsCurrent {
+.step:nth-child(4n + 2) {
+  background-color: var(--colour-grey-light);
+}
+
+.step.stepIsCurrent {
   background-color: var(--colour-secondary);
 }

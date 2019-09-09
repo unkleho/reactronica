@@ -66,9 +66,7 @@ const DAWClip: React.FunctionComponent<Props> = ({
             )}
             key={note}
           >
-            {[...new Array(steps.length)].map((_, columnIndex) => {
-              const index = columnIndex - 1;
-
+            {[...new Array(steps.length)].map((_, index) => {
               const isCurrent =
                 steps[index] &&
                 steps[index].findIndex((step) => {
@@ -81,7 +79,7 @@ const DAWClip: React.FunctionComponent<Props> = ({
                     css.step,
                     isCurrent ? css.stepIsCurrent : '',
                   ].join(' ')}
-                  key={columnIndex}
+                  key={index}
                 />
               );
             })}
