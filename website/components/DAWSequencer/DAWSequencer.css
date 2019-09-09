@@ -51,7 +51,9 @@
 .trackSummary {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 8rem;
+  padding: var(--baseline-half);
   background-color: var(--colour-bg);
   border-bottom: 2px solid var(--colour-black);
 }
@@ -68,5 +70,11 @@
 }
 
 .stepsChooserButtonActive {
+  color: var(--colour-secondary);
   font-weight: bold;
+}
+
+.removeButton {
+  align-self: flex-end;
+  width: fit-content;
 }

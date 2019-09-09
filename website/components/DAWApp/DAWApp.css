@@ -1,3 +1,5 @@
+@import '../../styles/global.css';
+
 .dawApp {
   display: grid;
   grid-template:
@@ -5,7 +7,8 @@
     'trackInfo trackSequencer' 1fr
     'trackInfo stepsEditor ' auto /
     15rem auto;
-  height: calc(100vh - 2rem);
+  height: calc(100vh);
+  padding: var(--baseline-2);
 
   & header {
     display: flex;
@@ -14,6 +17,36 @@
     /* margin-bottom: 1rem; */
     padding-bottom: var(--baseline-2);
     /* border-bottom: 2px dotted var(--colour-grey); */
+  }
+}
+
+.menu {
+  @extend .text-uppercase;
+
+  display: flex;
+  font-size: var(--font-size-xs);
+  list-style: none;
+
+  & li {
+    margin-right: var(--baseline-2);
+    padding-right: var(--baseline-2);
+    border-right: 1px solid var(--colour-grey-light);
+  }
+
+  & li:last-child {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+  }
+
+  & a:link,
+  & a:visited {
+    color: var(--colour-white);
+  }
+
+  & a:hover,
+  & a:active {
+    color: var(--colour-secondary);
   }
 }
 

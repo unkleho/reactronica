@@ -67,6 +67,7 @@ const Sequencer: React.FC<Props> = ({
                 {track.id}
               </button>
               <button
+                className={css.removeButton}
                 onClick={() => {
                   dispatch({
                     type: types.REMOVE_TRACK,

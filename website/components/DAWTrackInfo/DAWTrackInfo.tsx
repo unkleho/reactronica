@@ -140,7 +140,9 @@ const TrackInfo: React.FC<Props> = ({
         </select>
         <br />
         <br />
-        <button type="submit">Add Effect</button>
+        <button type="submit">
+          <ion-icon name="add"></ion-icon>&nbsp;&nbsp;Add Effect
+        </button>
       </form>
 
       <br />

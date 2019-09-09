@@ -1,4 +1,5 @@
 @import url('https://rsms.me/inter/inter-ui.css');
+@import './global.css';
 
 html {
   box-sizing: border-box;
@@ -68,10 +69,20 @@ button {
   border-right: 2px solid var(--colour-black);
   border-bottom: 2px solid var(--colour-black);
   border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+button:hover {
+  color: var(--colour-secondary);
 }
 
 a:link,
 a:visited {
   color: var(--colour-secondary);
   text-decoration: none;
+}
+
+pre {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }

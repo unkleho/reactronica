@@ -18,6 +18,10 @@
     border-top: 1px solid var(--colour-bg);
   }
 
+  & p {
+    margin-bottom: 0;
+  }
+
   & select,
   & input {
     width: 100%;
