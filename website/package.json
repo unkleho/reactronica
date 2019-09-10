@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^9.0.2",
+    "@types/node": "^12.7.4",
     "@types/react": "^16.9.1",
     "hygen": "^4.0.8",
     "postcss-extend-rule": "^3.0.0",

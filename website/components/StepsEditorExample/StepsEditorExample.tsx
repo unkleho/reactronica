@@ -50,9 +50,6 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
       </Song>
     </>
   );
-  // return (
-  //   <div className={[css.stepsEditorExample, className || ''].join(' ')}></div>
-  // );
 };
 
 export default StepsEditorExample;
