@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix empty steps bug for Track
 - Add more instrument types to Instrument
+- Add Next JS documentation and examples website
 
 ## [0.1.1] - 2019-06-23
 
