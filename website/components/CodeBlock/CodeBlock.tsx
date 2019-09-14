@@ -3,16 +3,21 @@ import Highlight, { defaultProps } from 'prism-react-renderer';
 
 import theme from '../../lib/codeTheme';
 
-const CodeBlock = ({ children }) => {
+const CodeBlock = ({ children, className }) => {
+  const language = className.replace(/language-/, '');
+
   return (
     <Highlight
       {...defaultProps}
       theme={theme}
       code={children}
-      language="javascript"
+      language={language}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className={className} style={{ ...style, padding: '20px' }}>
+        <pre
+          className={className}
+          style={{ ...style, fontSize: '15px', padding: '16px' }}
+        >
           {tokens.map((line, i) => (
             <div key={i} {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
