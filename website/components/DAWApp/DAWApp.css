@@ -63,6 +63,8 @@
 .trackSequencer {
   display: flex;
   grid-area: trackSequencer;
+  width: 100%;
+  overflow: auto;
 }
 
 .stepsEditor {

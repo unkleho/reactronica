@@ -10,6 +10,7 @@
   grid-template-rows: 2rem auto;
   width: 100%;
   margin-bottom: var(--baseline-1);
+  overflow: auto;
   background-color: var(--colour-black);
   background-image: linear-gradient(
     90deg,
@@ -31,6 +32,8 @@
 }
 
 .trackSummaries {
+  position: sticky;
+  left: 0;
   grid-area: summaries;
   background-color: var(--colour-bg);
 }
