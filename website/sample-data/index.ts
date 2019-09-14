@@ -160,13 +160,18 @@ export const beatClip1 = {
       duration: 0.5,
     },
     {
-      start: '1.1.3',
+      start: '1.1.1',
       note: 'E3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
       note: 'D3',
+      duration: 0.5,
+    },
+    {
+      start: '1.2.1',
+      note: 'E3',
       duration: 0.5,
     },
     {
@@ -180,18 +185,13 @@ export const beatClip1 = {
       duration: 0.5,
     },
     {
-      start: '1.3.3',
+      start: '1.3.1',
       note: 'E3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
       note: 'D3',
-      duration: 0.5,
-    },
-    {
-      start: '1.4.3',
-      note: 'E3',
       duration: 0.5,
     },
     {
@@ -212,18 +212,18 @@ export const beatClip2 = {
       duration: 0.5,
     },
     {
-      start: '1.1.3',
+      start: '1.1.1',
       note: 'E3',
+      duration: 0.5,
+    },
+    {
+      start: '1.1.4',
+      note: 'C3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
       note: 'D3',
-      duration: 0.5,
-    },
-    {
-      start: '1.2.3',
-      note: 'E3',
       duration: 0.5,
     },
     {
@@ -241,13 +241,8 @@ export const beatClip2 = {
       note: 'D3',
       duration: 0.5,
     },
-    // {
-    //   start: '1.4.3',
-    //   note: 'E3',
-    //   duration: 0.5,
-    // },
     {
-      start: '1.4.4',
+      start: '1.4.3',
       note: 'E3',
       duration: 0.5,
     },
