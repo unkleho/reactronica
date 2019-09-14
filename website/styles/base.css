@@ -12,6 +12,10 @@ html {
   box-sizing: inherit;
 }
 
+/* * + * {
+  margin-top: 1.5em;
+} */
+
 body {
   margin: 1em;
   color: var(--colour-text);
@@ -59,6 +63,10 @@ p {
   line-height: 1.5;
 }
 
+p:last-child {
+  margin-bottom: 0;
+}
+
 button {
   /* margin-right: 1em; */
   padding: 0.6em;
@@ -85,4 +93,11 @@ a:visited {
 pre {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+}
+
+blockquote {
+  margin: 0;
+  padding: var(--baseline);
+  background-color: var(--colour-black);
+  border-left: var(--baseline) solid var(--colour-primary);
 }

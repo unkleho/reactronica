@@ -1,11 +1,9 @@
 import css from '../styles/global.css';
 
-// console.log(css['colour-primary']);
-
 const theme = {
   plain: {
     backgroundColor: css['colour-black'],
-    color: css['colour-white'],
+    color: css['colour-orange'],
   },
   styles: [
     {
@@ -21,9 +19,15 @@ const theme = {
       },
     },
     {
-      types: ['tag', 'operator', 'number'],
+      types: ['operator', 'number'],
       style: {
         color: css['colour-purple'],
+      },
+    },
+    {
+      types: ['tag'],
+      style: {
+        color: css['colour-yellow'],
       },
     },
     {
@@ -41,13 +45,18 @@ const theme = {
     {
       types: ['attr-name'],
       style: {
-        color: '#c4b9fe',
+        color: css['colour-yellow-dark'],
+      },
+    },
+    {
+      types: ['string'],
+      style: {
+        color: css['colour-green'],
       },
     },
     {
       types: [
         'boolean',
-        'string',
         'entity',
         'url',
         'attr-value',

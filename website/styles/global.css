@@ -13,8 +13,9 @@
   --colour-purple: var(--colour-primary);
   --colour-blue: #0fa6d1;
   --colour-green: #0fd165;
-  --colour-yellow: #ffe813;
+  --colour-yellow: #e7d210;
   --colour-orange: #ff5c13;
+  --colour-yellow-dark: #a39513;
 
   /* Fonts */
   --font-size-xs: 0.7rem;
@@ -62,4 +63,5 @@
   colour-green: var(--colour-green);
   colour-yellow: var(--colour-yellow);
   colour-orange: var(--colour-orange);
+  colour-yellow-dark: var(--colour-yellow-dark);
 }

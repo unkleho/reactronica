@@ -4,9 +4,15 @@ import DrumPads from '../components/DrumPads';
 import CodeBlock from '../components/CodeBlock';
 import StepsEditorExample from '../components/StepsEditorExample';
 
-<!-- > Warning: Highly experimental. APIs will change. -->
+React audio components for making music in the browser.
 
-React audio components for making music in the browser. Uses [ToneJS](https://tonejs.github.io/) under the hood.
+React treats UI as a function of state. What if React’s declarative programming model could be applied to music as well?
+
+Reactronica aims to treat **_music_** as a function of state, rendering sound instead of UI. Visual components live side by side with Reactronica, sharing the same state and elegantly kept in sync.
+
+Uses [ToneJS](https://tonejs.github.io/) under the hood. Inspired by [React Music](https://github.com/FormidableLabs/react-music).
+
+> Warning: Highly experimental. APIs will change.
 
 ## Install
 
@@ -27,8 +33,9 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 <DrumPads />
 
 ```jsx
-// Simplified Drum Pads
+import { Song, Track, Instrument } from 'reactronica';
 
+// Simplified Drum Pads
 const DrumPads = () => {
   const [notes, setNotes] = React.useState(null);
 
@@ -66,8 +73,9 @@ const DrumPads = () => {
 <StepsEditorExample />
 
 ```jsx
-// Simplified Piano Roll
+import { Song, Track, Instrument } from 'reactronica';
 
+// Simplified Piano Roll
 const PianoRollExample = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -106,6 +114,64 @@ const PianoRollExample = () => {
         </Track>
       </Song>
     </>
+  );
+};
+```
+
+## Usage
+
+```jsx
+import React from 'react';
+import { Song, Track, Instrument, Effect } from 'reactronica';
+
+const Example = () => {
+  return (
+    // Top level component must be the Song, with Tracks nested inside
+    <Song tempo={90} isPlaying={true}>
+      <Track
+        // Array of several types
+        steps={[
+          // Note in string format
+          'C3',
+          // Object with note and duration
+          { note: 'C3', duration: 0.5 },
+          { note: 'D3', duration: 0.5 },
+          // Array of strings for chords
+          ['C3', 'G3'],
+          null,
+          null,
+          // Array of objects for chords
+          [{ note: 'C3', duration: 0.5 }, { note: 'G3', duration: 0.5 }],
+          null,
+        ]}
+        // Chain effects by putting them in an array
+        effects={[
+          <Effect type="feedbackDelay" />,
+          <Effect type="distortion" />,
+        ]}
+        volume={80}
+        pan={0}
+        // Callback for every tick
+        onStepPlay={(step, index) => {
+          doSomething(step, index);
+        }}
+      >
+        <Instrument type="polySynth" />
+      </Track>
+
+      <Track>
+        <Instrument
+          type="sampler"
+          samples={{
+            C3: 'path/to/kick.mp3',
+            D3: 'path/to/snare.mp3',
+            E3: 'path/to/hihat.mp3',
+          }}
+          // Add some notes here to play
+          notes={[{ name: 'C3' }]}
+        />
+      </Track>
+    </Song>
   );
 };
 ```

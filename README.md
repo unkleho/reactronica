@@ -24,76 +24,73 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 ## Usage
 
 ```jsx
-import React, { Component } from 'react';
-
+import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
-class Example extends Component {
-  render() {
-    return (
-      <Song tempo={90} isPlaying={false}>
-        <Track
-          // Array of several types
-          steps={[
-            // Note in string format
-            'C3',
-            // Object with note and duration
+const Example = () => {
+  return (
+    <Song tempo={90} isPlaying={true}>
+      <Track
+        // Array of several types
+        steps={[
+          // Note in string format
+          'C3',
+          // Object with note and duration
+          {
+            note: 'C3',
+            duration: 0.5,
+          },
+          {
+            note: 'D3',
+            duration: 0.5,
+          },
+          // Array of strings for chords
+          ['C3', 'G3'],
+          null,
+          null,
+          // Array of objects for chords
+          [
             {
               note: 'C3',
               duration: 0.5,
             },
             {
-              note: 'D3',
+              note: 'G3',
               duration: 0.5,
             },
-            // Array of strings for chords
-            ['C3', 'G3'],
-            null,
-            null,
-            // Array of objects for chords
-            [
-              {
-                note: 'C3',
-                duration: 0.5,
-              },
-              {
-                note: 'G3',
-                duration: 0.5,
-              },
-            ],
-            null,
-          ]}
-          effects={[
-            <Effect type="feedbackDelay" />,
-            <Effect type="distortion" />,
-          ]}
-          // Callback for every tick
-          onStepPlay={(step, index) => {
-            doSomething(step, index);
+          ],
+          null,
+        ]}
+        effects={[
+          <Effect type="feedbackDelay" />,
+          <Effect type="distortion" />,
+        ]}
+        // Callback for every tick
+        onStepPlay={(step, index) => {
+          doSomething(step, index);
+        }}
+      >
+        <Instrument type="polySynth" />
+      </Track>
+      <Track>
+        <Instrument
+          type="sampler"
+          samples={{
+            C3: 'path/to/kick.mp3',
+            D3: 'path/to/snare.mp3',
+            E3: 'path/to/hihat.mp3',
           }}
-        >
-          <Instrument type="polySynth" />
-        </Track>
-        <Track>
-          <Instrument
-            type="sampler"
-            samples={{
-              C3: 'path/to/kick.mp3',
-              D3: 'path/to/snare.mp3',
-              E3: 'path/to/hihat.mp3',
-            }}
-            // Add some notes here to play
-            notes={[
-              {
-                name: 'C3',
-              },
-            ]}
-          />
-        </Track>
-      </Song>
-    );
-  }
-}
+          // Add some notes here to play
+          notes={[
+            {
+              name: 'C3',
+            },
+          ]}
+        />
+      </Track>
+    </Song>
+  );
+};
 ```
 
 ## Documentation
