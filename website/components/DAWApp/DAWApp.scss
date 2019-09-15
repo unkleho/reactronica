@@ -1,6 +1,6 @@
-@import '../../styles/global.css';
+// @import '../../styles/global.css';
 
-@custom-media --viewport-sm (width <= 10rem);
+// @custom-media --viewport-sm (width <= 10rem);
 
 .dawApp {
   display: grid;
@@ -20,8 +20,14 @@
   padding-bottom: var(--baseline-2);
 }
 
+/* @media (--viewport-sm) {
+  .header {
+    background-color: #fff;
+  }
+} */
+
 .menu {
-  @extend .text-uppercase;
+  // @extend .text-uppercase;
 
   display: flex;
   font-size: var(--font-size-xs);
