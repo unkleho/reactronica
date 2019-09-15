@@ -1,5 +1,7 @@
 @import '../../styles/global.css';
 
+@custom-media --viewport-sm (width <= 10rem);
+
 .dawApp {
   display: grid;
   grid-template:
@@ -9,15 +11,13 @@
     15rem auto;
   height: calc(100vh);
   padding: var(--baseline-2);
+}
 
-  & header {
-    display: flex;
-    grid-area: header;
-    align-items: center;
-    /* margin-bottom: 1rem; */
-    padding-bottom: var(--baseline-2);
-    /* border-bottom: 2px dotted var(--colour-grey); */
-  }
+.header {
+  display: flex;
+  grid-area: header;
+  align-items: center;
+  padding-bottom: var(--baseline-2);
 }
 
 .menu {

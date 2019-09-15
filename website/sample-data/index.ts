@@ -217,13 +217,13 @@ export const beatClip2 = {
       duration: 0.5,
     },
     {
-      start: '1.1.4',
-      note: 'C3',
+      start: '1.2.1',
+      note: 'D3',
       duration: 0.5,
     },
     {
-      start: '1.2.1',
-      note: 'D3',
+      start: '1.2.3',
+      note: 'E3',
       duration: 0.5,
     },
     {

@@ -42,7 +42,7 @@
   --container-md: 45rem;
 }
 
-@custom-media --viewport-sm (min-width: 50rem);
+@custom-media --viewport-sm (width <= 10rem);
 
 .text-uppercase {
   font-weight: 300;
