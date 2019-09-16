@@ -87,7 +87,7 @@ const DAWApp = () => {
   return (
     <App className={css.dawApp}>
       <header className={css.header}>
-        <ReactronicaLogo subText="DAW Demo" />
+        <ReactronicaLogo subText="DAW Demo" className={css.logo} />
 
         <Transport
           isPlaying={isPlaying}
