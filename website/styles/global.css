@@ -42,8 +42,6 @@
   --container-md: 45rem;
 }
 
-@custom-media --viewport-sm (width <= 10rem);
-
 .text-uppercase {
   font-weight: 300;
   font-size: var(--font-size-sm);

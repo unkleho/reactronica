@@ -1,4 +1,4 @@
-// @import '../../styles/global.css';
+@import '../../styles/global.scss';
 
 // @custom-media --viewport-sm (width <= 10rem);
 
@@ -14,17 +14,15 @@
 }
 
 .header {
-  display: flex;
-  grid-area: header;
-  align-items: center;
-  padding-bottom: var(--baseline-2);
-}
+  display: grid;
 
-/* @media (--viewport-sm) {
-  .header {
-    background-color: #fff;
+  @include media-sm {
+    display: flex;
+    grid-area: header;
+    align-items: center;
+    padding-bottom: var(--baseline-2);
   }
-} */
+}
 
 .menu {
   // @extend .text-uppercase;
