@@ -29,6 +29,9 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
         {isPlaying ? 'Stop' : 'Play'}
       </button>
 
+      <br />
+      <br />
+
       <DAWStepsEditor
         currentStepIndex={currentStepIndex}
         subdivision={8}
