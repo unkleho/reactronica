@@ -4,7 +4,7 @@ import App from '../App';
 import ReactronicaLogo from '../ReactronicaLogo';
 // import DAWBeatTimerRuler from '../DAWBeatTimeRuler';
 
-import css from './DocApp.css';
+import css from './DocApp.scss';
 
 type Props = {
   className?: string;

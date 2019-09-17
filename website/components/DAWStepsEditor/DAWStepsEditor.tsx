@@ -1,6 +1,6 @@
 import React from 'react';
 
-import css from './DAWStepsEditor.css';
+import css from './DAWStepsEditor.scss';
 
 type Props = {
   currentStepIndex: number;
@@ -59,7 +59,7 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
-      <div className={css.row}>
+      <div className={[css.row, css.header].join(' ')}>
         {emptyArray.map((_, i) => {
           return (
             <div

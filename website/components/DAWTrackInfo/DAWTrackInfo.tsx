@@ -3,7 +3,7 @@ import { constants } from 'reactronica';
 
 import * as types from '../../types';
 
-import css from './DAWTrackInfo.css';
+import css from './DAWTrackInfo.scss';
 
 type Props = {
   currentTrack?: {

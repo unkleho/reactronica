@@ -1,3 +1,5 @@
+@import '../../styles/global.scss';
+
 .stepsEditor {
   margin-bottom: 0;
   border-top: 1px solid var(--colour-black);
@@ -11,6 +13,7 @@
 }
 
 .step.stepKey {
+  flex: 2;
   color: var(--colour-bg);
   background-color: var(--colour-white);
 }
@@ -25,7 +28,9 @@
   flex: 1;
   margin-right: 0;
   padding: 0.5em 0;
-  font-size: 0.8em;
+  // color: ;
+  font-weight: 400;
+  font-size: var(--font-size-xs);
   text-align: center;
   background-color: var(--colour-button);
   border: none;
@@ -33,6 +38,14 @@
   border-right: 1px solid var(--colour-black);
   border-radius: 0;
   cursor: pointer;
+
+  @include media-sm {
+    font-size: var(--font-size-xs);
+  }
+
+  .header &:first-child {
+    flex: 2;
+  }
 }
 
 .step:nth-child(4n + 2) {
