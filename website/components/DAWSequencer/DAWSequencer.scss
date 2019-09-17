@@ -1,10 +1,8 @@
 .dawSequencer {
   position: relative;
-
-  /* Use Grid! */
   display: grid;
   grid-template-areas:
-    'none ruler'
+    'corner ruler'
     'summaries clips';
   grid-template-columns: 8rem auto;
   grid-template-rows: 2rem auto;
@@ -25,6 +23,17 @@
   background-size: 32px 32px;
   border-bottom: 2px solid var(--colour-black);
   border-left: 2px solid var(--colour-black);
+}
+
+.corner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  grid-area: corner;
+  width: 100%;
+  height: 100%;
+  background-color: var(--colour-black);
 }
 
 .ruler {
@@ -55,7 +64,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 8rem;
+  height: 6rem;
   padding: var(--baseline-half);
   background-color: var(--colour-bg);
   border-bottom: 2px solid var(--colour-black);
@@ -64,7 +73,7 @@
 .trackClips {
   display: flex;
   width: 100%;
-  height: 8rem;
+  height: 6rem;
   border-bottom: 2px solid var(--colour-bg);
 }
 

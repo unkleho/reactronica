@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import css from './DAWBeatTimeRuler.css';
+import css from './DAWBeatTimeRuler.scss';
 
 type Props = {
   className?: string;

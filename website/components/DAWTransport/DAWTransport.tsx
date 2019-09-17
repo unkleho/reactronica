@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as types from '../../types';
 
-import css from './DAWTransport.css';
+import css from './DAWTransport.scss';
 
 type Props = {
   isPlaying?: boolean;

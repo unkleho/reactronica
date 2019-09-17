@@ -1,63 +1,86 @@
 @import '../../styles/global.scss';
 
-// @custom-media --viewport-sm (width <= 10rem);
-
 .dawApp {
   display: grid;
   grid-template:
-    'header header' auto
-    'trackInfo trackSequencer' 1fr
-    'trackInfo stepsEditor ' auto /
-    15rem auto;
-  height: calc(100vh);
-  padding: var(--baseline-2);
+    'header' auto
+    'trackSequencer' auto
+    'stepsEditor' auto
+    'trackInfo' auto /
+    auto;
+  padding: var(--baseline-1);
+
+  @include media-sm {
+    grid-template:
+      'header header' auto
+      'trackInfo trackSequencer' 1fr
+      'trackInfo stepsEditor ' auto /
+      15rem auto;
+    height: calc(100vh);
+    padding: var(--baseline-2);
+  }
 }
 
 .header {
   display: grid;
+  padding-bottom: var(--baseline-2);
 
   @include media-sm {
     display: flex;
     grid-area: header;
     align-items: center;
-    padding-bottom: var(--baseline-2);
+  }
+}
+
+.logo {
+  margin-bottom: var(--baseline-2);
+
+  @include media-sm {
+    margin-bottom: 0;
   }
 }
 
 .menu {
-  // @extend .text-uppercase;
+  @extend .textUppercase;
 
-  display: flex;
-  font-size: var(--font-size-xs);
-  list-style: none;
+  display: none;
 
-  & li {
-    margin-right: var(--baseline-2);
-    padding-right: var(--baseline-2);
-    border-right: 1px solid var(--colour-grey-light);
-  }
+  @include media-sm {
+    display: flex;
+    font-size: var(--font-size-xs);
+    list-style: none;
 
-  & li:last-child {
-    margin-right: 0;
-    padding-right: 0;
-    border-right: none;
-  }
+    & li {
+      margin-right: var(--baseline-2);
+      padding-right: var(--baseline-2);
+      border-right: 1px solid var(--colour-grey-light);
+    }
 
-  & a:link,
-  & a:visited {
-    color: var(--colour-white);
-  }
+    & li:last-child {
+      margin-right: 0;
+      padding-right: 0;
+      border-right: none;
+    }
 
-  & a:hover,
-  & a:active {
-    color: var(--colour-secondary);
+    & a:link,
+    & a:visited {
+      color: var(--colour-white);
+    }
+
+    & a:hover,
+    & a:active {
+      color: var(--colour-secondary);
+    }
   }
 }
 
 .transport {
   display: flex;
-  margin-right: auto;
-  margin-left: auto;
+
+  @include media-sm {
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
 .trackInfo {

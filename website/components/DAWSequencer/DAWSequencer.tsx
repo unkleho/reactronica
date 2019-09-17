@@ -8,7 +8,7 @@ import DAWPlayhead from '../DAWPlayhead';
 
 import { Clip } from '../../types/typescript';
 
-const css = require('./DAWSequencer.css');
+const css = require('./DAWSequencer.scss');
 
 type Props = {
   isPlaying: boolean;
@@ -41,6 +41,8 @@ const Sequencer: React.FC<Props> = ({
 }) => {
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
+      <div className={css.corner}></div>
+
       <DAWBeatTimeRuler className={css.ruler} />
 
       <DAWPlayhead isPlaying={isPlaying} tempo={tempo} />

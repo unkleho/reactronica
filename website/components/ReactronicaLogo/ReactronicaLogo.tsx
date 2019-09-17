@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import css from './ReactronicaLogo.css';
+import css from './ReactronicaLogo.scss';
 
 type Props = {
   subText?: string;

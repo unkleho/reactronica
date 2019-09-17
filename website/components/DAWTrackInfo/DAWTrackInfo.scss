@@ -1,4 +1,4 @@
-@import '../../styles/global.css';
+@import '../../styles/global.scss';
 
 .trackInfo {
   display: block;
@@ -8,7 +8,7 @@
 
   & h2,
   & h3 {
-    @extend .text-uppercase;
+    @extend .textUppercase;
 
     font-size: var(--font-size-xs);
   }
