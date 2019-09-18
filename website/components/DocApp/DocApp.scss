@@ -38,6 +38,12 @@ body {
     margin-top: var(--baseline-8);
   }
 
+  & code {
+    padding: 0 var(--baseline-1);
+    background-color: var(--colour-black);
+    border-radius: var(--border-radius);
+  }
+
   & footer {
     margin-top: var(--baseline-8);
     margin-bottom: var(--baseline-4);
@@ -55,10 +61,8 @@ body {
 
 .logo {
   font-size: var(--font-size-xxlg);
-}
 
-@media (min-width: 40rem) {
-  .logo {
+  @include media-sm {
     font-size: 3.5em;
   }
 }

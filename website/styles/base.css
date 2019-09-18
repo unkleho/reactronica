@@ -37,13 +37,14 @@ h2 {
 
 h3 {
   margin-top: 1.7em;
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--font-size-xlg);
 }
 
 h4 {
   margin-top: 1.5em;
-  font-size: 1.2em;
+  font-weight: 600;
+  font-size: 1.1em;
 }
 
 h1,
@@ -57,7 +58,8 @@ h6 {
   }
 }
 
-p {
+p,
+ul {
   margin-top: 0;
   margin-bottom: 2rem;
   line-height: 1.5;
@@ -65,6 +67,10 @@ p {
 
 p:last-child {
   margin-bottom: 0;
+}
+
+ul {
+  padding-left: var(--baseline-3);
 }
 
 button {

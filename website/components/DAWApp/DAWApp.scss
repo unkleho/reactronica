@@ -47,6 +47,7 @@
 
   @include media-sm {
     display: flex;
+    margin-bottom: 0;
     font-size: var(--font-size-xs);
     list-style: none;
 
