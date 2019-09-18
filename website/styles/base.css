@@ -107,3 +107,10 @@ blockquote {
   background-color: var(--colour-black);
   border-left: var(--baseline) solid var(--colour-primary);
 }
+
+code {
+  font-family: 'andale mono', /* MS WebFont */ 'monotype.com',
+    /* MS WebFont, former name */ monaco,
+    /* MacOS */ /* Fallback options */ 'courier new',
+    /* Windows, MacOS */ courier, /* Unix+X, MacOS */ monospace;
+}
