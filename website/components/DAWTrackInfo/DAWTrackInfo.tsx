@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { constants } from 'reactronica';
+import React from 'react';
+import { config } from 'reactronica';
 
 import * as types from '../../types';
 
@@ -33,6 +33,8 @@ const TrackInfo: React.FC<Props> = ({
   //   setSelectedEffect(null);
   // }, [currentTrackId]);
 
+  // console.log(constants);
+
   if (!currentTrack) {
     return null;
   }
@@ -55,13 +57,10 @@ const TrackInfo: React.FC<Props> = ({
         }}
         value={currentTrack.instrumentType}
       >
-        {constants.instruments.map((instrument, i) => {
-          const id = `${instrument.id}-${i}`;
-
+        {config.instruments.map((instrument) => {
           return (
             <option
-              key={id}
-              // data-id={id}
+              key={instrument.id}
               data-type={instrument.id}
               value={instrument.id}
             >
@@ -123,7 +122,7 @@ const TrackInfo: React.FC<Props> = ({
           }}
         >
           <option>None</option>
-          {constants.effects.map((effect, i) => {
+          {config.effects.map((effect, i) => {
             const id = `${effect.id}-${i}`;
 
             return (

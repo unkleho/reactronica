@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { instruments, effects } from '../constants';
+import { instruments, effects } from '../config';
 
 export const NoteType = PropTypes.shape({
   name: PropTypes.string.isRequired,

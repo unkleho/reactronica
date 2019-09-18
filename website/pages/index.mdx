@@ -179,3 +179,44 @@ const Example = () => {
   );
 };
 ```
+
+## Documentation
+
+### Song
+
+This component wraps around all Reactronica components, providing top level control of the audio.
+
+#### Props
+
+- `tempo` - Speed or pace of the song. Measured in beats per minute.
+- `isPlaying` - Whether the song is playing or not. Defaults to `false`.
+
+### Track
+
+Tracks make up the layers of audio within a Song. Each individual Track has independent `volume`, `pan`, `steps` and `effects`.
+
+#### Props
+
+- `volume` - Volume of track
+- `pan` - Panning of track
+- `steps` - An array of notes to play
+- `effects` - An array of `<Effect />` components
+- `onStepPlay` - Callback that runs on every step
+
+### Instrument
+
+Should be wrapped by a Track and becomes its audio source.
+
+#### Props
+
+- `type` - Instrument type, `AMSynth | duoSynth | FMSynth | membraneSynth | monoSynth | polySynth | sampler | synth`
+- `notes` - An array of notes to trigger Instrument, useful for auditioning sounds or live performance.
+- `samples` - Only for `sampler` instrument type
+
+### Effect
+
+Audio effects such as `feedbackDelay`, `distortion` and `freeverb`. Applied to a Track, with multiple Effects able to be added.
+
+#### Props
+
+- `type` - Effect type, `feedbackDelay | distortion | freeverb`
