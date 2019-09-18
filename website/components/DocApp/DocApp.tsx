@@ -14,8 +14,6 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
   return (
     <App className={[css.docApp, className || ''].join(' ')}>
       <header>
-        {/* <DAWBeatTimerRuler /> */}
-
         <div className={css.headerInside}>
           <ReactronicaLogo
             subText="Docs"
@@ -25,6 +23,8 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
           <ion-icon name="logo-github"></ion-icon>
         </div>
       </header>
+
+      {/* <DAWBeatTimerRuler /> */}
 
       <main className={css.main}>{children}</main>
 

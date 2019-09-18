@@ -23,10 +23,14 @@ body {
     align-items: center;
     width: 100%;
     margin-bottom: var(--baseline-4);
-    padding-top: var(--baseline-4);
+    padding-top: var(--baseline-1);
     padding-bottom: var(--baseline-1);
     background-color: var(--colour-black);
-    /* border-bottom: 2px solid var(--colour-black); */
+
+    @include media-sm {
+      padding-top: var(--baseline-4);
+      padding-bottom: var(--baseline-4);
+    }
 
     & ion-icon {
       width: 2rem;
