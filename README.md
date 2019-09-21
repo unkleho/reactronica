@@ -1,6 +1,6 @@
 # Reactronica
 
-[Website/Docs/Examples](https://reactronica.com)
+[https://reactronica.com](https://reactronica.com)(Website/Docs/Examples)
 
 React audio components for making music in the browser.
 
@@ -23,7 +23,7 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 ## Demos
 
 - [Digital Audio Workstation](https://reactronica.com/daw)
-- [Music chord, scale and progression tools](https://music-tools.now.sh)
+- [Music chord, scale and progression tools](https://music-toolbox.now.sh)
 
 ## Usage
 
