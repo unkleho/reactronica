@@ -3,6 +3,7 @@ import Highlight, { defaultProps } from 'prism-react-renderer';
 import DrumPads from '../components/DrumPads';
 import CodeBlock from '../components/CodeBlock';
 import StepsEditorExample from '../components/StepsEditorExample';
+import TabExample from '../components/TabExample';
 
 React audio components for making music in the browser.
 
@@ -25,6 +26,7 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 ## Demos
 
 - [Digital Audio Workstation](/daw)
+- [Music chord, scale and progression tools](https://music-toolbox.now.sh)
 
 ## Examples
 
@@ -115,6 +117,62 @@ const PianoRollExample = () => {
           }}
         >
           <Instrument type="polySynth" />
+        </Track>
+      </Song>
+    </>
+  );
+};
+```
+
+### Ukulele Tablature
+
+Interactive tablature for ukulele. Have a play and try changing the notes while the song is playing. Arrow keys should work as well.
+
+<TabExample />
+
+```jsx
+import { Song, Track, Instrument } from 'reactronica';
+
+const UkuleleTab = () => {
+  const [tab, setTab] = React.useState(defaultTab);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const steps = tabToSteps(tab);
+
+  return (
+    <>
+      <button onClick={() => setIsPlaying(!isPlaying)}>
+        {isPlaying ? 'Stop' : 'Play'}
+      </button>
+
+      <Tab
+        tab={tab}
+        currentIndex={currentIndex}
+        onUpdate={(newTab) => {
+          setTab(newTab);
+        }}
+      />
+
+      {/* Reactronica Components */}
+      <Song isPlaying={isPlaying} tempo={90}>
+        <Track
+          steps={steps}
+          subdivision={'8n'}
+          onStepPlay={(_, i) => {
+            setCurrentIndex(i);
+          }}
+        >
+          <Instrument
+            type="sampler"
+            samples={{
+              C4: `/ukulele/uke_060.wav`,
+              'C#4': `/ukulele/uke_061.wav`,
+              // ... D4 - A#5 samples
+              B5: `/ukulele/uke_083.wav`,
+              C6: `/ukulele/uke_084.wav`,
+            }}
+          />
         </Track>
       </Song>
     </>

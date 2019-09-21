@@ -8,14 +8,14 @@ import {
 } from '../../lib/tabUtils';
 import { instrumentConfig } from '../../constants';
 
-import './Tab.css';
+import css from './Tab.scss';
 
 const Tab = ({
   grid = [],
   resolution = 8,
   bars = 2,
   instrument = 'ukulele',
-  currentIndex,
+  currentIndex = 0,
   className,
   onUpdateGrid,
 }) => {
@@ -111,21 +111,21 @@ const Tab = ({
   };
 
   return (
-    <div className={['tab', className || ''].join(' ')}>
+    <div className={[css.tab, className || ''].join(' ')}>
       {tab.map((tabLine, i) => {
         const stringNote = getStringNote(instrument, i);
         textInputs[i] = [];
 
         return (
           <div
-            className="tab__line"
+            className={css.tabLine}
             key={`string${i}`}
             data-testid={`tabLines`}
           >
-            <div className="tab__line__line" />
+            <div className={css.tabLineLine} />
             {/*<div>{stringNote}</div>*/}
 
-            <div className="tab__line__steps">
+            <div className={css.tabLineSteps}>
               {tabLine.map((step, j) => {
                 const note = step && step.note ? step.note : undefined;
                 const fret = noteToFret(note, stringNote);
@@ -134,8 +134,8 @@ const Tab = ({
                   <div
                     key={`step${j}`}
                     className={[
-                      'tab__step',
-                      currentIndex === j ? 'tab__step--is-current' : '',
+                      css.tabStep,
+                      currentIndex === j ? css.tabStepIsCurrent : '',
                     ].join(' ')}
                     data-testid={'tabSteps'}
                   >

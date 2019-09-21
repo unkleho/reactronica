@@ -1,0 +1,66 @@
+@import '../../styles/global.scss';
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto 1rem;
+  font-size: 1.4em;
+}
+
+.tabLine {
+  position: relative;
+  display: flex;
+  flex: 0 0 100%;
+  align-items: center;
+}
+
+.tabLineLine {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--colour-grey-light);
+}
+
+.tabLineSteps {
+  display: flex;
+  width: 100%;
+  height: 1.4em;
+}
+
+.tabStep {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.tabStep:first-child {
+  border-left: 1px solid var(--colour-grey-light);
+}
+
+.tabStep:nth-child(8n) {
+  border-right: 1px solid var(--colour-grey-light);
+}
+
+.tabStep input {
+  width: var(--baseline-3);
+  height: var(--baseline-3);
+  margin: 0 auto;
+  color: var(--colour-white);
+  font-size: var(--font-size-md);
+  text-align: center;
+  background-color: var(--colour-black);
+  border: none;
+
+  &:focus {
+    outline: 1px solid var(--colour-secondary);
+  }
+}
+
+.tabStepIsCurrent input {
+  background-color: var(--colour-primary);
+}

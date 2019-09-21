@@ -113,4 +113,6 @@ code {
     /* MS WebFont, former name */ monaco,
     /* MacOS */ /* Fallback options */ 'courier new',
     /* Windows, MacOS */ courier, /* Unix+X, MacOS */ monospace;
+  color: var(--colour-yellow);
+  letter-spacing: -0.02em;
 }
