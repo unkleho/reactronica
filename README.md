@@ -23,7 +23,7 @@ Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.
 ## Demos
 
 - [Digital Audio Workstation](https://reactronica.com/daw)
-- [Music chord, scale and progression tools](https://music-toolbox.now.sh)
+- [Music chord, scale and progression finder](https://music-toolbox.now.sh)
 
 ## Usage
 
