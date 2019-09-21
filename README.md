@@ -1,6 +1,6 @@
 # Reactronica
 
-[https://reactronica.com](https://reactronica.com)(Website/Docs/Examples)
+[https://reactronica.com](https://reactronica.com) - website/docs/examples
 
 React audio components for making music in the browser.
 
