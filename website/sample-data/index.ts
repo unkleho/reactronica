@@ -195,8 +195,18 @@ export const beatClip1 = {
       duration: 0.5,
     },
     {
+      start: '1.4.3',
+      note: 'F3',
+      duration: 0.5,
+    },
+    {
       start: '1.4.4',
       note: 'E3',
+      duration: 0.5,
+    },
+    {
+      start: '1.4.4',
+      note: 'F3',
       duration: 0.5,
     },
   ],
@@ -244,6 +254,11 @@ export const beatClip2 = {
     {
       start: '1.4.3',
       note: 'E3',
+      duration: 0.5,
+    },
+    {
+      start: '1.4.4',
+      note: 'F3',
       duration: 0.5,
     },
   ],

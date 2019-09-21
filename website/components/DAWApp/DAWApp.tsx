@@ -17,10 +17,10 @@ import {
   beatClip2,
 } from '../../sample-data';
 import { buildSteps, buildClip } from '../../lib/stepUtils';
+import { useKeyPress } from '../../lib/hooks';
 
 import '../../node_modules/normalize.css/normalize.css';
 import css from './DAWApp.scss';
-// import css from './DAWApp.css';
 
 const initialState = {
   // --------------------------------------------------------------------------
@@ -46,7 +46,7 @@ const initialState = {
     {
       id: 'melody',
       instrumentType: 'polySynth',
-      volume: 100,
+      volume: 60,
       pan: 50,
       steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
       clips: [{ id: 'melody1' }, { id: 'melody2' }],
@@ -83,6 +83,10 @@ const DAWApp = () => {
     pan,
     notes,
   } = appSelector(state);
+
+  useKeyPress(' ', () => {
+    dispatch({ type: types.TOGGLE_PLAYING });
+  });
 
   return (
     <App className={css.dawApp}>
@@ -203,8 +207,10 @@ const DAWApp = () => {
                   type={track.instrumentType}
                   samples={{
                     C3: `/static/audio/drums/kick15.wav`,
-                    D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
-                    E3: `/static/audio/drums/chh12.wav`,
+                    // D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
+                    D3: `/static/audio/drums/snare-top-off25.wav`,
+                    E3: `/static/audio/drums/chh2.wav`,
+                    F3: `/static/audio/drums/snare-top-off17.wav`,
                   }}
                   notes={track.notes}
                 />

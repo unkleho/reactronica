@@ -70,6 +70,10 @@
   border-bottom: 2px solid var(--colour-black);
 }
 
+.trackSummaryIsCurrent {
+  background-color: var(--colour-grey-light);
+}
+
 .trackClips {
   display: flex;
   width: 100%;
@@ -81,7 +85,7 @@
   text-transform: capitalize;
 }
 
-.stepsChooserButtonActive {
+.stepsChooserButtonIsCurrent {
   color: var(--colour-secondary);
   font-weight: bold;
 }

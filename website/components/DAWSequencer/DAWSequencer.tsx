@@ -49,15 +49,20 @@ const Sequencer: React.FC<Props> = ({
 
       <div className={css.trackSummaries}>
         {tracks.map((track) => {
+          const isCurrent = track.id === currentTrackId;
+
           return (
-            // <div className={css.track} key={track.id}>
-            <div className={css.trackSummary} key={track.id}>
+            <div
+              className={[
+                css.trackSummary,
+                isCurrent ? css.trackSummaryIsCurrent : '',
+              ].join(' ')}
+              key={track.id}
+            >
               <button
                 className={[
                   css.stepsChooserButton,
-                  track.id === currentTrackId
-                    ? css.stepsChooserButtonActive
-                    : '',
+                  isCurrent ? css.stepsChooserButtonIsCurrent : '',
                 ].join(' ')}
                 onClick={() =>
                   dispatch({
