@@ -54,4 +54,8 @@
 
 .step.stepIsCurrent {
   background-color: var(--colour-secondary);
+
+  .header & {
+    background-color: var(--colour-primary);
+  }
 }

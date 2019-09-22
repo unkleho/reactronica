@@ -35,7 +35,7 @@ const Sequencer: React.FC<Props> = ({
   dispatch,
   className,
 }) => {
-  const [newTrackId, setNewTrackId] = React.useState(0);
+  const [newTrackId, setNewTrackId] = React.useState(1);
 
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
@@ -43,7 +43,11 @@ const Sequencer: React.FC<Props> = ({
 
       <DAWBeatTimeRuler className={css.ruler} />
 
-      <DAWPlayhead isPlaying={isPlaying} tempo={tempo} />
+      <DAWPlayhead
+        isPlaying={isPlaying}
+        tempo={tempo}
+        className={css.playhead}
+      />
 
       <div className={css.trackSummaries}>
         {tracks.map((track) => {
@@ -92,7 +96,7 @@ const Sequencer: React.FC<Props> = ({
           onClick={() => {
             dispatch({
               type: types.ADD_TRACK,
-              trackId: newTrackId,
+              trackId: `New Track ${newTrackId}`,
             });
 
             setNewTrackId(newTrackId + 1);
