@@ -24,21 +24,19 @@ type Props = {
 type Track = {
   id: string;
   clips: Clip[];
-  // clips: {
-  //   id: string;
-  // }[];
 };
 
 const Sequencer: React.FC<Props> = ({
   isPlaying,
   tempo,
   tracks = [],
-  // clips = [],
   currentClipId,
   currentTrackId,
   dispatch,
   className,
 }) => {
+  const [newTrackId, setNewTrackId] = React.useState(0);
+
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
       <div className={css.corner}></div>
@@ -85,9 +83,24 @@ const Sequencer: React.FC<Props> = ({
                 <ion-icon name="trash" />
               </button>
             </div>
-            // </div>
           );
         })}
+
+        {/* <div className={[css.trackSummary, css.trackSummaryAdd].join(' ')}> */}
+        <button
+          className={css.addTrackButton}
+          onClick={() => {
+            dispatch({
+              type: types.ADD_TRACK,
+              trackId: newTrackId,
+            });
+
+            setNewTrackId(newTrackId + 1);
+          }}
+        >
+          <ion-icon name="add"></ion-icon>&nbsp;&nbsp;Add Track
+        </button>
+        {/* </div> */}
       </div>
 
       <div className={css.clips}>
@@ -110,20 +123,9 @@ const Sequencer: React.FC<Props> = ({
             </div>
           );
         })}
-      </div>
 
-      {/* <div className={css.track}>
-        <button
-          onClick={() => {
-            dispatch({
-              type: types.ADD_TRACK,
-              trackId: 'test',
-            });
-          }}
-        >
-          Add
-        </button>
-      </div> */}
+        <div className={css.grid}></div>
+      </div>
     </div>
   );
 };
