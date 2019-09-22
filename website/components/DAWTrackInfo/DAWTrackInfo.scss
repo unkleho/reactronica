@@ -10,7 +10,12 @@
   & h3 {
     @extend .textUppercase;
 
+    color: var(--colour-grey-lightest);
     font-size: var(--font-size-xs);
+  }
+
+  & h2 {
+    margin-bottom: var(--baseline-half);
   }
 
   & h3 {

@@ -1,8 +1,11 @@
-@import '../../styles/global.css';
+@import '../../styles/global.scss';
 
 .dawBeatTimeRuler {
+  @include sequencer-grid;
+
   display: flex;
   color: #666;
+  color: var(--colour-grey-lighter);
   font-size: var(--font-size-xs);
   border-bottom: 4px solid var(--colour-bg);
 
