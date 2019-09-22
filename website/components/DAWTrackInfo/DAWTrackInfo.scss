@@ -41,4 +41,11 @@
 
 .effect {
   margin-bottom: 1rem;
+  padding-top: var(--baseline);
+  border-top: 1px solid var(--colour-bg);
+
+  p {
+    margin-bottom: var(--baseline);
+    text-transform: capitalize;
+  }
 }

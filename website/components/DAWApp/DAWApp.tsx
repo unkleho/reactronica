@@ -161,8 +161,8 @@ const DAWApp = () => {
       <Song
         isPlaying={isPlaying}
         tempo={tempo}
-        swing={1}
-        swingSubdivision={'8n'}
+        // swing={1}
+        // swingSubdivision={'16n'}
       >
         {tracks.map((track) => {
           const trackClips = track.clips.map((trackClip) => {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { config } from 'reactronica';
 
+import Select from '../Select';
+
 import * as types from '../../types';
 
 import css from './DAWTrackInfo.scss';
@@ -33,8 +35,6 @@ const TrackInfo: React.FC<Props> = ({
   //   setSelectedEffect(null);
   // }, [currentTrackId]);
 
-  // console.log(constants);
-
   if (!currentTrack) {
     return null;
   }
@@ -45,7 +45,25 @@ const TrackInfo: React.FC<Props> = ({
       <p className={css.name}>{currentTrack.id}</p>
 
       <h3>Instrument</h3>
-      <select
+      <Select
+        value={currentTrack.instrumentType}
+        options={config.instruments.map((instrument) => {
+          return {
+            label: instrument.name,
+            value: instrument.id,
+          };
+        })}
+        onChange={(selectedOption) => {
+          // const selectedOption = event.target[event.target.selectedIndex];
+          // const type = selectedOption.getAttribute('data-type');
+
+          dispatch({
+            type: types.UPDATE_INSTRUMENT,
+            instrumentType: selectedOption.value,
+          });
+        }}
+      />
+      {/* <select
         onChange={(event) => {
           const selectedOption = event.target[event.target.selectedIndex];
           const type = selectedOption.getAttribute('data-type');
@@ -68,7 +86,7 @@ const TrackInfo: React.FC<Props> = ({
             </option>
           );
         })}
-      </select>
+      </select> */}
 
       <h3>
         <label htmlFor="volume">Volume</label>
@@ -112,7 +130,28 @@ const TrackInfo: React.FC<Props> = ({
           }
         }}
       >
-        <select
+        <Select
+          value={selectedEffect ? selectedEffect.id : null}
+          options={[
+            {
+              label: 'None',
+              value: null,
+            },
+            ...config.effects.map((effect) => {
+              return {
+                label: effect.name,
+                value: effect.id,
+              };
+            }),
+          ]}
+          onChange={(selectedOption) => {
+            const id = selectedOption.value;
+            const type = selectedOption.value;
+
+            setSelectedEffect({ id, type });
+          }}
+        />
+        {/* <select
           onChange={(event) => {
             const selectedOption = event.target[event.target.selectedIndex];
             const id = selectedOption.getAttribute('data-id');
@@ -136,11 +175,11 @@ const TrackInfo: React.FC<Props> = ({
               </option>
             );
           })}
-        </select>
-        <br />
+        </select> */}
         <br />
         <button type="submit">
-          <ion-icon name="add"></ion-icon>&nbsp;&nbsp;Add Effect
+          <ion-icon name="add" />
+          &nbsp;&nbsp;Add Effect
         </button>
       </form>
 
@@ -155,7 +194,8 @@ const TrackInfo: React.FC<Props> = ({
                 dispatch({ type: types.REMOVE_EFFECT, id: effect.id })
               }
             >
-              Remove
+              <ion-icon name="remove" />
+              &nbsp;&nbsp;Remove
             </button>
           </div>
         );
