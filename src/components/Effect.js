@@ -20,14 +20,30 @@ const EffectConsumer = ({
     // console.log('<Effect /> mount');
     // console.log(`id: ${id}`);
 
-    if (type === 'feedbackDelay') {
-      effect.current = new Tone.FeedbackDelay(delayTime, feedback);
+    if (type === 'autoFilter') {
+      effect.current = new Tone.AutoFilter();
+    } else if (type === 'autoPanner') {
+      effect.current = new Tone.AutoPanner();
+    } else if (type === 'autoWah') {
+      effect.current = new Tone.AutoWah();
+    } else if (type === 'bitCrusher') {
+      effect.current = new Tone.BitCrusher();
+      // Removed for now because delayTime has to be in ms
+      // } else if (type === 'chorus') {
+      //   effect.current = new Tone.Chorus();
     } else if (type === 'distortion') {
       effect.current = new Tone.Distortion(0.5);
+    } else if (type === 'feedbackDelay') {
+      effect.current = new Tone.FeedbackDelay(delayTime, feedback);
     } else if (type === 'freeverb') {
       effect.current = new Tone.Freeverb();
     } else if (type === 'panVol') {
       effect.current = new Tone.PanVol();
+      // Needs generate()
+      // } else if (type === 'reverb') {
+      //   effect.current = new Tone.Reverb();
+    } else if (type === 'tremolo') {
+      effect.current = new Tone.Tremolo();
     }
 
     effect.current.id = id;

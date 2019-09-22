@@ -1,8 +1,15 @@
 export const effects = [
-  { id: 'feedbackDelay', name: 'Feedback delay' },
+  { id: 'autoFilter', name: 'Auto filter' },
+  { id: 'autoPanner', name: 'Auto panner' },
+  { id: 'autoWah', name: 'Auto wah' },
+  { id: 'bitCrusher', name: 'Bit crusher' },
+  // { id: 'chorus', name: 'Chorus' },
   { id: 'distortion', name: 'Distortion' },
+  { id: 'feedbackDelay', name: 'Feedback delay' },
   { id: 'freeverb', name: 'Freeverb' },
   { id: 'panVol', name: 'Volume/Pan' },
+  // { id: 'reverb', name: 'Reverb' },
+  { id: 'tremolo', name: 'Tremolo' },
 ];
 
 export const instruments = [
