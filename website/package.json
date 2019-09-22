@@ -24,7 +24,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-select": "^3.0.5",
-    "reactronica": "0.2.0",
+    "reactronica": "0.2.2",
     "tone": "^13.4.9"
   },
   "devDependencies": {
