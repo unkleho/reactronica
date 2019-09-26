@@ -84,7 +84,8 @@ const Sequencer: React.FC<Props> = ({
                   });
                 }}
               >
-                <ion-icon name="trash" />
+                {/* <ion-icon name="trash" /> */}
+                <i className="icon ion-md-trash"></i>
               </button>
             </div>
           );
@@ -102,7 +103,9 @@ const Sequencer: React.FC<Props> = ({
             setNewTrackId(newTrackId + 1);
           }}
         >
-          <ion-icon name="add"></ion-icon>&nbsp;&nbsp;Add Track
+          {/* <ion-icon name="add"></ion-icon> */}
+          <i className="icon ion-md-add"></i>
+          &nbsp;&nbsp;Add Track
         </button>
         {/* </div> */}
       </div>

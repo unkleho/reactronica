@@ -1,5 +1,6 @@
 import React from 'react';
 import NextApp from 'next/app';
+import Head from 'next/head';
 import { MDXProvider } from '@mdx-js/react';
 
 import DocApp from '../components/DocApp';
@@ -26,6 +27,13 @@ class MyApp extends NextApp {
 
     return (
       <MDXProvider components={components}>
+        <Head>
+          <link
+            href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css"
+            rel="stylesheet"
+          />
+        </Head>
+
         <AppComponent>
           <Component {...pageProps} />
         </AppComponent>
