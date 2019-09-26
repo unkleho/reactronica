@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import App from '../App';
 import ReactronicaLogo from '../ReactronicaLogo';
-// import DAWBeatTimerRuler from '../DAWBeatTimeRuler';
 
 import css from './DocApp.scss';
 
@@ -20,7 +19,9 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
             logoClassName={css.logo}
           ></ReactronicaLogo>
 
-          <ion-icon name="logo-github"></ion-icon>
+          <a href="https://www.github.com/unkleho/reactronica">
+            <ion-icon name="logo-github"></ion-icon>
+          </a>
         </div>
       </header>
 
