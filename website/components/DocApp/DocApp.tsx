@@ -20,7 +20,8 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
           ></ReactronicaLogo>
 
           <a href="https://www.github.com/unkleho/reactronica">
-            <ion-icon name="logo-github"></ion-icon>
+            {/* <ion-icon name="logo-github"></ion-icon> */}
+            <i className="icon ion-logo-github"></i>
           </a>
         </div>
       </header>

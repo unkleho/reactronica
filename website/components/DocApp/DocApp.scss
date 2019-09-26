@@ -34,9 +34,8 @@ body {
       padding-bottom: var(--baseline-4);
     }
 
-    & ion-icon {
-      width: 2rem;
-      height: 2rem;
+    & i {
+      font-size: var(--font-size-xlg);
     }
   }
 

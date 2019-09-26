@@ -178,7 +178,8 @@ const TrackInfo: React.FC<Props> = ({
         </select> */}
         <br />
         <button type="submit">
-          <ion-icon name="add" />
+          <i className="icon ion-md-add"></i>
+          {/* <ion-icon name="add" /> */}
           &nbsp;&nbsp;Add Effect
         </button>
       </form>
