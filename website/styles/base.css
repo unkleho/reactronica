@@ -74,7 +74,7 @@ ul {
 }
 
 button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   padding: 0.6em;
   color: var(--colour-text);

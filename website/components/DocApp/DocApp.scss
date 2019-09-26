@@ -17,6 +17,8 @@ body {
   }
 
   & header {
+    @include sequencer-grid;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
