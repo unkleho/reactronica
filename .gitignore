@@ -24,3 +24,5 @@ yarn-error.log*
 # samples
 website/static/audio/ukulele
 example/public/audio/ukulele
+
+*.code-workspace
