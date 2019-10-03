@@ -2,6 +2,7 @@ import React from 'react';
 import { config } from 'reactronica';
 
 import Select from '../Select';
+import Icon from '../Icon';
 
 import * as types from '../../types';
 
@@ -178,8 +179,7 @@ const TrackInfo: React.FC<Props> = ({
         </select> */}
         <br />
         <button type="submit">
-          <i className="icon ion-md-add"></i>
-          {/* <ion-icon name="add" /> */}
+          <Icon name="add"></Icon>
           &nbsp;&nbsp;Add Effect
         </button>
       </form>

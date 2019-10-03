@@ -2,6 +2,7 @@ import React from 'react';
 
 import DAWBeatTimeRuler from '../DAWBeatTimeRuler';
 import DAWClip from '../DAWClip';
+import Icon from '../Icon';
 
 import * as types from '../../types';
 import DAWPlayhead from '../DAWPlayhead';
@@ -84,8 +85,7 @@ const Sequencer: React.FC<Props> = ({
                   });
                 }}
               >
-                {/* <ion-icon name="trash" /> */}
-                <i className="icon ion-md-trash"></i>
+                <Icon name="trash"></Icon>
               </button>
             </div>
           );
