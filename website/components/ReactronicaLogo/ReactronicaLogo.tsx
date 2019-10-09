@@ -16,7 +16,7 @@ const ReactronicaLogo: React.FunctionComponent<Props> = ({
   return (
     <div className={[css.reactronicaLogo, className || ''].join(' ')}>
       <h1 className={[css.logo, logoClassName || ''].join(' ')}>
-        <span>Reactronica</span> <span>{subText}</span>
+        <span>Reactronica</span> {subText && <span>{subText}</span>}
       </h1>
     </div>
   );
