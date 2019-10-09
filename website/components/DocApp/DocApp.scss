@@ -43,6 +43,11 @@ body {
     margin-top: var(--baseline-8);
   }
 
+  & img {
+    max-width: 30rem;
+    border: 1px solid var(--colour-black);
+  }
+
   & code {
     padding: 0 var(--baseline-1);
     background-color: var(--colour-black);
