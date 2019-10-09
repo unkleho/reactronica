@@ -8,7 +8,8 @@
     "start": "next start",
     "build": "next build",
     "test": "jest",
-    "link": "npm link reactronica && npm link ../node_modules/react"
+    "link": "npm link reactronica && npm link ../node_modules/react",
+    "deploy": "now"
   },
   "author": "unkleho",
   "license": "ISC",
