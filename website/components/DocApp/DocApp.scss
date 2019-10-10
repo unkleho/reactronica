@@ -40,7 +40,7 @@ body {
 
     & p {
       margin-bottom: var(--baseline-3);
-      font-size: var(--font-size-sm);
+      font-size: var(--font-size-lg);
       text-align: center;
       // opacity: 0.8;
 
@@ -52,7 +52,11 @@ body {
   }
 
   & h2 {
-    margin-top: var(--baseline-8);
+    margin-top: var(--baseline-16);
+  }
+
+  & h2:first-child {
+    margin-top: 0;
   }
 
   & p {
@@ -60,6 +64,7 @@ body {
   }
 
   & img {
+    width: 100%;
     max-width: 30rem;
     border: 1px solid var(--colour-black);
   }
@@ -83,7 +88,7 @@ body {
   align-items: center;
   width: 100%;
   max-width: var(--container-md);
-  padding: var(--baseline-4);
+  padding: var(--baseline-5);
   background-color: var(--colour-black);
 }
 
@@ -95,7 +100,7 @@ body {
 .logo {
   margin-right: 0;
   margin-bottom: var(--baseline-2);
-  font-size: 11vw;
+  font-size: 13vw;
 
   @include media-sm {
     font-size: 4em;
