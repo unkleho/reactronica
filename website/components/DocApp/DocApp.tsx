@@ -20,12 +20,14 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
           ></ReactronicaLogo>
           <p>React audio components for making music in the browser</p>
 
-          <a
-            href="https://www.github.com/unkleho/reactronica"
-            className={css.headerLink}
-          >
-            <i className="icon ion-logo-github"></i>&nbsp;Github
-          </a>
+          <div>
+            <a
+              href="https://www.github.com/unkleho/reactronica"
+              className={css.headerLink}
+            >
+              <i className="icon ion-logo-github"></i>&nbsp;Github
+            </a>
+          </div>
         </div>
       </header>
 
