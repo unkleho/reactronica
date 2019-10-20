@@ -91,10 +91,14 @@
 .trackSequencer {
   display: flex;
   grid-area: trackSequencer;
-  width: 100%;
   overflow: auto;
 }
 
 .stepsEditor {
   grid-area: stepsEditor;
+  margin-bottom: 1rem;
+
+  @include media-sm {
+    margin-bottom: 0;
+  }
 }
