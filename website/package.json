@@ -9,7 +9,8 @@
     "build": "next build",
     "test": "jest",
     "link": "npm link reactronica && npm link ../node_modules/react",
-    "deploy": "now"
+    "deploy": "now",
+    "alias": "now alias https://reactronica-website.unkleho.now.sh reactronica.com"
   },
   "author": "unkleho",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "prism-react-renderer": "^0.1.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-ga": "^2.7.0",
     "react-select": "^3.0.5",
     "reactronica": "0.2.1",
     "tone": "^13.4.9"
@@ -36,6 +38,7 @@
     "postcss-extend-rule": "^3.0.0",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "webpack-filter-warnings-plugin": "^1.2.1"
   }
 }
