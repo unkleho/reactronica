@@ -36,3 +36,13 @@
   background-color: var(--colour-secondary);
   /* border-radius: var(--border-radius-sm); */
 }
+
+.clipName {
+  position: absolute;
+  bottom: 0;
+  padding: var(--baseline-half) var(--baseline);
+  color: var(--colour-grey-lightest);
+  font-size: var(--font-size-sm);
+  background-color: rgba(30, 30, 30, 0.9);
+  // background-color: var(--colour-grey);
+}

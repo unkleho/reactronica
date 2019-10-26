@@ -18,7 +18,6 @@ import {
 } from '../../sample-data';
 import { buildSteps, buildClip } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
-import useAnalytics from '../../lib/hooks/useAnalytics';
 
 import '../../node_modules/normalize.css/normalize.css';
 import css from './DAWApp.scss';
@@ -275,12 +274,13 @@ function appSelector(state) {
       return {
         ...track,
         clips: track.clips.map((trackClip) => {
+          const clip = state.clips.find((clip) => clip.id === trackClip.id);
+
           return {
             ...trackClip,
-            notes: state.clips.find((clip) => clip.id === trackClip.id).notes,
-            steps: buildSteps(
-              state.clips.find((clip) => clip.id === trackClip.id),
-            ),
+            name: clip.name,
+            notes: clip.notes,
+            steps: buildSteps(clip),
           };
         }),
       };
