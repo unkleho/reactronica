@@ -1,6 +1,6 @@
 {
   "name": "reactronica-website",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,9 @@
     "build": "next build",
     "test": "jest",
     "link": "npm link reactronica && npm link ../node_modules/react",
-    "deploy": "now",
-    "alias": "now alias https://reactronica-website.unkleho.now.sh reactronica.com"
+    "deploy:prod": "now --prod",
+    "deploy:staging": "now --local-config now.staging.json",
+    "alias:staging": "now alias https://reactronica.unkleho.now.sh staging.reactronica.com"
   },
   "author": "unkleho",
   "license": "ISC",
@@ -34,6 +35,7 @@
     "@testing-library/react": "^9.0.2",
     "@types/node": "^12.7.4",
     "@types/react": "^16.9.1",
+    "dotenv": "^8.2.0",
     "hygen": "^4.0.8",
     "postcss-extend-rule": "^3.0.0",
     "postcss-import": "^12.0.1",
