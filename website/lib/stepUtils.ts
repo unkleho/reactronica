@@ -53,6 +53,23 @@ export function buildClip(steps, id, subdivision = 16, notesPerBar = 4) {
   };
 }
 
+export function convertStepsToNotes(steps, subdivision = 16, notesPerBar = 4) {
+  const notes = steps.reduce((prev, curr, i) => {
+    const timeKey = buildTimeKey(i, subdivision, notesPerBar);
+
+    return [
+      ...prev,
+      ...(curr
+        ? curr.map((note) => {
+            return { start: timeKey, ...note };
+          })
+        : []),
+    ];
+  }, []);
+
+  return notes;
+}
+
 function buildTimeKey(i, subdivision, notesPerBar) {
   const barKey = Math.ceil((i + 1) / subdivision);
   const noteKey = Math.ceil((i + 1) / notesPerBar) % notesPerBar || notesPerBar;

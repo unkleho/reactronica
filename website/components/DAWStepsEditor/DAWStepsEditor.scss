@@ -8,6 +8,11 @@
   border-left: 2px solid var(--colour-black);
 }
 
+.info {
+  padding: var(--baseline);
+  background: var(--colour-black);
+}
+
 .row {
   display: flex;
 }

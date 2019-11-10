@@ -3,6 +3,7 @@ import React from 'react';
 import css from './DAWStepsEditor.scss';
 
 type Props = {
+  clipName: string;
   currentStepIndex: number;
   stepIndexOffset: number;
   defaultSteps: any[];
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const DAWStepsEditor: React.FC<Props> = ({
+  clipName,
   currentStepIndex,
   stepIndexOffset = 0,
   defaultSteps = [],
@@ -59,6 +61,10 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
+      <div className={css.info}>
+        <p>{clipName}</p>
+      </div>
+
       <div className={[css.row, css.header].join(' ')}>
         {emptyArray.map((_, i) => {
           return (
