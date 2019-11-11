@@ -1,6 +1,7 @@
 @import '../../styles/global.scss';
 
 .stepsEditor {
+  height: 100%;
   margin-bottom: 0;
   border-top: 1px solid var(--colour-black);
   border-right: 1px solid var(--colour-black);
@@ -10,7 +11,18 @@
 
 .info {
   padding: var(--baseline);
+  font-size: var(--font-size-sm);
   background: var(--colour-black);
+}
+
+.steps {
+  height: calc(100% - var(--baseline-4));
+  overflow: auto;
+}
+
+.header {
+  position: sticky;
+  top: 0;
 }
 
 .row {
@@ -33,14 +45,13 @@
   flex: 1;
   margin-right: 0;
   padding: 0.5em 0;
-  // color: ;
   font-weight: 400;
   font-size: var(--font-size-xs);
   text-align: center;
   background-color: var(--colour-button);
   border: none;
-  border-top: 1px solid var(--colour-black);
   border-right: 1px solid var(--colour-black);
+  border-bottom: 1px solid var(--colour-black);
   border-radius: 0;
   cursor: pointer;
 

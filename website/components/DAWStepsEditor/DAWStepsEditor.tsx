@@ -14,6 +14,45 @@ type Props = {
   onKeyboardUp: Function;
 };
 
+const notes = [
+  'C2',
+  'C#2',
+  'D2',
+  'D#2',
+  'E2',
+  'F2',
+  'F#2',
+  'G2',
+  'G#2',
+  'A2',
+  'A#2',
+  'B2',
+  'C3',
+  'C#3',
+  'D3',
+  'D#3',
+  'E3',
+  'F3',
+  'F#3',
+  'G3',
+  'G#3',
+  'A3',
+  'A#3',
+  'B3',
+  'C4',
+  'C#4',
+  'D4',
+  'D#4',
+  'E4',
+  'F4',
+  'F#4',
+  'G4',
+  'G#4',
+  'A4',
+  'A#4',
+  'B4',
+];
+
 const DAWStepsEditor: React.FC<Props> = ({
   clipName,
   currentStepIndex,
@@ -26,6 +65,7 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardUp,
 }) => {
   const [steps, setSteps] = React.useState(defaultSteps);
+
   React.useEffect(() => {
     setSteps(defaultSteps);
   }, [defaultSteps]);
@@ -34,7 +74,32 @@ const DAWStepsEditor: React.FC<Props> = ({
     return null;
   }
 
-  // console.log(steps);
+  const flattenedSteps = [].concat.apply([], steps);
+  console.log(flattenedSteps);
+
+  // Work out highest step for scrollIntoView
+  const highestStep = flattenedSteps.reduce((prev, curr) => {
+    if (curr) {
+      if (prev === null) {
+        return curr;
+      }
+
+      // Find indexes and compare between previous highest and current
+      const currentIndex = notes.findIndex((note) => note === curr.note);
+      const prevIndex = notes.findIndex((note) => note === prev.note);
+
+      if (currentIndex < prevIndex) {
+        return curr;
+      }
+      console.log(currentIndex, prevIndex);
+
+      return prev;
+    }
+
+    return prev;
+  }, null);
+
+  console.log(highestStep);
 
   const handleStepClick = (note, index) => {
     // Append note to stepRow
@@ -57,109 +122,97 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   const emptyArray = [...new Array(1 + subdivision)];
 
-  // console.log(steps);
-
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
       <div className={css.info}>
         <p>{clipName}</p>
       </div>
 
-      <div className={[css.row, css.header].join(' ')}>
-        {emptyArray.map((_, i) => {
+      <div className={css.steps}>
+        <div className={[css.row, css.header].join(' ')}>
+          {emptyArray.map((_, i) => {
+            return (
+              <div
+                className={[
+                  css.step,
+                  currentStepIndex + 1 === i + stepIndexOffset
+                    ? css.stepIsCurrent
+                    : '',
+                ].join(' ')}
+                key={`header-${i}`}
+                data-testid={`header`}
+              >
+                {i !== 0 && i + stepIndexOffset}
+              </div>
+            );
+          })}
+        </div>
+
+        {notes.map((note, rowIndex) => {
+          const isAccidental = note.includes('#');
+
           return (
             <div
               className={[
-                css.step,
-                currentStepIndex + 1 === i + stepIndexOffset
-                  ? css.stepIsCurrent
-                  : '',
+                css.row,
+                isAccidental ? css.rowIsAccidental : '',
               ].join(' ')}
-              key={`header-${i}`}
-              data-testid={`header`}
+              key={note}
             >
-              {i !== 0 && i + stepIndexOffset}
+              {emptyArray.map((_, columnIndex) => {
+                const index = columnIndex - 1;
+
+                const isCurrent =
+                  steps[index] &&
+                  steps[index].findIndex((step) => {
+                    return step.note === note;
+                  }) >= 0;
+
+                const dataTestId = `step-button-${columnIndex - 1}-${rowIndex}${
+                  isCurrent ? '-current' : ''
+                }`;
+
+                // For the first column, show playable keyboard
+                if (columnIndex === 0) {
+                  return (
+                    <button
+                      className={[css.step, css.stepKey].join(' ')}
+                      onMouseDown={() => {
+                        if (typeof onKeyboardDown === 'function') {
+                          onKeyboardDown(note);
+                        }
+                      }}
+                      onMouseUp={() => {
+                        if (typeof onKeyboardUp === 'function') {
+                          onKeyboardUp(note);
+                        }
+                      }}
+                      key={columnIndex}
+                      data-testid="keyboard-button"
+                    >
+                      {note}
+                    </button>
+                  );
+                }
+
+                return (
+                  <button
+                    className={[
+                      css.step,
+                      isCurrent ? css.stepIsCurrent : '',
+                    ].join(' ')}
+                    onClick={() => {
+                      handleStepClick({ note, duration: 0.5 }, index);
+                    }}
+                    key={columnIndex}
+                    data-testid={dataTestId}
+                  />
+                );
+              })}
             </div>
           );
         })}
       </div>
-
-      {[
-        'C3',
-        'C#3',
-        'D3',
-        'D#3',
-        'E3',
-        'F3',
-        'F#3',
-        'G3',
-        'G#3',
-        'A3',
-        'A#3',
-        'B3',
-      ].map((note, rowIndex) => {
-        const isAccidental = note.includes('#');
-
-        return (
-          <div
-            className={[css.row, isAccidental ? css.rowIsAccidental : ''].join(
-              ' ',
-            )}
-            key={note}
-          >
-            {emptyArray.map((_, columnIndex) => {
-              const index = columnIndex - 1;
-
-              const isCurrent =
-                steps[index] &&
-                steps[index].findIndex((step) => {
-                  return step.note === note;
-                }) >= 0;
-
-              const dataTestId = `step-button-${columnIndex - 1}-${rowIndex}${
-                isCurrent ? '-current' : ''
-              }`;
-
-              // For the first column, show playable keyboard
-              if (columnIndex === 0) {
-                return (
-                  <button
-                    className={[css.step, css.stepKey].join(' ')}
-                    onMouseDown={() => {
-                      if (typeof onKeyboardDown === 'function') {
-                        onKeyboardDown(note);
-                      }
-                    }}
-                    onMouseUp={() => {
-                      if (typeof onKeyboardUp === 'function') {
-                        onKeyboardUp(note);
-                      }
-                    }}
-                    key={columnIndex}
-                    data-testid="keyboard-button"
-                  >
-                    {note}
-                  </button>
-                );
-              }
-
-              return (
-                <button
-                  className={[
-                    css.step,
-                    isCurrent ? css.stepIsCurrent : '',
-                  ].join(' ')}
-                  onClick={() => {
-                    handleStepClick({ note, duration: 0.5 }, index);
-                  }}
-                  key={columnIndex}
-                  data-testid={dataTestId}
-                />
-              );
-            })}
-          </div>
-        );
-      })}
     </div>
   );
 };

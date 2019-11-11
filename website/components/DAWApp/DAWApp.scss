@@ -96,6 +96,7 @@
 
 .stepsEditor {
   grid-area: stepsEditor;
+  height: 23rem;
   margin-bottom: 1rem;
 
   @include media-sm {
