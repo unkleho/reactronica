@@ -1,8 +1,11 @@
 import React from 'react';
 
+import { midiNotes } from '../../constants';
+
 import css from './DAWStepsEditor.scss';
 
 type Props = {
+  clipId: string;
   clipName: string;
   currentStepIndex: number;
   stepIndexOffset: number;
@@ -14,46 +17,8 @@ type Props = {
   onKeyboardUp: Function;
 };
 
-const notes = [
-  'C2',
-  'C#2',
-  'D2',
-  'D#2',
-  'E2',
-  'F2',
-  'F#2',
-  'G2',
-  'G#2',
-  'A2',
-  'A#2',
-  'B2',
-  'C3',
-  'C#3',
-  'D3',
-  'D#3',
-  'E3',
-  'F3',
-  'F#3',
-  'G3',
-  'G#3',
-  'A3',
-  'A#3',
-  'B3',
-  'C4',
-  'C#4',
-  'D4',
-  'D#4',
-  'E4',
-  'F4',
-  'F#4',
-  'G4',
-  'G#4',
-  'A4',
-  'A#4',
-  'B4',
-];
-
 const DAWStepsEditor: React.FC<Props> = ({
+  clipId,
   clipName,
   currentStepIndex,
   stepIndexOffset = 0,
@@ -65,17 +30,32 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardUp,
 }) => {
   const [steps, setSteps] = React.useState(defaultSteps);
+  const highestStepRef = React.useRef(null);
+  const stepsRef = React.useRef(null);
 
   React.useEffect(() => {
     setSteps(defaultSteps);
   }, [defaultSteps]);
+
+  // NOTE: This kicks in a bit delayed for some reason. On next clip click
+  React.useLayoutEffect(() => {
+    if (highestStepRef.current && stepsRef.current) {
+      // console.log(clipId);
+
+      // console.log(stepsRef.current.scrollTop);
+      highestStepRef.current.scrollIntoView();
+      // console.log(stepsRef.current.scrollTop);
+
+      stepsRef.current.scrollTop = stepsRef.current.scrollTop - 32;
+    }
+  }, [clipId]);
 
   if (steps.length === 0) {
     return null;
   }
 
   const flattenedSteps = [].concat.apply([], steps);
-  console.log(flattenedSteps);
+  const notes = midiNotes.slice(24, 60);
 
   // Work out highest step for scrollIntoView
   const highestStep = flattenedSteps.reduce((prev, curr) => {
@@ -91,15 +71,12 @@ const DAWStepsEditor: React.FC<Props> = ({
       if (currentIndex < prevIndex) {
         return curr;
       }
-      console.log(currentIndex, prevIndex);
 
       return prev;
     }
 
     return prev;
   }, null);
-
-  console.log(highestStep);
 
   const handleStepClick = (note, index) => {
     // Append note to stepRow
@@ -128,7 +105,7 @@ const DAWStepsEditor: React.FC<Props> = ({
         <p>{clipName}</p>
       </div>
 
-      <div className={css.steps}>
+      <div className={css.steps} ref={stepsRef}>
         <div className={[css.row, css.header].join(' ')}>
           {emptyArray.map((_, i) => {
             return (
@@ -189,6 +166,7 @@ const DAWStepsEditor: React.FC<Props> = ({
                       }}
                       key={columnIndex}
                       data-testid="keyboard-button"
+                      ref={note === highestStep.note ? highestStepRef : null}
                     >
                       {note}
                     </button>
