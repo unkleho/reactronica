@@ -138,6 +138,7 @@ const DAWApp = () => {
       </div>
 
       <StepsEditor
+        clipId={currentClip.id}
         clipName={currentClip.name}
         defaultSteps={currentSteps}
         currentStepIndex={currentStepIndex}

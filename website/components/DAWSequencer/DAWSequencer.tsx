@@ -38,7 +38,7 @@ const Sequencer: React.FC<Props> = ({
 }) => {
   const [newTrackId, setNewTrackId] = React.useState(1);
 
-  console.log(tracks);
+  // console.log(tracks);
 
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
