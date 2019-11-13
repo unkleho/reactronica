@@ -30,22 +30,66 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardUp,
 }) => {
   const [steps, setSteps] = React.useState(defaultSteps);
-  const highestStepRef = React.useRef(null);
-  const stepsRef = React.useRef(null);
 
+  // --------------------------------------------------------------------------
+  // Set up refs for keyboard notes
+  // Lets us get and set scroll position of stepsRef
+  // --------------------------------------------------------------------------
+
+  const keysRef = React.useRef([]);
+  const stepsRef = React.useRef(null);
+  const notes = midiNotes.slice(24, 60);
+
+  React.useEffect(() => {
+    keysRef.current = keysRef.current.slice(0, notes.length);
+  }, [notes]);
+
+  // --------------------------------------------------------------------------
+  // Assign local steps
+  // TODO: Check if steps are any different to defaultSteps
+  // --------------------------------------------------------------------------
   React.useEffect(() => {
     setSteps(defaultSteps);
   }, [defaultSteps]);
 
-  // NOTE: This kicks in a bit delayed for some reason. On next clip click
-  React.useLayoutEffect(() => {
-    if (highestStepRef.current && stepsRef.current) {
-      // console.log(clipId);
+  // --------------------------------------------------------------------------
+  // If click on new clip, work out highest key and scroll to it
+  // --------------------------------------------------------------------------
 
-      // console.log(stepsRef.current.scrollTop);
-      highestStepRef.current.scrollIntoView();
-      // console.log(stepsRef.current.scrollTop);
+  React.useEffect(() => {
+    const flattenedSteps = [].concat.apply([], defaultSteps);
 
+    // Work out highest step for scrollIntoView
+    const highestStep = flattenedSteps.reduce((prev, curr) => {
+      if (curr) {
+        if (prev === null) {
+          return curr;
+        }
+
+        // Find indexes and compare between previous highest and current
+        const currentIndex = notes.findIndex((note) => note === curr.note);
+        const prevIndex = notes.findIndex((note) => note === prev.note);
+
+        if (currentIndex < prevIndex) {
+          return curr;
+        }
+
+        return prev;
+      }
+
+      return prev;
+    }, null);
+
+    const highestStepIndex = notes.findIndex(
+      (note) => note === highestStep.note,
+    );
+
+    const highestKeyRef = keysRef.current[highestStepIndex];
+
+    // console.log(highestStepIndex, highestKeyRef);
+
+    if (highestKeyRef) {
+      highestKeyRef.scrollIntoView();
       stepsRef.current.scrollTop = stepsRef.current.scrollTop - 32;
     }
   }, [clipId]);
@@ -53,30 +97,6 @@ const DAWStepsEditor: React.FC<Props> = ({
   if (steps.length === 0) {
     return null;
   }
-
-  const flattenedSteps = [].concat.apply([], steps);
-  const notes = midiNotes.slice(24, 60);
-
-  // Work out highest step for scrollIntoView
-  const highestStep = flattenedSteps.reduce((prev, curr) => {
-    if (curr) {
-      if (prev === null) {
-        return curr;
-      }
-
-      // Find indexes and compare between previous highest and current
-      const currentIndex = notes.findIndex((note) => note === curr.note);
-      const prevIndex = notes.findIndex((note) => note === prev.note);
-
-      if (currentIndex < prevIndex) {
-        return curr;
-      }
-
-      return prev;
-    }
-
-    return prev;
-  }, null);
 
   const handleStepClick = (note, index) => {
     // Append note to stepRow
@@ -166,7 +186,7 @@ const DAWStepsEditor: React.FC<Props> = ({
                       }}
                       key={columnIndex}
                       data-testid="keyboard-button"
-                      ref={note === highestStep.note ? highestStepRef : null}
+                      ref={(el) => (keysRef.current[rowIndex] = el)}
                     >
                       {note}
                     </button>
