@@ -409,11 +409,13 @@ function reducer(state, action) {
           ...state.clips,
           {
             id: `${action.trackId}1`,
+            name: 'New Clip 1',
             bars: 1,
             notes: [],
           },
           {
             id: `${action.trackId}2`,
+            name: 'New Clip 2',
             bars: 1,
             notes: [],
           },

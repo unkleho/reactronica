@@ -5,16 +5,18 @@ import { midiNotes } from '../../constants';
 import css from './DAWStepsEditor.scss';
 
 type Props = {
-  clipId: string;
-  clipName: string;
-  currentStepIndex: number;
-  stepIndexOffset: number;
+  clipId?: string;
+  clipName?: string;
+  currentStepIndex?: number;
+  stepIndexOffset?: number;
   defaultSteps: any[];
-  subdivision: number;
-  className: string;
-  onStepEditorClick: Function;
-  onKeyboardDown: Function;
-  onKeyboardUp: Function;
+  subdivision?: number;
+  startNote?: string;
+  endNote?: string;
+  className?: string;
+  onStepEditorClick?: Function;
+  onKeyboardDown?: Function;
+  onKeyboardUp?: Function;
 };
 
 const DAWStepsEditor: React.FC<Props> = ({
@@ -24,6 +26,8 @@ const DAWStepsEditor: React.FC<Props> = ({
   stepIndexOffset = 0,
   defaultSteps = [],
   subdivision = 8,
+  startNote = 'C2',
+  endNote = 'B4',
   className,
   onStepEditorClick,
   onKeyboardDown,
@@ -38,7 +42,9 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   const keysRef = React.useRef([]);
   const stepsRef = React.useRef(null);
-  const notes = midiNotes.slice(24, 60);
+  const startNoteIndex = midiNotes.indexOf(startNote);
+  const endNoteIndex = midiNotes.indexOf(endNote);
+  const notes = midiNotes.slice(startNoteIndex, endNoteIndex + 1);
 
   React.useEffect(() => {
     keysRef.current = keysRef.current.slice(0, notes.length);
@@ -80,17 +86,19 @@ const DAWStepsEditor: React.FC<Props> = ({
       return prev;
     }, null);
 
-    const highestStepIndex = notes.findIndex(
-      (note) => note === highestStep.note,
-    );
+    if (highestStep) {
+      const highestStepIndex = notes.findIndex(
+        (note) => note === highestStep.note,
+      );
 
-    const highestKeyRef = keysRef.current[highestStepIndex];
+      const highestKeyRef = keysRef.current[highestStepIndex];
 
-    // console.log(highestStepIndex, highestKeyRef);
+      // console.log(highestStepIndex, highestKeyRef);
 
-    if (highestKeyRef) {
-      highestKeyRef.scrollIntoView();
-      stepsRef.current.scrollTop = stepsRef.current.scrollTop - 32;
+      if (highestKeyRef) {
+        highestKeyRef.scrollIntoView();
+        stepsRef.current.scrollTop = stepsRef.current.scrollTop - 32;
+      }
     }
   }, [clipId]);
 
@@ -121,9 +129,11 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
-      <div className={css.info}>
-        <p>{clipName}</p>
-      </div>
+      {clipName && (
+        <div className={css.info}>
+          <p>{clipName}</p>
+        </div>
+      )}
 
       <div className={css.steps} ref={stepsRef}>
         <div className={[css.row, css.header].join(' ')}>
