@@ -13,6 +13,7 @@ type Props = {
   subdivision?: number;
   startNote?: string;
   endNote?: string;
+  disableScrollIntoView?: boolean;
   className?: string;
   onStepEditorClick?: Function;
   onKeyboardDown?: Function;
@@ -28,6 +29,7 @@ const DAWStepsEditor: React.FC<Props> = ({
   subdivision = 8,
   startNote = 'C2',
   endNote = 'B4',
+  disableScrollIntoView = false,
   className,
   onStepEditorClick,
   onKeyboardDown,
@@ -95,7 +97,7 @@ const DAWStepsEditor: React.FC<Props> = ({
 
       // console.log(highestStepIndex, highestKeyRef);
 
-      if (highestKeyRef) {
+      if (highestKeyRef && disableScrollIntoView === false) {
         highestKeyRef.scrollIntoView();
         stepsRef.current.scrollTop = stepsRef.current.scrollTop - 32;
       }

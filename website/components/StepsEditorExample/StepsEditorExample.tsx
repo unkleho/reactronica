@@ -38,6 +38,7 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
         defaultSteps={currentSteps}
         startNote="C3"
         endNote="B3"
+        disableScrollIntoView={true}
         onStepEditorClick={(steps) => {
           setCurrentSteps(steps);
         }}
