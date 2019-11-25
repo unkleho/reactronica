@@ -8,6 +8,11 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
+import { split } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+
+import ws from 'ws';
 import fetch from 'node-fetch';
 
 let apolloClient = null;
@@ -124,11 +129,12 @@ export function initApolloClient(initialState) {
   return apolloClient;
 }
 
+const token = process.env.TOKEN;
+
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   // const token = localStorage.getItem('token');
 
-  const token = process.env.TOKEN;
   // Get token from URL if it exists
   // const { token } = queryString.parse(window.location.search);
 
@@ -147,6 +153,39 @@ const httpLink = new HttpLink({
   fetch,
 });
 
+// Create a WebSocket link:
+const wsLink = new WebSocketLink({
+  uri: process.env.GRAPHQL_SUBSCRIPTION_URL,
+  options: {
+    reconnect: true,
+    connectionParams: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    },
+  },
+  ...(process.browser
+    ? {}
+    : {
+        webSocketImpl: ws,
+      }),
+});
+
+// using the ability to split links, you can send data to each link
+// depending on what kind of operation is being sent
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink,
+);
+
 /**
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]
@@ -155,7 +194,7 @@ function createApolloClient(initialState = {}) {
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient({
     ssrMode: typeof window === 'undefined', // Disables forceFetch on the server (so queries are only run once)
-    link: authLink.concat(httpLink),
+    link: authLink.concat(link),
     cache: new InMemoryCache().restore(initialState),
   });
 }

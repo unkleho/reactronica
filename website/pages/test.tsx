@@ -2,13 +2,17 @@ import React from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 import { withApollo } from '../lib/apollo';
 
-import { useQuery } from '@apollo/react-hooks';
+import {
+  //useQuery,
+  useSubscription,
+} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 const GET_SONG = gql`
-  {
+  subscription {
     songs {
       id
+      pan
       clips {
         notes {
           note
@@ -21,7 +25,9 @@ const GET_SONG = gql`
 const HomePage = () => {
   const [notes, setNotes] = React.useState(null);
 
-  const { loading, data } = useQuery(GET_SONG);
+  // const { loading, data } = useQuery(GET_SONG);
+  const { loading, data } = useSubscription(GET_SONG);
+
   console.log(loading, data);
 
   return (
