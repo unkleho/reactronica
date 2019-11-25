@@ -1,6 +1,8 @@
 import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 import Link from 'next/link';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
 import App from '../App';
 import ReactronicaLogo from '../ReactronicaLogo';
@@ -18,13 +20,21 @@ import {
 } from '../../sample-data';
 import {
   buildSteps,
-  buildClip,
+  // buildClip,
   convertStepsToNotes,
 } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 
 import '../../node_modules/normalize.css/normalize.css';
 import css from './DAWApp.scss';
+
+const GET_SONG = gql`
+  {
+    posts {
+      id
+    }
+  }
+`;
 
 const initialState = {
   // --------------------------------------------------------------------------
@@ -86,12 +96,15 @@ const DAWApp = () => {
     tracks,
     volume,
     pan,
-    notes,
+    // notes,
   } = appSelector(state);
 
   useKeyPress(' ', () => {
     dispatch({ type: types.TOGGLE_PLAYING });
   });
+
+  const { data } = useQuery(GET_SONG);
+  console.log(data);
 
   return (
     <App className={css.dawApp}>

@@ -1,8 +1,28 @@
 import React from 'react';
 import { Song, Track, Instrument } from 'reactronica';
+import { withApollo } from '../lib/apollo';
+
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+
+const GET_SONG = gql`
+  {
+    songs {
+      id
+      clips {
+        notes {
+          note
+        }
+      }
+    }
+  }
+`;
 
 const HomePage = () => {
   const [notes, setNotes] = React.useState(null);
+
+  const { loading, data } = useQuery(GET_SONG);
+  console.log(loading, data);
 
   return (
     <div>
@@ -40,4 +60,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default withApollo(HomePage);

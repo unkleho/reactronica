@@ -7,6 +7,8 @@ import DocApp from '../components/DocApp';
 import DAWApp from '../components/DAWApp';
 import CodeBlock from '../components/CodeBlock';
 
+// import { withApollo } from '../lib/apollo';
+
 class MyApp extends NextApp {
   render() {
     const { Component, pageProps, router } = this.props;
