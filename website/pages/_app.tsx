@@ -15,10 +15,12 @@ class MyApp extends NextApp {
 
     let AppComponent;
 
-    if (router.route === '/daw') {
-      AppComponent = DAWApp;
-    } else {
+    if (router.route === '/') {
       AppComponent = DocApp;
+    } else {
+      AppComponent = ({ children }) => {
+        return children;
+      };
     }
 
     const components = {

@@ -30,8 +30,9 @@ import css from './DAWApp.scss';
 
 const GET_SONG = gql`
   {
-    posts {
+    songs {
       id
+      name
     }
   }
 `;
