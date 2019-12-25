@@ -4,7 +4,7 @@ import StartAudioContext from 'startaudiocontext';
 
 import Tone from '../lib/tone';
 
-export const SongContext = React.createContext();
+export const SongContext = React.createContext({});
 
 const Song = ({
   isPlaying = false,

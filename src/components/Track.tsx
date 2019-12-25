@@ -6,7 +6,7 @@ import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
 import buildSequencerStep from '../lib/buildSequencerStep';
 
-export const TrackContext = React.createContext();
+export const TrackContext = React.createContext({});
 
 const TrackConsumer = ({
   // <Song /> props
