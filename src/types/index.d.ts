@@ -7,6 +7,9 @@ declare module 'reactronica' {
 	};
 
 	const Song: React.FunctionComponent<SongProps>;
+	const Track: React.FunctionComponent;
+	const Instrument: React.FunctionComponent;
+	const Effect: React.FunctionComponent;
 
-	export { Song };
+	export { Song, Track, Instrument, Effect };
 }
