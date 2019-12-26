@@ -13,7 +13,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noEmitOnError": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "build", "dist", "example", "rollup.config.js"]

@@ -42,7 +42,7 @@ const TrackConsumer = ({
     // Start/Stop sequencer!
     if (isPlaying) {
       sequencer.current = new Tone.Sequence(
-        (time, step) => {
+        (_, step) => {
           step.notes.forEach((note) => {
             instrumentsRef.current.map((instrument) => {
               instrument.triggerAttackRelease(
