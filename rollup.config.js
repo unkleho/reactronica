@@ -35,9 +35,12 @@ export default {
     // }),
     resolve(),
     typescript({
-      rollupCommonJSResolveHack: true,
+      // rollupCommonJSResolveHack: true,
       clean: true,
+      check: false,
       abortOnError: false,
+      verbosity: 0,
+      typescript: require('typescript'),
     }),
     commonjs(),
   ],

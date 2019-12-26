@@ -46,7 +46,9 @@ const EffectConsumer = ({
       effect.current = new Tone.Tremolo();
     }
 
-    effect.current.id = id;
+    if (effect.current) {
+      effect.current.id = id;
+    }
 
     // Update effects chain
     // TODO: Work out which index to insert current this.effect

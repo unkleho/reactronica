@@ -22,7 +22,13 @@ const TrackConsumer = ({
 }) => {
   const [effectsChain, setEffectsChain] = useState([]);
   const [instruments, setInstruments] = useState([]);
-  const sequencer = useRef();
+  const sequencer = useRef<{
+    start: Function;
+    stop: Function;
+    removeAll: Function;
+    add: Function;
+    dispose: Function;
+  }>();
   const instrumentsRef = useRef(instruments);
 
   useEffect(() => {
@@ -62,7 +68,9 @@ const TrackConsumer = ({
         subdivision,
       );
 
-      sequencer.current.start(0);
+      if (sequencer.current) {
+        sequencer.current.start(0);
+      }
     } else {
       if (sequencer.current) {
         sequencer.current.stop();
