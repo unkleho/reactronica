@@ -5,7 +5,9 @@ import CodeBlock from '../components/CodeBlock';
 import StepsEditorExample from '../components/StepsEditorExample';
 import TabExample from '../components/TabExample';
 
-React audio components for making music in the browser.
+<!-- React audio components for making music in the browser. -->
+
+## Introduction
 
 React treats UI as a function of state. What if React’s declarative programming model could be applied to music as well?
 
@@ -17,6 +19,24 @@ Uses [ToneJS](https://tonejs.github.io/) under the hood. Inspired by [React Musi
 
 > Warning: Highly experimental. APIs will change.
 
+## Demos
+
+### Digital Audio Workstation
+
+Early prototype of a browser based [Digital Audio Workstation](https://reactronica.com/daw). Inspired by Ableton Live, Cubase and Logic Pro, this experiment comes complete with multi-track sequencing, browser synths, drums and web audio effects.
+
+[https://reactronica.com/daw](https://reactronica.com/daw)
+
+[![Reactronica Digital Audio Workstation demo!](/static/screenshots/daw-screenshot.png 'Reactronica Digital Audio Workstation demo')](https://reactronica.com/daw)
+
+### Music chord/scale toolbox
+
+Improve your understanding of music theory with this chord, scale and progression finder.
+
+[https://music-toolbox.now.sh](https://music-toolbox.now.sh)
+
+[![Music chord, scale and progression tools!](/static/screenshots/music-toolbox-screenshot.png 'Music chord, scale and progression tools')](https://music-toolbox.now.sh)
+
 ## Install
 
 ```bash
@@ -24,16 +44,6 @@ $ npm install --save reactronica tone
 ```
 
 Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.html) are used internally.
-
-## Demos
-
-### Digital Audio Workstation
-
-[https://reactronica.com/daw](https://reactronica.com/daw)
-
-![Reactronica Digital Audio Workstation demo!](/static/screenshots/daw-screenshot.png 'Reactronica Digital Audio Workstation demo')
-
-- [Music chord, scale and progression tools](https://music-toolbox.now.sh)
 
 ## Examples
 
@@ -210,7 +220,10 @@ const Example = () => {
           null,
           null,
           // Array of objects for chords
-          [{ note: 'C3', duration: 0.5 }, { note: 'G3', duration: 0.5 }],
+          [
+            { note: 'C3', duration: 0.5 },
+            { note: 'G3', duration: 0.5 },
+          ],
           null,
         ]}
         // Chain effects by putting them in an array

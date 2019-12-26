@@ -7,6 +7,7 @@ import css from './DAWClip.scss';
 
 type Props = {
   id: string;
+  name: string;
   steps: Step[];
   bars: number;
   trackId: string;
@@ -17,6 +18,7 @@ type Props = {
 
 const DAWClip: React.FunctionComponent<Props> = ({
   id,
+  name,
   steps,
   trackId,
   isSelected = false,
@@ -86,10 +88,12 @@ const DAWClip: React.FunctionComponent<Props> = ({
           </div>
         );
       })}
+
+      <div className={css.clipName}>
+        <p>{name}</p>
+      </div>
     </div>
   );
-
-  // return <div className={[css.dawClip, className || ''].join(' ')}></div>;
 };
 
 export default DAWClip;

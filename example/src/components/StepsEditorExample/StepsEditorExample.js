@@ -297,9 +297,7 @@ const StepsEditorExample = () => {
                   type={track.instrumentType}
                   samples={{
                     C3: `${process.env.PUBLIC_URL}/audio/drums/kick15.wav`,
-                    D3: `${
-                      process.env.PUBLIC_URL
-                    }/audio/drums/snare-bottom-buttend15.wav`,
+                    D3: `${process.env.PUBLIC_URL}/audio/drums/snare-bottom-buttend15.wav`,
                     E3: `${process.env.PUBLIC_URL}/audio/drums/chh12.wav`,
                   }}
                   notes={track.notes}

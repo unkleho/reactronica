@@ -32,13 +32,13 @@ h1 {
 h2 {
   margin-top: 1.2em;
   font-weight: 700;
-  font-size: var(--font-size-xxlg);
+  font-size: var(--font-size-xlg);
 }
 
 h3 {
   margin-top: 1.7em;
-  font-weight: 600;
-  font-size: var(--font-size-xlg);
+  font-weight: 500;
+  font-size: var(--font-size-lg);
 }
 
 h4 {

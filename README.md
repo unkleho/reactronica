@@ -32,54 +32,57 @@ import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
 const Example = () => {
-  return (
-    // Top level component must be the Song, with Tracks nested inside
-    <Song tempo={90} isPlaying={true}>
-      <Track
-        // Array of several types
-        steps={[
-          // Note in string format
-          'C3',
-          // Object with note and duration
-          { note: 'C3', duration: 0.5 },
-          { note: 'D3', duration: 0.5 },
-          // Array of strings for chords
-          ['C3', 'G3'],
-          null,
-          null,
-          // Array of objects for chords
-          [{ note: 'C3', duration: 0.5 }, { note: 'G3', duration: 0.5 }],
-          null,
-        ]}
-        // Chain effects by putting them in an array
-        effects={[
-          <Effect type="feedbackDelay" />,
-          <Effect type="distortion" />,
-        ]}
-        volume={80}
-        pan={0}
-        // Callback for every tick
-        onStepPlay={(step, index) => {
-          doSomething(step, index);
-        }}
-      >
-        <Instrument type="polySynth" />
-      </Track>
+	return (
+		// Top level component must be the Song, with Tracks nested inside
+		<Song tempo={90} isPlaying={true}>
+			<Track
+				// Array of several types
+				steps={[
+					// Note in string format
+					'C3',
+					// Object with note and duration
+					{ note: 'C3', duration: 0.5 },
+					{ note: 'D3', duration: 0.5 },
+					// Array of strings for chords
+					['C3', 'G3'],
+					null,
+					null,
+					// Array of objects for chords
+					[
+						{ note: 'C3', duration: 0.5 },
+						{ note: 'G3', duration: 0.5 },
+					],
+					null,
+				]}
+				// Chain effects by putting them in an array
+				effects={[
+					<Effect type="feedbackDelay" />,
+					<Effect type="distortion" />,
+				]}
+				volume={80}
+				pan={0}
+				// Callback for every tick
+				onStepPlay={(step, index) => {
+					doSomething(step, index);
+				}}
+			>
+				<Instrument type="polySynth" />
+			</Track>
 
-      <Track>
-        <Instrument
-          type="sampler"
-          samples={{
-            C3: 'path/to/kick.mp3',
-            D3: 'path/to/snare.mp3',
-            E3: 'path/to/hihat.mp3',
-          }}
-          // Add some notes here to play
-          notes={[{ name: 'C3' }]}
-        />
-      </Track>
-    </Song>
-  );
+			<Track>
+				<Instrument
+					type="sampler"
+					samples={{
+						C3: 'path/to/kick.mp3',
+						D3: 'path/to/snare.mp3',
+						E3: 'path/to/hihat.mp3',
+					}}
+					// Add some notes here to play
+					notes={[{ name: 'C3' }]}
+				/>
+			</Track>
+		</Song>
+	);
 };
 ```
 
@@ -140,6 +143,7 @@ $ npm start
 
 ## Known Issues
 
+- Tried to migrate library to Typescript, however having issues with `rollup-plugin-typescript` being too strict while bundling. (branch `jest-typescript` - 26/12/19).
 - Tone installed as dependency due to `Module not found: Can't resolve 'tone' in '/Users/kcheung/Development/unkleho/reactronica/dist'` issue in `website/`. Keep as both dependency and peer for now.
 - Latest Tone (13.4.9) has this issue `Cannot assign to read only property 'listener' of object '#<AudioContext>'` due to `https://stackoverflow.com/questions/55039122/why-does-tone-js-not-play-nice-in-a-svelte-component`. Tone cannot be bundled with Reactronica and has to be a peer dependency for now.
 - Both Reactronica and example/ have their own test config. Would prefer if Reactronica took care of all tests, however react-scripts only allows testing within a src/ dir. Moving to jest and babel/@core etc is required. (3/6/19)

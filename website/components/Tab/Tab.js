@@ -20,6 +20,7 @@ const Tab = ({
   onUpdateGrid,
 }) => {
   const tab = gridLinesToTab(grid, resolution, bars);
+
   let textInputs = [];
 
   const handleTabChange = (event, stringIndex, step) => {
@@ -129,6 +130,8 @@ const Tab = ({
               {tabLine.map((step, j) => {
                 const note = step && step.note ? step.note : undefined;
                 const fret = noteToFret(note, stringNote);
+
+                // console.log(fret);
 
                 return (
                   <div
