@@ -1,15 +1,51 @@
 declare module 'reactronica' {
-	import * as React from 'react';
+  import * as React from 'react';
 
-	export type SongProps = {
-		isPlaying: boolean;
-		tempo: number;
-	};
+  export type SongProps = {
+    isPlaying?: boolean;
+    tempo?: number;
+    swing?: number;
+    subdivision?: string;
+    children: React.ReactNode;
+  };
 
-	const Song: React.FunctionComponent<SongProps>;
-	const Track: React.FunctionComponent;
-	const Instrument: React.FunctionComponent;
-	const Effect: React.FunctionComponent;
+  export type TrackProps = {
+    isPlaying?: boolean;
+    steps?: any[];
+    volume?: number;
+    pan?: number;
+    subdivision?: string;
+    effects?: React.ReactNode[];
+    children: React.ReactNode;
+    onStepPlay?: Function;
+  };
 
-	export { Song, Track, Instrument, Effect };
+  export type InstrumentProps = {
+    type?: string;
+    options?: any;
+    notes?: any[];
+    samples?: {
+      [k: string]: string;
+    };
+    volume?: number;
+    pan?: number;
+    effectsChain?: React.ReactNode[];
+    onInstrumentUpdate?: Function;
+  };
+
+  export type EffectProps = {
+    type?: string;
+    id?: string;
+    delayTime?: string;
+    feedback?: number;
+    onAddToEffectsChain?: Function;
+    onRemoveFromEffectsChain?: Function;
+  };
+
+  const Song: React.FunctionComponent<SongProps>;
+  const Track: React.FunctionComponent<TrackProps>;
+  const Instrument: React.FunctionComponent<InstrumentProps>;
+  const Effect: React.FunctionComponent<EffectProps>;
+
+  export { Song, Track, Instrument, Effect };
 }
