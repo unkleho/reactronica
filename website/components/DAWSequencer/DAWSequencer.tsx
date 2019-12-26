@@ -38,6 +38,8 @@ const Sequencer: React.FC<Props> = ({
 }) => {
   const [newTrackId, setNewTrackId] = React.useState(1);
 
+  // console.log(tracks);
+
   return (
     <div className={[css.dawSequencer, className || ''].join(' ')}>
       <div className={css.corner}></div>
@@ -118,6 +120,7 @@ const Sequencer: React.FC<Props> = ({
                 return (
                   <DAWClip
                     id={clip.id}
+                    name={clip.name}
                     steps={clip.steps}
                     bars={clip.bars}
                     trackId={track.id}

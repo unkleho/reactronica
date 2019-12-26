@@ -17,7 +17,7 @@ body {
   }
 
   & header {
-    @include sequencer-grid;
+    // @include sequencer-grid;
 
     display: flex;
     flex-direction: column;
@@ -25,25 +25,46 @@ body {
     align-items: center;
     width: 100%;
     margin-bottom: var(--baseline-4);
-    padding-top: var(--baseline-1);
-    padding-bottom: var(--baseline-1);
+    padding-top: var(--baseline-2);
+    padding-bottom: var(--baseline-2);
     background-color: var(--colour-black);
 
     @include media-sm {
-      padding-top: var(--baseline-4);
-      padding-bottom: var(--baseline-4);
+      padding-top: var(--baseline-5);
+      padding-bottom: var(--baseline-5);
     }
 
     & i {
       font-size: var(--font-size-xlg);
     }
+
+    & p {
+      margin-bottom: var(--baseline-3);
+      font-size: var(--font-size-lg);
+      text-align: center;
+      // opacity: 0.8;
+
+      @include media-sm {
+        margin-bottom: var(--baseline-5);
+        font-size: var(--font-size-lg);
+      }
+    }
   }
 
   & h2 {
-    margin-top: var(--baseline-8);
+    margin-top: var(--baseline-16);
+  }
+
+  & h2:first-child {
+    margin-top: 0;
+  }
+
+  & p {
+    opacity: 0.9;
   }
 
   & img {
+    width: 100%;
     max-width: 30rem;
     border: 1px solid var(--colour-black);
   }
@@ -62,17 +83,26 @@ body {
 
 .headerInside {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   max-width: var(--container-md);
-  padding: var(--baseline-2);
+  padding: var(--baseline-5);
+  background-color: var(--colour-black);
+}
+
+.headerLink {
+  display: flex;
+  align-items: center;
 }
 
 .logo {
-  font-size: var(--font-size-xxlg);
+  margin-right: 0;
+  margin-bottom: var(--baseline-2);
+  font-size: 13vw;
 
   @include media-sm {
-    font-size: 3.5em;
+    font-size: 4em;
   }
 }

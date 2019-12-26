@@ -1,4 +1,7 @@
-import { midiNotes, instrumentConfig } from '../constants';
+import {
+  midiNotesLowerCase as midiNotes,
+  instrumentConfig,
+} from '../constants';
 
 /*
  * Tab Functions
@@ -115,7 +118,7 @@ export function gridToSamplerSteps(grid) {
  *
  */
 
-export function fretToNote(fret, string) {
+export function fretToNote(fret: number, string) {
   if (fret === undefined) {
     throw new Error('Fret is required');
   }
@@ -133,13 +136,20 @@ export function fretToNote(fret, string) {
   }
 
   const stringMidi = midiNotes.indexOf(string);
+
   return midiNotes[stringMidi + fret];
 }
 
 export function noteToFret(note, string) {
+  if (note === undefined) {
+    return null;
+  }
+
   const stringMidi = midiNotes.indexOf(string);
   const noteMidi = midiNotes.indexOf(note);
+
   let fret = noteMidi - stringMidi;
+
   return fret >= 0 ? fret : null;
 }
 

@@ -16,7 +16,11 @@ import {
   beatClip1,
   beatClip2,
 } from '../../sample-data';
-import { buildSteps, buildClip } from '../../lib/stepUtils';
+import {
+  buildSteps,
+  buildClip,
+  convertStepsToNotes,
+} from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 
 import '../../node_modules/normalize.css/normalize.css';
@@ -71,6 +75,7 @@ const DAWApp = () => {
   const {
     isPlaying,
     tempo,
+    currentClip,
     currentClipId,
     clips,
     currentTrackId,
@@ -133,19 +138,26 @@ const DAWApp = () => {
       </div>
 
       <StepsEditor
+        clipId={currentClip.id}
+        clipName={currentClip.name}
         defaultSteps={currentSteps}
         currentStepIndex={currentStepIndex}
         stepIndexOffset={stepIndexOffset}
-        notes={notes}
+        // notes={notes}
         subdivision={16}
         className={css.stepsEditor}
         onStepEditorClick={(steps) => {
-          // WIP
-          // Convert steps to clip
-          const clip = buildClip(steps, currentClipId);
+          const notes = convertStepsToNotes(steps);
 
-          dispatch({ type: types.UPDATE_CLIP, clip });
-          // This should update currentSteps and track[].clips
+          dispatch({
+            type: types.UPDATE_CLIP,
+            clip: {
+              ...currentClip,
+              notes,
+            },
+          });
+
+          // This should update currentSteps and track[].clips?
           // dispatch({ type: types.UPDATE_CURRENT_STEPS, steps });
         }}
         onKeyboardDown={(note) =>
@@ -274,12 +286,13 @@ function appSelector(state) {
       return {
         ...track,
         clips: track.clips.map((trackClip) => {
+          const clip = state.clips.find((clip) => clip.id === trackClip.id);
+
           return {
             ...trackClip,
-            notes: state.clips.find((clip) => clip.id === trackClip.id).notes,
-            steps: buildSteps(
-              state.clips.find((clip) => clip.id === trackClip.id),
-            ),
+            name: clip.name,
+            notes: clip.notes,
+            steps: buildSteps(clip),
           };
         }),
       };
@@ -396,11 +409,13 @@ function reducer(state, action) {
           ...state.clips,
           {
             id: `${action.trackId}1`,
+            name: 'New Clip 1',
             bars: 1,
             notes: [],
           },
           {
             id: `${action.trackId}2`,
+            name: 'New Clip 2',
             bars: 1,
             notes: [],
           },
