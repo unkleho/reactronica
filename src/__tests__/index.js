@@ -8,6 +8,8 @@ import {
   mockPanVolVolume,
   mockPanVolPan,
   mockPolySynthConstructor,
+  mockPolySynthTriggerAttack,
+  mockPolySynthTriggerRelease,
   mockPolySynthDispose,
   mockSamplerConstructor,
   mockSamplerDispose,
@@ -143,6 +145,29 @@ describe('Instrument', () => {
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockSamplerDispose).toBeCalledTimes(1);
+  });
+
+  it('should trigger and release note', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="polySynth" notes={[{ name: 'C3' }]} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthTriggerAttack).toBeCalledWith('C3');
+    expect(mockPolySynthTriggerRelease).not.toBeCalledWith('C3');
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="polySynth" notes={[]} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthTriggerRelease).toBeCalledWith('C3');
   });
 });
 
