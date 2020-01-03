@@ -12,6 +12,8 @@ const Song = ({
   // subdivision= '4n',
   swing = 0,
   swingSubdivision = '8n',
+  volume = 0,
+  isMuted = false,
   children,
 }) => {
   useEffect(() => {
@@ -35,6 +37,14 @@ const Song = ({
       Tone.Transport.stop();
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    Tone.Master.volume.value = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    Tone.Master.mute = isMuted;
+  }, [isMuted]);
 
   if (typeof window === 'undefined') {
     return null;

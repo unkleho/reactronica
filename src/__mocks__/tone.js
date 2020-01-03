@@ -12,7 +12,9 @@
 // ----------------------------------------------------------------------------
 
 const Master = {
-  volume: 0,
+  volume: {
+    value: 0,
+  },
   mute: false,
   chain: jest.fn(),
   dispose: jest.fn(),
