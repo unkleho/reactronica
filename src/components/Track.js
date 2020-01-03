@@ -133,7 +133,10 @@ TrackConsumer.propTypes = {
   volume: PropTypes.number,
   pan: PropTypes.number,
   subdivision: PropTypes.string, // react-music = resolution
-  effects: PropTypes.arrayOf(PropTypes.element), // TODO: Consider accepting Tone effects signals
+  effects: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.arrayOf(PropTypes.element),
+  ]),
   onStepPlay: PropTypes.func,
 };
 
