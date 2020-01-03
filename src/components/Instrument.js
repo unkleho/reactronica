@@ -38,12 +38,6 @@ const InstrumentConsumer = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
-    // console.log(type);
-
-    // if (synth.current) {
-    //   synth.current.disconnect();
-    // }
-
     if (type === 'AMSynth') {
       synth.current = new Tone.AMSynth(options);
     } else if (type === 'duoSynth') {
@@ -74,10 +68,6 @@ const InstrumentConsumer = ({
       synth.current = new Tone.Synth(options);
     }
 
-    // trackChannelBase.current = new Tone.PanVol(pan, volume);
-    // synth.current.chain(trackChannelBase.current, Tone.Master);
-
-    // synth.current.disconnect();
     synth.current.chain(...effectsChain, trackChannelBase.current, Tone.Master);
 
     // Add this Instrument to Track Context

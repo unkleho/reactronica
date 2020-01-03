@@ -62,6 +62,8 @@ class PanVol {
 // ----------------------------------------------------------------------------
 
 export const mockPolySynthConstructor = jest.fn();
+export const mockPolySynthTriggerAttack = jest.fn();
+export const mockPolySynthTriggerRelease = jest.fn();
 export const mockPolySynthDispose = jest.fn();
 export const mockPolySynthChain = jest.fn();
 
@@ -69,6 +71,8 @@ class PolySynth {
   constructor(polyphony, voice, voiceArgs) {
     mockPolySynthConstructor(polyphony, voice, voiceArgs);
 
+    this.triggerAttack = mockPolySynthTriggerAttack;
+    this.triggerRelease = mockPolySynthTriggerRelease;
     this.dispose = mockPolySynthDispose;
     this.chain = mockPolySynthChain;
     this.disconnect = jest.fn();
