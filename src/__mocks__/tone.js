@@ -114,6 +114,18 @@ class AutoFilter {
 }
 
 // ----------------------------------------------------------------------------
+// Tone.AutoPanner
+// ----------------------------------------------------------------------------
+
+export const mockAutoPannerConstructor = jest.fn();
+
+class AutoPanner {
+  constructor() {
+    mockAutoPannerConstructor();
+  }
+}
+
+// ----------------------------------------------------------------------------
 // Tone.Sequence
 // ----------------------------------------------------------------------------
 
@@ -138,6 +150,7 @@ const MockTone = {
   PolySynth,
   Sampler,
   AutoFilter,
+  AutoPanner,
   Sequence,
 };
 
