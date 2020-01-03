@@ -1,6 +1,6 @@
 # Reactronica
 
-[https://reactronica.com](https://reactronica.com) - website/docs/examples
+[https://reactronica.com](https://reactronica.com)
 
 React audio components for making music in the browser.
 
@@ -32,57 +32,57 @@ import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
 const Example = () => {
-	return (
-		// Top level component must be the Song, with Tracks nested inside
-		<Song tempo={90} isPlaying={true}>
-			<Track
-				// Array of several types
-				steps={[
-					// Note in string format
-					'C3',
-					// Object with note and duration
-					{ note: 'C3', duration: 0.5 },
-					{ note: 'D3', duration: 0.5 },
-					// Array of strings for chords
-					['C3', 'G3'],
-					null,
-					null,
-					// Array of objects for chords
-					[
-						{ note: 'C3', duration: 0.5 },
-						{ note: 'G3', duration: 0.5 },
-					],
-					null,
-				]}
-				// Chain effects by putting them in an array
-				effects={[
-					<Effect type="feedbackDelay" />,
-					<Effect type="distortion" />,
-				]}
-				volume={80}
-				pan={0}
-				// Callback for every tick
-				onStepPlay={(step, index) => {
-					doSomething(step, index);
-				}}
-			>
-				<Instrument type="polySynth" />
-			</Track>
+  return (
+    // Top level component must be Song, with Tracks nested inside
+    <Song tempo={90} isPlaying={true}>
+      <Track
+        // Array of several types
+        steps={[
+          // Note in string format
+          'C3',
+          // Object with note and duration
+          { note: 'C3', duration: 0.5 },
+          { note: 'D3', duration: 0.5 },
+          // Array of strings for chords
+          ['C3', 'G3'],
+          null,
+          null,
+          // Array of objects for chords
+          [
+            { note: 'C3', duration: 0.5 },
+            { note: 'G3', duration: 0.5 },
+          ],
+          null,
+        ]}
+        // Chain effects by putting them in an array
+        effects={[
+          <Effect type="feedbackDelay" />,
+          <Effect type="distortion" />,
+        ]}
+        volume={80}
+        pan={0}
+        // Callback for every tick
+        onStepPlay={(step, index) => {
+          doSomething(step, index);
+        }}
+      >
+        <Instrument type="polySynth" />
+      </Track>
 
-			<Track>
-				<Instrument
-					type="sampler"
-					samples={{
-						C3: 'path/to/kick.mp3',
-						D3: 'path/to/snare.mp3',
-						E3: 'path/to/hihat.mp3',
-					}}
-					// Add some notes here to play
-					notes={[{ name: 'C3' }]}
-				/>
-			</Track>
-		</Song>
-	);
+      <Track>
+        <Instrument
+          type="sampler"
+          samples={{
+            C3: 'path/to/kick.mp3',
+            D3: 'path/to/snare.mp3',
+            E3: 'path/to/hihat.mp3',
+          }}
+          // Add some notes here to play
+          notes={[{ name: 'C3' }]}
+        />
+      </Track>
+    </Song>
+  );
 };
 ```
 
@@ -96,6 +96,8 @@ This component wraps around all Reactronica components, providing top level cont
 
 - `tempo` - Speed or pace of the song. Measured in beats per minute.
 - `isPlaying` - Whether the song is playing or not. Defaults to `false`.
+- `volume` - Volume of entire song
+- `isMuted` - Whether song is muted or not
 
 ### Track
 

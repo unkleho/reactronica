@@ -6,6 +6,8 @@ declare module 'reactronica' {
     tempo?: number;
     swing?: number;
     subdivision?: string;
+    volume?: number;
+    isMuted?: boolean;
     children: React.ReactNode;
   };
 
