@@ -14,7 +14,7 @@ type Props = {
     instrumentType: string;
     instrumentPolyphony: number;
     instrumentOscillator: {
-      type: 'triangle' | 'sine';
+      type: 'triangle' | 'sine' | 'square';
     };
     volume: number;
     pan: number;

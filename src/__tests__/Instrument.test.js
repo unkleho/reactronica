@@ -20,7 +20,7 @@ describe('Instrument', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );
@@ -61,7 +61,7 @@ describe('Instrument', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track>
-          <Instrument type="polySynth" notes={[{ name: 'C3' }]} />
+          <Instrument type="synth" notes={[{ name: 'C3' }]} />
         </Track>
       </Song>,
     );
@@ -72,7 +72,7 @@ describe('Instrument', () => {
     rerender(
       <Song isPlaying={true}>
         <Track>
-          <Instrument type="polySynth" notes={[]} />
+          <Instrument type="synth" notes={[]} />
         </Track>
       </Song>,
     );
@@ -87,7 +87,7 @@ describe('PolySynth', () => {
       <Song isPlaying={true}>
         <Track>
           <Instrument
-            type="polySynth"
+            type="synth"
             polyphony={5}
             oscillator={{ type: 'square' }}
           />
@@ -105,7 +105,7 @@ describe('PolySynth', () => {
       <Song isPlaying={true}>
         <Track>
           <Instrument
-            type="polySynth"
+            type="synth"
             polyphony={3}
             oscillator={{ type: 'square' }}
           />
@@ -123,7 +123,7 @@ describe('PolySynth', () => {
       <Song isPlaying={true}>
         <Track>
           <Instrument
-            type="polySynth"
+            type="synth"
             polyphony={3}
             oscillator={{ type: 'sine' }}
           />

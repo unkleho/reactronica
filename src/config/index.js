@@ -18,7 +18,7 @@ export const instruments = [
   { id: 'FMSynth', name: 'FM synth' },
   { id: 'membraneSynth', name: 'Membrane synth' },
   { id: 'monoSynth', name: 'Mono synth' },
-  { id: 'polySynth', name: 'Poly synth' },
+  // { id: 'polySynth', name: 'Poly synth' },
   { id: 'sampler', name: 'Sampler' },
   { id: 'synth', name: 'Synth' },
 ];

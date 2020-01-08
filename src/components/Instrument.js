@@ -10,7 +10,7 @@ import { usePrevious } from '../lib/hooks';
 
 const InstrumentConsumer = ({
   // <Instrument /> Props
-  type = 'polySynth',
+  type = 'synth',
   options,
   // options = {
   //   oscillator: {
@@ -29,7 +29,7 @@ const InstrumentConsumer = ({
   effectsChain,
   onInstrumentsUpdate,
 }) => {
-  const synth = useRef();
+  const instrumentRef = useRef();
   const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
   const prevNotes = usePrevious(notes);
 
@@ -38,46 +38,56 @@ const InstrumentConsumer = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
-    if (type === 'AMSynth') {
-      synth.current = new Tone.AMSynth(options);
-    } else if (type === 'duoSynth') {
-      synth.current = new Tone.DuoSynth(options);
-    } else if (type === 'FMSynth') {
-      synth.current = new Tone.FMSynth(options);
-    } else if (type === 'membraneSynth') {
-      synth.current = new Tone.MembraneSynth(options);
-    } else if (type === 'monoSynth') {
-      synth.current = new Tone.MonoSynth(options);
-    } else if (type === 'polySynth') {
-      synth.current = new Tone.PolySynth(
+    if (type === 'sampler') {
+      instrumentRef.current = new Tone.Sampler(samples);
+
+      if (options && options.curve) {
+        instrumentRef.current.curve = options.curve;
+      }
+
+      if (options && options.release) {
+        instrumentRef.current.release = options.release;
+      }
+    } else {
+      let synth;
+
+      if (type === 'AMSynth') {
+        synth = Tone.AMSynth;
+      } else if (type === 'duoSynth') {
+        synth = Tone.DuoSynth;
+      } else if (type === 'FMSynth') {
+        synth = Tone.FMSynth;
+      } else if (type === 'membraneSynth') {
+        synth = Tone.MembraneSynth;
+      } else if (type === 'monoSynth') {
+        synth = Tone.MonoSynth;
+      } else if (type === 'synth') {
+        synth = Tone.Synth;
+      } else {
+        synth = Tone.Synth;
+      }
+
+      instrumentRef.current = new Tone.PolySynth(
         polyphony,
-        Tone.Synth,
+        synth,
         oscillator && {
           oscillator,
         },
       );
-    } else if (type === 'sampler') {
-      synth.current = new Tone.Sampler(samples);
-
-      if (options && options.curve) {
-        synth.current.curve = options.curve;
-      }
-
-      if (options && options.release) {
-        synth.current.release = options.release;
-      }
-    } else if (type === 'synth') {
-      synth.current = new Tone.Synth(options);
     }
 
-    synth.current.chain(...effectsChain, trackChannelBase.current, Tone.Master);
+    instrumentRef.current.chain(
+      ...effectsChain,
+      trackChannelBase.current,
+      Tone.Master,
+    );
 
     // Add this Instrument to Track Context
-    onInstrumentsUpdate([synth.current]);
+    onInstrumentsUpdate([instrumentRef.current]);
 
     return function cleanup() {
-      if (synth.current) {
-        synth.current.dispose();
+      if (instrumentRef.current) {
+        instrumentRef.current.dispose();
       }
     };
   }, [type, polyphony, JSON.stringify(oscillator)]);
@@ -108,7 +118,7 @@ const InstrumentConsumer = ({
 
         // Only play note is it isn't already playing
         if (!isPlaying) {
-          synth.current.triggerAttack(note.name);
+          instrumentRef.current.triggerAttack(note.name);
         }
       });
 
@@ -120,7 +130,7 @@ const InstrumentConsumer = ({
           notes && notes.filter((n) => n.name === note.name).length > 0;
 
         if (!isPlaying) {
-          synth.current.triggerRelease(note.name);
+          instrumentRef.current.triggerRelease(note.name);
         }
       });
   }, [notes]);
@@ -133,8 +143,12 @@ const InstrumentConsumer = ({
     // console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
     // NOTE: Using trackChannelBase causes effects to not turn off
-    synth.current.disconnect();
-    synth.current.chain(...effectsChain, trackChannelBase.current, Tone.Master);
+    instrumentRef.current.disconnect();
+    instrumentRef.current.chain(
+      ...effectsChain,
+      trackChannelBase.current,
+      Tone.Master,
+    );
   }, [effectsChain]);
 
   return null;
