@@ -34,9 +34,10 @@ const TrackInfo: React.FC<Props> = ({
   className,
 }) => {
   const [selectedEffect, setSelectedEffect] = React.useState(null);
-  // React.useEffect(() => {
-  //   setSelectedEffect(null);
-  // }, [currentTrackId]);
+
+  const instrumentConfig = config.instruments.find((instrument) => {
+    return instrument.id === currentTrack.instrumentType;
+  });
 
   if (!currentTrack) {
     return null;
@@ -67,7 +68,7 @@ const TrackInfo: React.FC<Props> = ({
         }}
       />
 
-      {currentTrack.instrumentType === 'synth' && (
+      {instrumentConfig.props.includes('oscillatorType') && (
         <>
           <h3>Oscillator Type</h3>
           <Select
@@ -88,7 +89,7 @@ const TrackInfo: React.FC<Props> = ({
         </>
       )}
 
-      {currentTrack.instrumentType === 'synth' && (
+      {instrumentConfig.props.includes('polyphony') && (
         <>
           <h3>Polyphony</h3>
           <Select
