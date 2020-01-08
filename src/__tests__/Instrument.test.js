@@ -245,4 +245,20 @@ describe('Synth', () => {
 
     expect(mockPluckSynthConstructor).toHaveBeenLastCalledWith(undefined);
   });
+
+  it('should render synth envelopes', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="synth" envelopeAttack={0.02} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(4, 'Synth', {
+      envelope: {
+        attack: 0.02,
+      },
+    });
+  });
 });
