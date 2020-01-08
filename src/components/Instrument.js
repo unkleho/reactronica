@@ -14,6 +14,10 @@ const InstrumentConsumer = ({
   options,
   polyphony = 4,
   oscillatorType,
+  envelopeAttack,
+  envelopeDecay,
+  envelopeSustain,
+  envelopeRelease,
   notes = [],
   samples,
   // <Track /> Props
@@ -43,11 +47,13 @@ const InstrumentConsumer = ({
       }
     } else if (type === 'membraneSynth') {
       instrumentRef.current = new Tone.MembraneSynth(
-        oscillatorType && {
-          oscillator: {
-            type: oscillatorType,
-          },
-        },
+        buildSynthOptions({
+          oscillatorType,
+          envelopeAttack,
+          envelopeDecay,
+          envelopeSustain,
+          envelopeRelease,
+        }),
       );
     } else if (type === 'metalSynth') {
       instrumentRef.current = new Tone.MetalSynth();
@@ -75,17 +81,19 @@ const InstrumentConsumer = ({
       /**
        * PolySynth accepts other Synth types as second param, making them
        * polyphonic. As this is a common use case, all Synths will be created
-       * via PolySynth. Monophonic synths can easily be created using the
-       * `polyphony` prop.
+       * via PolySynth. Monophonic synths can easily be created by setting the
+       * `polyphony` prop to 1.
        */
       instrumentRef.current = new Tone.PolySynth(
         polyphony,
         synth,
-        oscillatorType && {
-          oscillator: {
-            type: oscillatorType,
-          },
-        },
+        buildSynthOptions({
+          oscillatorType,
+          envelopeAttack,
+          envelopeDecay,
+          envelopeSustain,
+          envelopeRelease,
+        }),
       );
     }
 
@@ -183,14 +191,17 @@ InstrumentConsumer.propTypes = {
   type: InstrumentTypes.isRequired,
   options: PropTypes.object,
   notes: PropTypes.arrayOf(NoteType), // Currently played notes.
+  polyphony: PropTypes.number,
+  oscillatorType: PropTypes.oneOf(['triangle', 'sine', 'square']),
+  envelopeAttack: PropTypes.number,
+  envelopeDecay: PropTypes.number,
+  envelopeSustain: PropTypes.number,
+  envelopeRelease: PropTypes.number,
   samples: PropTypes.object,
   trackChannel: PropTypes.object, // An instance of new this.Tone.PanVol()
-  // polyphony: PropTypes.number,
   // <Track /> Props
   volume: PropTypes.number,
   pan: PropTypes.number,
-  polyphony: PropTypes.number,
-  oscillatorType: PropTypes.oneOf(['triangle', 'sine', 'square']),
   effectsChain: PropTypes.array,
   onInstrumentsUpdate: PropTypes.func,
 };
@@ -204,6 +215,52 @@ const Instrument = (props) => {
   }
 
   return <InstrumentConsumer {...value} {...props} />;
+};
+
+/**
+ * Use Instrument's flattened synth props to create options object for Tone JS
+ */
+const buildSynthOptions = ({
+  oscillatorType,
+  envelopeAttack,
+  envelopeDecay,
+  envelopeSustain,
+  envelopeRelease,
+}) => {
+  let oscillator;
+
+  if (oscillatorType) {
+    oscillator = {
+      ...(oscillatorType ? { type: oscillatorType } : {}),
+    };
+  }
+
+  let envelope;
+
+  if (envelopeAttack || envelopeDecay || envelopeSustain || envelopeRelease) {
+    envelope = {
+      ...(envelopeAttack ? { attack: envelopeAttack } : {}),
+      ...(envelopeDecay ? { decay: envelopeDecay } : {}),
+      ...(envelopeSustain ? { sustain: envelopeSustain } : {}),
+      ...(envelopeRelease ? { release: envelopeRelease } : {}),
+    };
+  }
+
+  if (oscillator || envelope) {
+    return {
+      ...(envelope ? { envelope } : {}),
+      ...(oscillator ? { oscillator } : {}),
+    };
+  }
+
+  return undefined;
+
+  // return {
+  //   ...(
+  //     ? { envelope }
+  //     : {}),
+  //   ...(oscillator.type ? { oscillator } : {}),
+  // };
 };
 
 export default Instrument;
