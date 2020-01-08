@@ -66,6 +66,7 @@ export const mockPolySynthTriggerAttack = jest.fn();
 export const mockPolySynthTriggerRelease = jest.fn();
 export const mockPolySynthDispose = jest.fn();
 export const mockPolySynthChain = jest.fn();
+export const mockPolySynthSet = jest.fn();
 
 class PolySynth {
   constructor(polyphony, voice, voiceArgs) {
@@ -75,6 +76,7 @@ class PolySynth {
     this.triggerRelease = mockPolySynthTriggerRelease;
     this.dispose = mockPolySynthDispose;
     this.chain = mockPolySynthChain;
+    this.set = mockPolySynthSet;
     this.disconnect = jest.fn();
   }
 }

@@ -4,8 +4,8 @@ import Select from 'react-select';
 import css from './Select.css';
 
 type Props = {
-  value?: string;
-  options: { value: string; label: string }[];
+  value?: string | number;
+  options: { value: string | number; label: string | number }[];
   className?: string;
   onChange?: Function;
 };

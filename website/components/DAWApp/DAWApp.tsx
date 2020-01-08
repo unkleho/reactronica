@@ -48,9 +48,7 @@ const initialState = {
       // TODO: Convert to instrument object?
       instrumentType: 'synth',
       instrumentPolyphony: 4,
-      instrumentOscillator: {
-        type: 'triangle',
-      },
+      instrumentOscillatorType: 'triangle',
       volume: 60,
       pan: 50,
       steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
@@ -230,7 +228,7 @@ const DAWApp = () => {
                   type={track.instrumentType}
                   notes={track.notes}
                   polyphony={track.instrumentPolyphony}
-                  oscillator={track.instrumentOscillator}
+                  oscillatorType={track.instrumentOscillator}
                 />
               )}
             </Track>
@@ -477,10 +475,7 @@ function reducer(state, action) {
           if (track.id === action.trackId) {
             return {
               ...track,
-              instrumentOscillator: {
-                ...track.instrumentOscillator,
-                type: action.oscillatorType,
-              },
+              instrumentOscillatorType: action.oscillatorType,
             };
           }
 

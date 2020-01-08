@@ -13,6 +13,7 @@ import {
   mockPluckSynthConstructor,
   mockSamplerConstructor,
   mockSamplerDispose,
+  mockPolySynthSet,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -90,11 +91,7 @@ describe('Synth', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track>
-          <Instrument
-            type="synth"
-            polyphony={5}
-            oscillator={{ type: 'square' }}
-          />
+          <Instrument type="synth" polyphony={5} oscillatorType="square" />
         </Track>
       </Song>,
     );
@@ -108,11 +105,7 @@ describe('Synth', () => {
     rerender(
       <Song isPlaying={true}>
         <Track>
-          <Instrument
-            type="synth"
-            polyphony={3}
-            oscillator={{ type: 'square' }}
-          />
+          <Instrument type="synth" polyphony={3} oscillatorType="square" />
         </Track>
       </Song>,
     );
@@ -126,20 +119,15 @@ describe('Synth', () => {
     rerender(
       <Song isPlaying={true}>
         <Track>
-          <Instrument
-            type="synth"
-            polyphony={3}
-            oscillator={{ type: 'sine' }}
-          />
+          <Instrument type="synth" polyphony={3} oscillatorType="sine" />
         </Track>
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, 'Synth', {
-      oscillator: {
-        type: 'sine',
-      },
-    });
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith(
+      'oscillator.type',
+      'sine',
+    );
   });
 
   it('should render with `synth`, `amSynth` and go through all other synth types', () => {
@@ -202,7 +190,7 @@ describe('Synth', () => {
     rerender(
       <Song isPlaying={true}>
         <Track>
-          <Instrument type="membraneSynth" oscillator={{ type: 'triangle' }} />
+          <Instrument type="membraneSynth" oscillatorType="triangle" />
         </Track>
       </Song>,
     );

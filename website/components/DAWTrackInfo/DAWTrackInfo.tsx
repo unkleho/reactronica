@@ -13,9 +13,7 @@ type Props = {
     id: string;
     instrumentType: string;
     instrumentPolyphony: number;
-    instrumentOscillator: {
-      type: 'triangle' | 'sine' | 'square';
-    };
+    instrumentOscillatorType: 'triangle' | 'sine' | 'square';
     volume: number;
     pan: number;
     effects: any[];
@@ -69,11 +67,11 @@ const TrackInfo: React.FC<Props> = ({
         }}
       />
 
-      {currentTrack.instrumentType === 'polySynth' && (
+      {currentTrack.instrumentType === 'synth' && (
         <>
           <h3>Oscillator Type</h3>
           <Select
-            value={currentTrack.instrumentOscillator.type}
+            value={currentTrack.instrumentOscillatorType}
             options={[
               { label: 'Triangle', value: 'triangle' },
               { label: 'Sine', value: 'sine' },
@@ -90,7 +88,7 @@ const TrackInfo: React.FC<Props> = ({
         </>
       )}
 
-      {currentTrack.instrumentType === 'polySynth' && (
+      {currentTrack.instrumentType === 'synth' && (
         <>
           <h3>Polyphony</h3>
           <Select
