@@ -22,7 +22,7 @@ describe('Effect', () => {
           // TODO: Remove need for key and id prop
           effects={<Effect type="autoFilter" id="effect-1" />}
         >
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );
@@ -45,7 +45,7 @@ describe('Effect', () => {
             </>
           }
         >
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );
@@ -68,7 +68,7 @@ describe('Effect', () => {
             </>
           }
         >
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );
@@ -82,7 +82,7 @@ describe('Effect', () => {
     rerender(
       <Song isPlaying={true}>
         <Track steps={['C3']} effects={null}>
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );

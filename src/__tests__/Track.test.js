@@ -19,7 +19,7 @@ describe('Track', () => {
     const { rerender } = render(
       <Song isPlaying={false} tempo={100}>
         <Track steps={['C3', null]} pan={2} volume={-6}>
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );
@@ -33,7 +33,7 @@ describe('Track', () => {
           pan={0}
           volume={0}
         >
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );
@@ -51,7 +51,7 @@ describe('Track', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
-          <Instrument type="polySynth" />
+          <Instrument type="synth" />
         </Track>
       </Song>,
     );

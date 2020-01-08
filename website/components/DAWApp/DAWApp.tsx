@@ -46,7 +46,7 @@ const initialState = {
     {
       id: 'melody',
       // TODO: Convert to instrument object?
-      instrumentType: 'polySynth',
+      instrumentType: 'synth',
       instrumentPolyphony: 4,
       instrumentOscillator: {
         type: 'triangle',
