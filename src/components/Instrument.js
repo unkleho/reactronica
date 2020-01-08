@@ -12,13 +12,6 @@ const InstrumentConsumer = ({
   // <Instrument /> Props
   type = 'synth',
   options,
-  // options = {
-  //   oscillator: {
-  //     type: 'triangle',
-  //   },
-  //   // release,
-  //   // curve,
-  // },
   polyphony = 4,
   oscillator,
   notes = [],
@@ -48,17 +41,27 @@ const InstrumentConsumer = ({
       if (options && options.release) {
         instrumentRef.current.release = options.release;
       }
+    } else if (type === 'membraneSynth') {
+      instrumentRef.current = new Tone.MembraneSynth(
+        oscillator && {
+          oscillator,
+        },
+      );
+    } else if (type === 'metalSynth') {
+      instrumentRef.current = new Tone.MetalSynth();
+    } else if (type === 'noiseSynth') {
+      instrumentRef.current = new Tone.NoiseSynth();
+    } else if (type === 'pluckSynth') {
+      instrumentRef.current = new Tone.PluckSynth();
     } else {
       let synth;
 
-      if (type === 'AMSynth') {
+      if (type === 'amSynth') {
         synth = Tone.AMSynth;
       } else if (type === 'duoSynth') {
         synth = Tone.DuoSynth;
-      } else if (type === 'FMSynth') {
+      } else if (type === 'fmSynth') {
         synth = Tone.FMSynth;
-      } else if (type === 'membraneSynth') {
-        synth = Tone.MembraneSynth;
       } else if (type === 'monoSynth') {
         synth = Tone.MonoSynth;
       } else if (type === 'synth') {
@@ -67,6 +70,12 @@ const InstrumentConsumer = ({
         synth = Tone.Synth;
       }
 
+      /**
+       * PolySynth accepts other Synth types as second param, making them
+       * polyphonic. As this is a common use case, all Synths will be created
+       * via PolySynth. Monophonic synths can easily be created using the
+       * `polyphony` prop.
+       */
       instrumentRef.current = new Tone.PolySynth(
         polyphony,
         synth,

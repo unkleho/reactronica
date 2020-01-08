@@ -7,6 +7,10 @@ import {
   mockPolySynthTriggerAttack,
   mockPolySynthTriggerRelease,
   mockPolySynthDispose,
+  mockMembraneSynthConstructor,
+  mockMetalSynthConstructor,
+  // mockNoiseSynthConstructor,
+  mockPluckSynthConstructor,
   mockSamplerConstructor,
   mockSamplerDispose,
 } from '../__mocks__/tone';
@@ -26,7 +30,7 @@ describe('Instrument', () => {
     );
 
     expect(mockPolySynthConstructor).toBeCalledTimes(1);
-    expect(mockPolySynthConstructor).toBeCalledWith(4, undefined, undefined);
+    expect(mockPolySynthConstructor).toBeCalledWith(4, 'Synth', undefined);
     expect(mockPolySynthDispose).toBeCalledTimes(0);
 
     rerender(<Song isPlaying={true}></Song>);
@@ -81,7 +85,7 @@ describe('Instrument', () => {
   });
 });
 
-describe('PolySynth', () => {
+describe('Synth', () => {
   it('should render with polyphony and oscillator props', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
@@ -95,7 +99,7 @@ describe('PolySynth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(5, undefined, {
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(5, 'Synth', {
       oscillator: {
         type: 'square',
       },
@@ -113,7 +117,7 @@ describe('PolySynth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, undefined, {
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, 'Synth', {
       oscillator: {
         type: 'square',
       },
@@ -131,10 +135,126 @@ describe('PolySynth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, undefined, {
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, 'Synth', {
       oscillator: {
         type: 'sine',
       },
     });
+  });
+
+  it('should render with `synth`, `amSynth` and go through all other synth types', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
+      4,
+      'Synth',
+      undefined,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="amSynth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
+      4,
+      'AMSynth',
+      undefined,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="duoSynth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
+      4,
+      'DuoSynth',
+      undefined,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="fmSynth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
+      4,
+      'FMSynth',
+      undefined,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="membraneSynth" oscillator={{ type: 'triangle' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockMembraneSynthConstructor).toHaveBeenLastCalledWith({
+      oscillator: {
+        type: 'triangle',
+      },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="metalSynth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockMetalSynthConstructor).toHaveBeenLastCalledWith(undefined);
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="monoSynth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
+      4,
+      'MonoSynth',
+      undefined,
+    );
+
+    // rerender(
+    //   <Song isPlaying={true}>
+    //     <Track>
+    //       <Instrument type="noiseSynth" />
+    //     </Track>
+    //   </Song>,
+    // );
+
+    // expect(mockNoiseSynthConstructor).toHaveBeenLastCalledWith(undefined);
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="pluckSynth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPluckSynthConstructor).toHaveBeenLastCalledWith(undefined);
   });
 });

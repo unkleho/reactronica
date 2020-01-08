@@ -80,6 +80,108 @@ class PolySynth {
 }
 
 // ----------------------------------------------------------------------------
+// Tone.Synth
+// ----------------------------------------------------------------------------
+
+const Synth = 'Synth';
+
+// ----------------------------------------------------------------------------
+// Tone.AMSynth
+// ----------------------------------------------------------------------------
+
+const AMSynth = 'AMSynth';
+
+// ----------------------------------------------------------------------------
+// Tone.DuoSynth
+// ----------------------------------------------------------------------------
+
+const DuoSynth = 'DuoSynth';
+
+// ----------------------------------------------------------------------------
+// Tone.FMSynth
+// ----------------------------------------------------------------------------
+
+const FMSynth = 'FMSynth';
+
+// ----------------------------------------------------------------------------
+// Tone.MonoSynth
+// ----------------------------------------------------------------------------
+
+const MonoSynth = 'MonoSynth';
+
+// ----------------------------------------------------------------------------
+// Tone.MembraneSynth
+// ----------------------------------------------------------------------------
+
+export const mockMembraneSynthConstructor = jest.fn();
+
+class MembraneSynth {
+  constructor(options) {
+    mockMembraneSynthConstructor(options);
+
+    this.triggerAttack = jest.fn();
+    this.triggerRelease = jest.fn();
+    this.dispose = jest.fn();
+    this.chain = jest.fn();
+    this.disconnect = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.MetalSynth
+// ----------------------------------------------------------------------------
+
+export const mockMetalSynthConstructor = jest.fn();
+
+class MetalSynth {
+  constructor(options) {
+    mockMetalSynthConstructor(options);
+
+    this.triggerAttack = jest.fn();
+    this.triggerRelease = jest.fn();
+    this.dispose = jest.fn();
+    this.chain = jest.fn();
+    this.disconnect = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.NoiseSynth
+// ----------------------------------------------------------------------------
+
+export const mockNoiseSynthConstructor = jest.fn();
+
+class NoiseSynth {
+  constructor(options) {
+    mockNoiseSynthConstructor(options);
+
+    this.triggerAttack = jest.fn();
+    this.triggerRelease = jest.fn();
+    this.dispose = jest.fn();
+    this.chain = jest.fn();
+    this.disconnect = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.PluckSynth
+// ----------------------------------------------------------------------------
+
+export const mockPluckSynthConstructor = jest.fn();
+
+class PluckSynth {
+  constructor(options) {
+    mockPluckSynthConstructor(options);
+
+    this.triggerAttack = jest.fn();
+    this.triggerRelease = jest.fn();
+    this.dispose = jest.fn();
+    this.chain = jest.fn();
+    this.disconnect = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
 // Tone.Sampler
 // ----------------------------------------------------------------------------
 
@@ -148,6 +250,15 @@ const MockTone = {
   Transport,
   PanVol,
   PolySynth,
+  Synth,
+  AMSynth,
+  DuoSynth,
+  FMSynth,
+  MembraneSynth,
+  MetalSynth,
+  MonoSynth,
+  NoiseSynth,
+  PluckSynth,
   Sampler,
   AutoFilter,
   AutoPanner,
