@@ -16,11 +16,7 @@ import {
   beatClip1,
   beatClip2,
 } from '../../sample-data';
-import {
-  buildSteps,
-  buildClip,
-  convertStepsToNotes,
-} from '../../lib/stepUtils';
+import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 
 import '../../node_modules/normalize.css/normalize.css';
@@ -49,7 +45,12 @@ const initialState = {
   tracks: [
     {
       id: 'melody',
+      // TODO: Convert to instrument object?
       instrumentType: 'polySynth',
+      instrumentPolyphony: 4,
+      instrumentOscillator: {
+        type: 'triangle',
+      },
       volume: 60,
       pan: 50,
       steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
@@ -86,7 +87,7 @@ const DAWApp = () => {
     tracks,
     volume,
     pan,
-    notes,
+    // notes,
   } = appSelector(state);
 
   useKeyPress(' ', () => {
@@ -187,8 +188,6 @@ const DAWApp = () => {
             return [...prev, ...buildSteps(curr)];
           }, []);
 
-          // console.log(trackSteps);
-
           return (
             <Track
               steps={trackSteps}
@@ -227,7 +226,12 @@ const DAWApp = () => {
                   notes={track.notes}
                 />
               ) : (
-                <Instrument type={track.instrumentType} notes={track.notes} />
+                <Instrument
+                  type={track.instrumentType}
+                  notes={track.notes}
+                  polyphony={track.instrumentPolyphony}
+                  oscillator={track.instrumentOscillator}
+                />
               )}
             </Track>
           );
@@ -444,6 +448,39 @@ function reducer(state, action) {
             return {
               ...track,
               instrumentType: action.instrumentType,
+            };
+          }
+
+          return track;
+        }),
+      };
+
+    case types.SET_INSTRUMENT_POLYPHONY:
+      return {
+        ...state,
+        tracks: state.tracks.map((track) => {
+          if (track.id === action.trackId) {
+            return {
+              ...track,
+              instrumentPolyphony: action.instrumentPolyphony,
+            };
+          }
+
+          return track;
+        }),
+      };
+
+    case types.SET_INSTRUMENT_OSCILLATOR_TYPE:
+      return {
+        ...state,
+        tracks: state.tracks.map((track) => {
+          if (track.id === action.trackId) {
+            return {
+              ...track,
+              instrumentOscillator: {
+                ...track.instrumentOscillator,
+                type: action.oscillatorType,
+              },
             };
           }
 

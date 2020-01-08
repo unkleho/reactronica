@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.5] - 2020-01-03
 
 - Add `volume` and `isMuted` prop to `Song`
+- Add `polyphony` prop to `Instrument`
 
 ## [0.0.4] - 2019-11-16
 

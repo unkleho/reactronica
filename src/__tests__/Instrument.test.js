@@ -26,10 +26,7 @@ describe('Instrument', () => {
     );
 
     expect(mockPolySynthConstructor).toBeCalledTimes(1);
-    expect(mockPolySynthConstructor).toBeCalledWith(4, undefined, {
-      oscillator: { partials: [0, 2, 3, 4] },
-      polyphony: 4,
-    });
+    expect(mockPolySynthConstructor).toBeCalledWith(4, undefined, undefined);
     expect(mockPolySynthDispose).toBeCalledTimes(0);
 
     rerender(<Song isPlaying={true}></Song>);
@@ -81,5 +78,63 @@ describe('Instrument', () => {
     );
 
     expect(mockPolySynthTriggerRelease).toBeCalledWith('C3');
+  });
+});
+
+describe('PolySynth', () => {
+  it('should render with polyphony and oscillator props', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="polySynth"
+            polyphony={5}
+            oscillator={{ type: 'square' }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(5, undefined, {
+      oscillator: {
+        type: 'square',
+      },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="polySynth"
+            polyphony={3}
+            oscillator={{ type: 'square' }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, undefined, {
+      oscillator: {
+        type: 'square',
+      },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="polySynth"
+            polyphony={3}
+            oscillator={{ type: 'sine' }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, undefined, {
+      oscillator: {
+        type: 'sine',
+      },
+    });
   });
 });

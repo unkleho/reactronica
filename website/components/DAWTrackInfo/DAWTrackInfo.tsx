@@ -12,6 +12,10 @@ type Props = {
   currentTrack?: {
     id: string;
     instrumentType: string;
+    instrumentPolyphony: number;
+    instrumentOscillator: {
+      type: 'triangle' | 'sine';
+    };
     volume: number;
     pan: number;
     effects: any[];
@@ -64,30 +68,49 @@ const TrackInfo: React.FC<Props> = ({
           });
         }}
       />
-      {/* <select
-        onChange={(event) => {
-          const selectedOption = event.target[event.target.selectedIndex];
-          const type = selectedOption.getAttribute('data-type');
 
-          dispatch({
-            type: types.UPDATE_INSTRUMENT,
-            instrumentType: type,
-          });
-        }}
-        value={currentTrack.instrumentType}
-      >
-        {config.instruments.map((instrument) => {
-          return (
-            <option
-              key={instrument.id}
-              data-type={instrument.id}
-              value={instrument.id}
-            >
-              {instrument.name}
-            </option>
-          );
-        })}
-      </select> */}
+      {currentTrack.instrumentType === 'polySynth' && (
+        <>
+          <h3>Oscillator Type</h3>
+          <Select
+            value={currentTrack.instrumentOscillator.type}
+            options={[
+              { label: 'Triangle', value: 'triangle' },
+              { label: 'Sine', value: 'sine' },
+              { label: 'Square', value: 'square' },
+            ]}
+            onChange={(selectedOption) => {
+              dispatch({
+                type: types.SET_INSTRUMENT_OSCILLATOR_TYPE,
+                trackId: currentTrack.id,
+                oscillatorType: selectedOption.value,
+              });
+            }}
+          />
+        </>
+      )}
+
+      {currentTrack.instrumentType === 'polySynth' && (
+        <>
+          <h3>Polyphony</h3>
+          <Select
+            value={currentTrack.instrumentPolyphony}
+            options={[...Array(6)].map((_, i) => {
+              return {
+                label: i,
+                value: i,
+              };
+            })}
+            onChange={(selectedOption) => {
+              dispatch({
+                type: types.SET_INSTRUMENT_POLYPHONY,
+                trackId: currentTrack.id,
+                instrumentPolyphony: selectedOption.value,
+              });
+            }}
+          />
+        </>
+      )}
 
       <h3>
         <label htmlFor="volume">Volume</label>
