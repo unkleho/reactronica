@@ -66,7 +66,7 @@ const Example = () => {
           doSomething(step, index);
         }}
       >
-        <Instrument type="polySynth" />
+        <Instrument type="synth" />
       </Track>
 
       <Track>
@@ -117,9 +117,11 @@ Should be wrapped by a Track and becomes its audio source.
 
 #### Props
 
-- `type` - Instrument type, `AMSynth | duoSynth | FMSynth | membraneSynth | monoSynth | polySynth | sampler | synth`
+- `type` - Instrument type, `amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | sampler | synth`
 - `notes` - An array of notes to trigger Instrument, useful for auditioning sounds or live performance.
 - `samples` - Only for `sampler` instrument type
+- `polyphony` - Maximum number of notes played at the same time. Only for some synth types.
+- `oscillatorType` - A repeating waveform shape of type `triangle | sine | square`. Only for some synth types.
 
 ### Effect
 

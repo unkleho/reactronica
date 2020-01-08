@@ -13,7 +13,7 @@ const InstrumentConsumer = ({
   type = 'synth',
   options,
   polyphony = 4,
-  oscillator,
+  oscillatorType,
   notes = [],
   samples,
   // <Track /> Props
@@ -43,8 +43,10 @@ const InstrumentConsumer = ({
       }
     } else if (type === 'membraneSynth') {
       instrumentRef.current = new Tone.MembraneSynth(
-        oscillator && {
-          oscillator,
+        oscillatorType && {
+          oscillator: {
+            type: oscillatorType,
+          },
         },
       );
     } else if (type === 'metalSynth') {
@@ -79,8 +81,10 @@ const InstrumentConsumer = ({
       instrumentRef.current = new Tone.PolySynth(
         polyphony,
         synth,
-        oscillator && {
-          oscillator,
+        oscillatorType && {
+          oscillator: {
+            type: oscillatorType,
+          },
         },
       );
     }
@@ -99,7 +103,18 @@ const InstrumentConsumer = ({
         instrumentRef.current.dispose();
       }
     };
-  }, [type, polyphony, JSON.stringify(oscillator)]);
+  }, [type, polyphony]);
+
+  useEffect(() => {
+    if (
+      type === 'synth' &&
+      instrumentRef &&
+      instrumentRef.current &&
+      oscillatorType
+    ) {
+      instrumentRef.current.set('oscillator.type', oscillatorType);
+    }
+  }, [oscillatorType]);
 
   // -------------------------------------------------------------------------
   // VOLUME / PAN
@@ -175,6 +190,7 @@ InstrumentConsumer.propTypes = {
   volume: PropTypes.number,
   pan: PropTypes.number,
   polyphony: PropTypes.number,
+  oscillatorType: PropTypes.oneOf(['triangle', 'sine', 'square']),
   effectsChain: PropTypes.array,
   onInstrumentsUpdate: PropTypes.func,
 };

@@ -36,9 +36,7 @@ declare module 'reactronica' {
     options?: any;
     notes?: any[];
     polyphony?: number;
-    oscillator?: {
-      type?: 'triangle' | 'sine' | 'square';
-    };
+    oscillatorType?: 'triangle' | 'sine' | 'square';
     samples?: {
       [k: string]: string;
     };
