@@ -1,14 +1,18 @@
 export const instruments = [
-  { id: 'amSynth', name: 'AM Synth' },
-  { id: 'duoSynth', name: 'Duo Synth' },
-  { id: 'fmSynth', name: 'FM Synth' },
-  { id: 'membraneSynth', name: 'Membrane Synth' },
-  { id: 'metalSynth', name: 'Metal Synth' },
-  { id: 'monoSynth', name: 'Mono Synth' },
+  { id: 'amSynth', name: 'AM Synth', props: ['polyphony', 'oscillatorType'] },
+  { id: 'duoSynth', name: 'Duo Synth', props: ['polyphony', 'oscillatorType'] },
+  { id: 'fmSynth', name: 'FM Synth', props: ['polyphony', 'oscillatorType'] },
+  { id: 'membraneSynth', name: 'Membrane Synth', props: [] },
+  { id: 'metalSynth', name: 'Metal Synth', props: [] },
+  {
+    id: 'monoSynth',
+    name: 'Mono Synth',
+    props: ['polyphony', 'oscillatorType'],
+  },
   // { id: 'noiseSynth', name: 'Noise Synth' }, // No sound, disabled for now
-  { id: 'pluckSynth', name: 'Pluck Synth' },
-  { id: 'sampler', name: 'Sampler' },
-  { id: 'synth', name: 'Synth' },
+  { id: 'pluckSynth', name: 'Pluck Synth', props: [] },
+  { id: 'sampler', name: 'Sampler', props: ['samples'] },
+  { id: 'synth', name: 'Synth', props: ['polyphony', 'oscillatorType'] },
 ];
 
 export const effects = [
