@@ -228,7 +228,7 @@ const DAWApp = () => {
                   type={track.instrumentType}
                   notes={track.notes}
                   polyphony={track.instrumentPolyphony}
-                  oscillatorType={track.instrumentOscillator}
+                  oscillatorType={track.instrumentOscillatorType}
                 />
               )}
             </Track>
