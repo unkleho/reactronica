@@ -9,18 +9,18 @@ import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 
 const InstrumentConsumer = ({
-  // <Song /> Props
-  // Tone,
   // <Instrument /> Props
   type = 'polySynth',
-  options = {
-    polyphony: 4,
-    oscillator: {
-      partials: [0, 2, 3, 4],
-    },
-    // release,
-    // curve,
-  },
+  options,
+  // options = {
+  //   oscillator: {
+  //     type: 'triangle',
+  //   },
+  //   // release,
+  //   // curve,
+  // },
+  polyphony = 4,
+  oscillator,
   notes = [],
   samples,
   // <Track /> Props
@@ -50,18 +50,20 @@ const InstrumentConsumer = ({
       synth.current = new Tone.MonoSynth(options);
     } else if (type === 'polySynth') {
       synth.current = new Tone.PolySynth(
-        options.polyphony,
+        polyphony,
         Tone.Synth,
-        options,
+        oscillator && {
+          oscillator,
+        },
       );
     } else if (type === 'sampler') {
       synth.current = new Tone.Sampler(samples);
 
-      if (options.curve) {
+      if (options && options.curve) {
         synth.current.curve = options.curve;
       }
 
-      if (options.release) {
+      if (options && options.release) {
         synth.current.release = options.release;
       }
     } else if (type === 'synth') {
@@ -78,7 +80,7 @@ const InstrumentConsumer = ({
         synth.current.dispose();
       }
     };
-  }, [type]);
+  }, [type, polyphony, JSON.stringify(oscillator)]);
 
   // -------------------------------------------------------------------------
   // VOLUME / PAN
@@ -130,8 +132,6 @@ const InstrumentConsumer = ({
   useEffect(() => {
     // console.log('<Instrument />', 'updateEffectsChain', effectsChain);
 
-    // trackChannelBase.current = new Tone.PanVol(pan, volume);
-
     // NOTE: Using trackChannelBase causes effects to not turn off
     synth.current.disconnect();
     synth.current.chain(...effectsChain, trackChannelBase.current, Tone.Master);
@@ -151,6 +151,7 @@ InstrumentConsumer.propTypes = {
   // <Track /> Props
   volume: PropTypes.number,
   pan: PropTypes.number,
+  polyphony: PropTypes.number,
   effectsChain: PropTypes.array,
   onInstrumentsUpdate: PropTypes.func,
 };
