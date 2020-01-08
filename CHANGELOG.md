@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `polyphony` and `oscillator` prop to `Instrument`
 - Remove `type` of `polySynth` from `Instrument` as it is just a wrapper around other synths
 - Add polyphony for Instrument synths
+- Add `membraneSynth`, `metalSynth` and `pluckSynth` types to `Instrument`
+- Update `AMSynth` and `FMSynth` values in `Instrument` `type` to `amSynth` and `fmSynth`
 
 ## [0.2.2] - 2019-09-18
 

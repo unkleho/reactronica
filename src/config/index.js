@@ -1,3 +1,16 @@
+export const instruments = [
+  { id: 'amSynth', name: 'AM Synth' },
+  { id: 'duoSynth', name: 'Duo Synth' },
+  { id: 'fmSynth', name: 'FM Synth' },
+  { id: 'membraneSynth', name: 'Membrane Synth' },
+  { id: 'metalSynth', name: 'Metal Synth' },
+  { id: 'monoSynth', name: 'Mono Synth' },
+  // { id: 'noiseSynth', name: 'Noise Synth' }, // No sound, disabled for now
+  { id: 'pluckSynth', name: 'Pluck Synth' },
+  { id: 'sampler', name: 'Sampler' },
+  { id: 'synth', name: 'Synth' },
+];
+
 export const effects = [
   { id: 'autoFilter', name: 'Auto Filter' },
   { id: 'autoPanner', name: 'Auto Panner' },
@@ -12,22 +25,9 @@ export const effects = [
   { id: 'tremolo', name: 'Tremolo' },
 ];
 
-export const instruments = [
-  { id: 'amSynth', name: 'AM Synth' },
-  { id: 'duoSynth', name: 'Duo Synth' },
-  { id: 'fmSynth', name: 'FM Synth' },
-  { id: 'membraneSynth', name: 'Membrane Synth' },
-  { id: 'metalSynth', name: 'Metal Synth' },
-  { id: 'monoSynth', name: 'Mono Synth' },
-  // { id: 'noiseSynth', name: 'Noise Synth' }, // No sound, disabled for now
-  { id: 'pluckSynth', name: 'Pluck Synth' },
-  { id: 'sampler', name: 'Sampler' },
-  { id: 'synth', name: 'Synth' },
-];
-
 const config = {
-  effects,
   instruments,
+  effects,
 };
 
 export default config;

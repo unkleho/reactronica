@@ -22,8 +22,17 @@ declare module 'reactronica' {
     onStepPlay?: Function;
   };
 
+  export type InstrumentType =
+    | 'amSynth'
+    | 'duoSynth'
+    | 'fmSynth'
+    | 'membraneSynth'
+    | 'metalSynth'
+    | 'pluckSynth'
+    | 'synth';
+
   export type InstrumentProps = {
-    type?: string;
+    type?: InstrumentType;
     options?: any;
     notes?: any[];
     polyphony?: number;
@@ -46,6 +55,18 @@ declare module 'reactronica' {
     feedback?: number;
     onAddToEffectsChain?: Function;
     onRemoveFromEffectsChain?: Function;
+  };
+
+  // WIP, not exported yet
+  type config = {
+    instruments: {
+      id: InstrumentType;
+      name: string;
+    }[];
+    effects: {
+      id: string;
+      name: string;
+    }[];
   };
 
   const Song: React.FunctionComponent<SongProps>;
