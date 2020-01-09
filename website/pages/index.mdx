@@ -260,26 +260,24 @@ const Example = () => {
 
 ## Documentation
 
-### Song
+### `Song`
 
 This component wraps around all Reactronica components, providing top level control of the audio.
 
-#### Props
+- **tempo** `number` - Speed or pace of the song. Measured in beats per minute.
+- **isPlaying** `boolean` - Whether the song is playing or not. Defaults to `false`.
+- **volume** `number` - Volume of entire song
+- **isMuted** `boolean` - Mute the whole song
 
-- `tempo` - Speed or pace of the song. Measured in beats per minute.
-- `isPlaying` - Whether the song is playing or not. Defaults to `false`.
-
-### Track
+### `Track`
 
 Tracks make up the layers of audio within a Song. Each individual Track has independent `volume`, `pan`, `steps` and `effects`.
 
-#### Props
-
-- `volume` - Volume of track
-- `pan` - Panning of track
-- `steps` - An array of notes to play
-- `effects` - An array of `<Effect />` components
-- `onStepPlay` - Callback that runs on every step
+- **volume** `number` - Volume of track
+- **pan** `number` - Panning of track
+- **steps** `array` - An array of notes to play
+- **effects** `Effect[]` - An array of `<Effect />` components
+- **onStepPlay** `function` - Callback that runs on every step
 
 ### Instrument
 
@@ -287,9 +285,11 @@ Should be wrapped by a Track and becomes its audio source.
 
 #### Props
 
-- `type` - Instrument type, `AMSynth | duoSynth | FMSynth | membraneSynth | monoSynth | polySynth | sampler | synth`
-- `notes` - An array of notes to trigger Instrument, useful for auditioning sounds or live performance.
-- `samples` - Only for `sampler` instrument type
+- **type** `amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | sampler | synth` - Instrument type
+- **notes** `array` - An array of notes to trigger Instrument, useful for auditioning sounds or live performance.
+- **samples** `object` - Only for `sampler` instrument type
+- **polyphony** `number` - Maximum number of notes played at the same time. Only for some synth types.
+- **oscillatorType** `triangle | sine | square` - A repeating waveform shape. Only for some synth types.
 
 ### Effect
 
@@ -297,4 +297,4 @@ Audio effects such as `feedbackDelay`, `distortion` and `freeverb`. Applied to a
 
 #### Props
 
-- `type` - Effect type, `feedbackDelay | distortion | freeverb`
+- **type** `feedbackDelay | distortion | freeverb` - Effect type
