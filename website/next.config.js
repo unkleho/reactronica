@@ -5,8 +5,12 @@ const webpack = require('webpack');
 /* eslint-enable import/no-extraneous-dependencies */
 const withSass = require('@zeit/next-sass');
 const withCSS = require('@zeit/next-css');
+const slug = require('remark-slug');
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [slug],
+  },
 });
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 

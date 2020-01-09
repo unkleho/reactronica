@@ -41,6 +41,7 @@
     "postcss-extend-rule": "^3.0.0",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
+    "remark-slug": "^5.1.2",
     "typescript": "^3.5.3",
     "webpack-filter-warnings-plugin": "^1.2.1"
   }

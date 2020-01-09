@@ -32,19 +32,19 @@ h1 {
 h2 {
   margin-top: 1.2em;
   font-weight: 700;
-  font-size: var(--font-size-xlg);
+  font-size: var(--font-size-xxlg);
 }
 
 h3 {
   margin-top: 1.7em;
-  font-weight: 500;
-  font-size: var(--font-size-lg);
+  font-weight: 600;
+  font-size: var(--font-size-xlg);
 }
 
 h4 {
   margin-top: 1.5em;
   font-weight: 600;
-  font-size: 1.1em;
+  font-size: 1em;
 }
 
 h1,
@@ -100,6 +100,8 @@ a:visited {
 pre {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  /* font-size: var(--font-size-xlg); */
+  font-family: Inconsolata, monospace;
 }
 
 blockquote {
@@ -110,10 +112,6 @@ blockquote {
 }
 
 code {
-  font-family: 'andale mono', /* MS WebFont */ 'monotype.com',
-    /* MS WebFont, former name */ monaco,
-    /* MacOS */ /* Fallback options */ 'courier new',
-    /* Windows, MacOS */ courier, /* Unix+X, MacOS */ monospace;
   color: var(--colour-yellow);
-  letter-spacing: -0.02em;
+  font-family: Inconsolata, monospace;
 }
