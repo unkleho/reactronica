@@ -32,6 +32,10 @@ class MyApp extends NextApp {
             href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css"
             rel="stylesheet"
           />
+          <link
+            href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap"
+            rel="stylesheet"
+          ></link>
         </Head>
 
         <AppComponent>
