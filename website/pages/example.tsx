@@ -1,9 +1,37 @@
 import React, { useState } from 'react';
 import { Song, Track, Instrument } from 'reactronica';
+import WebMidi from 'webmidi';
 
 import './index.css';
 
 const HomePage = () => {
+  const [notes, setNotes] = useState([]);
+
+  React.useEffect(() => {
+    WebMidi.enable((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(WebMidi.inputs);
+        console.log(WebMidi.outputs);
+
+        const input = WebMidi.getInputByName('Keystation Mini 32');
+
+        if (input) {
+          input.addListener('noteon', 'all', (e) => {
+            setNotes([{ name: `${e.note.name}${e.note.octave}` }]);
+          });
+
+          input.addListener('noteoff', 'all', (e) => {
+            setNotes([]);
+          });
+        }
+      }
+    });
+  }, []);
+
+  console.log(notes);
+
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -55,7 +83,7 @@ const HomePage = () => {
           //   // console.log(step);
           // }}
         >
-          <Instrument type={'polySynth'} />
+          <Instrument type={'polySynth'} notes={notes} />
         </Track>
       </Song>
     </div>
