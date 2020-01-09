@@ -53,10 +53,6 @@ const Song = ({
   return (
     <SongContext.Provider
       value={{
-        // NOTE: Not sure what tracks are for...
-        // tracks,
-        // updateTracks: this.updateTracks,
-        // instruments: [],
         isPlaying,
       }}
     >
