@@ -29,7 +29,8 @@
     "react-ga": "^2.7.0",
     "react-select": "^3.0.5",
     "reactronica": "0.2.1",
-    "tone": "^13.4.9"
+    "tone": "^13.4.9",
+    "webmidi": "^2.5.1"
   },
   "devDependencies": {
     "@testing-library/react": "^9.0.2",
