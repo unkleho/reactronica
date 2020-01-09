@@ -14,12 +14,11 @@ const HomePage = () => {
   const sequence = useRef();
 
   useEffect(() => {
-    synth.current = new Tone.Synth(null);
-    reverb.current = new Tone.Freeverb(null);
+    synth.current = new Tone.Synth();
+    reverb.current = new Tone.Freeverb();
     Tone.Master.volume.value = 0;
 
     synth.current.chain(reverb.current, Tone.Master);
-
     sequence.current = new Tone.Sequence(
       (time, note) => {
         synth.current.triggerAttackRelease(note);
@@ -32,7 +31,9 @@ const HomePage = () => {
     <div>
       <button
         onClick={() => {
-          synth.current.triggerAttackRelease('C3', '8n');
+          if (synth && synth.current) {
+            synth.current.triggerAttackRelease('C3', '8n');
+          }
         }}
       >
         Play Sound
@@ -40,8 +41,10 @@ const HomePage = () => {
 
       <button
         onClick={() => {
-          sequence.current.start();
-          Tone.Transport.start();
+          if (sequence && sequence.current) {
+            sequence.current.start();
+            Tone.Transport.start();
+          }
         }}
       >
         Play Sequence
@@ -49,7 +52,9 @@ const HomePage = () => {
 
       <button
         onClick={() => {
-          synth.current.dispose();
+          if (synth && synth.current) {
+            synth.current.dispose();
+          }
         }}
       >
         Remove synth
