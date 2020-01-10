@@ -20,6 +20,17 @@ $ npm install --save reactronica tone
 
 Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.html) are used internally.
 
+## Documentation
+
+[https://reactronica.com](https://reactronica.com/#documentation)
+
+### Components
+
+- [Song](https://reactronica.com/#song)
+- [Track](https://reactronica.com/#track)
+- [Instrument](https://reactronica.com/#instrument)
+- [Effect](https://reactronica.com/#effect)
+
 ## Demos
 
 - [Digital Audio Workstation](https://reactronica.com/daw)
@@ -86,51 +97,6 @@ const Example = () => {
 };
 ```
 
-## Documentation
-
-### Song
-
-This component wraps around all Reactronica components, providing top level control of the audio.
-
-#### Props
-
-- `tempo` - Speed or pace of the song. Measured in beats per minute.
-- `isPlaying` - Whether the song is playing or not. Defaults to `false`.
-- `volume` - Volume of entire song
-- `isMuted` - Whether song is muted or not
-
-### Track
-
-Tracks make up the layers of audio within a Song. Each individual Track has independent `volume`, `pan`, `steps` and `effects`.
-
-#### Props
-
-- `volume` - Volume of track
-- `pan` - Panning of track
-- `steps` - An array of notes to play
-- `effects` - An array of `<Effect />` components
-- `onStepPlay` - Callback that runs on every step
-
-### Instrument
-
-Should be wrapped by a Track and becomes its audio source.
-
-#### Props
-
-- `type` - Instrument type, `amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | sampler | synth`
-- `notes` - An array of notes to trigger Instrument, useful for auditioning sounds or live performance.
-- `samples` - Only for `sampler` instrument type
-- `polyphony` - Maximum number of notes played at the same time. Only for some synth types.
-- `oscillatorType` - A repeating waveform shape of type `triangle | sine | square`. Only for some synth types.
-
-### Effect
-
-Audio effects such as `feedbackDelay`, `distortion` and `freeverb`. Applied to a Track, with multiple Effects able to be added.
-
-#### Props
-
-- `type` - Effect type, `feedbackDelay | distortion | freeverb`
-
 ## Development
 
 ```bash
@@ -150,7 +116,6 @@ $ npm start
 - Tried to migrate library to Typescript, however having issues with `rollup-plugin-typescript` being too strict while bundling. (branch `jest-typescript` - 26/12/19).
 - Tone installed as dependency due to `Module not found: Can't resolve 'tone' in '/Users/kcheung/Development/unkleho/reactronica/dist'` issue in `website/`. Keep as both dependency and peer for now.
 - Latest Tone (13.4.9) has this issue `Cannot assign to read only property 'listener' of object '#<AudioContext>'` due to `https://stackoverflow.com/questions/55039122/why-does-tone-js-not-play-nice-in-a-svelte-component`. Tone cannot be bundled with Reactronica and has to be a peer dependency for now.
-- Both Reactronica and example/ have their own test config. Would prefer if Reactronica took care of all tests, however react-scripts only allows testing within a src/ dir. Moving to jest and babel/@core etc is required. (3/6/19)
 - If you get `Hooks can only be called inside the body of a function component.`, have a look at https://github.com/facebook/react/issues/14721. Try going into the examples folder and running `npm link ../node_modules/react`.
 
 ## Thanks

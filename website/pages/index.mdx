@@ -279,7 +279,7 @@ Tracks make up the layers of audio within a Song. Each individual Track has inde
 - **effects** `Effect[]` - An array of `<Effect />` components
 - **onStepPlay** `function` - Callback that runs on every step
 
-### Instrument
+### `Instrument`
 
 Should be wrapped by a Track and becomes its audio source.
 
@@ -291,7 +291,7 @@ Should be wrapped by a Track and becomes its audio source.
 - **polyphony** `number` - Maximum number of notes played at the same time. Only for some synth types.
 - **oscillatorType** `triangle | sine | square` - A repeating waveform shape. Only for some synth types.
 
-### Effect
+### `Effect`
 
 Audio effects such as `feedbackDelay`, `distortion` and `freeverb`. Applied to a Track, with multiple Effects able to be added.
 
