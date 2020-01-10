@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `membraneSynth`, `metalSynth` and `pluckSynth` types to `Instrument`
 - Update `AMSynth` and `FMSynth` values in `Instrument` `type` to `amSynth` and `fmSynth`
 - Remove `/example` folder to focus on `/website` that already includes docs and examples
+- Change `steps` from `step.note` to `step.name` in `Track`
 - Add more Typescript definitions
 
 ## [0.2.2] - 2019-09-18

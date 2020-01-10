@@ -275,7 +275,7 @@ Tracks make up the layers of audio within a Song. Each individual Track has inde
 
 - **volume** `number` - Volume of track
 - **pan** `number` - Panning of track
-- **steps** `array` - An array of notes to play
+- **steps** `StepType[]` - An array of steps to play. Can be `string` or `{ name: string, duration: number, velocity: number }`.
 - **effects** `Effect[]` - An array of `<Effect />` components
 - **onStepPlay** `function` - Callback that runs on every step
 
@@ -286,7 +286,7 @@ Should be wrapped by a Track and becomes its audio source.
 #### Props
 
 - **type** `amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | sampler | synth` - Instrument type
-- **notes** `array` - An array of notes to trigger Instrument, useful for auditioning sounds or live performance.
+- **notes** `NoteType[]` - An array of notes (`{ name: string, velocity: number }`) to trigger Instrument, useful for auditioning sounds or live performance.
 - **samples** `object` - Only for `sampler` instrument type
 - **polyphony** `number` - Maximum number of notes played at the same time. Only for some synth types.
 - **oscillatorType** `triangle | sine | square` - A repeating waveform shape. Only for some synth types.
