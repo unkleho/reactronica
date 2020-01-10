@@ -13,7 +13,7 @@ declare module 'reactronica' {
 
   export type TrackProps = {
     isPlaying?: boolean;
-    steps?: any[];
+    steps?: StepType[];
     volume?: number;
     pan?: number;
     subdivision?: string;
@@ -21,6 +21,14 @@ declare module 'reactronica' {
     children: React.ReactNode;
     onStepPlay?: Function;
   };
+
+  export type StepNoteType = {
+    name: string;
+    duration?: number;
+    velocity?: number;
+  };
+
+  export type StepType = StepNoteType | StepNoteType[] | string;
 
   export type InstrumentType =
     | 'amSynth'
@@ -31,10 +39,15 @@ declare module 'reactronica' {
     | 'pluckSynth'
     | 'synth';
 
+  export type NoteType = {
+    name: string;
+    velocity: number;
+  };
+
   export type InstrumentProps = {
     type?: InstrumentType;
     options?: any;
-    notes?: any[];
+    notes?: NoteType[];
     polyphony?: number;
     oscillatorType?: 'triangle' | 'sine' | 'square';
     envelopeAttack?: number;

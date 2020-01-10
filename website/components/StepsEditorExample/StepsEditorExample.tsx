@@ -11,13 +11,13 @@ type Props = {
 
 const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
   const [currentSteps, setCurrentSteps] = React.useState([
-    [{ note: 'C3' }, { note: 'E3' }, { note: 'A3' }],
+    [{ name: 'C3' }, { name: 'E3' }, { name: 'A3' }],
     null,
-    [{ note: 'C3' }, { note: 'E3' }, { note: 'G3' }, { note: 'B3' }],
+    [{ name: 'C3' }, { name: 'E3' }, { name: 'G3' }, { name: 'B3' }],
     null,
-    [{ note: 'C3' }, { note: 'F3' }, { note: 'A3' }],
+    [{ name: 'C3' }, { name: 'F3' }, { name: 'A3' }],
     null,
-    [{ note: 'D3' }, { note: 'G3' }, { note: 'B3' }],
+    [{ name: 'D3' }, { name: 'G3' }, { name: 'B3' }],
     null,
   ]);
   const [isPlaying, setIsPlaying] = React.useState(false);

@@ -25,11 +25,12 @@ const Tab = ({
 
   const handleTabChange = (event, stringIndex, step) => {
     const string = instrumentConfig[instrument].strings[stringIndex];
-    let note;
+    let noteName;
+
     if (event.target.value) {
-      note = fretToNote(parseInt(event.target.value, 10), string);
+      noteName = fretToNote(parseInt(event.target.value, 10), string);
     } else {
-      note = null;
+      noteName = null;
     }
 
     // console.log(note, step, stringIndex);
@@ -41,7 +42,7 @@ const Tab = ({
     });
 
     newGridLine.push({
-      note,
+      name: noteName,
       duration: 1,
       step, // TODO: step could be derived from array, but this makes things easier for now.
     });
@@ -128,10 +129,8 @@ const Tab = ({
 
             <div className={css.tabLineSteps}>
               {tabLine.map((step, j) => {
-                const note = step && step.note ? step.note : undefined;
+                const note = step && step.name ? step.name : undefined;
                 const fret = noteToFret(note, stringNote);
-
-                // console.log(fret);
 
                 return (
                   <div

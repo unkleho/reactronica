@@ -17,7 +17,7 @@ export function buildSteps(clip: Clip, subdivision = 16, notesPerBar = 4) {
       })
       .map((note) => {
         return {
-          note: note.note,
+          name: note.name,
           duration: note.duration,
         };
       });

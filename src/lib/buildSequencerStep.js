@@ -3,7 +3,7 @@ export default function buildSequencerStep(step, i) {
     return {
       notes: [
         {
-          note: step,
+          name: step,
         },
       ],
       index: i,
@@ -12,7 +12,7 @@ export default function buildSequencerStep(step, i) {
     return {
       notes: [
         {
-          note: step.note,
+          name: step.name,
           duration: step.duration,
           velocity: step.velocity,
         },
@@ -24,7 +24,7 @@ export default function buildSequencerStep(step, i) {
       notes: step.map((s) => {
         if (typeof s === 'string') {
           return {
-            note: s,
+            name: s,
           };
         }
 
