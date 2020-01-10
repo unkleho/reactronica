@@ -9,9 +9,9 @@ beforeEach(() => {
 });
 
 describe('Song', () => {
-  it('should render Song with tempo of 100 and then play with volume -3', () => {
+  it('should render Song with bpm of 100 and then play with volume -3', () => {
     const { rerender } = render(
-      <Song isPlaying={false} tempo={100} isMuted={true}>
+      <Song isPlaying={false} bpm={100} isMuted={true}>
         <Track steps={['C3']}>
           <Instrument type="synth" />
         </Track>
@@ -24,7 +24,7 @@ describe('Song', () => {
     expect(Tone.Master.mute).toEqual(true);
 
     rerender(
-      <Song isPlaying={true} tempo={100} volume={-3} isMuted={false}>
+      <Song isPlaying={true} bpm={100} volume={-3} isMuted={false}>
         <Track steps={['C3']}>
           <Instrument type="synth" />
         </Track>

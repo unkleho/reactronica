@@ -19,9 +19,15 @@ const theme = {
       },
     },
     {
-      types: ['operator', 'number'],
+      types: ['operator'],
       style: {
         color: css['colour-purple'],
+      },
+    },
+    {
+      types: ['number'],
+      style: {
+        color: css['colour-yellow'],
       },
     },
     {

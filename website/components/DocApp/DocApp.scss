@@ -92,6 +92,15 @@ body {
   background-color: var(--colour-black);
 }
 
+.headerLinks {
+  display: flex;
+  align-items: center;
+
+  a {
+    margin: 0 var(--baseline-1);
+  }
+}
+
 .headerLink {
   display: flex;
   align-items: center;

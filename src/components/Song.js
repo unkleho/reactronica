@@ -8,7 +8,7 @@ export const SongContext = React.createContext();
 
 const Song = ({
   isPlaying = false,
-  tempo = 90,
+  bpm = 90,
   // subdivision= '4n',
   swing = 0,
   swingSubdivision = '8n',
@@ -17,15 +17,15 @@ const Song = ({
   children,
 }) => {
   useEffect(() => {
-    Tone.Transport.bpm.value = tempo;
+    Tone.Transport.bpm.value = bpm;
     Tone.Transport.swing = swing;
     Tone.Transport.swingSubdivision = swingSubdivision;
-  }, [tempo, swing, swingSubdivision]);
+  }, [bpm, swing, swingSubdivision]);
 
   useEffect(() => {
     if (isPlaying) {
       // Hack to get Tone to NOT use same settings from another instance
-      Tone.Transport.bpm.value = tempo;
+      Tone.Transport.bpm.value = bpm;
       Tone.Transport.swing = swing;
       Tone.Transport.swingSubdivision = swingSubdivision;
 
@@ -63,7 +63,7 @@ const Song = ({
 
 Song.propTypes = {
   isPlaying: PropTypes.bool,
-  tempo: PropTypes.number,
+  bpm: PropTypes.number,
   swing: PropTypes.number,
   swingSubdivision: PropTypes.oneOf(['8n']),
   children: PropTypes.node,

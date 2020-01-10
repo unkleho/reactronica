@@ -172,7 +172,7 @@ const UkuleleTab = () => {
       />
 
       {/* Reactronica Components */}
-      <Song isPlaying={isPlaying} tempo={90}>
+      <Song isPlaying={isPlaying} bpm={90}>
         <Track
           steps={steps}
           subdivision={'8n'}
@@ -206,7 +206,7 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 const Example = () => {
   return (
     // Top level component must be the Song, with Tracks nested inside
-    <Song tempo={90} isPlaying={true}>
+    <Song bpm={90} isPlaying={true}>
       <Track
         // Array of several types
         steps={[
@@ -264,7 +264,7 @@ const Example = () => {
 
 This component wraps around all Reactronica components, providing top level control of the audio.
 
-- **tempo** `number` - Speed or pace of the song. Measured in beats per minute.
+- **bpm** `number` - Speed or pace of the song. Short for beats per minute.
 - **isPlaying** `boolean` - Whether the song is playing or not. Defaults to `false`.
 - **volume** `number` - Volume of entire song
 - **isMuted** `boolean` - Mute the whole song
@@ -290,6 +290,10 @@ Should be wrapped by a Track and becomes its audio source.
 - **samples** `object` - Only for `sampler` instrument type
 - **polyphony** `number` - Maximum number of notes played at the same time. Only for some synth types.
 - **oscillatorType** `triangle | sine | square` - A repeating waveform shape. Only for some synth types.
+- **envelopeAttack** `number`
+- **envelopeDecay** `number`
+- **envelopeSustain** `number`
+- **envelopeRelease** `number`
 
 ### `Effect`
 

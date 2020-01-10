@@ -8,14 +8,14 @@ import css from './DAWTransport.scss';
 
 type Props = {
   isPlaying?: boolean;
-  tempo?: number;
+  bpm?: number;
   dispatch?: Function;
   className?: string;
 };
 
 const Transport: React.FC<Props> = ({
   isPlaying,
-  tempo,
+  bpm,
   dispatch,
   className,
 }) => {
@@ -27,12 +27,12 @@ const Transport: React.FC<Props> = ({
         </button>
       </div>
 
-      <div className={css.tempo}>
-        <label>{tempo} bpm</label>
-        <button onClick={() => dispatch({ type: types.INCREASE_TEMPO })}>
+      <div className={css.bpm}>
+        <label>{bpm} bpm</label>
+        <button onClick={() => dispatch({ type: types.INCREASE_BPM })}>
           <Icon name="add"></Icon>
         </button>
-        <button onClick={() => dispatch({ type: types.DECREASE_TEMPO })}>
+        <button onClick={() => dispatch({ type: types.DECREASE_BPM })}>
           <Icon name="remove"></Icon>
         </button>
       </div>

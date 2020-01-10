@@ -27,7 +27,7 @@ const initialState = {
   // TRANSPORT
   // --------------------------------------------------------------------------
   isPlaying: false,
-  tempo: 70,
+  bpm: 70,
   // --------------------------------------------------------------------------
   // STEPS
   // --------------------------------------------------------------------------
@@ -73,7 +73,7 @@ const DAWApp = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const {
     isPlaying,
-    tempo,
+    bpm,
     currentClip,
     currentClipId,
     clips,
@@ -99,7 +99,7 @@ const DAWApp = () => {
 
         <Transport
           isPlaying={isPlaying}
-          tempo={tempo}
+          bpm={bpm}
           dispatch={dispatch}
           className={css.transport}
         />
@@ -128,7 +128,7 @@ const DAWApp = () => {
       <div className={css.trackSequencer}>
         <DAWSequencer
           isPlaying={isPlaying}
-          tempo={tempo}
+          bpm={bpm}
           tracks={tracks}
           currentTrackId={currentTrackId}
           currentClipId={currentClipId}
@@ -171,7 +171,7 @@ const DAWApp = () => {
 
       <Song
         isPlaying={isPlaying}
-        tempo={tempo}
+        bpm={bpm}
         // swing={1}
         // swingSubdivision={'16n'}
       >
@@ -315,11 +315,11 @@ function reducer(state, action) {
     case types.TOGGLE_PLAYING:
       return { ...state, isPlaying: !state.isPlaying };
 
-    case types.INCREASE_TEMPO:
-      return { ...state, tempo: state.tempo + 1 };
+    case types.INCREASE_BPM:
+      return { ...state, bpm: state.bpm + 1 };
 
-    case types.DECREASE_TEMPO:
-      return { ...state, tempo: state.tempo - 1 };
+    case types.DECREASE_BPM:
+      return { ...state, bpm: state.bpm - 1 };
 
     // ------------------------------------------------------------------------
     // STEPS / NOTES

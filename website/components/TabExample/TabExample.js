@@ -37,7 +37,7 @@ const TabExample = () => {
         {/* AUDIO */}
         {/* ----------------------------------------------------------------- */}
 
-        <Song isPlaying={isPlaying} tempo={90}>
+        <Song isPlaying={isPlaying} bpm={90}>
           <Track
             steps={steps}
             subdivision={'8n'}
