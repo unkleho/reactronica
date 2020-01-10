@@ -51,17 +51,17 @@ const Example = () => {
         steps={[
           // Note in string format
           'C3',
-          // Object with note and duration
-          { note: 'C3', duration: 0.5 },
-          { note: 'D3', duration: 0.5 },
+          // Object with note name and duration
+          { name: 'C3', duration: 0.5 },
+          { name: 'D3', duration: 0.5 },
           // Array of strings for chords
           ['C3', 'G3'],
           null,
           null,
           // Array of objects for chords
           [
-            { note: 'C3', duration: 0.5 },
-            { note: 'G3', duration: 0.5 },
+            { name: 'C3', duration: 0.5 },
+            { name: 'G3', duration: 0.5 },
           ],
           null,
         ]}
