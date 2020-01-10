@@ -38,7 +38,7 @@ const HomePage = () => {
     <div>
       <button onClick={() => setIsPlaying(!isPlaying)}>Play</button>
 
-      <Song tempo={90} isPlaying={isPlaying} swing={1} swingSubdivision={'8n'}>
+      <Song bpm={90} isPlaying={isPlaying} swing={1} swingSubdivision={'8n'}>
         <Track
           subdivision={'16n'}
           steps={[

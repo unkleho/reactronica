@@ -3,7 +3,7 @@ declare module 'reactronica' {
 
   export type SongProps = {
     isPlaying?: boolean;
-    tempo?: number;
+    bpm?: number;
     swing?: number;
     subdivision?: string;
     volume?: number;

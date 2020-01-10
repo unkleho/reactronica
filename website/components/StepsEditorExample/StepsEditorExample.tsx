@@ -51,7 +51,7 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
             setCurrentStepIndex(index);
           }}
         >
-          <Instrument type="polySynth"></Instrument>
+          <Instrument type="synth"></Instrument>
         </Track>
       </Song>
     </>

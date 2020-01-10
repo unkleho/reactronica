@@ -45,7 +45,7 @@ import { Song, Track, Instrument, Effect } from 'reactronica';
 const Example = () => {
   return (
     // Top level component must be Song, with Tracks nested inside
-    <Song tempo={90} isPlaying={true}>
+    <Song bpm={90} isPlaying={true}>
       <Track
         // Array of several types
         steps={[

@@ -73,6 +73,10 @@ ul {
   padding-left: var(--baseline-3);
 }
 
+li {
+  margin-bottom: var(--baseline-1);
+}
+
 button {
   display: inline-flex;
   align-items: center;

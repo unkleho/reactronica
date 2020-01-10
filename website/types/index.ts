@@ -2,8 +2,8 @@
 // TRANSPORT
 // ----------------------------------------------------------------------------
 export const TOGGLE_PLAYING = 'TOGGLE_PLAYING';
-export const INCREASE_TEMPO = 'INCREASE_TEMPO';
-export const DECREASE_TEMPO = 'DECREASE_TEMPO';
+export const INCREASE_BPM = 'INCREASE_BPM';
+export const DECREASE_BPM = 'DECREASE_BPM';
 
 // ----------------------------------------------------------------------------
 // STEPS

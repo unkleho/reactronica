@@ -13,7 +13,7 @@ const css = require('./DAWSequencer.scss');
 
 type Props = {
   isPlaying: boolean;
-  tempo?: number;
+  bpm?: number;
   tracks: Track[];
   // clips: Clip[];
   currentClipId: string;
@@ -29,7 +29,7 @@ type Track = {
 
 const Sequencer: React.FC<Props> = ({
   isPlaying,
-  tempo,
+  bpm,
   tracks = [],
   currentClipId,
   currentTrackId,
@@ -46,11 +46,7 @@ const Sequencer: React.FC<Props> = ({
 
       <DAWBeatTimeRuler className={css.ruler} />
 
-      <DAWPlayhead
-        isPlaying={isPlaying}
-        tempo={tempo}
-        className={css.playhead}
-      />
+      <DAWPlayhead isPlaying={isPlaying} bpm={bpm} className={css.playhead} />
 
       <div className={css.trackSummaries}>
         {tracks.map((track) => {

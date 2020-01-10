@@ -17,7 +17,7 @@ beforeEach(() => {
 describe('Track', () => {
   it('should render Track with steps, pan and volume props', () => {
     const { rerender } = render(
-      <Song isPlaying={false} tempo={100}>
+      <Song isPlaying={false} bpm={100}>
         <Track steps={['C3', null]} pan={2} volume={-6}>
           <Instrument type="synth" />
         </Track>
@@ -27,7 +27,7 @@ describe('Track', () => {
     expect(mockPanVolConstructor).toBeCalledWith(2, -6);
 
     rerender(
-      <Song isPlaying={true} tempo={100}>
+      <Song isPlaying={true} bpm={100}>
         <Track
           steps={['C3', null, [{ note: 'C3' }, { note: 'G3' }]]}
           pan={0}

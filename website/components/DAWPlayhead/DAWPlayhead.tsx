@@ -4,20 +4,20 @@ import css from './DAWPlayhead.css';
 
 type Props = {
   isPlaying?: boolean;
-  tempo: number;
+  bpm: number;
   className?: string;
 };
 
 const DAWPlayhead: React.FunctionComponent<Props> = ({
   isPlaying,
-  tempo,
+  bpm,
   className,
 }) => {
   return (
     <div className={[css.dawPlayhead, className || ''].join(' ')}>
       <style jsx>{`
         div {
-          animation: playhead ${(8 / tempo) * 60}s infinite linear;
+          animation: playhead ${(8 / bpm) * 60}s infinite linear;
         }
 
         @keyframes playhead {

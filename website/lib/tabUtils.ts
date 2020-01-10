@@ -8,8 +8,8 @@ import {
  *
  */
 
-export function getDuration(tempo, bars) {
-  return ((bars * 240) / tempo) * 1000;
+export function getDuration(bpm, bars) {
+  return ((bars * 240) / bpm) * 1000;
 }
 
 export function getStringNote(instrument, stringIndex) {
