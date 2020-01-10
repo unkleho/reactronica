@@ -29,7 +29,7 @@ describe('Track', () => {
     rerender(
       <Song isPlaying={true} bpm={100}>
         <Track
-          steps={['C3', null, [{ note: 'C3' }, { note: 'G3' }]]}
+          steps={['C3', null, [{ name: 'C3' }, { name: 'G3' }]]}
           pan={0}
           volume={0}
         >
@@ -41,9 +41,9 @@ describe('Track', () => {
     expect(mockPanVolVolume).toBeCalledWith(0);
     expect(mockPanVolPan).toBeCalledWith(0);
     expect(mockSequenceConstructor).toBeCalledWith([
-      { index: 0, notes: [{ note: 'C3' }] },
+      { index: 0, notes: [{ name: 'C3' }] },
       { index: 1, notes: [] },
-      { index: 2, notes: [{ note: 'C3' }, { note: 'G3' }] },
+      { index: 2, notes: [{ name: 'C3' }, { name: 'G3' }] },
     ]);
   });
 

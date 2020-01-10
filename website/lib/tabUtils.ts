@@ -34,11 +34,11 @@ export function gridLineToTabLine(gridLine, resolution, bars) {
   let result = Array(resolution * bars).fill(null);
 
   gridLine.forEach((noteObject, i) => {
-    const { step, duration, note } = noteObject;
+    const { step, duration, name } = noteObject;
 
     // console.log(i, step, note);
     result[step] = {
-      note,
+      name,
       duration,
     };
   });
@@ -55,13 +55,13 @@ export function gridLineToTabLine(gridLine, resolution, bars) {
 export function pianoGridToRoll(grid, resolution, bars, skip = 0, limit = 12) {
   const notes = midiNotes.slice(skip, skip + limit);
 
-  const result = notes.map((note) => {
+  const result = notes.map((name) => {
     return Array(resolution * bars)
       .fill(null)
       .map((nothing, step) => {
         // Check if grid has note and step
         const gridCheck = grid.filter((noteObject) => {
-          return noteObject.note === note && noteObject.step === step;
+          return noteObject.name === name && noteObject.step === step;
         });
 
         // Return noteObject if it exists
@@ -82,7 +82,7 @@ export function gridToSynthSteps(grid) {
   let result = [];
 
   grid.forEach((noteObject) => {
-    result.push([noteObject.step, noteObject.duration, noteObject.note]);
+    result.push([noteObject.step, noteObject.duration, noteObject.name]);
   });
 
   return result;
@@ -98,10 +98,10 @@ export function gridToSamplerSteps(grid) {
 
       result[step] = [
         ...(result[step] ? result[step] : []),
-        ...(gridStep.note
+        ...(gridStep.name
           ? [
               {
-                note: gridStep.note,
+                name: gridStep.name,
                 duration: gridStep.duration,
               },
             ]

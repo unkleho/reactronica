@@ -46,7 +46,7 @@ const TrackConsumer = ({
           step.notes.forEach((note) => {
             instrumentsRef.current.map((instrument) => {
               instrument.triggerAttackRelease(
-                note.note,
+                note.name,
                 note.duration || 0.5,
                 undefined,
                 note.velocity,

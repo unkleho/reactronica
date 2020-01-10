@@ -75,8 +75,8 @@ const DAWStepsEditor: React.FC<Props> = ({
         }
 
         // Find indexes and compare between previous highest and current
-        const currentIndex = notes.findIndex((note) => note === curr.note);
-        const prevIndex = notes.findIndex((note) => note === prev.note);
+        const currentIndex = notes.findIndex((note) => note === curr.name);
+        const prevIndex = notes.findIndex((note) => note === prev.name);
 
         if (currentIndex < prevIndex) {
           return curr;
@@ -90,7 +90,7 @@ const DAWStepsEditor: React.FC<Props> = ({
 
     if (highestStep) {
       const highestStepIndex = notes.findIndex(
-        (note) => note === highestStep.note,
+        (note) => note === highestStep.name,
       );
 
       const highestKeyRef = keysRef.current[highestStepIndex];
@@ -112,9 +112,9 @@ const DAWStepsEditor: React.FC<Props> = ({
     // Append note to stepRow
     const stepRow = [...(steps[index] ? steps[index] : []), note];
     const shouldRemove =
-      stepRow.filter((s) => s.note === note.note).length >= 2;
+      stepRow.filter((s) => s.name === note.name).length >= 2;
     const newStepRow = shouldRemove
-      ? stepRow.filter((s) => s.note !== note.note)
+      ? stepRow.filter((s) => s.name !== note.name)
       : stepRow;
 
     const newSteps = [...steps];
@@ -174,7 +174,7 @@ const DAWStepsEditor: React.FC<Props> = ({
                 const isCurrent =
                   steps[index] &&
                   steps[index].findIndex((step) => {
-                    return step.note === note;
+                    return step.name === note;
                   }) >= 0;
 
                 const dataTestId = `step-button-${columnIndex - 1}-${rowIndex}${
