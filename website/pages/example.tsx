@@ -44,7 +44,7 @@ const HomePage = () => {
           steps={[
             [
               {
-                note: 'C3',
+                name: 'C3',
                 duration: 0.5,
               },
             ],
@@ -53,7 +53,7 @@ const HomePage = () => {
             null,
             [
               {
-                note: 'D3',
+                name: 'D3',
                 duration: 0.5,
               },
             ],
@@ -83,7 +83,7 @@ const HomePage = () => {
           //   // console.log(step);
           // }}
         >
-          <Instrument type={'polySynth'} notes={notes} />
+          <Instrument type={'synth'} notes={notes} />
         </Track>
       </Song>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // import { SongContext } from './Song';
@@ -140,7 +140,7 @@ const InstrumentConsumer = ({
   // NOTES
   // -------------------------------------------------------------------------
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Loop through all current notes
     notes &&
       notes.forEach((note) => {
@@ -165,7 +165,7 @@ const InstrumentConsumer = ({
           instrumentRef.current.triggerRelease(note.name);
         }
       });
-  }, [notes]);
+  }, [notes, prevNotes]);
 
   // -------------------------------------------------------------------------
   // EFFECTS CHAIN
