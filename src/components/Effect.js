@@ -46,11 +46,13 @@ const EffectConsumer = ({
       effect.current = new Tone.Tremolo();
     }
 
-    effect.current.id = id;
+    if (effect.current) {
+      effect.current.id = id;
 
-    // Update effects chain
-    // TODO: Work out which index to insert current this.effect
-    onAddToEffectsChain(effect.current);
+      // Update effects chain
+      // TODO: Work out which index to insert current this.effect
+      onAddToEffectsChain(effect.current);
+    }
 
     return () => {
       // console.log('<Effect /> unmount');
@@ -59,13 +61,13 @@ const EffectConsumer = ({
   }, [type]);
 
   useEffect(() => {
-    if (effect.current.feedback) {
+    if (effect.current && effect.current.feedback) {
       effect.current.feedback.value = feedback;
     }
   }, [feedback]);
 
   useEffect(() => {
-    if (effect.current.delayTime) {
+    if (effect.current && effect.current.delayTime) {
       effect.current.delayTime.value = delayTime;
     }
   }, [delayTime]);
