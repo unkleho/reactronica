@@ -37,7 +37,8 @@ declare module 'reactronica' {
     | 'membraneSynth'
     | 'metalSynth'
     | 'pluckSynth'
-    | 'synth';
+    | 'synth'
+    | 'sampler';
 
   export type NoteType = {
     name: string;
