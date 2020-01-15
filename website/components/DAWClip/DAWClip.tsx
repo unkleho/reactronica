@@ -72,7 +72,7 @@ const DAWClip: React.FunctionComponent<Props> = ({
               const isCurrent =
                 steps[index] &&
                 steps[index].findIndex((step) => {
-                  return step.note === note;
+                  return step.name === note;
                 }) >= 0;
 
               return (

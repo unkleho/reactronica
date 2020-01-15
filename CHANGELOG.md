@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Change `tempo` to `bpm` in `Song` to match `Tone` API
 - Add `volume` and `isMuted` prop to `Song`
-- Add `polyphony`, `oscillatorType`, `envelopeAttack`, `envelopeDecay`, `envelopeSustain` and `envelopeRelease` props to `Instrument`
+- Add `polyphony`, `oscillator`, `envelope` props to `Instrument`
 - Remove `type` of `polySynth` from `Instrument` as it is just a wrapper around other synths
 - Add `membraneSynth`, `metalSynth` and `pluckSynth` types to `Instrument`
 - Update `AMSynth` and `FMSynth` values in `Instrument` `type` to `amSynth` and `fmSynth`
 - Remove `/example` folder to focus on `/website` that already includes docs and examples
 - Change `steps` from `step.note` to `step.name` in `Track`
 - Add more Typescript definitions
-- Change `Instrument` to use `useLayoutEffect` instead of `useEffect` for triggering `notes`
+  <!-- - Change `Instrument` to use `useLayoutEffect` instead of `useEffect` for triggering `notes` -->
 - Ensure `Instrument` and `Effect` don't crash if unknown `type` is passed
 
 ## [0.2.2] - 2019-09-18
