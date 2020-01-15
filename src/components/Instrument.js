@@ -1,4 +1,9 @@
-import React, { useEffect, useRef, useContext, useLayoutEffect } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useContext,
+  // useLayoutEffect
+} from 'react';
 import PropTypes from 'prop-types';
 
 // import { SongContext } from './Song';
@@ -13,11 +18,8 @@ const InstrumentConsumer = ({
   type = 'synth',
   options,
   polyphony = 4,
-  oscillatorType,
-  envelopeAttack,
-  envelopeDecay,
-  envelopeSustain,
-  envelopeRelease,
+  oscillator,
+  envelope,
   notes = [],
   samples,
   // <Track /> Props
@@ -48,11 +50,8 @@ const InstrumentConsumer = ({
     } else if (type === 'membraneSynth') {
       instrumentRef.current = new Tone.MembraneSynth(
         buildSynthOptions({
-          oscillatorType,
-          envelopeAttack,
-          envelopeDecay,
-          envelopeSustain,
-          envelopeRelease,
+          oscillator,
+          envelope,
         }),
       );
     } else if (type === 'metalSynth') {
@@ -88,11 +87,8 @@ const InstrumentConsumer = ({
         polyphony,
         synth,
         buildSynthOptions({
-          oscillatorType,
-          envelopeAttack,
-          envelopeDecay,
-          envelopeSustain,
-          envelopeRelease,
+          oscillator,
+          envelope,
         }),
       );
     }
@@ -118,11 +114,12 @@ const InstrumentConsumer = ({
       type === 'synth' &&
       instrumentRef &&
       instrumentRef.current &&
-      oscillatorType
+      oscillator
     ) {
-      instrumentRef.current.set('oscillator.type', oscillatorType);
+      instrumentRef.current.set('oscillator', oscillator);
+      // console.log(oscillator);
     }
-  }, [oscillatorType]);
+  }, [oscillator, type]);
 
   // -------------------------------------------------------------------------
   // VOLUME / PAN
@@ -140,7 +137,10 @@ const InstrumentConsumer = ({
   // NOTES
   // -------------------------------------------------------------------------
 
-  useLayoutEffect(() => {
+  /**
+   NOTE: Would prefer to use useLayoutEffect as it is a little faster, but unable to test it right now
+   **/
+  useEffect(() => {
     // Loop through all current notes
     notes &&
       notes.forEach((note) => {
@@ -220,32 +220,7 @@ const Instrument = (props) => {
 /**
  * Use Instrument's flattened synth props to create options object for Tone JS
  */
-const buildSynthOptions = ({
-  oscillatorType,
-  envelopeAttack,
-  envelopeDecay,
-  envelopeSustain,
-  envelopeRelease,
-}) => {
-  let oscillator;
-
-  if (oscillatorType) {
-    oscillator = {
-      ...(oscillatorType ? { type: oscillatorType } : {}),
-    };
-  }
-
-  let envelope;
-
-  if (envelopeAttack || envelopeDecay || envelopeSustain || envelopeRelease) {
-    envelope = {
-      ...(envelopeAttack ? { attack: envelopeAttack } : {}),
-      ...(envelopeDecay ? { decay: envelopeDecay } : {}),
-      ...(envelopeSustain ? { sustain: envelopeSustain } : {}),
-      ...(envelopeRelease ? { release: envelopeRelease } : {}),
-    };
-  }
-
+const buildSynthOptions = ({ oscillator, envelope }) => {
   if (oscillator || envelope) {
     return {
       ...(envelope ? { envelope } : {}),
@@ -254,13 +229,6 @@ const buildSynthOptions = ({
   }
 
   return undefined;
-
-  // return {
-  //   ...(
-  //     ? { envelope }
-  //     : {}),
-  //   ...(oscillator.type ? { oscillator } : {}),
-  // };
 };
 
 export default Instrument;

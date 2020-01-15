@@ -6,6 +6,6 @@ export type Clip = {
 };
 
 export type Step = {
-  note: string;
+  name: string;
   duration: number;
 }[];

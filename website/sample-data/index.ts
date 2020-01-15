@@ -6,75 +6,75 @@ export const melodyClip1 = {
   notes: [
     {
       start: '1.1.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.1.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.1.1',
-      note: 'A3',
+      name: 'A3',
       duration: 0.5,
     },
 
     {
       start: '1.2.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'A3',
+      name: 'A3',
       duration: 0.5,
     },
 
     {
       start: '1.3.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'G3',
+      name: 'G3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'B3',
+      name: 'B3',
       duration: 0.5,
     },
 
     {
       start: '1.4.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'G3',
+      name: 'G3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'B3',
+      name: 'B3',
       duration: 0.5,
     },
   ],
@@ -87,65 +87,65 @@ export const melodyClip2 = {
   notes: [
     {
       start: '1.1.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.1.1',
-      note: 'F3',
+      name: 'F3',
       duration: 0.5,
     },
     {
       start: '1.1.1',
-      note: 'A3',
+      name: 'A3',
       duration: 0.5,
     },
 
     {
       start: '1.2.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'F3',
+      name: 'F3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'A3',
+      name: 'A3',
       duration: 0.5,
     },
 
     {
       start: '1.3.1',
-      note: 'D3',
+      name: 'D3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'G3',
+      name: 'G3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'B3',
+      name: 'B3',
       duration: 0.5,
     },
 
     {
       start: '1.4.1',
-      note: 'D3',
+      name: 'D3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'G3',
+      name: 'G3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'B3',
+      name: 'B3',
       duration: 0.5,
     },
   ],
@@ -159,67 +159,67 @@ export const beatClip1 = {
   notes: [
     {
       start: '1.1.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.1.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.1.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'D3',
+      name: 'D3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.2.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.3.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'D3',
+      name: 'D3',
       duration: 0.5,
     },
     {
       start: '1.4.3',
-      note: 'F3',
+      name: 'F3',
       duration: 0.5,
     },
     {
       start: '1.4.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.4.4',
-      note: 'F3',
+      name: 'F3',
       duration: 0.5,
     },
   ],
@@ -232,62 +232,62 @@ export const beatClip2 = {
   notes: [
     {
       start: '1.1.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.1.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.1.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'D3',
+      name: 'D3',
       duration: 0.5,
     },
     {
       start: '1.2.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.2.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'C3',
+      name: 'C3',
       duration: 0.5,
     },
     {
       start: '1.3.1',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.3.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.4.1',
-      note: 'D3',
+      name: 'D3',
       duration: 0.5,
     },
     {
       start: '1.4.3',
-      note: 'E3',
+      name: 'E3',
       duration: 0.5,
     },
     {
       start: '1.4.4',
-      note: 'F3',
+      name: 'F3',
       duration: 0.5,
     },
   ],

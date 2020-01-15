@@ -50,11 +50,15 @@ declare module 'reactronica' {
     options?: any;
     notes?: NoteType[];
     polyphony?: number;
-    oscillatorType?: 'triangle' | 'sine' | 'square';
-    envelopeAttack?: number;
-    envelopeDecay?: number;
-    envelopeSustain?: number;
-    envelopeRelease?: number;
+    oscillator?: {
+      type: 'triangle' | 'sine' | 'square';
+    };
+    envelope?: {
+      attack?: number;
+      decay?: number;
+      sustain?: number;
+      release?: number;
+    };
     samples?: {
       [k: string]: string;
     };
