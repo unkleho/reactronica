@@ -289,11 +289,8 @@ Should be wrapped by a Track and becomes its audio source.
 - **notes** `NoteType[]` - An array of notes (`{ name: string, velocity: number }`) to trigger Instrument, useful for auditioning sounds or live performance.
 - **samples** `object` - Only for `sampler` instrument type
 - **polyphony** `number` - Maximum number of notes played at the same time. Only for some synth types.
-- **oscillatorType** `triangle | sine | square` - A repeating waveform shape. Only for some synth types.
-- **envelopeAttack** `number`
-- **envelopeDecay** `number`
-- **envelopeSustain** `number`
-- **envelopeRelease** `number`
+- **oscillator** `{ type: 'triangle' | 'sine' | 'square' }` - A repeating waveform shape. Only for some synth types.
+- **envelope** `{ attack: number, decay: number, sustain: number, release: number }`
 
 ### `Effect`
 
