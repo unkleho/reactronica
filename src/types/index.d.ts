@@ -19,7 +19,7 @@ declare module 'reactronica' {
     subdivision?: string;
     effects?: React.ReactNode[];
     children: React.ReactNode;
-    onStepPlay?: Function;
+    onStepPlay?: (stepNotes: StepNoteType[], index: string) => void;
   };
 
   export type StepNoteType = {
