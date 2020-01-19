@@ -9,7 +9,9 @@ type Props = {
   clipName?: string;
   currentStepIndex?: number;
   stepIndexOffset?: number;
-  defaultSteps: any[];
+  defaultSteps: {
+    name: string;
+  }[][];
   subdivision?: number;
   startNote?: string;
   endNote?: string;
