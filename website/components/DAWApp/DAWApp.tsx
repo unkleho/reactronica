@@ -203,10 +203,10 @@ const DAWApp = () => {
                   />
                 );
               })}
-              onStepPlay={(step) =>
+              onStepPlay={(_, index) =>
                 dispatch({
                   type: types.SET_CURRENT_STEP_INDEX,
-                  currentStepIndex: step.index,
+                  currentStepIndex: index,
                 })
               }
               key={track.id}

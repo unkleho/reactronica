@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add more Typescript definitions
   <!-- - Change `Instrument` to use `useLayoutEffect` instead of `useEffect` for triggering `notes` -->
 - Ensure `Instrument` and `Effect` don't crash if unknown `type` is passed
+- Update `onStepPlay` arguments to `StepNoteType[]` and `number`.
 
 ## [0.2.2] - 2019-09-18
 

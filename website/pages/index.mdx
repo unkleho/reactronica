@@ -129,7 +129,7 @@ const PianoRollExample = () => {
         <Track
           steps={steps}
           // Callback triggers on every step
-          onStepPlay={(_, index) => {
+          onStepPlay={(stepNotes, index) => {
             setCurrentStepIndex(index);
           }}
         >
@@ -277,7 +277,7 @@ Tracks make up the layers of audio within a Song. Each individual Track has inde
 - **pan** `number` - Panning of track
 - **steps** `StepType[]` - An array of steps to play. Can be `string` or `{ name: string, duration: number, velocity: number }`.
 - **effects** `Effect[]` - An array of `<Effect />` components
-- **onStepPlay** `function` - Callback that runs on every step
+- **onStepPlay** `function` - Callback that runs on every step.
 
 ### `Instrument`
 

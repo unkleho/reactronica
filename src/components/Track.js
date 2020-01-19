@@ -55,7 +55,7 @@ const TrackConsumer = ({
           });
 
           if (typeof onStepPlay === 'function') {
-            onStepPlay(step, step.index);
+            onStepPlay(step.notes, step.index);
           }
         },
         sequencerSteps,
