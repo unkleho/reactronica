@@ -5,6 +5,7 @@ import DAWStepsEditor from '../components/DAWStepsEditor';
 
 const Page = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const [stepIndex, setStepIndex] = React.useState(0);
   const [notes, setNotes] = React.useState(null);
   const [steps, setSteps] = React.useState([
     null,
@@ -26,7 +27,7 @@ const Page = () => {
         onStepEditorClick={(steps, noteName, index) => {
           setSteps(steps);
         }}
-        // currentStepIndex={}
+        currentStepIndex={stepIndex}
       ></DAWStepsEditor>
       <button
         onMouseDown={() => {
@@ -53,8 +54,8 @@ const Page = () => {
       <Song isPlaying={isPlaying}>
         <Track
           steps={steps}
-          onStepPlay={(stepNotes, index) => {
-            console.log(stepNotes, index);
+          onStepPlay={(_, index) => {
+            setStepIndex(index);
           }}
         >
           <Instrument

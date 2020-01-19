@@ -1,11 +1,11 @@
 import {
-  gridLineToTabLine,
+  // gridLineToTabLine,
   fretToNote,
   noteToFret,
   gridToSamplerSteps,
-  pianoGridToRoll,
+  // pianoGridToRoll,
 } from './tabUtils';
-import { defaultUkeGrid, defaultPianoGrid } from '../constants';
+import { defaultUkeGrid } from '../constants';
 
 const gridLine = [
   {
