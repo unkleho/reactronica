@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 // import { SongContext } from './Song';
 import { TrackContext } from './Track';
 import { NoteType, InstrumentTypes } from '../types/propTypes';
-// import { instruments } from '../constants';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 
