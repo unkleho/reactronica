@@ -7,5 +7,5 @@ export type Clip = {
 
 export type Step = {
   name: string;
-  duration: number;
+  duration?: number;
 }[];

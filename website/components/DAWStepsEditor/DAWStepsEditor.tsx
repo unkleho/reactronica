@@ -1,4 +1,5 @@
 import React from 'react';
+import { StepNoteType } from 'reactronica';
 
 import { midiNotes } from '../../constants';
 
@@ -9,15 +10,17 @@ type Props = {
   clipName?: string;
   currentStepIndex?: number;
   stepIndexOffset?: number;
-  defaultSteps: {
-    name: string;
-  }[][];
+  defaultSteps: StepNoteType[][];
   subdivision?: number;
   startNote?: string;
   endNote?: string;
   disableScrollIntoView?: boolean;
   className?: string;
-  onStepEditorClick?: Function;
+  onStepEditorClick?: (
+    steps: StepNoteType[][],
+    stepNote: StepNoteType,
+    index: number,
+  ) => void;
   onKeyboardDown?: Function;
   onKeyboardUp?: Function;
 };
@@ -214,7 +217,7 @@ const DAWStepsEditor: React.FC<Props> = ({
                       isCurrent ? css.stepIsCurrent : '',
                     ].join(' ')}
                     onClick={() => {
-                      handleStepClick({ note, duration: 0.5 }, index);
+                      handleStepClick({ name: note, duration: 0.5 }, index);
                     }}
                     key={columnIndex}
                     data-testid={dataTestId}
