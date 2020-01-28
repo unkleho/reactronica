@@ -205,12 +205,16 @@ class Sampler {
 // ----------------------------------------------------------------------------
 
 export const mockAutoFilterConstructor = jest.fn();
+// export const mockAutoFilterWet = jest.fn();
 // export const mockAutoFilterDispose = jest.fn();
 
 class AutoFilter {
   constructor() {
     mockAutoFilterConstructor();
 
+    this.wet = {
+      value: 1,
+    };
     // this.dispose = mockAutoFilterDispose;
     // this.chain = jest.fn();
     // this.disconnect = jest.fn();

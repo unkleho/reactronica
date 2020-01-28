@@ -29,7 +29,7 @@ describe('Effect', () => {
 
     expect(mockAutoFilterConstructor).toBeCalled();
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
-      { id: 'effect-1' },
+      { id: 'effect-1', wet: { value: 1 } },
       { pan: { value: 0 }, volume: { value: 0 } },
       Tone.Master,
     );
@@ -53,7 +53,7 @@ describe('Effect', () => {
     expect(mockAutoPannerConstructor).toBeCalled();
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-2' },
-      { id: 'effect-1' },
+      { id: 'effect-1', wet: { value: 1 } },
       { pan: { value: 0 }, volume: { value: 0 } },
       Tone.Master,
     );
@@ -92,6 +92,23 @@ describe('Effect', () => {
         pan: { value: 0 },
         volume: { value: 0 },
       },
+      Tone.Master,
+    );
+  });
+
+  it('should update wet prop', () => {
+    render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+          <Effect type="autoFilter" id="effect-1" wet={0.5}></Effect>
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthChain).toHaveBeenLastCalledWith(
+      { id: 'effect-1', wet: { value: 0.5 } },
+      { pan: { value: 0 }, volume: { value: 0 } },
       Tone.Master,
     );
   });

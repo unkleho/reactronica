@@ -11,6 +11,7 @@ const EffectConsumer = ({
   // options,
   delayTime = '8n',
   feedback = 0.5,
+  wet = 1,
   onAddToEffectsChain,
   onRemoveFromEffectsChain,
 }) => {
@@ -71,6 +72,12 @@ const EffectConsumer = ({
       effect.current.delayTime.value = delayTime;
     }
   }, [delayTime]);
+
+  useEffect(() => {
+    if (effect.current && effect.current.wet) {
+      effect.current.wet.value = wet;
+    }
+  }, [wet]);
 
   return null;
 };
