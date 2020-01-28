@@ -200,6 +200,7 @@ const DAWApp = () => {
                     id={`${effect.id}-${i}-melody`}
                     delayTime={effect.delayTime || '16n'}
                     feedback={effect.feedback || 0.6}
+                    // wet={0.5}
                   />
                 );
               })}
