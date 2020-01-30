@@ -8,7 +8,6 @@ import { EffectTypes } from '../types/propTypes';
 const EffectConsumer = ({
   type,
   id,
-  // options,
   delayTime = '8n',
   feedback = 0.5,
   wet = 1,
@@ -84,10 +83,13 @@ const EffectConsumer = ({
 
 EffectConsumer.propTypes = {
   type: EffectTypes.isRequired,
-  id: PropTypes.string.isRequired,
-  options: PropTypes.object,
+  id: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.number.isRequired,
+  ]),
   delayTime: PropTypes.string,
   feedback: PropTypes.number,
+  wet: PropTypes.number,
   onAddToEffectsChain: PropTypes.func,
   onRemoveFromEffectsChain: PropTypes.func,
 };

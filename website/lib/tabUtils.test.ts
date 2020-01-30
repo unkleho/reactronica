@@ -5,7 +5,7 @@ import {
   gridToSamplerSteps,
   // pianoGridToRoll,
 } from './tabUtils';
-import { defaultUkeGrid } from '../constants';
+import { exampleUkuleleGrid } from '../data/ukulele';
 
 const gridLine = [
   {
@@ -40,7 +40,7 @@ it('converts note (string) to fret (int)', () => {
 });
 
 it('converts grid (array) to sample steps (array)', () => {
-  const result = gridToSamplerSteps(defaultUkeGrid);
+  const result = gridToSamplerSteps(exampleUkuleleGrid);
 
   expect(result).toHaveLength(16);
   expect(result).toEqual([

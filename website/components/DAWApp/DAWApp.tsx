@@ -10,12 +10,7 @@ import DAWSequencer from '../DAWSequencer';
 import TrackInfo from '../DAWTrackInfo';
 
 import * as types from '../../types';
-import {
-  melodyClip1,
-  melodyClip2,
-  beatClip1,
-  beatClip2,
-} from '../../sample-data';
+import { melodyClip1, melodyClip2, beatClip1, beatClip2 } from '../../data/daw';
 import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 

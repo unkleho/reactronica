@@ -1,7 +1,7 @@
 import React from 'react';
 import { StepNoteType } from 'reactronica';
 
-import { midiNotes } from '../../constants';
+import { midiNotes } from '../../configs/midiConfig';
 
 import css from './DAWStepsEditor.scss';
 
