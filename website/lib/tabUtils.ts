@@ -1,7 +1,5 @@
-import {
-  midiNotesLowerCase as midiNotes,
-  instrumentConfig,
-} from '../constants';
+import { midiNotesLowerCase as midiNotes } from '../configs/midiConfig';
+import { instrumentConfig } from '../configs';
 
 /*
  * Tab Functions

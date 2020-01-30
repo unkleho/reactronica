@@ -1,5 +1,5 @@
 import { buildSteps } from '../lib/stepUtils';
-import { melodyClip } from '../sample-data';
+import { melodyClip } from '../data/daw';
 
 export const melodySteps = [
   [

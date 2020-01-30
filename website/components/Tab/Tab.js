@@ -6,7 +6,7 @@ import {
   noteToFret,
   fretToNote,
 } from '../../lib/tabUtils';
-import { instrumentConfig } from '../../constants';
+import { instrumentConfig } from '../../configs';
 
 import css from './Tab.scss';
 

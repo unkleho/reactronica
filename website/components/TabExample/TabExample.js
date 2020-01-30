@@ -2,13 +2,13 @@ import React from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 
 import Tab from '../Tab';
-import { defaultUkeGrid } from '../../constants';
+import { exampleUkuleleGrid } from '../../data/ukulele';
 import { gridToSamplerSteps } from '../../lib/tabUtils';
 
 import css from './TabExample.scss';
 
 const TabExample = () => {
-  const [grid, setGrid] = React.useState(defaultUkeGrid);
+  const [grid, setGrid] = React.useState(exampleUkuleleGrid);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [currentIndex, setCurrentIndex] = React.useState(0);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 
 import Tab from './Tab';
-import { defaultUkeGrid } from '../../constants';
+import { exampleUkuleleGrid } from '../../data/ukulele';
 
 afterEach(cleanup);
 
@@ -13,7 +13,7 @@ describe('Tab', () => {
 
   it('should render tab grid', () => {
     const { getAllByTestId, getByTestId } = render(
-      <Tab grid={defaultUkeGrid} instrument="ukulele" />,
+      <Tab grid={exampleUkuleleGrid} instrument="ukulele" />,
     );
 
     expect(getAllByTestId('tabLines').length).toEqual(4);
