@@ -20,6 +20,7 @@ export const StepNoteType = PropTypes.shape({
 export const StepType = PropTypes.oneOfType([
   StepNoteType,
   PropTypes.arrayOf(StepNoteType),
+  PropTypes.arrayOf(PropTypes.string),
   PropTypes.string,
 ]);
 
