@@ -68,48 +68,52 @@ const TrackInfo: React.FC<Props> = ({
         }}
       />
 
-      {instrumentConfig.props.includes('oscillatorType') && (
-        <>
-          <h3>Oscillator Type</h3>
-          <Select
-            value={currentTrack.instrumentOscillatorType}
-            options={[
-              { label: 'Triangle', value: 'triangle' },
-              { label: 'Sine', value: 'sine' },
-              { label: 'Square', value: 'square' },
-            ]}
-            onChange={(selectedOption) => {
-              dispatch({
-                type: types.SET_INSTRUMENT_OSCILLATOR_TYPE,
-                trackId: currentTrack.id,
-                oscillatorType: selectedOption.value,
-              });
-            }}
-          />
-        </>
-      )}
+      {instrumentConfig &&
+        instrumentConfig.props &&
+        instrumentConfig.props.includes('oscillatorType') && (
+          <>
+            <h3>Oscillator Type</h3>
+            <Select
+              value={currentTrack.instrumentOscillatorType}
+              options={[
+                { label: 'Triangle', value: 'triangle' },
+                { label: 'Sine', value: 'sine' },
+                { label: 'Square', value: 'square' },
+              ]}
+              onChange={(selectedOption) => {
+                dispatch({
+                  type: types.SET_INSTRUMENT_OSCILLATOR_TYPE,
+                  trackId: currentTrack.id,
+                  oscillatorType: selectedOption.value,
+                });
+              }}
+            />
+          </>
+        )}
 
-      {instrumentConfig.props.includes('polyphony') && (
-        <>
-          <h3>Polyphony</h3>
-          <Select
-            value={currentTrack.instrumentPolyphony}
-            options={[...Array(6)].map((_, i) => {
-              return {
-                label: i,
-                value: i,
-              };
-            })}
-            onChange={(selectedOption) => {
-              dispatch({
-                type: types.SET_INSTRUMENT_POLYPHONY,
-                trackId: currentTrack.id,
-                instrumentPolyphony: selectedOption.value,
-              });
-            }}
-          />
-        </>
-      )}
+      {instrumentConfig &&
+        instrumentConfig.props &&
+        instrumentConfig.props.includes('polyphony') && (
+          <>
+            <h3>Polyphony</h3>
+            <Select
+              value={currentTrack.instrumentPolyphony}
+              options={[...Array(6)].map((_, i) => {
+                return {
+                  label: i,
+                  value: i,
+                };
+              })}
+              onChange={(selectedOption) => {
+                dispatch({
+                  type: types.SET_INSTRUMENT_POLYPHONY,
+                  trackId: currentTrack.id,
+                  instrumentPolyphony: selectedOption.value,
+                });
+              }}
+            />
+          </>
+        )}
 
       <h3>
         <label htmlFor="volume">Volume</label>
