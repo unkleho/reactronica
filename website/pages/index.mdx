@@ -226,11 +226,7 @@ const Example = () => {
           ],
           null,
         ]}
-        // Chain effects by putting them in an array
-        effects={[
-          <Effect type="feedbackDelay" />,
-          <Effect type="distortion" />,
-        ]}
+        effects={[]}
         volume={80}
         pan={0}
         // Callback for every tick
@@ -239,6 +235,9 @@ const Example = () => {
         }}
       >
         <Instrument type="polySynth" />
+        {/* Add effects chain here */}
+        <Effect type="feedbackDelay" />
+        <Effect type="distortion" />
       </Track>
 
       <Track>

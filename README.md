@@ -65,11 +65,6 @@ const Example = () => {
           ],
           null,
         ]}
-        // Chain effects by putting them in an array
-        effects={[
-          <Effect type="feedbackDelay" />,
-          <Effect type="distortion" />,
-        ]}
         volume={80}
         pan={0}
         // Callback for every tick
@@ -78,6 +73,9 @@ const Example = () => {
         }}
       >
         <Instrument type="synth" />
+        {/* Add effects chain here */}
+        <Effect type="feedbackDelay" />
+        <Effect type="distortion" />
       </Track>
 
       <Track>
