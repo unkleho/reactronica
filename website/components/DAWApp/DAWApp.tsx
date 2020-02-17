@@ -211,10 +211,13 @@ const DAWApp = () => {
                 <Instrument
                   type={track.instrumentType}
                   samples={{
-                    C3: `/static/audio/drums/kick15.wav`,
+                    // C3: `/static/audio/drums/kick15.wav`,
+                    C3: `/static/audio/drums/019_Kick_A_-_MELODICDEEPHOUSE_Zenhiser.wav`,
                     // D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
-                    D3: `/static/audio/drums/snare-top-off25.wav`,
-                    E3: `/static/audio/drums/chh2.wav`,
+                    // D3: `/static/audio/drums/snare-top-off25.wav`,
+                    D3: `/static/audio/drums/OS_TD_Trappa_Snare.wav`,
+                    // E3: `/static/audio/drums/chh2.wav`,
+                    E3: `/static/audio/drums/OS_TD_Randy_Hat.wav`,
                     F3: `/static/audio/drums/snare-top-off17.wav`,
                   }}
                   notes={track.notes}

@@ -21,6 +21,7 @@ const InstrumentConsumer = ({
   envelope,
   notes = [],
   samples,
+  onLoad,
   // <Track /> Props
   volume,
   pan,
@@ -37,7 +38,7 @@ const InstrumentConsumer = ({
 
   useEffect(() => {
     if (type === 'sampler') {
-      instrumentRef.current = new Tone.Sampler(samples);
+      instrumentRef.current = new Tone.Sampler(samples, onLoad);
 
       if (options && options.curve) {
         instrumentRef.current.curve = options.curve;
