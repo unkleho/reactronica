@@ -149,7 +149,20 @@ const InstrumentConsumer = ({
 
         // Only play note is it isn't already playing
         if (!isPlaying) {
-          instrumentRef.current.triggerAttack(note.name);
+          if (note.duration) {
+            instrumentRef.current.triggerAttackRelease(
+              note.name,
+              note.duration,
+              undefined,
+              note.velocity,
+            );
+          } else {
+            instrumentRef.current.triggerAttack(
+              note.name,
+              undefined,
+              note.velocity,
+            );
+          }
         }
       });
 
