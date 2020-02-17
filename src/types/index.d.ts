@@ -65,6 +65,7 @@ declare module 'reactronica' {
     volume?: number;
     pan?: number;
     effectsChain?: React.ReactNode[];
+    onLoad?: Function;
     onInstrumentUpdate?: Function;
   };
 
