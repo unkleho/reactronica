@@ -83,6 +83,9 @@ const DAWApp = () => {
     // notes,
   } = appSelector(state);
 
+  console.log(bpm, currentStepIndex);
+  // const currentStepIndex = 0;
+
   useKeyPress(' ', () => {
     dispatch({ type: types.TOGGLE_PLAYING });
   });
@@ -170,7 +173,7 @@ const DAWApp = () => {
         // swing={1}
         // swingSubdivision={'16n'}
       >
-        {tracks.map((track) => {
+        {tracks.map((track, trackIndex) => {
           const trackClips = track.clips.map((trackClip) => {
             return clips.find((clip) => {
               return clip.id === trackClip.id;
@@ -199,12 +202,15 @@ const DAWApp = () => {
                   />
                 );
               })}
-              onStepPlay={(_, index) =>
-                dispatch({
-                  type: types.SET_CURRENT_STEP_INDEX,
-                  currentStepIndex: index,
-                })
-              }
+              onStepPlay={(_, index) => {
+                // Improve performance by only dispatching callback for one track
+                if (trackIndex === 0) {
+                  dispatch({
+                    type: types.SET_CURRENT_STEP_INDEX,
+                    currentStepIndex: index,
+                  });
+                }
+              }}
               key={track.id}
             >
               {track.instrumentType === 'sampler' ? (

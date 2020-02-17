@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.1] - xxxx
 
 - Add `duration` and `velocity` for Instrument notes
+- Add `onLoad` prop to `Instrument` for `type` of `sampler`
 
 ## [0.3.0] - 2020-02-07
 

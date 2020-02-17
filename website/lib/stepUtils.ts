@@ -19,6 +19,7 @@ export function buildSteps(clip: Clip, subdivision = 16, notesPerBar = 4) {
         return {
           name: note.name,
           duration: note.duration,
+          velocity: note.velocity,
         };
       });
 
