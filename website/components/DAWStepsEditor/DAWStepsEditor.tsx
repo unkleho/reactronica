@@ -42,6 +42,8 @@ const DAWStepsEditor: React.FC<Props> = ({
 }) => {
   const [steps, setSteps] = React.useState(defaultSteps);
 
+  // console.log(currentStepIndex, clipId);
+
   // --------------------------------------------------------------------------
   // Set up refs for keyboard notes
   // Lets us get and set scroll position of stepsRef
@@ -63,7 +65,7 @@ const DAWStepsEditor: React.FC<Props> = ({
   // --------------------------------------------------------------------------
   React.useEffect(() => {
     setSteps(defaultSteps);
-  }, [defaultSteps]);
+  }, [JSON.stringify(defaultSteps)]);
 
   // --------------------------------------------------------------------------
   // If click on new clip, work out highest key and scroll to it

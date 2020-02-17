@@ -165,26 +165,31 @@ export const beatClip1 = {
     {
       start: '1.1.1',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.1.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.2.1',
       name: 'D3',
+      velocity: 0.5,
       duration: 0.5,
     },
     {
       start: '1.2.1',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.2.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
@@ -195,16 +200,19 @@ export const beatClip1 = {
     {
       start: '1.3.1',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.3.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.4.1',
       name: 'D3',
+      velocity: 0.5,
       duration: 0.5,
     },
     {
@@ -215,6 +223,7 @@ export const beatClip1 = {
     {
       start: '1.4.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
@@ -238,26 +247,31 @@ export const beatClip2 = {
     {
       start: '1.1.1',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.1.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.2.1',
       name: 'D3',
+      velocity: 0.5,
       duration: 0.5,
     },
     {
       start: '1.2.1',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.2.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
@@ -268,21 +282,25 @@ export const beatClip2 = {
     {
       start: '1.3.1',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.3.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
       start: '1.4.1',
       name: 'D3',
+      velocity: 0.5,
       duration: 0.5,
     },
     {
       start: '1.4.3',
       name: 'E3',
+      velocity: 0.25,
       duration: 0.5,
     },
     {
