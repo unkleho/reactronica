@@ -10,7 +10,14 @@ import DAWSequencer from '../DAWSequencer';
 import TrackInfo from '../DAWTrackInfo';
 
 import * as types from '../../types';
-import { melodyClip1, melodyClip2, beatClip1, beatClip2 } from '../../data/daw';
+import {
+  melodyClip1,
+  melodyClip2,
+  beatClip1,
+  beatClip2,
+  vocalClip1,
+  vocalClip2,
+} from '../../data/daw';
 import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 
@@ -22,7 +29,7 @@ const initialState = {
   // TRANSPORT
   // --------------------------------------------------------------------------
   isPlaying: false,
-  bpm: 70,
+  bpm: 71.5,
   // --------------------------------------------------------------------------
   // STEPS
   // --------------------------------------------------------------------------
@@ -32,7 +39,14 @@ const initialState = {
   // CLIPS
   // --------------------------------------------------------------------------
   currentClipId: 'melody1',
-  clips: [melodyClip1, melodyClip2, beatClip1, beatClip2],
+  clips: [
+    melodyClip1,
+    melodyClip2,
+    beatClip1,
+    beatClip2,
+    vocalClip1,
+    vocalClip2,
+  ],
   // --------------------------------------------------------------------------
   // TRACK
   // --------------------------------------------------------------------------
@@ -41,10 +55,10 @@ const initialState = {
     {
       id: 'melody',
       // TODO: Convert to instrument object?
-      instrumentType: 'synth',
+      instrumentType: 'amSynth',
       instrumentPolyphony: 4,
       instrumentOscillatorType: 'triangle',
-      volume: 60,
+      volume: 70,
       pan: 50,
       steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
       clips: [{ id: 'melody1' }, { id: 'melody2' }],
@@ -58,6 +72,16 @@ const initialState = {
       pan: 50,
       steps: [...buildSteps(beatClip1), ...buildSteps(beatClip2)],
       clips: [{ id: 'beat1' }, { id: 'beat2' }],
+      notes: [],
+      effects: [],
+    },
+    {
+      id: 'vocal',
+      instrumentType: 'sampler',
+      volume: 100,
+      pan: 50,
+      steps: [...buildSteps(vocalClip1), ...buildSteps(vocalClip2)],
+      clips: [{ id: 'vocalClip1' }, { id: 'vocalClip2' }],
       notes: [],
       effects: [],
     },
@@ -83,7 +107,7 @@ const DAWApp = () => {
     // notes,
   } = appSelector(state);
 
-  console.log(bpm, currentStepIndex);
+  // console.log(bpm, currentStepIndex);
   // const currentStepIndex = 0;
 
   useKeyPress(' ', () => {
@@ -198,7 +222,7 @@ const DAWApp = () => {
                     id={`${effect.id}-${i}-melody`}
                     delayTime={effect.delayTime || '16n'}
                     feedback={effect.feedback || 0.6}
-                    // wet={0.5}
+                    wet={0.5}
                   />
                 );
               })}
@@ -218,13 +242,18 @@ const DAWApp = () => {
                   type={track.instrumentType}
                   samples={{
                     // C3: `/static/audio/drums/kick15.wav`,
+                    A2: `/static/audio/drums/TLYKST_808_nice_A.wav`,
                     C3: `/static/audio/drums/019_Kick_A_-_MELODICDEEPHOUSE_Zenhiser.wav`,
                     // D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
                     // D3: `/static/audio/drums/snare-top-off25.wav`,
-                    D3: `/static/audio/drums/OS_TD_Trappa_Snare.wav`,
+                    // D3: `/static/audio/drums/OS_TD_Trappa_Snare.wav`,
+                    D3: '/static/audio/drums/SOUTHSIDE_snare_og_punch.wav',
                     // E3: `/static/audio/drums/chh2.wav`,
-                    E3: `/static/audio/drums/OS_TD_Randy_Hat.wav`,
+                    // E3: `/static/audio/drums/OS_TD_Randy_Hat.wav`,
+                    E3: `/static/audio/drums/NOL_hihat_freeze.wav`,
                     F3: `/static/audio/drums/snare-top-off17.wav`,
+                    G3: `/static/audio/drums/NOL_hihat_roll_lipstick.wav`,
+                    A3: `/static/audio/vocals/NOL_143_vocal_chop_jacuzzi_Am.wav`,
                   }}
                   notes={track.notes}
                 />

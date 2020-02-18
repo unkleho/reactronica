@@ -111,6 +111,7 @@ const InstrumentConsumer = ({
 
   useEffect(() => {
     if (
+      // TODO: Add other synth types
       type === 'synth' &&
       instrumentRef &&
       instrumentRef.current &&
