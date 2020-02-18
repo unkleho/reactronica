@@ -162,6 +162,13 @@ export const beatClip1 = {
       name: 'C3',
       duration: 0.5,
     },
+    // Sub
+    {
+      start: '1.1.1',
+      name: 'A2',
+      duration: '2n',
+      velocity: 0.5,
+    },
     {
       start: '1.1.1',
       name: 'E3',
@@ -203,9 +210,10 @@ export const beatClip1 = {
       velocity: 0.25,
       duration: 0.5,
     },
+    // Triplet hat
     {
       start: '1.3.3',
-      name: 'E3',
+      name: 'G3',
       velocity: 0.25,
       duration: 0.5,
     },
@@ -244,6 +252,13 @@ export const beatClip2 = {
       name: 'C3',
       duration: 0.5,
     },
+    // Sub
+    {
+      start: '1.1.1',
+      name: 'F2',
+      duration: '2n',
+      velocity: 0.5,
+    },
     {
       start: '1.1.1',
       name: 'E3',
@@ -279,12 +294,19 @@ export const beatClip2 = {
       name: 'C3',
       duration: 0.5,
     },
+    // Triplet hat
     {
       start: '1.3.1',
-      name: 'E3',
+      name: 'G3',
       velocity: 0.25,
       duration: 0.5,
     },
+    // {
+    //   start: '1.3.1',
+    //   name: 'E3',
+    //   velocity: 0.25,
+    //   duration: 0.5,
+    // },
     {
       start: '1.3.3',
       name: 'E3',
@@ -308,5 +330,34 @@ export const beatClip2 = {
       name: 'F3',
       duration: 0.5,
     },
+  ],
+};
+
+// Vocals
+export const vocalClip1 = {
+  id: 'vocalClip1',
+  name: 'Vocal 1',
+  bars: 1,
+  notes: [
+    {
+      start: '1.3.1',
+      name: 'A3',
+      duration: 6,
+      velocity: 0.2,
+    },
+  ],
+};
+
+export const vocalClip2 = {
+  id: 'vocalClip2',
+  name: 'Vocal 2',
+  bars: 1,
+  notes: [
+    // {
+    //   start: '1.3.1',
+    //   name: 'A3',
+    //   duration: '1n',
+    //   velocity: 0.3,
+    // },
   ],
 };
