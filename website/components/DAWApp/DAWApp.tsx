@@ -29,7 +29,7 @@ const initialState = {
   // TRANSPORT
   // --------------------------------------------------------------------------
   isPlaying: false,
-  bpm: 71.5,
+  bpm: 75,
   // --------------------------------------------------------------------------
   // STEPS
   // --------------------------------------------------------------------------
@@ -247,11 +247,14 @@ const DAWApp = () => {
                     // D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
                     // D3: `/static/audio/drums/snare-top-off25.wav`,
                     // D3: `/static/audio/drums/OS_TD_Trappa_Snare.wav`,
-                    D3: '/static/audio/drums/SOUTHSIDE_snare_og_punch.wav',
+                    // D3: '/static/audio/drums/SOUTHSIDE_snare_og_punch.wav',
+                    D3:
+                      '/static/audio/drums/ABJP_Trap_Snare_18_nice_roll_snare.wav',
                     // E3: `/static/audio/drums/chh2.wav`,
                     // E3: `/static/audio/drums/OS_TD_Randy_Hat.wav`,
                     E3: `/static/audio/drums/NOL_hihat_freeze.wav`,
-                    F3: `/static/audio/drums/snare-top-off17.wav`,
+                    // F3: `/static/audio/drums/snare-top-off17.wav`,
+                    F3: `/static/audio/drums/ad3_playground_concrete_foot_stomp_02_r01.wav`,
                     G3: `/static/audio/drums/NOL_hihat_roll_lipstick.wav`,
                     A3: `/static/audio/vocals/NOL_143_vocal_chop_jacuzzi_Am.wav`,
                   }}

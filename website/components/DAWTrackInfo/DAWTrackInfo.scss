@@ -4,6 +4,7 @@
   display: block;
   margin-right: var(--baseline);
   padding: var(--baseline);
+  overflow: auto;
   background-color: var(--colour-black);
 
   & h2,
