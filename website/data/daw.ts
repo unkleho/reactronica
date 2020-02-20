@@ -152,6 +152,7 @@ export const melodyClip2 = {
 };
 
 // Beat clip with notes that will need to have buildSteps() run on it.
+const hatVelocity = 0.15;
 export const beatClip1 = {
   id: 'beat1',
   name: 'Beat 1',
@@ -172,13 +173,13 @@ export const beatClip1 = {
     {
       start: '1.1.1',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
       start: '1.1.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -190,13 +191,13 @@ export const beatClip1 = {
     {
       start: '1.2.1',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
       start: '1.2.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -207,14 +208,14 @@ export const beatClip1 = {
     {
       start: '1.3.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     // Triplet hat
     {
       start: '1.3.1',
       name: 'G3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -232,7 +233,7 @@ export const beatClip1 = {
     {
       start: '1.4.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -264,13 +265,13 @@ export const beatClip2 = {
     {
       start: '1.1.1',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
       start: '1.1.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -282,13 +283,13 @@ export const beatClip2 = {
     {
       start: '1.2.1',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
       start: '1.2.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -300,19 +301,19 @@ export const beatClip2 = {
     {
       start: '1.3.1',
       name: 'G3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     // {
     //   start: '1.3.1',
     //   name: 'E3',
-    //   velocity: 0.25,
+    //   velocity: hatVelocity,
     //   duration: 0.5,
     // },
     {
       start: '1.3.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -324,7 +325,7 @@ export const beatClip2 = {
     {
       start: '1.4.3',
       name: 'E3',
-      velocity: 0.25,
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
