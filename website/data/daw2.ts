@@ -1,5 +1,6 @@
 // Melody clip with notes that will need to have buildSteps() run on it.
 
+const melodyNoteLength = '4n';
 export const melodyClip1 = {
   id: 'melody1',
   name: 'Melody 1',
@@ -9,76 +10,76 @@ export const melodyClip1 = {
     {
       start: '1.1.1',
       name: 'A2',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.1.1',
       name: 'C3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.1.1',
       name: 'E3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     // Am
     {
       start: '1.2.1',
       name: 'A3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.2.1',
       name: 'C3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.2.1',
       name: 'E3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     // Am
     {
       start: '1.3.1',
       name: 'A3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.3.1',
       name: 'C3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.3.1',
       name: 'E3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     // Am
     {
       start: '1.4.1',
       name: 'A3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.4.1',
       name: 'C3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.4.1',
       name: 'E3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
 
     {
       start: '1.3.1',
       name: 'C4',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.4.1',
       name: 'C4',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
   ],
 };
@@ -92,68 +93,68 @@ export const melodyClip2 = {
     {
       start: '1.1.1',
       name: 'B3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.1.1',
       name: 'D3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.1.1',
       name: 'F3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
 
     // Bm
     {
       start: '1.2.1',
       name: 'B3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.2.1',
       name: 'D3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.2.1',
       name: 'F3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
 
     // Dm
     {
       start: '1.3.1',
       name: 'D3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.3.1',
       name: 'F3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.3.1',
       name: 'A3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
 
     // Dm
     {
       start: '1.4.1',
       name: 'D3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.4.1',
       name: 'F3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
     {
       start: '1.4.1',
       name: 'B3',
-      duration: '6n',
+      duration: melodyNoteLength,
     },
 
     // {
@@ -303,14 +304,27 @@ export const beatClip2 = {
       duration: '2n',
       velocity: 0.4,
     },
+    //
     {
       start: '1.1.1',
+      name: 'G3',
+      velocity: hatVelocity,
+      duration: 0.5,
+    },
+    {
+      start: '1.1.2',
       name: 'E3',
       velocity: hatVelocity,
       duration: 0.5,
     },
     {
       start: '1.1.3',
+      name: 'E3',
+      velocity: hatVelocity,
+      duration: 0.5,
+    },
+    {
+      start: '1.1.4',
       name: 'E3',
       velocity: hatVelocity,
       duration: 0.5,
@@ -395,12 +409,12 @@ export const vocalClip1 = {
   name: 'Vocal 1',
   bars: 1,
   notes: [
-    // {
-    //   start: '1.3.3',
-    //   name: 'A3',
-    //   duration: 6,
-    //   velocity: 0.2,
-    // },
+    {
+      start: '1.3.3',
+      name: 'B3',
+      duration: '2n',
+      velocity: 0.7,
+    },
   ],
 };
 
@@ -409,11 +423,11 @@ export const vocalClip2 = {
   name: 'Vocal 2',
   bars: 1,
   notes: [
-    // {
-    //   start: '1.3.1',
-    //   name: 'A3',
-    //   duration: '1n',
-    //   velocity: 0.3,
-    // },
+    {
+      start: '1.3.3',
+      name: 'B3',
+      duration: '4n',
+      velocity: 0.7,
+    },
   ],
 };
