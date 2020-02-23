@@ -17,7 +17,7 @@ import {
   beatClip2,
   vocalClip1,
   vocalClip2,
-} from '../../data/daw';
+} from '../../data/daw2';
 import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 
