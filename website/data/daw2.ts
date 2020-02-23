@@ -9,76 +9,76 @@ export const melodyClip1 = {
     {
       start: '1.1.1',
       name: 'A2',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.1.1',
       name: 'C3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.1.1',
       name: 'E3',
-      duration: '4n',
+      duration: '6n',
     },
     // Am
     {
       start: '1.2.1',
       name: 'A3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.2.1',
       name: 'C3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.2.1',
       name: 'E3',
-      duration: '4n',
+      duration: '6n',
     },
     // Am
     {
       start: '1.3.1',
       name: 'A3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.3.1',
       name: 'C3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.3.1',
       name: 'E3',
-      duration: '4n',
+      duration: '6n',
     },
     // Am
     {
       start: '1.4.1',
       name: 'A3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.4.1',
       name: 'C3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.4.1',
       name: 'E3',
-      duration: '4n',
+      duration: '6n',
     },
 
     {
       start: '1.3.1',
       name: 'C4',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.4.1',
       name: 'C4',
-      duration: '4n',
+      duration: '6n',
     },
   ],
 };
@@ -92,68 +92,68 @@ export const melodyClip2 = {
     {
       start: '1.1.1',
       name: 'B3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.1.1',
       name: 'D3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.1.1',
       name: 'F3',
-      duration: '4n',
+      duration: '6n',
     },
 
     // Bm
     {
       start: '1.2.1',
       name: 'B3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.2.1',
       name: 'D3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.2.1',
       name: 'F3',
-      duration: '4n',
+      duration: '6n',
     },
 
     // Dm
     {
       start: '1.3.1',
       name: 'D3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.3.1',
       name: 'F3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.3.1',
       name: 'A3',
-      duration: '4n',
+      duration: '6n',
     },
 
     // Dm
     {
       start: '1.4.1',
       name: 'D3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.4.1',
       name: 'F3',
-      duration: '4n',
+      duration: '6n',
     },
     {
       start: '1.4.1',
       name: 'B3',
-      duration: '4n',
+      duration: '6n',
     },
 
     // {
@@ -222,6 +222,12 @@ export const beatClip1 = {
       start: '1.2.1',
       name: 'E3',
       velocity: hatVelocity,
+      duration: 0.5,
+    },
+    {
+      start: '1.2.2',
+      name: 'C3',
+      velocity: 0.8,
       duration: 0.5,
     },
     {

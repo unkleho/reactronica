@@ -63,7 +63,11 @@ const initialState = {
       steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
       clips: [{ id: 'melody1' }, { id: 'melody2' }],
       notes: [],
-      effects: [],
+      effects: [
+        {
+          type: 'autoWah',
+        },
+      ],
     },
     {
       id: 'beat',
@@ -247,9 +251,9 @@ const DAWApp = () => {
                     // D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
                     // D3: `/static/audio/drums/snare-top-off25.wav`,
                     // D3: `/static/audio/drums/OS_TD_Trappa_Snare.wav`,
-                    // D3: '/static/audio/drums/SOUTHSIDE_snare_og_punch.wav',
-                    D3:
-                      '/static/audio/drums/ABJP_Trap_Snare_18_nice_roll_snare.wav',
+                    D3: '/static/audio/drums/SOUTHSIDE_snare_og_punch.wav',
+                    // D3:
+                    //   '/static/audio/drums/ABJP_Trap_Snare_18_nice_roll_snare.wav',
                     // E3: `/static/audio/drums/chh2.wav`,
                     // E3: `/static/audio/drums/OS_TD_Randy_Hat.wav`,
                     E3: `/static/audio/drums/NOL_hihat_freeze.wav`,
