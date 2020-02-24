@@ -247,6 +247,7 @@ const DAWApp = () => {
                   samples={{
                     // C3: `/static/audio/drums/kick15.wav`,
                     A2: `/static/audio/drums/TLYKST_808_nice_A.wav`,
+                    // C3: `/static/audio/drums/st2_kick_one_shot_low_punch_basic.wav`,
                     C3: `/static/audio/drums/019_Kick_A_-_MELODICDEEPHOUSE_Zenhiser.wav`,
                     // D3: `/static/audio/drums/snare-bottom-buttend15.wav`,
                     // D3: `/static/audio/drums/snare-top-off25.wav`,
