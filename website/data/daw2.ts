@@ -187,7 +187,7 @@ export const beatClip1 = {
       start: '1.1.1',
       name: 'A2',
       duration: '2n',
-      velocity: 0.4,
+      velocity: 0.3,
     },
     {
       start: '1.1.1',
@@ -320,7 +320,7 @@ export const beatClip2 = {
       start: '1.1.1',
       name: 'F2',
       duration: '2n',
-      velocity: 0.4,
+      velocity: 0.3,
     },
     //
     {
