@@ -261,7 +261,8 @@ const DAWApp = () => {
                     F3: `/static/audio/drums/ad3_playground_concrete_foot_stomp_02_r01.wav`,
                     G3: `/static/audio/drums/NOL_hihat_roll_lipstick.wav`,
                     A3: `/static/audio/vocals/NOL_143_vocal_chop_jacuzzi_Am.wav`,
-                    B3: `/static/audio/vocals/fe3_kit2_futuro_intro_vocal_fx_loop_140_Am.wav`,
+                    B3: `/static/audio/vocals/fe3_kit2_futuro_intro_vocal_fx_loop_150_Am_1bar.wav`,
+                    C4: `/static/audio/vocals/fe3_kit2_futuro_intro_vocal_fx_loop_150_Am_end.wav`,
                   }}
                   notes={track.notes}
                 />

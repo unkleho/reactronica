@@ -171,7 +171,7 @@ export const melodyClip2 = {
 };
 
 // Beat clip with notes that will need to have buildSteps() run on it.
-const hatVelocity = 0.15;
+const hatVelocity = 0.1;
 export const beatClip1 = {
   id: 'beat1',
   name: 'Beat 1',
@@ -238,10 +238,16 @@ export const beatClip1 = {
       duration: 0.5,
     },
     {
-      start: '1.3.1',
-      name: 'C3',
+      start: '1.3.2',
+      name: 'E3',
+      velocity: hatVelocity,
       duration: 0.5,
     },
+    // {
+    //   start: '1.3.1',
+    //   name: 'C3',
+    //   duration: 0.5,
+    // },
     {
       start: '1.3.3',
       name: 'C3',
@@ -255,8 +261,14 @@ export const beatClip1 = {
     },
     // Triplet hat
     {
-      start: '1.3.2',
+      start: '1.2.4',
       name: 'G3',
+      velocity: hatVelocity,
+      duration: 0.5,
+    },
+    {
+      start: '1.3.4',
+      name: 'E3',
       velocity: hatVelocity,
       duration: 0.5,
     },
@@ -264,6 +276,12 @@ export const beatClip1 = {
       start: '1.4.1',
       name: 'D3',
       velocity: 0.4,
+      duration: 0.5,
+    },
+    {
+      start: '1.4.2',
+      name: 'E3',
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -342,14 +360,38 @@ export const beatClip2 = {
       duration: 0.5,
     },
     {
-      start: '1.2.3',
+      start: '1.2.2',
+      name: 'C3',
+      duration: 0.5,
+    },
+    {
+      start: '1.2.2',
       name: 'E3',
       velocity: hatVelocity,
       duration: 0.5,
     },
     {
-      start: '1.3.1',
-      name: 'C3',
+      start: '1.2.3',
+      name: 'E3',
+      velocity: hatVelocity,
+      duration: 0.5,
+    },
+    // Triplet hat
+    {
+      start: '1.2.4',
+      name: 'G3',
+      velocity: hatVelocity,
+      duration: 0.5,
+    },
+    // {
+    //   start: '1.3.1',
+    //   name: 'C3',
+    //   duration: 0.5,
+    // },
+    {
+      start: '1.3.3',
+      name: 'E3',
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -364,12 +406,12 @@ export const beatClip2 = {
       velocity: hatVelocity,
       duration: 0.5,
     },
-    // {
-    //   start: '1.3.1',
-    //   name: 'E3',
-    //   velocity: hatVelocity,
-    //   duration: 0.5,
-    // },
+    {
+      start: '1.3.4',
+      name: 'E3',
+      velocity: hatVelocity,
+      duration: 0.5,
+    },
     {
       start: '1.3.1',
       name: 'E3',
@@ -380,6 +422,12 @@ export const beatClip2 = {
       start: '1.4.1',
       name: 'D3',
       velocity: 0.4,
+      duration: 0.5,
+    },
+    {
+      start: '1.4.2',
+      name: 'E3',
+      velocity: hatVelocity,
       duration: 0.5,
     },
     {
@@ -410,10 +458,10 @@ export const vocalClip1 = {
   bars: 1,
   notes: [
     {
-      start: '1.3.3',
+      start: '1.4.3',
       name: 'B3',
-      duration: '2n',
-      velocity: 0.7,
+      duration: 4,
+      velocity: 0.6,
     },
   ],
 };
@@ -424,10 +472,16 @@ export const vocalClip2 = {
   bars: 1,
   notes: [
     {
-      start: '1.3.3',
+      start: '1.2.3',
+      name: 'C4',
+      duration: '2n',
+      velocity: 0.6,
+    },
+    {
+      start: '1.4.3',
       name: 'B3',
-      duration: '4n',
-      velocity: 0.7,
+      duration: 0.7,
+      velocity: 0.6,
     },
   ],
 };
