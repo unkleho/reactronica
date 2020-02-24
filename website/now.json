@@ -1,12 +1,6 @@
 {
   "name": "reactronica",
   "version": 2,
-  "rewrites": [
-    {
-      "source": "/reactconfau2020",
-      "destination": "https://reactronica-music-function-state-talk.now.sh"
-    }
-  ],
   "env": {
     "GOOGLE_ANALYTICS_ID": "@google_analytics_id"
   },
