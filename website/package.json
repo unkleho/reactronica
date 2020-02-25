@@ -3,6 +3,7 @@
   "version": "0.0.3",
   "description": "",
   "main": "index.js",
+  "homepage": "https://reactronica-music-function-state-talk.now.sh/reactconfau2020",
   "scripts": {
     "dev": "next -p 4010",
     "start": "next start",
