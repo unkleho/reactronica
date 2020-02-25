@@ -1,6 +1,12 @@
 {
   "name": "reactronica",
   "version": 2,
+  "redirects": [
+    {
+      "source": "/reactconfau2020",
+      "destination": "/reactconfau2020/"
+    }
+  ],
   "rewrites": [
     {
       "source": "/reactconfau2020/(.*)",
