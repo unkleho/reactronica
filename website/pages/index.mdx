@@ -285,10 +285,11 @@ Should be wrapped by a Track and becomes its audio source.
 
 - **type** `amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | sampler | synth` - Instrument type
 - **notes** `NoteType[]` - An array of notes (`{ name: string, velocity: number }`) to trigger Instrument, useful for auditioning sounds or live performance.
-- **samples** `object` - Only for `sampler` instrument type
+- **samples** `object` - Only for `sampler` instrument type. eg. `{ C3: '/path/to/file1.wav', C3: '/path/to/file2.wav' }`
 - **polyphony** `number` - Maximum number of notes played at the same time. Only for some synth types.
 - **oscillator** `{ type: 'triangle' | 'sine' | 'square' }` - A repeating waveform shape. Only for some synth types.
 - **envelope** `{ attack: number, decay: number, sustain: number, release: number }`
+- **onLoad** `function` - Only for `sampler` instrument type. Gets called after all `samples` load
 
 ### `Effect`
 
