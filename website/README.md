@@ -19,4 +19,3 @@ $ npm link reactronica
 $ npm link ../node_modules/react
 ```
 
-Test
