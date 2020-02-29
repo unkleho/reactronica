@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.4] - 2019-11-16
 
 - Update DAWStepsEditor with more keys and scrolling
+- Update docs
 
 ## [0.0.3] - 2019-10-26
 
