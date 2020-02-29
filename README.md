@@ -4,9 +4,7 @@
 
 React audio components for making music in the browser.
 
-React treats UI as a function of state. What if React’s declarative programming model could be applied to music as well?
-
-This library aims to treat **_music_** as a function of state, rendering sound instead of UI. Visual components live side by side with Reactronica, sharing the same state and elegantly kept in sync.
+React treats UI as a function of state. This library aims to treat **_music_** as a function of state, rendering sound instead of UI. Visual components live side by side with Reactronica, sharing the same state and elegantly kept in sync.
 
 Uses [ToneJS](https://tonejs.github.io/) under the hood. Inspired by [React Music](https://github.com/FormidableLabs/react-music).
 
