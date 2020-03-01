@@ -20,6 +20,14 @@ $ npm install --save reactronica tone
 
 Note: Use React version >= 16.8 as [Hooks](https://reactjs.org/docs/hooks-intro.html) are used internally.
 
+## Template
+
+To get started quickly with Create React App and Reactronica, just run the command below:
+
+```bash
+$ npx create-react-app my-app --template reactronica
+```
+
 ## Documentation
 
 [https://reactronica.com](https://reactronica.com/#documentation)
