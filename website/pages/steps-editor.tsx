@@ -62,8 +62,8 @@ const Page = () => {
             type="sampler"
             notes={notes}
             samples={{
-              C3: '/static/audio/ukulele/Fluke_Uke_060.wav',
-              D3: '/static/audio/ukulele/Fluke_Uke_062.wav',
+              C3: '/audio/ukulele/Fluke_Uke_060.wav',
+              D3: '/audio/ukulele/Fluke_Uke_062.wav',
             }}
             options={{
               release: 3,
