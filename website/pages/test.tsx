@@ -28,7 +28,7 @@ const HomePage = () => {
             type="sampler"
             notes={notes}
             samples={{
-              C3: '/static/audio/ukulele/Fluke_Uke_060.wav',
+              C3: '/audio/ukulele/Fluke_Uke_060.wav',
             }}
             options={{
               release: 3,

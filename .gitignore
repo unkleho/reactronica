@@ -22,7 +22,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # samples
-website/static/audio/ukulele
+website/audio/ukulele
 example/public/audio/ukulele
 
 *.code-workspace
