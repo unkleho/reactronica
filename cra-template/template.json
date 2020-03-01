@@ -1,0 +1,8 @@
+{
+  "package": {
+    "dependencies": {
+      "reactronica": "^0.3.1",
+      "tone": "^13.4.9"
+    }
+  }
+}
