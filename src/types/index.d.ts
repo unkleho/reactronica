@@ -75,6 +75,7 @@ declare module 'reactronica' {
     delayTime?: string;
     feedback?: number;
     wet?: number;
+    low?: number;
     onAddToEffectsChain?: Function;
     onRemoveFromEffectsChain?: Function;
   };

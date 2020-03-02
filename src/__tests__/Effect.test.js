@@ -112,4 +112,26 @@ describe('Effect', () => {
       Tone.Master,
     );
   });
+
+  it('should add EQ3 effect', () => {
+    render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+          <Effect type="eq3" id="effect-1" low={-6} mid={3} high={1} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthChain).toHaveBeenLastCalledWith(
+      {
+        id: 'effect-1',
+        low: { value: -6 },
+        mid: { value: 3 },
+        high: { value: 1 },
+      },
+      { pan: { value: 0 }, volume: { value: 0 } },
+      Tone.Master,
+    );
+  });
 });
