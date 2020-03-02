@@ -234,6 +234,30 @@ class AutoPanner {
 }
 
 // ----------------------------------------------------------------------------
+// Tone.EQ3
+// ----------------------------------------------------------------------------
+
+export const mockEQ3Constructor = jest.fn();
+
+class EQ3 {
+  constructor(low, mid, high) {
+    mockEQ3Constructor(low, mid, high);
+
+    this.low = {
+      value: low,
+    };
+
+    this.mid = {
+      value: mid,
+    };
+
+    this.high = {
+      value: high,
+    };
+  }
+}
+
+// ----------------------------------------------------------------------------
 // Tone.Sequence
 // ----------------------------------------------------------------------------
 
@@ -268,6 +292,7 @@ const MockTone = {
   Sampler,
   AutoFilter,
   AutoPanner,
+  EQ3,
   Sequence,
 };
 
