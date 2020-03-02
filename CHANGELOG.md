@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.2] - xxxxxx
 
 - Add Create React Template for Reactronica
+- Add `eq3` effect type with `low`, `mid`, `high`, `lowFrequency` and `highFrequency` props
 
 ## [0.3.1] - 2020-02-27
 

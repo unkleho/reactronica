@@ -141,13 +141,13 @@ TrackConsumer.propTypes = {
 };
 
 const Track = (props) => {
-  const value = React.useContext(SongContext);
+  const { isPlaying } = React.useContext(SongContext);
 
   if (typeof window === 'undefined') {
     return null;
   }
 
-  return <TrackConsumer {...value} {...props} />;
+  return <TrackConsumer isPlaying={isPlaying} {...props} />;
 };
 
 export default Track;

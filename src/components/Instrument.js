@@ -221,14 +221,23 @@ InstrumentConsumer.propTypes = {
 };
 
 const Instrument = (props) => {
-  const value = useContext(TrackContext);
-  // const { Tone } = useContext(SongContext);
+  const { volume, pan, effectsChain, onInstrumentsUpdate } = useContext(
+    TrackContext,
+  );
 
   if (typeof window === 'undefined') {
     return null;
   }
 
-  return <InstrumentConsumer {...value} {...props} />;
+  return (
+    <InstrumentConsumer
+      volume={volume}
+      pan={pan}
+      effectsChain={effectsChain}
+      onInstrumentsUpdate={onInstrumentsUpdate}
+      {...props}
+    />
+  );
 };
 
 /**

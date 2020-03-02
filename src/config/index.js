@@ -16,6 +16,9 @@ export const instruments = [
 ];
 
 export const effects = [
+  // --------------------------------------------------------------------------
+  // Tone JS Effects
+  // --------------------------------------------------------------------------
   { id: 'autoFilter', name: 'Auto Filter' },
   { id: 'autoPanner', name: 'Auto Panner' },
   { id: 'autoWah', name: 'Auto Wah' },
@@ -27,6 +30,10 @@ export const effects = [
   { id: 'panVol', name: 'Volume/Pan' },
   // { id: 'reverb', name: 'Reverb' },
   { id: 'tremolo', name: 'Tremolo' },
+  // --------------------------------------------------------------------------
+  // Tone JS Components
+  // --------------------------------------------------------------------------
+  { id: 'eq3', name: 'EQ3' },
 ];
 
 const config = {

@@ -11,6 +11,11 @@ const EffectConsumer = ({
   delayTime = '8n',
   feedback = 0.5,
   wet = 1,
+  low,
+  mid,
+  high,
+  lowFrequency,
+  highFrequency,
   onAddToEffectsChain,
   onRemoveFromEffectsChain,
 }) => {
@@ -44,6 +49,8 @@ const EffectConsumer = ({
       //   effect.current = new Tone.Reverb();
     } else if (type === 'tremolo') {
       effect.current = new Tone.Tremolo();
+    } else if (type === 'eq3') {
+      effect.current = new Tone.EQ3(low, mid, high);
     }
 
     if (effect.current) {
@@ -78,6 +85,44 @@ const EffectConsumer = ({
     }
   }, [wet]);
 
+  useEffect(() => {
+    if (typeof low !== 'undefined' && effect.current && effect.current.low) {
+      effect.current.low.value = low;
+    }
+  }, [low]);
+
+  useEffect(() => {
+    if (typeof mid !== 'undefined' && effect.current && effect.current.mid) {
+      effect.current.mid.value = mid;
+    }
+  }, [mid]);
+
+  useEffect(() => {
+    if (typeof high !== 'undefined' && effect.current && effect.current.high) {
+      effect.current.high.value = high;
+    }
+  }, [high]);
+
+  useEffect(() => {
+    if (
+      typeof lowFrequency !== 'undefined' &&
+      effect.current &&
+      effect.current.lowFrequency
+    ) {
+      effect.current.lowFrequency.value = lowFrequency;
+    }
+  }, [lowFrequency]);
+
+  useEffect(() => {
+    if (
+      typeof highFrequency !== 'undefined' &&
+      effect.current &&
+      effect.current.highFrequency
+    ) {
+      effect.current.highFrequency.value = highFrequency;
+    }
+  }, [highFrequency]);
+
   return null;
 };
 
@@ -90,14 +135,28 @@ EffectConsumer.propTypes = {
   delayTime: PropTypes.string,
   feedback: PropTypes.number,
   wet: PropTypes.number,
+  low: PropTypes.number,
+  mid: PropTypes.number,
+  high: PropTypes.number,
+  lowFrequency: PropTypes.number,
+  highFrequency: PropTypes.number,
+  // <Track /> Props
   onAddToEffectsChain: PropTypes.func,
   onRemoveFromEffectsChain: PropTypes.func,
 };
 
 const Effect = (props) => {
-  const value = useContext(TrackContext);
+  const { onAddToEffectsChain, onRemoveFromEffectsChain } = useContext(
+    TrackContext,
+  );
 
-  return <EffectConsumer {...value} {...props} />;
+  return (
+    <EffectConsumer
+      onAddToEffectsChain={onAddToEffectsChain}
+      onRemoveFromEffectsChain={onRemoveFromEffectsChain}
+      {...props}
+    />
+  );
 };
 
 export default Effect;
