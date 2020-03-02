@@ -254,6 +254,14 @@ class EQ3 {
     this.high = {
       value: high,
     };
+
+    this.lowFrequency = {
+      value: 400,
+    };
+
+    this.highFrequency = {
+      value: 2500,
+    };
   }
 }
 
