@@ -113,8 +113,8 @@ describe('Effect', () => {
     );
   });
 
-  it('should add EQ3 effect', () => {
-    render(
+  it('should add EQ3 effect and then update frequency', () => {
+    const { rerender } = render(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
           <Instrument type="synth" />
@@ -129,6 +129,38 @@ describe('Effect', () => {
         low: { value: -6 },
         mid: { value: 3 },
         high: { value: 1 },
+        lowFrequency: { value: 400 },
+        highFrequency: { value: 2500 },
+      },
+      { pan: { value: 0 }, volume: { value: 0 } },
+      Tone.Master,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+          <Effect
+            type="eq3"
+            id="effect-1"
+            low={-3}
+            mid={1}
+            high={0}
+            lowFrequency={100}
+            highFrequency={3000}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthChain).toHaveBeenLastCalledWith(
+      {
+        id: 'effect-1',
+        low: { value: -3 },
+        mid: { value: 1 },
+        high: { value: 0 },
+        lowFrequency: { value: 100 },
+        highFrequency: { value: 3000 },
       },
       { pan: { value: 0 }, volume: { value: 0 } },
       Tone.Master,

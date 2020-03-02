@@ -19,7 +19,7 @@ const HomePage = () => {
 
       <button
         onClick={() => {
-          setLow(low === 0 ? -6 : 0);
+          setLow(low === 0 ? -12 : 0);
         }}
       >
         Low {low}

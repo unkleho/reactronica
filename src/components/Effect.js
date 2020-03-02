@@ -14,6 +14,8 @@ const EffectConsumer = ({
   low,
   mid,
   high,
+  lowFrequency,
+  highFrequency,
   onAddToEffectsChain,
   onRemoveFromEffectsChain,
 }) => {
@@ -84,22 +86,42 @@ const EffectConsumer = ({
   }, [wet]);
 
   useEffect(() => {
-    if (effect.current && effect.current.low) {
+    if (typeof low !== 'undefined' && effect.current && effect.current.low) {
       effect.current.low.value = low;
     }
   }, [low]);
 
   useEffect(() => {
-    if (effect.current && effect.current.mid) {
+    if (typeof mid !== 'undefined' && effect.current && effect.current.mid) {
       effect.current.mid.value = mid;
     }
   }, [mid]);
 
   useEffect(() => {
-    if (effect.current && effect.current.high) {
+    if (typeof high !== 'undefined' && effect.current && effect.current.high) {
       effect.current.high.value = high;
     }
   }, [high]);
+
+  useEffect(() => {
+    if (
+      typeof lowFrequency !== 'undefined' &&
+      effect.current &&
+      effect.current.lowFrequency
+    ) {
+      effect.current.lowFrequency.value = lowFrequency;
+    }
+  }, [lowFrequency]);
+
+  useEffect(() => {
+    if (
+      typeof highFrequency !== 'undefined' &&
+      effect.current &&
+      effect.current.highFrequency
+    ) {
+      effect.current.highFrequency.value = highFrequency;
+    }
+  }, [highFrequency]);
 
   return null;
 };
@@ -113,6 +135,11 @@ EffectConsumer.propTypes = {
   delayTime: PropTypes.string,
   feedback: PropTypes.number,
   wet: PropTypes.number,
+  low: PropTypes.number,
+  mid: PropTypes.number,
+  high: PropTypes.number,
+  lowFrequency: PropTypes.number,
+  highFrequency: PropTypes.number,
   // <Track /> Props
   onAddToEffectsChain: PropTypes.func,
   onRemoveFromEffectsChain: PropTypes.func,
