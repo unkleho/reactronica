@@ -66,12 +66,16 @@ describe('Instrument', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track>
-          <Instrument type="synth" notes={[{ name: 'C3' }]} />
+          <Instrument type="synth" notes={[{ name: 'C3', velocity: 0.5 }]} />
         </Track>
       </Song>,
     );
 
-    expect(mockPolySynthTriggerAttack).toBeCalledWith('C3');
+    expect(mockPolySynthTriggerAttack).toBeCalledWith(
+      'C3',
+      undefined, // Duration
+      0.5,
+    );
     expect(mockPolySynthTriggerRelease).not.toBeCalledWith('C3');
 
     rerender(
