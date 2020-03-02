@@ -40,9 +40,9 @@ const DrumPads: React.FunctionComponent<Props> = ({ className }) => {
             type="sampler"
             notes={notes}
             samples={{
-              C3: '/static/audio/drums/kick15.wav',
-              D3: '/static/audio/drums/snare-bottom-buttend15.wav',
-              E3: '/static/audio/drums/chh12.wav',
+              C3: '/audio/drums/kick15.wav',
+              D3: '/audio/drums/snare-bottom-buttend15.wav',
+              E3: '/audio/drums/chh12.wav',
             }}
           />
         </Track>

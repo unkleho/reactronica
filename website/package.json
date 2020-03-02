@@ -21,7 +21,7 @@
     "@next/mdx": "^9.0.3",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
-    "next": "^9.0.2",
+    "next": "^9.2.2",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
     "prism-react-renderer": "^0.1.7",
