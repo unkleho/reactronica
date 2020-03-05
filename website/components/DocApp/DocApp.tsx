@@ -14,6 +14,7 @@ const DocApp: React.FunctionComponent<Props> = ({ children, className }) => {
     <App className={[css.docApp, className || ''].join(' ')}>
       <header>
         <div className={css.headerInside}>
+          <h1 className="border-white">Test</h1>
           <ReactronicaLogo
             // subText="Docs"
             logoClassName={css.logo}
