@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import css from './DAWPlayhead.css';
+import css from './DAWPlayhead.scss';
 
 type Props = {
   isPlaying?: boolean;

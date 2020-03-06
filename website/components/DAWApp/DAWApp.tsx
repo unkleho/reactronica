@@ -66,6 +66,7 @@ const initialState = {
       effects: [
         {
           type: 'autoWah',
+          id: 'autoWah-1',
         },
       ],
     },

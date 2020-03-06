@@ -3,9 +3,8 @@ import Head from 'next/head';
 
 import useAnalytics from '../../lib/hooks/useAnalytics';
 
-import '../../node_modules/normalize.css/normalize.css';
-import '../../styles/base.css';
-import css from './App.css';
+import '../../styles/base.scss';
+import css from './App.scss';
 
 type Props = {
   className?: string;

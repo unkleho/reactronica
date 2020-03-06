@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Tone from 'tone';
 
-import './index.css';
+import './index.scss';
 
 /**
  * Example usage of Tone JS with React

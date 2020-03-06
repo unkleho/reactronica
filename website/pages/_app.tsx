@@ -7,6 +7,9 @@ import DocApp from '../components/DocApp';
 import DAWApp from '../components/DAWApp';
 import CodeBlock from '../components/CodeBlock';
 
+import '../node_modules/normalize.css/normalize.css';
+// import '../styles/base.scss';
+
 class MyApp extends NextApp {
   render() {
     const { Component, pageProps, router } = this.props;

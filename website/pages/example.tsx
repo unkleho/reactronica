@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 import WebMidi from 'webmidi';
 
-import './index.css';
+import './index.scss';
 
 const HomePage = () => {
   const [notes, setNotes] = useState([]);

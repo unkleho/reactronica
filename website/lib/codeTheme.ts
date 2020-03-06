@@ -1,4 +1,4 @@
-import css from '../styles/global.css';
+import css from '../styles/variables.css';
 
 const theme = {
   plain: {

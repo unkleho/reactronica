@@ -19,7 +19,6 @@
   "dependencies": {
     "@mdx-js/loader": "^1.2.2",
     "@next/mdx": "^9.0.3",
-    "@zeit/next-css": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "next": "^9.2.2",
     "node-sass": "^4.12.0",
@@ -37,6 +36,7 @@
     "@testing-library/react": "^9.0.2",
     "@types/node": "^12.7.4",
     "@types/react": "^16.9.1",
+    "@zeit/next-css": "^1.0.1",
     "dotenv": "^8.2.0",
     "hygen": "^4.0.8",
     "postcss-extend-rule": "^3.0.0",

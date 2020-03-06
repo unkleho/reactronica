@@ -3,8 +3,6 @@ import { Song, Track, Instrument } from 'reactronica';
 
 import DAWStepsEditor from '../DAWStepsEditor';
 
-// import css from './StepsEditorExample.css';
-
 type Props = {
   className?: string;
 };
