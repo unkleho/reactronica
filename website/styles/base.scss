@@ -25,19 +25,19 @@ body {
 
 h1 {
   margin-bottom: 0;
-  font-size: 3.5em;
+  font-size: var(--font-size-xxxlg);
   letter-spacing: -0.03em;
 }
 
 h2 {
-  margin-top: 1.2em;
+  margin-top: var(--baseline-4);
   font-weight: 700;
   font-size: var(--font-size-xxlg);
 }
 
 h3 {
   margin-top: 1.7em;
-  font-weight: 600;
+  font-weight: 500;
   font-size: var(--font-size-xlg);
 }
 
