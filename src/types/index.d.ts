@@ -16,6 +16,8 @@ declare module 'reactronica' {
     steps?: StepType[];
     volume?: number;
     pan?: number;
+    mute?: boolean;
+    solo?: boolean;
     subdivision?: string;
     effects?: React.ReactNode[];
     children: React.ReactNode;

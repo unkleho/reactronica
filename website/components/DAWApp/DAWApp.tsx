@@ -60,6 +60,8 @@ const initialState = {
       instrumentOscillatorType: 'triangle',
       volume: 70,
       pan: 50,
+      mute: false,
+      solo: false,
       steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
       clips: [{ id: 'melody1' }, { id: 'melody2' }],
       notes: [],
@@ -75,6 +77,8 @@ const initialState = {
       instrumentType: 'sampler',
       volume: 100,
       pan: 50,
+      mute: false,
+      solo: false,
       steps: [...buildSteps(beatClip1), ...buildSteps(beatClip2)],
       clips: [{ id: 'beat1' }, { id: 'beat2' }],
       notes: [],
@@ -85,6 +89,8 @@ const initialState = {
       instrumentType: 'sampler',
       volume: 100,
       pan: 50,
+      mute: false,
+      solo: false,
       steps: [...buildSteps(vocalClip1), ...buildSteps(vocalClip2)],
       clips: [{ id: 'vocalClip1' }, { id: 'vocalClip2' }],
       notes: [],
@@ -218,6 +224,8 @@ const DAWApp = () => {
               steps={trackSteps}
               volume={(parseInt(track.volume, 10) / 100) * 32 - 32}
               pan={(parseInt(track.pan, 10) / 100) * 2 - 1}
+              mute={track.mute}
+              solo={track.solo}
               subdivision={'16n'}
               effects={track.effects.map((effect, i) => {
                 return (

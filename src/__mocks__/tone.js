@@ -36,13 +36,13 @@ const Transport = {
 // Tone.PanVol
 // ----------------------------------------------------------------------------
 
-export const mockPanVolConstructor = jest.fn();
-export const mockPanVolVolume = jest.fn();
-export const mockPanVolPan = jest.fn();
+export const mockChannelConstructor = jest.fn();
+export const mockChannelVolume = jest.fn();
+export const mockChannelPan = jest.fn();
 
-class PanVol {
-  constructor(pan, volume) {
-    mockPanVolConstructor(pan, volume);
+class Channel {
+  constructor(volume, pan) {
+    mockChannelConstructor(volume, pan);
 
     this.volume = {
       value: volume,
@@ -52,8 +52,8 @@ class PanVol {
       value: pan,
     };
 
-    mockPanVolVolume(this.volume.value);
-    mockPanVolPan(this.pan.value);
+    mockChannelVolume(this.volume.value);
+    mockChannelPan(this.pan.value);
   }
 }
 
@@ -286,7 +286,7 @@ class Sequence {
 const MockTone = {
   Master,
   Transport,
-  PanVol,
+  Channel,
   PolySynth,
   Synth,
   AMSynth,

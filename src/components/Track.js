@@ -15,6 +15,8 @@ const TrackConsumer = ({
   steps = [],
   volume = 0,
   pan = 0,
+  mute,
+  solo,
   subdivision = '4n',
   effects = [],
   children,
@@ -117,6 +119,8 @@ const TrackConsumer = ({
         onRemoveFromEffectsChain: handleRemoveFromEffectsChain,
         pan,
         volume,
+        mute,
+        solo,
       }}
     >
       {children}
@@ -132,6 +136,8 @@ TrackConsumer.propTypes = {
   steps: PropTypes.arrayOf(StepType),
   volume: PropTypes.number,
   pan: PropTypes.number,
+  mute: PropTypes.bool,
+  solo: PropTypes.bool,
   subdivision: PropTypes.string, // react-music = resolution
   effects: PropTypes.oneOfType([
     PropTypes.node,

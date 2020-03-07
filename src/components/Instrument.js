@@ -25,11 +25,14 @@ const InstrumentConsumer = ({
   // <Track /> Props
   volume,
   pan,
+  mute,
+  solo,
   effectsChain,
   onInstrumentsUpdate,
 }) => {
   const instrumentRef = useRef();
-  const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
+  // const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
+  const trackChannelBase = useRef(new Tone.Channel(volume, pan));
   const prevNotes = usePrevious(notes);
 
   // -------------------------------------------------------------------------
@@ -134,6 +137,14 @@ const InstrumentConsumer = ({
     trackChannelBase.current.pan.value = pan;
   }, [pan]);
 
+  useEffect(() => {
+    trackChannelBase.current.mute = mute;
+  }, [mute]);
+
+  useEffect(() => {
+    trackChannelBase.current.solo = solo;
+  }, [solo]);
+
   // -------------------------------------------------------------------------
   // NOTES
   // -------------------------------------------------------------------------
@@ -216,14 +227,21 @@ InstrumentConsumer.propTypes = {
   // <Track /> Props
   volume: PropTypes.number,
   pan: PropTypes.number,
+  mute: PropTypes.bool,
+  solo: PropTypes.bool,
   effectsChain: PropTypes.array,
   onInstrumentsUpdate: PropTypes.func,
 };
 
 const Instrument = (props) => {
-  const { volume, pan, effectsChain, onInstrumentsUpdate } = useContext(
-    TrackContext,
-  );
+  const {
+    volume,
+    pan,
+    mute,
+    solo,
+    effectsChain,
+    onInstrumentsUpdate,
+  } = useContext(TrackContext);
 
   if (typeof window === 'undefined') {
     return null;
@@ -233,6 +251,8 @@ const Instrument = (props) => {
     <InstrumentConsumer
       volume={volume}
       pan={pan}
+      mute={mute}
+      solo={solo}
       effectsChain={effectsChain}
       onInstrumentsUpdate={onInstrumentsUpdate}
       {...props}

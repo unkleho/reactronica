@@ -3,9 +3,9 @@ import { render } from '@testing-library/react';
 
 import { Song, Track, Instrument } from '..';
 import {
-  mockPanVolConstructor,
-  mockPanVolVolume,
-  mockPanVolPan,
+  mockChannelConstructor,
+  mockChannelVolume,
+  mockChannelPan,
   mockPolySynthDispose,
   mockSequenceConstructor,
 } from '../__mocks__/tone';
@@ -24,7 +24,7 @@ describe('Track', () => {
       </Song>,
     );
 
-    expect(mockPanVolConstructor).toBeCalledWith(2, -6);
+    expect(mockChannelConstructor).toBeCalledWith(-6, 2);
 
     rerender(
       <Song isPlaying={true} bpm={100}>
@@ -32,14 +32,15 @@ describe('Track', () => {
           steps={['C3', null, [{ name: 'C3' }, { name: 'G3' }]]}
           pan={0}
           volume={0}
+          mute={true}
         >
           <Instrument type="synth" />
         </Track>
       </Song>,
     );
 
-    expect(mockPanVolVolume).toBeCalledWith(0);
-    expect(mockPanVolPan).toBeCalledWith(0);
+    expect(mockChannelVolume).toBeCalledWith(0);
+    expect(mockChannelPan).toBeCalledWith(0);
     expect(mockSequenceConstructor).toBeCalledWith([
       { index: 0, notes: [{ name: 'C3' }] },
       { index: 1, notes: [] },
@@ -56,7 +57,7 @@ describe('Track', () => {
       </Song>,
     );
 
-    expect(mockPanVolConstructor).toBeCalledWith(0, 0);
+    expect(mockChannelConstructor).toBeCalledWith(0, 0);
     expect(mockPolySynthDispose).toBeCalledTimes(0);
 
     rerender(<Song isPlaying={true}></Song>);
