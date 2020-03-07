@@ -8,7 +8,7 @@ import DAWApp from '../components/DAWApp';
 import CodeBlock from '../components/CodeBlock';
 
 import '../node_modules/normalize.css/normalize.css';
-// import '../styles/base.scss';
+import '../styles/base.scss';
 
 class MyApp extends NextApp {
   render() {
@@ -36,9 +36,14 @@ class MyApp extends NextApp {
             rel="stylesheet"
           />
           <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://rsms.me/inter/inter-ui.css"
+          />
+          <link
             href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap"
             rel="stylesheet"
-          ></link>
+          />
         </Head>
 
         <AppComponent>
