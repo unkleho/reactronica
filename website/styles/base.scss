@@ -18,7 +18,8 @@ html {
 body {
   margin: 0;
   color: var(--colour-text);
-  font-family: 'Inter UI', sans-serif;
+  font-weight: 400;
+  font-family: var(--font-primary);
   background-color: var(--colour-bg);
 }
 
@@ -103,8 +104,7 @@ a:visited {
 pre {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  /* font-size: var(--font-size-xlg); */
-  font-family: Inconsolata, monospace;
+  font-family: var(--font-secondary);
 }
 
 blockquote {

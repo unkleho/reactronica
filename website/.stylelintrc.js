@@ -20,7 +20,7 @@ module.exports = {
       'always',
       {
         ignore: ['after-comment', 'first-nested'],
-        except: ['after-same-name'],
+        except: ['blockless-after-blockless'],
       },
     ],
     'no-descending-specificity': null,

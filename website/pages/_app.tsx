@@ -36,10 +36,14 @@ class MyApp extends NextApp {
             rel="stylesheet"
           />
           <link
+            href="https://fonts.googleapis.com/css?family=Inter:300,400,500,700,900&display=swap"
+            rel="stylesheet"
+          />
+          {/* <link
             rel="stylesheet"
             type="text/css"
             href="https://rsms.me/inter/inter-ui.css"
-          />
+          /> */}
           <link
             href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap"
             rel="stylesheet"

@@ -4,27 +4,6 @@
  * ========================================================================== */
 
 @import './variables.scss';
-
 @import './mixins.scss';
-
 @import './text.scss';
-
 //  @import './other.scss';
-
-/*
- * Mixins
- * ------------------------------------------------------------------------ */
-
-@mixin sequencer-grid {
-  background-image: linear-gradient(
-    90deg,
-    var(--colour-bg) 3.13%,
-    var(--colour-black) 3.13%,
-    var(--colour-black) 50%,
-    var(--colour-bg) 50%,
-    var(--colour-bg) 53.13%,
-    var(--colour-black) 53.13%,
-    var(--colour-black) 100%
-  );
-  background-size: 32px 32px;
-}

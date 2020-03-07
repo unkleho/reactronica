@@ -4,6 +4,7 @@
  * ========================================================================== */
 
 :root {
+  /* Colours */
   --colour-bg: #131313;
   --colour-text: #ccc;
   --colour-button: #222;
@@ -24,7 +25,11 @@
   --colour-orange: #ff5c13;
   --colour-yellow-dark: #a39513;
 
-  /* Fonts */
+  /* Fonts Families */
+  --font-primary: 'Inter', sans-serif;
+  --font-secondary: Inconsolata, monospace;
+
+  /* Fonts Sizes */
   --font-size-xs: 0.7rem;
   --font-size-sm: 0.8rem;
   --font-size-md: 1rem;
@@ -33,7 +38,7 @@
   --font-size-xxlg: 2rem;
   --font-size-xxxlg: 3.5rem;
 
-  /* Baseline */
+  /* Baselines */
   --baseline: 0.5rem;
   --baseline-half: calc(var(--baseline) * 0.5);
   --baseline-1: var(--baseline);
@@ -49,13 +54,6 @@
 
   /* Containers */
   --container-md: 45rem;
-}
-
-.text-uppercase {
-  font-weight: 300;
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
 }
 
 :export {
