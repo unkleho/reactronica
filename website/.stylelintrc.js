@@ -19,7 +19,8 @@ module.exports = {
     'at-rule-empty-line-before': [
       'always',
       {
-        ignore: ['after-comment', 'first-nested', 'after-same-name'],
+        ignore: ['after-comment', 'first-nested'],
+        except: ['after-same-name'],
       },
     ],
     'no-descending-specificity': null,
