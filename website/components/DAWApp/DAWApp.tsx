@@ -21,7 +21,6 @@ import {
 import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 
-import '../../node_modules/normalize.css/normalize.css';
 import css from './DAWApp.scss';
 
 const initialState = {

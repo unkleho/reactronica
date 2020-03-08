@@ -12,8 +12,7 @@ export const NoteType = PropTypes.shape({
 
 export const StepNoteType = PropTypes.shape({
   name: PropTypes.oneOfType([NoteType, PropTypes.string]),
-  // position: PropTypes.number,
-  duration: PropTypes.number,
+  duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   velocity: PropTypes.number,
 });
 

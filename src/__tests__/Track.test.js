@@ -18,7 +18,7 @@ describe('Track', () => {
   it('should render Track with steps, pan and volume props', () => {
     const { rerender } = render(
       <Song isPlaying={false} bpm={100}>
-        <Track steps={['C3', null]} pan={2} volume={-6}>
+        <Track steps={['C3', null]} pan={2} volume={-6} mute={false}>
           <Instrument type="synth" />
         </Track>
       </Song>,

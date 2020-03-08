@@ -33,7 +33,7 @@ const Transport = {
 };
 
 // ----------------------------------------------------------------------------
-// Tone.PanVol
+// Tone.Channel
 // ----------------------------------------------------------------------------
 
 export const mockChannelConstructor = jest.fn();
@@ -51,6 +51,8 @@ class Channel {
     this.pan = {
       value: pan,
     };
+
+    // console.log(this.mute);
 
     mockChannelVolume(this.volume.value);
     mockChannelPan(this.pan.value);
