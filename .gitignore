@@ -25,3 +25,5 @@ yarn-error.log*
 website/public/audio
 
 *.code-workspace
+
+.now
