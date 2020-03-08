@@ -92,14 +92,19 @@
   font-weight: bold;
 }
 
+.trackSummaryButtons {
+  display: flex;
+}
+
 .removeButton {
-  align-self: flex-end;
-  width: fit-content;
+  margin-left: auto;
+  // align-self: flex-end;
+  // width: fit-content;
 }
 
 // Mute / Solo
 .textButton {
-  margin-right: auto;
+  margin-right: var(--baseline-half);
 }
 
 .textButtonIsActive {

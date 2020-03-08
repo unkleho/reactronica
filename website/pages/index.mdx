@@ -282,6 +282,8 @@ Tracks make up the layers of audio within a Song. Each individual Track has inde
 
 - **volume** `number` - Volume of track
 - **pan** `number` - Panning of track
+- **mute** `boolean` - Mute track
+- **solo** `boolean` - Only play this track, or other solo'd tracks
 - **steps** `StepType[]` - An array of steps to play. Can be `string` or `{ name: string, duration: number, velocity: number }`.
 - **onStepPlay** `function` - Callback that runs on every step.
 
