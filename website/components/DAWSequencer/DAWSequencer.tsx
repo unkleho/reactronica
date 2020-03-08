@@ -24,6 +24,8 @@ type Props = {
 
 type Track = {
   id: string;
+  mute: boolean;
+  solo: boolean;
   clips: Clip[];
 };
 
@@ -74,17 +76,50 @@ const Sequencer: React.FC<Props> = ({
               >
                 {track.id}
               </button>
-              <button
-                className={css.removeButton}
-                onClick={() => {
-                  dispatch({
-                    type: types.REMOVE_TRACK,
-                    trackId: track.id,
-                  });
-                }}
-              >
-                <Icon name="trash"></Icon>
-              </button>
+
+              <div className={css.trackSummaryButtons}>
+                <button
+                  className={[
+                    css.textButton,
+                    track.mute ? css.textButtonIsActive : '',
+                  ].join(' ')}
+                  onClick={() => {
+                    dispatch({
+                      type: types.TOGGLE_TRACK_MUTE,
+                      trackId: track.id,
+                    });
+                  }}
+                >
+                  M
+                </button>
+
+                <button
+                  className={[
+                    css.textButton,
+                    track.solo ? css.textButtonIsActive : '',
+                  ].join(' ')}
+                  onClick={() => {
+                    dispatch({
+                      type: types.TOGGLE_TRACK_SOLO,
+                      trackId: track.id,
+                    });
+                  }}
+                >
+                  S
+                </button>
+
+                <button
+                  className={css.removeButton}
+                  onClick={() => {
+                    dispatch({
+                      type: types.REMOVE_TRACK,
+                      trackId: track.id,
+                    });
+                  }}
+                >
+                  <Icon name="trash"></Icon>
+                </button>
+              </div>
             </div>
           );
         })}

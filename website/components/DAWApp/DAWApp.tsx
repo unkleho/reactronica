@@ -565,6 +565,36 @@ function reducer(state, action) {
         }),
       };
 
+    case types.TOGGLE_TRACK_MUTE:
+      return {
+        ...state,
+        tracks: state.tracks.map((track) => {
+          if (track.id === action.trackId) {
+            return {
+              ...track,
+              mute: !track.mute,
+            };
+          }
+
+          return track;
+        }),
+      };
+
+    case types.TOGGLE_TRACK_SOLO:
+      return {
+        ...state,
+        tracks: state.tracks.map((track) => {
+          if (track.id === action.trackId) {
+            return {
+              ...track,
+              solo: !track.solo,
+            };
+          }
+
+          return track;
+        }),
+      };
+
     // ------------------------------------------------------------------------
     // EFFECTS
     // ------------------------------------------------------------------------

@@ -97,6 +97,16 @@
   width: fit-content;
 }
 
+// Mute / Solo
+.textButton {
+  margin-right: auto;
+}
+
+.textButtonIsActive {
+  color: var(--colour-secondary);
+  font-weight: 600;
+}
+
 .addTrackButton {
   display: flex;
   margin-top: var(--baseline-half);
