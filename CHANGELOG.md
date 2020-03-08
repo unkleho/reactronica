@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor Track to use `Tone.Channel` instead of `Tone.PanVol`
 - Add Track `mute` and `solo`
 - Update `propTypes`
-- Remove `website` audio files, unsure of rights status
-- Update `stylelint` config
-- Migrate to css files to scss
 
 ## [0.3.2] - 2020-03-03
 

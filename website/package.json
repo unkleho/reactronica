@@ -1,6 +1,6 @@
 {
   "name": "reactronica-website",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "index.js",
   "homepage": "https://reactronica-music-function-state-talk.now.sh/reactconfau2020",
@@ -28,7 +28,7 @@
     "react-dom": "^16.8.6",
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
-    "reactronica": "^0.3.2",
+    "reactronica": "^0.3.3",
     "tone": "^13.4.9",
     "webmidi": "^2.5.1"
   },
