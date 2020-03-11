@@ -41,6 +41,7 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardUp,
 }) => {
   const [steps, setSteps] = React.useState(defaultSteps);
+  const [selectedStepNote, setSelectedStepNote] = React.useState();
 
   // console.log(currentStepIndex, clipId);
 
@@ -115,6 +116,10 @@ const DAWStepsEditor: React.FC<Props> = ({
     return null;
   }
 
+  // --------------------------------------------------------------------------
+  // Handlers
+  // --------------------------------------------------------------------------
+
   const handleStepClick = (note, index) => {
     // Append note to stepRow
     const stepRow = [...(steps[index] ? steps[index] : []), note];
@@ -134,13 +139,33 @@ const DAWStepsEditor: React.FC<Props> = ({
     }
   };
 
+  const handleStepFocus = (note, index) => {
+    const stepNotes = steps[index];
+
+    if (stepNotes) {
+      const stepNote = stepNotes.find((s) => s.name === note);
+
+      setSelectedStepNote(stepNote);
+    } else {
+      setSelectedStepNote(null);
+    }
+  };
+
   const emptyArray = [...new Array(1 + subdivision)];
+
+  const stepNoteName = selectedStepNote && selectedStepNote.name;
+  const stepNoteDuration = selectedStepNote && selectedStepNote.duration;
+  const stepNoteVelocity = selectedStepNote && selectedStepNote.velocity;
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
       {clipName && (
         <div className={css.info}>
-          <p>{clipName}</p>
+          <p>
+            {clipName} {stepNoteName && <span>{stepNoteName}</span>}{' '}
+            {stepNoteDuration && <span>{stepNoteDuration}</span>}
+            {stepNoteVelocity && <span>{stepNoteVelocity}</span>}
+          </p>
         </div>
       )}
 
@@ -220,6 +245,9 @@ const DAWStepsEditor: React.FC<Props> = ({
                     ].join(' ')}
                     onClick={() => {
                       handleStepClick({ name: note, duration: 0.5 }, index);
+                    }}
+                    onFocus={() => {
+                      handleStepFocus(note, index);
                     }}
                     key={columnIndex}
                     data-testid={dataTestId}
