@@ -41,7 +41,9 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardUp,
 }) => {
   const [steps, setSteps] = React.useState(defaultSteps);
-  const [selectedStepNote, setSelectedStepNote] = React.useState();
+  // const [selectedStepNote, setSelectedStepNote] = React.useState();
+  const [selectedStepIndex, setSelectedStepIndex] = React.useState();
+  const [selectedStepNoteName, setSelectedStepNoteName] = React.useState();
 
   // console.log(currentStepIndex, clipId);
 
@@ -139,23 +141,65 @@ const DAWStepsEditor: React.FC<Props> = ({
     }
   };
 
-  const handleStepFocus = (note, index) => {
+  const handleStepFocus = (noteName, index) => {
     const stepNotes = steps[index];
 
     if (stepNotes) {
-      const stepNote = stepNotes.find((s) => s.name === note);
+      // const stepNote = stepNotes.find((s) => s.name === note);
 
-      setSelectedStepNote(stepNote);
+      // setSelectedStepNote({ ...stepNote, index });
+      setSelectedStepNoteName(noteName);
+      setSelectedStepIndex(index);
     } else {
-      setSelectedStepNote(null);
+      // setSelectedStepNote(null);
+
+      setSelectedStepNoteName(null);
+      setSelectedStepIndex(null);
     }
+  };
+
+  const handleStepDurationChange = (event) => {
+    const newDuration = event.target.value;
+
+    const newSteps = steps.map((stepNotes, index) => {
+      if (index === selectedStepIndex) {
+        return stepNotes.map((stepNote) => {
+          if (stepNote.name === selectedStepNoteName) {
+            return {
+              ...stepNote,
+              duration: newDuration,
+            };
+          }
+
+          return stepNote;
+        });
+      }
+
+      return stepNotes;
+    });
+
+    setSteps(newSteps);
   };
 
   const emptyArray = [...new Array(1 + subdivision)];
 
-  const stepNoteName = selectedStepNote && selectedStepNote.name;
-  const stepNoteDuration = selectedStepNote && selectedStepNote.duration;
-  const stepNoteVelocity = selectedStepNote && selectedStepNote.velocity;
+  const selectedStepNotes = steps[selectedStepIndex];
+  const selectedStepNote =
+    (selectedStepNotes &&
+      selectedStepNotes.find(
+        (stepNote) => stepNote.name === selectedStepNoteName,
+      )) ||
+    {};
+
+  console.log(selectedStepNotes, selectedStepNoteName);
+
+  const stepNoteName = selectedStepNoteName;
+  const stepNoteDuration = selectedStepNote.duration;
+  const stepNoteVelocity = selectedStepNote.velocity;
+
+  // const stepNoteName = selectedStepNote && selectedStepNote.name;
+  // const stepNoteDuration = selectedStepNote && selectedStepNote.duration;
+  // const stepNoteVelocity = selectedStepNote && selectedStepNote.velocity;
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
@@ -163,7 +207,17 @@ const DAWStepsEditor: React.FC<Props> = ({
         <div className={css.info}>
           <p>
             {clipName} {stepNoteName && <span>{stepNoteName}</span>}{' '}
-            {stepNoteDuration && <span>{stepNoteDuration}</span>}
+            {stepNoteDuration && (
+              <span>
+                <input
+                  type="text"
+                  value={stepNoteDuration}
+                  onChange={(event) =>
+                    handleStepDurationChange(event, selectedStepNote)
+                  }
+                />
+              </span>
+            )}
             {stepNoteVelocity && <span>{stepNoteVelocity}</span>}
           </p>
         </div>
