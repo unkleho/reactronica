@@ -18,7 +18,7 @@ type Props = {
   endNote?: string;
   disableScrollIntoView?: boolean;
   className?: string;
-  onStepEditorClick?: (
+  onStepEditorChange?: (
     steps: StepNoteType[][],
   ) => // stepNote: StepNoteType,
   // index: number,
@@ -39,7 +39,7 @@ const initialState: State = {
   selectedStepIndex: null,
 };
 
-const reducer = produce((draft: Draft<State>, action) => {
+const reducer = produce((draft: State, action) => {
   switch (action.type) {
     case types.SET_LOCAL_STEPS: {
       draft.localSteps = action.localSteps;
@@ -57,15 +57,12 @@ const reducer = produce((draft: Draft<State>, action) => {
     case types.SET_SELECTED_STEP_NOTE_DURATION: {
       const { selectedStepIndex, selectedStepNoteName } = draft;
 
-      // const stepNotes = draft.localSteps[selectedStepIndex];
-      const stepNoteIndex = draft.localSteps[selectedStepIndex].findIndex(
-        (stepNote) => {
-          return (stepNote.name = selectedStepNoteName);
-        },
-      );
+      const stepNotes = draft.localSteps[selectedStepIndex];
+      const stepNoteIndex = stepNotes.findIndex((stepNote) => {
+        return stepNote.name === selectedStepNoteName;
+      });
 
-      draft.localSteps[selectedStepIndex][stepNoteIndex].duration =
-        action.duration;
+      stepNotes[stepNoteIndex].duration = action.duration;
 
       break;
     }
@@ -75,12 +72,10 @@ const reducer = produce((draft: Draft<State>, action) => {
 
       const stepNotes = draft.localSteps[selectedStepIndex];
       const stepNoteIndex = stepNotes.findIndex((stepNote) => {
-        return (stepNote.name = selectedStepNoteName);
+        return stepNote.name === selectedStepNoteName;
       });
 
       stepNotes[stepNoteIndex].velocity = parseInt(action.velocity);
-      // NOTE: Not sure if this is the best idea, feel like selectedStepNote should be derived
-      // selectedStepNote.velocity = parseInt(action.velocity);
 
       break;
     }
@@ -106,7 +101,7 @@ const DAWStepsEditor: React.FC<Props> = ({
   endNote = 'B4',
   disableScrollIntoView = false,
   className,
-  onStepEditorClick,
+  onStepEditorChange,
   onKeyboardDown,
   onKeyboardUp,
 }) => {
@@ -116,8 +111,6 @@ const DAWStepsEditor: React.FC<Props> = ({
   const selectedStepNote =
     localSteps[selectedStepIndex] &&
     localSteps[selectedStepIndex].find((s) => s.name === selectedStepNoteName);
-
-  console.log(selectedStepNote);
 
   // --------------------------------------------------------------------------
   // Set up refs for keyboard noteNames
@@ -153,14 +146,14 @@ const DAWStepsEditor: React.FC<Props> = ({
   }, [clipId]);
 
   // --------------------------------------------------------------------------
-  // Run onStepEditorClick callback whenever localSteps change
+  // Run onStepEditorChange callback whenever localSteps change
   // --------------------------------------------------------------------------
 
   React.useEffect(() => {
-    if (typeof onStepEditorClick === 'function') {
-      console.log(localSteps);
+    if (typeof onStepEditorChange === 'function') {
+      // console.log(localSteps);
 
-      onStepEditorClick(localSteps);
+      onStepEditorChange(localSteps);
     }
   }, [JSON.stringify(localSteps)]);
 
@@ -215,12 +208,15 @@ const DAWStepsEditor: React.FC<Props> = ({
   // Handlers
   // --------------------------------------------------------------------------
 
-  const handleStepClick = (note, index) => {
-    const stepNotes = [...(localSteps[index] ? localSteps[index] : []), note];
+  const handleStepClick = (stepNote, index) => {
+    const stepNotes = [
+      ...(localSteps[index] ? localSteps[index] : []),
+      stepNote,
+    ];
     const shouldRemove =
-      stepNotes.filter((s) => s.name === note.name).length >= 2;
+      stepNotes.filter((s) => s.name === stepNote.name).length >= 2;
     const newStepNotes = shouldRemove
-      ? stepNotes.filter((s) => s.name !== note.name)
+      ? stepNotes.filter((s) => s.name !== stepNote.name)
       : stepNotes;
 
     const newSteps = [...localSteps];
@@ -231,9 +227,11 @@ const DAWStepsEditor: React.FC<Props> = ({
       localSteps: newSteps,
     });
 
-    // if (typeof onStepEditorClick === 'function') {
-    //   onStepEditorClick(newSteps);
-    // }
+    dispatch({
+      type: types.SET_SELECTED_STEP_NOTE,
+      index,
+      stepNote,
+    });
   };
 
   const handleStepFocus = (stepNote, index) => {
@@ -251,12 +249,12 @@ const DAWStepsEditor: React.FC<Props> = ({
     });
   };
 
-  const handleStepVelocityChange = (event) => {
-    dispatch({
-      type: types.SET_SELECTED_STEP_NOTE_VELOCITY,
-      velocity: event.target.value,
-    });
-  };
+  // const handleStepVelocityChange = (event) => {
+  //   dispatch({
+  //     type: types.SET_SELECTED_STEP_NOTE_VELOCITY,
+  //     velocity: event.target.value,
+  //   });
+  // };
 
   const emptyArray = [...new Array(1 + subdivision)];
 
@@ -266,21 +264,21 @@ const DAWStepsEditor: React.FC<Props> = ({
         <div className={css.info}>
           <p>
             {clipName}
-            {selectedStepNoteName && (
+            {selectedStepNote && (
               <>
                 <span>{selectedStepNoteName}</span>
 
                 <input
                   type="text"
-                  value={selectedStepNote.duration}
+                  value={selectedStepNote?.duration ?? ''}
                   onChange={(event) => handleStepDurationChange(event)}
                 />
 
-                <input
+                {/* <input
                   type="text"
-                  value={selectedStepNote.velocity}
+                  value={selectedStepNote?.velocity ?? ''}
                   onChange={(event) => handleStepVelocityChange(event)}
-                />
+                /> */}
               </>
             )}{' '}
           </p>

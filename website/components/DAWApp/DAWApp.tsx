@@ -177,10 +177,8 @@ const DAWApp = () => {
         // notes={notes}
         subdivision={16}
         className={css.stepsEditor}
-        onStepEditorClick={(steps) => {
+        onStepEditorChange={(steps) => {
           const notes = convertStepsToNotes(steps);
-
-          // console.log(notes);
 
           dispatch({
             type: types.UPDATE_CLIP,
