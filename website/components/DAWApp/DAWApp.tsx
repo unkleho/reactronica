@@ -171,7 +171,7 @@ const DAWApp = () => {
       <StepsEditor
         clipId={currentClip.id}
         clipName={currentClip.name}
-        defaultSteps={currentSteps}
+        steps={currentSteps}
         currentStepIndex={currentStepIndex}
         stepIndexOffset={stepIndexOffset}
         // notes={notes}
@@ -179,6 +179,8 @@ const DAWApp = () => {
         className={css.stepsEditor}
         onStepEditorClick={(steps) => {
           const notes = convertStepsToNotes(steps);
+
+          // console.log(notes);
 
           dispatch({
             type: types.UPDATE_CLIP,
