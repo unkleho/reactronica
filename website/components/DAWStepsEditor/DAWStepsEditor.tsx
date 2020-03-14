@@ -26,6 +26,28 @@ type Props = {
   onKeyboardUp?: Function;
 };
 
+const initialState = {
+  localSteps: [],
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case types.UPDATE_LOCAL_STEPS: {
+      return {
+        ...state,
+        localSteps: action.localSteps,
+      };
+    }
+
+    default:
+      throw new Error('Action type needed');
+  }
+};
+
+const types = {
+  UPDATE_LOCAL_STEPS: 'UPDATE_LOCAL_STEPS',
+};
+
 const DAWStepsEditor: React.FC<Props> = ({
   clipId,
   clipName,
@@ -42,8 +64,9 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardDown,
   onKeyboardUp,
 }) => {
-  const [localSteps, setLocalSteps] = React.useState([]);
-  // const [focusStepNotes, setSelectedStepNotes] = React.useState([]);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const { localSteps } = state;
+  // const [selectedStepNotes, setSelectedStepNotes] = React.useState([]);
 
   // const [selectedStepIndex, setSelectedStepIndex] = React.useState();
   // const [selectedStepNoteName, setSelectedStepNoteName] = React.useState();
@@ -75,7 +98,23 @@ const DAWStepsEditor: React.FC<Props> = ({
   // --------------------------------------------------------------------------
 
   React.useEffect(() => {
-    setLocalSteps(steps);
+    // const stepsWithIndex = steps.map((stepNotes, index) => {
+    //   if (stepNotes && stepNotes.length > 0) {
+    //     return stepNotes.map((stepNote) => {
+    //       return {
+    //         ...stepNote,
+    //         index,
+    //       };
+    //     });
+    //   }
+
+    //   return stepNotes;
+    // });
+
+    dispatch({
+      type: types.UPDATE_LOCAL_STEPS,
+      localSteps: steps,
+    });
   }, [clipId]);
 
   // --------------------------------------------------------------------------
