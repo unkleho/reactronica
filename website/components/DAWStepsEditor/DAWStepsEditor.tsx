@@ -95,7 +95,6 @@ const DAWStepsEditor: React.FC<Props> = ({
   currentStepIndex,
   stepIndexOffset = 0,
   steps = [],
-  // defaultSteps = [],
   subdivision = 8,
   startNote = 'C2',
   endNote = 'B4',
@@ -151,8 +150,6 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (typeof onStepEditorChange === 'function') {
-      // console.log(localSteps);
-
       onStepEditorChange(localSteps);
     }
   }, [JSON.stringify(localSteps)]);

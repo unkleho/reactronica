@@ -33,11 +33,11 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
       <DAWStepsEditor
         currentStepIndex={currentStepIndex}
         subdivision={8}
-        defaultSteps={currentSteps}
+        steps={currentSteps}
         startNote="C3"
         endNote="B3"
         disableScrollIntoView={true}
-        onStepEditorClick={(steps) => {
+        onStepEditorChange={(steps) => {
           setCurrentSteps(steps);
         }}
       ></DAWStepsEditor>

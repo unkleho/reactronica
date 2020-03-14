@@ -23,6 +23,8 @@ import { useKeyPress } from '../../lib/hooks';
 
 import css from './DAWApp.scss';
 
+const StepIndexContext = React.createContext(null);
+
 const initialState = {
   // --------------------------------------------------------------------------
   // TRANSPORT
@@ -240,12 +242,12 @@ const DAWApp = () => {
               })}
               onStepPlay={(_, index) => {
                 // Improve performance by only dispatching callback for one track
-                // if (trackIndex === 0) {
-                //   dispatch({
-                //     type: types.SET_CURRENT_STEP_INDEX,
-                //     currentStepIndex: index,
-                //   });
-                // }
+                if (trackIndex === 0) {
+                  dispatch({
+                    type: types.SET_CURRENT_STEP_INDEX,
+                    currentStepIndex: index,
+                  });
+                }
               }}
               key={track.id}
             >
@@ -291,7 +293,22 @@ const DAWApp = () => {
   );
 };
 
-export default DAWApp;
+const DAWAppContainer = () => {
+  const [currentStepIndex, setCurrentStepIndex] = React.useState();
+
+  return (
+    <StepIndexContext.Provider
+      value={{
+        currentStepIndex,
+        setCurrentStepIndex,
+      }}
+    >
+      <DAWApp />
+    </StepIndexContext.Provider>
+  );
+};
+
+export default DAWAppContainer;
 
 function appSelector(state) {
   // --------------------------------------------------------------------------
