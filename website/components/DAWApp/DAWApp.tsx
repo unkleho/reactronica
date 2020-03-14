@@ -242,12 +242,12 @@ const DAWApp = () => {
               })}
               onStepPlay={(_, index) => {
                 // Improve performance by only dispatching callback for one track
-                if (trackIndex === 0) {
-                  dispatch({
-                    type: types.SET_CURRENT_STEP_INDEX,
-                    currentStepIndex: index,
-                  });
-                }
+                // if (trackIndex === 0) {
+                //   dispatch({
+                //     type: types.SET_CURRENT_STEP_INDEX,
+                //     currentStepIndex: index,
+                //   });
+                // }
               }}
               key={track.id}
             >

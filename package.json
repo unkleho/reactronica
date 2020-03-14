@@ -17,6 +17,7 @@
     "dev": "npm start"
   },
   "dependencies": {
+    "immer": "^6.0.1",
     "startaudiocontext": "^1.2.1",
     "tone": "^13.4.9"
   },

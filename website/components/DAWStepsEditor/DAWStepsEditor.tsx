@@ -1,5 +1,6 @@
 import React from 'react';
 import { StepNoteType } from 'reactronica';
+import produce, { Draft } from 'immer';
 
 import { midiNotes } from '../../configs/midiConfig';
 
@@ -19,33 +20,78 @@ type Props = {
   className?: string;
   onStepEditorClick?: (
     steps: StepNoteType[][],
-    stepNote: StepNoteType,
-    index: number,
-  ) => void;
+  ) => // stepNote: StepNoteType,
+  // index: number,
+  void;
   onKeyboardDown?: Function;
   onKeyboardUp?: Function;
 };
 
-const initialState = {
-  localSteps: [],
+type State = {
+  localSteps: StepNoteType[][];
+  selectedStepNoteName: string;
+  selectedStepIndex: number;
 };
 
-const reducer = (state, action) => {
+const initialState: State = {
+  localSteps: [],
+  selectedStepNoteName: null,
+  selectedStepIndex: null,
+};
+
+const reducer = produce((draft: Draft<State>, action) => {
   switch (action.type) {
-    case types.UPDATE_LOCAL_STEPS: {
-      return {
-        ...state,
-        localSteps: action.localSteps,
-      };
+    case types.SET_LOCAL_STEPS: {
+      draft.localSteps = action.localSteps;
+
+      break;
     }
 
-    default:
-      throw new Error('Action type needed');
+    case types.SET_SELECTED_STEP_NOTE: {
+      draft.selectedStepNoteName = action.stepNote?.name;
+      draft.selectedStepIndex = action.index;
+
+      break;
+    }
+
+    case types.SET_SELECTED_STEP_NOTE_DURATION: {
+      const { selectedStepIndex, selectedStepNoteName } = draft;
+
+      // const stepNotes = draft.localSteps[selectedStepIndex];
+      const stepNoteIndex = draft.localSteps[selectedStepIndex].findIndex(
+        (stepNote) => {
+          return (stepNote.name = selectedStepNoteName);
+        },
+      );
+
+      draft.localSteps[selectedStepIndex][stepNoteIndex].duration =
+        action.duration;
+
+      break;
+    }
+
+    case types.SET_SELECTED_STEP_NOTE_VELOCITY: {
+      const { selectedStepIndex, selectedStepNoteName } = draft;
+
+      const stepNotes = draft.localSteps[selectedStepIndex];
+      const stepNoteIndex = stepNotes.findIndex((stepNote) => {
+        return (stepNote.name = selectedStepNoteName);
+      });
+
+      stepNotes[stepNoteIndex].velocity = parseInt(action.velocity);
+      // NOTE: Not sure if this is the best idea, feel like selectedStepNote should be derived
+      // selectedStepNote.velocity = parseInt(action.velocity);
+
+      break;
+    }
   }
-};
+});
 
 const types = {
-  UPDATE_LOCAL_STEPS: 'UPDATE_LOCAL_STEPS',
+  SET_LOCAL_STEPS: 'SET_LOCAL_STEPS',
+  SET_SELECTED_STEP_NOTE: 'SET_SELECTED_STEP_NOTE',
+  SET_SELECTED_STEP_NOTE_DURATION: 'SET_SELECTED_STEP_NOTE_DURATION',
+  SET_SELECTED_STEP_NOTE_VELOCITY: 'SET_SELECTED_STEP_NOTE_VELOCITY',
 };
 
 const DAWStepsEditor: React.FC<Props> = ({
@@ -65,11 +111,13 @@ const DAWStepsEditor: React.FC<Props> = ({
   onKeyboardUp,
 }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const { localSteps } = state;
-  // const [selectedStepNotes, setSelectedStepNotes] = React.useState([]);
+  const { localSteps, selectedStepNoteName, selectedStepIndex } = state;
 
-  // const [selectedStepIndex, setSelectedStepIndex] = React.useState();
-  // const [selectedStepNoteName, setSelectedStepNoteName] = React.useState();
+  const selectedStepNote =
+    localSteps[selectedStepIndex] &&
+    localSteps[selectedStepIndex].find((s) => s.name === selectedStepNoteName);
+
+  console.log(selectedStepNote);
 
   // --------------------------------------------------------------------------
   // Set up refs for keyboard noteNames
@@ -98,24 +146,23 @@ const DAWStepsEditor: React.FC<Props> = ({
   // --------------------------------------------------------------------------
 
   React.useEffect(() => {
-    // const stepsWithIndex = steps.map((stepNotes, index) => {
-    //   if (stepNotes && stepNotes.length > 0) {
-    //     return stepNotes.map((stepNote) => {
-    //       return {
-    //         ...stepNote,
-    //         index,
-    //       };
-    //     });
-    //   }
-
-    //   return stepNotes;
-    // });
-
     dispatch({
-      type: types.UPDATE_LOCAL_STEPS,
+      type: types.SET_LOCAL_STEPS,
       localSteps: steps,
     });
   }, [clipId]);
+
+  // --------------------------------------------------------------------------
+  // Run onStepEditorClick callback whenever localSteps change
+  // --------------------------------------------------------------------------
+
+  React.useEffect(() => {
+    if (typeof onStepEditorClick === 'function') {
+      console.log(localSteps);
+
+      onStepEditorClick(localSteps);
+    }
+  }, [JSON.stringify(localSteps)]);
 
   // --------------------------------------------------------------------------
   // If new clipId, work out highest key and scroll to it
@@ -179,84 +226,39 @@ const DAWStepsEditor: React.FC<Props> = ({
     const newSteps = [...localSteps];
     newSteps[index] = newStepNotes;
 
-    setLocalSteps(newSteps);
+    dispatch({
+      type: types.SET_LOCAL_STEPS,
+      localSteps: newSteps,
+    });
 
-    if (typeof onStepEditorClick === 'function') {
-      return onStepEditorClick(newSteps, note, index);
-    }
+    // if (typeof onStepEditorClick === 'function') {
+    //   onStepEditorClick(newSteps);
+    // }
   };
 
-  // const handleStepFocus = (noteName, index) => {
-  //   const stepNotes = localSteps[index] || [];
-  //   const newSelectedStepNotes = stepNotes.filter(
-  //     (stepNote) => stepNote.name === noteName,
-  //   );
+  const handleStepFocus = (stepNote, index) => {
+    dispatch({
+      type: types.SET_SELECTED_STEP_NOTE,
+      index,
+      stepNote,
+    });
+  };
 
-  //   if (newSelectedStepNotes.length > 0) {
-  //     setSelectedStepNotes(newSelectedStepNotes);
-  //   }
+  const handleStepDurationChange = (event) => {
+    dispatch({
+      type: types.SET_SELECTED_STEP_NOTE_DURATION,
+      duration: event.target.value,
+    });
+  };
 
-  //   if (stepNotes) {
-  //     setSelectedStepNoteName(noteName);
-  //     setSelectedStepIndex(index);
-  //   } else {
-  //     setSelectedStepNoteName(null);
-  //     setSelectedStepIndex(null);
-  //   }
-  // };
-
-  // const handleStepDurationChange = (event, focusStepNote, focusIndex) => {
-  //   const newDuration = event.target.value;
-
-  //   const newSteps = localSteps.map((stepNotes, index) => {
-  //     if (index === focusIndex) {
-  //       return stepNotes.map((stepNote) => {
-  //         if (stepNote.name === focusStepNote) {
-  //           return {
-  //             ...stepNote,
-  //             duration: newDuration,
-  //           };
-  //         }
-
-  //         return stepNote;
-  //       });
-  //     }
-
-  //     return stepNotes;
-  //   });
-
-  //   if (typeof onStepEditorClick === 'function') {
-  //     return onStepEditorClick(
-  //       newSteps,
-  //       selectedStepNoteName,
-  //       selectedStepIndex,
-  //     );
-  //   }
-
-  //   // setSteps(newSteps);
-  // };
+  const handleStepVelocityChange = (event) => {
+    dispatch({
+      type: types.SET_SELECTED_STEP_NOTE_VELOCITY,
+      velocity: event.target.value,
+    });
+  };
 
   const emptyArray = [...new Array(1 + subdivision)];
-
-  // const selectedStepNotes = steps[selectedStepIndex];
-  // const selectedStepNote =
-  //   (selectedStepNotes &&
-  //     selectedStepNotes.find(
-  //       (stepNote) => stepNote.name === selectedStepNoteName,
-  //     )) ||
-  //   {};
-
-  // // console.log(selectedStepNotes, selectedStepNoteName);
-
-  // const stepNoteName = selectedStepNoteName;
-  // const stepNoteDuration = selectedStepNote.duration;
-  // const stepNoteVelocity = selectedStepNote.velocity;
-
-  // console.log(focusStepNotes);
-
-  // In the future, we may allow multiple notes to be focussed,
-  // however for now we'll concentrate on just one at a time
-  // const focusStepNote = focusStepNotes[0] || [];
 
   return (
     <div className={[css.stepsEditor, className || ''].join(' ')}>
@@ -264,24 +266,23 @@ const DAWStepsEditor: React.FC<Props> = ({
         <div className={css.info}>
           <p>
             {clipName}
+            {selectedStepNoteName && (
+              <>
+                <span>{selectedStepNoteName}</span>
 
-            {/* {stepNoteName && <span>{stepNoteName}</span>}{' '}
-            {stepNoteDuration && (
-              <span>
                 <input
                   type="text"
-                  value={stepNoteDuration}
-                  // onChange={(event) =>
-                  //   handleStepDurationChange(
-                  //     event,
-                  //     focusStepNote,
-                  //     selectedStepIndex,
-                  //   )
-                  // }
+                  value={selectedStepNote.duration}
+                  onChange={(event) => handleStepDurationChange(event)}
                 />
-              </span>
-            )}
-            {stepNoteVelocity && <span>{stepNoteVelocity}</span>} */}
+
+                <input
+                  type="text"
+                  value={selectedStepNote.velocity}
+                  onChange={(event) => handleStepVelocityChange(event)}
+                />
+              </>
+            )}{' '}
           </p>
         </div>
       )}
@@ -328,11 +329,13 @@ const DAWStepsEditor: React.FC<Props> = ({
               {emptyArray.map((_, columnIndex) => {
                 const index = columnIndex - 1;
 
-                const isCurrent =
+                const currentStepNote =
                   localSteps[index] &&
-                  localSteps[index].findIndex((step) => {
-                    return step.name === noteName;
-                  }) >= 0;
+                  localSteps[index].find(
+                    (stepNote) => stepNote.name === noteName,
+                  );
+
+                const isCurrent = Boolean(currentStepNote);
 
                 const dataTestId = `step-button-${columnIndex - 1}-${rowIndex}${
                   isCurrent ? '-current' : ''
@@ -378,9 +381,9 @@ const DAWStepsEditor: React.FC<Props> = ({
                     onClick={() => {
                       handleStepClick({ name: noteName, duration: 0.5 }, index);
                     }}
-                    // onFocus={() => {
-                    //   handleStepFocus(noteName, index);
-                    // }}
+                    onFocus={() => {
+                      handleStepFocus(currentStepNote, index);
+                    }}
                     key={columnIndex}
                     data-testid={dataTestId}
                   />
