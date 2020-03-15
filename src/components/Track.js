@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import equal from 'fast-deep-equal';
 
 import { SongContext } from './Song';
 import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
 import buildSequencerStep from '../lib/buildSequencerStep';
+import { usePrevious } from '../lib/hooks';
 
 export const TrackContext = React.createContext();
 
@@ -35,6 +37,7 @@ const TrackConsumer = ({
   Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
   */
   const sequencerSteps = steps.map(buildSequencerStep);
+  const prevSequencerSteps = usePrevious(sequencerSteps);
 
   useEffect(() => {
     // -------------------------------------------------------------------------
@@ -74,12 +77,14 @@ const TrackConsumer = ({
 
   useEffect(() => {
     if (sequencer.current) {
-      console.log(sequencerSteps);
+      sequencerSteps.forEach((step, i) => {
+        const isEqual = equal(step.notes, prevSequencerSteps[i].notes);
 
-      sequencer.current.removeAll();
-
-      sequencerSteps.forEach((note, i) => {
-        sequencer.current.add(i, note);
+        // Only update step if difference to before
+        if (!isEqual) {
+          sequencer.current.remove(i);
+          sequencer.current.add(i, step);
+        }
       });
     }
   }, [JSON.stringify(sequencerSteps)]);
