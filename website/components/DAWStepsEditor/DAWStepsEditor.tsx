@@ -1,15 +1,16 @@
 import React from 'react';
 import { StepNoteType } from 'reactronica';
-import produce, { Draft } from 'immer';
+import produce from 'immer';
 
 import { midiNotes } from '../../configs/midiConfig';
 
 import css from './DAWStepsEditor.scss';
+import { StepIndexContext } from '../DAWApp/DAWApp';
 
 type Props = {
   clipId?: string;
   clipName?: string;
-  currentStepIndex?: number;
+  // currentStepIndex?: number;
   stepIndexOffset?: number;
   steps?: StepNoteType[][];
   // defaultSteps?: StepNoteType[][];
@@ -18,11 +19,7 @@ type Props = {
   endNote?: string;
   disableScrollIntoView?: boolean;
   className?: string;
-  onStepEditorChange?: (
-    steps: StepNoteType[][],
-  ) => // stepNote: StepNoteType,
-  // index: number,
-  void;
+  onStepEditorChange?: (steps: StepNoteType[][]) => void;
   onKeyboardDown?: Function;
   onKeyboardUp?: Function;
 };
@@ -89,10 +86,39 @@ const types = {
   SET_SELECTED_STEP_NOTE_VELOCITY: 'SET_SELECTED_STEP_NOTE_VELOCITY',
 };
 
+/**
+ * This component directly accesses `currentStepIndex` from StepIndexContext
+ * as it changes on every step tick. This bypasses other components, making
+ * it better for performance.
+ */
+const StepsHeader = ({ emptyArray, stepIndexOffset }) => {
+  const { currentStepIndex } = React.useContext(StepIndexContext);
+
+  return (
+    <div className={[css.row, css.header].join(' ')}>
+      {emptyArray.map((_, i) => {
+        return (
+          <div
+            className={[
+              css.step,
+              currentStepIndex + 1 === i + stepIndexOffset
+                ? css.stepIsCurrent
+                : '',
+            ].join(' ')}
+            key={`header-${i}`}
+            data-testid={`header`}
+          >
+            {i !== 0 && i + stepIndexOffset}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const DAWStepsEditor: React.FC<Props> = ({
   clipId,
   clipName,
-  currentStepIndex,
   stepIndexOffset = 0,
   steps = [],
   subdivision = 8,
@@ -261,7 +287,8 @@ const DAWStepsEditor: React.FC<Props> = ({
         <div className={css.info}>
           <p>
             {clipName}
-            {selectedStepNote && (
+            {/* Hide this for now, still some performance issues */}
+            {false && selectedStepNote && (
               <>
                 <span>{selectedStepNoteName}</span>
 
@@ -287,24 +314,10 @@ const DAWStepsEditor: React.FC<Props> = ({
         {/* Steps Header */}
         {/* --------------------------------------------------------------- */}
 
-        <div className={[css.row, css.header].join(' ')}>
-          {emptyArray.map((_, i) => {
-            return (
-              <div
-                className={[
-                  css.step,
-                  currentStepIndex + 1 === i + stepIndexOffset
-                    ? css.stepIsCurrent
-                    : '',
-                ].join(' ')}
-                key={`header-${i}`}
-                data-testid={`header`}
-              >
-                {i !== 0 && i + stepIndexOffset}
-              </div>
-            );
-          })}
-        </div>
+        <StepsHeader
+          emptyArray={emptyArray}
+          stepIndexOffset={stepIndexOffset}
+        />
 
         {/* --------------------------------------------------------------- */}
         {/* Keyboard + Steps */}

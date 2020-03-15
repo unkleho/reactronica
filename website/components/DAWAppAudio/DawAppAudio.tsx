@@ -2,8 +2,11 @@ import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
 import { buildSteps } from '../../lib/stepUtils';
+import { StepIndexContext } from '../DAWApp/DAWApp';
 
 const DawAppAudio = ({ isPlaying, bpm, tracks, clips }) => {
+  const { setCurrentStepIndex } = React.useContext(StepIndexContext);
+
   return (
     <Song
       isPlaying={isPlaying}
@@ -44,12 +47,14 @@ const DawAppAudio = ({ isPlaying, bpm, tracks, clips }) => {
             })}
             onStepPlay={(_, index) => {
               // Improve performance by only dispatching callback for one track
-              // if (trackIndex === 0) {
-              //   dispatch({
-              //     type: types.SET_CURRENT_STEP_INDEX,
-              //     currentStepIndex: index,
-              //   });
-              // }
+              if (trackIndex === 0) {
+                setCurrentStepIndex(index);
+
+                // dispatch({
+                //   type: types.SET_CURRENT_STEP_INDEX,
+                //   currentStepIndex: index,
+                // });
+              }
             }}
             key={track.id}
           >

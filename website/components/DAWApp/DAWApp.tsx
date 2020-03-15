@@ -1,5 +1,5 @@
 import React from 'react';
-import { Song, Track, Instrument, Effect } from 'reactronica';
+// import { Song, Track, Instrument, Effect } from 'reactronica';
 import Link from 'next/link';
 
 import App from '../App';
@@ -24,7 +24,7 @@ import { useKeyPress } from '../../lib/hooks';
 import css from './DAWApp.scss';
 import DawAppAudio from '../DAWAppAudio';
 
-const StepIndexContext = React.createContext(null);
+export const StepIndexContext = React.createContext(null);
 
 const initialState = {
   // --------------------------------------------------------------------------
@@ -111,7 +111,7 @@ const DAWApp = () => {
     clips,
     currentTrackId,
     currentTrack,
-    currentStepIndex,
+    // currentStepIndex,
     stepIndexOffset,
     currentSteps,
     tracks,
@@ -175,9 +175,7 @@ const DAWApp = () => {
         clipId={currentClip.id}
         clipName={currentClip.name}
         steps={currentSteps}
-        currentStepIndex={currentStepIndex}
         stepIndexOffset={stepIndexOffset}
-        // notes={notes}
         subdivision={16}
         className={css.stepsEditor}
         onStepEditorChange={(steps) => {
@@ -214,6 +212,9 @@ const DAWApp = () => {
   );
 };
 
+// Ensure DAWApp doesn't rerender if it doesn't need to
+const MemoDAWApp = React.memo(DAWApp);
+
 const DAWAppContainer = () => {
   const [currentStepIndex, setCurrentStepIndex] = React.useState();
 
@@ -224,7 +225,7 @@ const DAWAppContainer = () => {
         setCurrentStepIndex,
       }}
     >
-      <DAWApp />
+      <MemoDAWApp />
     </StepIndexContext.Provider>
   );
 };
