@@ -74,6 +74,8 @@ const TrackConsumer = ({
 
   useEffect(() => {
     if (sequencer.current) {
+      console.log(sequencerSteps);
+
       sequencer.current.removeAll();
 
       sequencerSteps.forEach((note, i) => {

@@ -12,7 +12,8 @@
     "link": "npm link reactronica && npm link ../node_modules/react",
     "deploy:prod": "now --prod",
     "deploy:staging": "now --local-config now.staging.json",
-    "alias:staging": "now alias https://reactronica.unkleho.now.sh staging.reactronica.com"
+    "alias:staging": "now alias https://reactronica.unkleho.now.sh staging.reactronica.com",
+    "postinstall": "npm run link"
   },
   "author": "unkleho",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@mdx-js/loader": "^1.2.2",
     "@next/mdx": "^9.0.3",
     "@zeit/next-sass": "^1.0.1",
+    "immer": "^6.0.1",
     "next": "^9.2.2",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
