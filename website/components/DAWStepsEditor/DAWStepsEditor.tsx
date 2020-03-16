@@ -5,7 +5,7 @@ import produce from 'immer';
 import { midiNotes } from '../../configs/midiConfig';
 
 import css from './DAWStepsEditor.scss';
-import { StepIndexContext } from '../DAWApp/DAWApp';
+import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
 type Props = {
   clipId?: string;

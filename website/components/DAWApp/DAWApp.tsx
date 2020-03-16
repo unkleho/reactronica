@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Song, Track, Instrument, Effect } from 'reactronica';
 import Link from 'next/link';
 
 import App from '../App';
@@ -8,6 +7,7 @@ import StepsEditor from '../DAWStepsEditor';
 import Transport from '../DAWTransport';
 import DAWSequencer from '../DAWSequencer';
 import TrackInfo from '../DAWTrackInfo';
+import DawAppAudio from '../DAWAppAudio';
 
 import * as types from '../../types';
 import {
@@ -20,11 +20,9 @@ import {
 } from '../../data/daw2';
 import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
+import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
 import css from './DAWApp.scss';
-import DawAppAudio from '../DAWAppAudio';
-
-export const StepIndexContext = React.createContext(null);
 
 const initialState = {
   // --------------------------------------------------------------------------

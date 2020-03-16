@@ -2,9 +2,16 @@ import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
 import { buildSteps } from '../../lib/stepUtils';
-import { StepIndexContext } from '../DAWApp/DAWApp';
+import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
-const DawAppAudio = ({ isPlaying, bpm, tracks, clips }) => {
+type Props = {
+  isPlaying?: boolean;
+  bpm?: number;
+  tracks?: any[];
+  clips?: any[];
+};
+
+const DawAppAudio: React.FC<Props> = ({ isPlaying, bpm, tracks, clips }) => {
   const { setCurrentStepIndex } = React.useContext(StepIndexContext);
 
   return (
