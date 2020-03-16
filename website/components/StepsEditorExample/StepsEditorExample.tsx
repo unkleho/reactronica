@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 
 import DAWStepsEditor from '../DAWStepsEditor';
+import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
 type Props = {
   className?: string;
@@ -22,7 +23,7 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
   const [currentStepIndex, setCurrentStepIndex] = React.useState(0);
 
   return (
-    <>
+    <StepIndexContext.Provider value={{ currentStepIndex }}>
       <button onClick={() => setIsPlaying(!isPlaying)}>
         {isPlaying ? 'Stop' : 'Play'}
       </button>
@@ -31,16 +32,15 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
       <br />
 
       <DAWStepsEditor
-        currentStepIndex={currentStepIndex}
         subdivision={8}
-        defaultSteps={currentSteps}
+        steps={currentSteps}
         startNote="C3"
         endNote="B3"
         disableScrollIntoView={true}
-        onStepEditorClick={(steps) => {
+        onStepEditorChange={(steps) => {
           setCurrentSteps(steps);
         }}
-      ></DAWStepsEditor>
+      />
 
       <Song isPlaying={isPlaying}>
         <Track
@@ -52,7 +52,7 @@ const StepsEditorExample: React.FunctionComponent<Props> = ({ className }) => {
           <Instrument type="synth"></Instrument>
         </Track>
       </Song>
-    </>
+    </StepIndexContext.Provider>
   );
 };
 

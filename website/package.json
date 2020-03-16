@@ -20,6 +20,7 @@
     "@mdx-js/loader": "^1.2.2",
     "@next/mdx": "^9.0.3",
     "@zeit/next-sass": "^1.0.1",
+    "immer": "^6.0.1",
     "next": "^9.2.2",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
@@ -28,7 +29,7 @@
     "react-dom": "^16.8.6",
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
-    "reactronica": "^0.3.3",
+    "reactronica": "^0.3.4",
     "tone": "^13.4.9",
     "webmidi": "^2.5.1"
   },
