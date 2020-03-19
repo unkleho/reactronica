@@ -19,7 +19,7 @@
   "dependencies": {
     "fast-deep-equal": "^3.1.1",
     "startaudiocontext": "^1.2.1",
-    "tone": "^13.4.9"
+    "tone": "^13.8.25"
   },
   "peerDependencies": {
     "prop-types": ">=15.7.0",
