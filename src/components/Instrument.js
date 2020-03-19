@@ -157,26 +157,27 @@ const InstrumentConsumer = ({
     notes &&
       notes.forEach((note) => {
         // Check if note is playing
-        const isPlaying =
-          prevNotes && prevNotes.filter((n) => n.name === note.name).length > 0;
+        // const isPlaying =
+        //   prevNotes && prevNotes.filter((n) => n.name === note.name).length > 0;
 
         // Only play note is it isn't already playing
-        if (!isPlaying) {
-          if (note.duration) {
-            instrumentRef.current.triggerAttackRelease(
-              note.name,
-              note.duration,
-              undefined,
-              note.velocity,
-            );
-          } else {
-            instrumentRef.current.triggerAttack(
-              note.name,
-              undefined,
-              note.velocity,
-            );
-          }
+        // if (!isPlaying) {
+
+        if (note.duration) {
+          instrumentRef.current.triggerAttackRelease(
+            note.name,
+            note.duration,
+            undefined,
+            note.velocity,
+          );
+        } else {
+          instrumentRef.current.triggerAttack(
+            note.name,
+            undefined,
+            note.velocity,
+          );
         }
+        // }
       });
 
     // Loop through all previous notes

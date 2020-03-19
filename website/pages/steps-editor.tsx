@@ -2,43 +2,49 @@ import React from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 
 import DAWStepsEditor from '../components/DAWStepsEditor';
+import { StepIndexContext } from '../lib/contexts/StepIndexContext';
 
 const Page = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [stepIndex, setStepIndex] = React.useState(0);
   const [notes, setNotes] = React.useState(null);
   const [steps, setSteps] = React.useState([
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
+    { name: 'C3' },
+    { name: 'C3' },
+    { name: 'C3' },
+    { name: 'C3' },
+    { name: 'C3' },
+    { name: 'C3' },
+    { name: 'C3' },
+    { name: 'C3' },
   ]);
 
   return (
     <div>
-      <DAWStepsEditor
-        defaultSteps={steps}
-        startNote="C3"
-        endNote="B3"
-        onStepEditorClick={(steps, noteName, index) => {
-          setSteps(steps);
-        }}
-        currentStepIndex={stepIndex}
-      ></DAWStepsEditor>
+      <StepIndexContext.Provider value={{ currentStepIndex: 0 }}>
+        <DAWStepsEditor
+          clipId="Melody"
+          steps={steps}
+          startNote="C3"
+          endNote="B3"
+          // onStepsChange={(steps, noteName, index) => {
+          //   setSteps(steps);
+          // }}
+          // currentStepIndex={stepIndex}
+        />
+      </StepIndexContext.Provider>
+
       <button
         onMouseDown={() => {
           setNotes([
             {
               name: 'C3',
+              duration: 1,
             },
           ]);
         }}
         onMouseUp={() => {
-          setNotes(null);
+          // setNotes(null);
         }}
       >
         Play Note
@@ -65,9 +71,9 @@ const Page = () => {
               C3: '/audio/ukulele/Fluke_Uke_060.wav',
               D3: '/audio/ukulele/Fluke_Uke_062.wav',
             }}
-            options={{
-              release: 3,
-            }}
+            // options={{
+            //   release: 3,
+            // }}
           />
         </Track>
       </Song>

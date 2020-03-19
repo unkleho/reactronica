@@ -24,8 +24,7 @@
   "peerDependencies": {
     "prop-types": ">=15.7.0",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "tone": "^13.4.9"
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@testing-library/react": "^9.4.0",

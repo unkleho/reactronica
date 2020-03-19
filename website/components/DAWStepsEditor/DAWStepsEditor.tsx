@@ -339,6 +339,7 @@ const DAWStepsEditor: React.FC<Props> = ({
 
                 const currentStepNote =
                   localSteps[index] &&
+                  localSteps[index].length > 0 &&
                   localSteps[index].find(
                     (stepNote) => stepNote.name === noteName,
                   );
