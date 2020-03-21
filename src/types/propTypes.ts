@@ -3,6 +3,7 @@ import { instruments, effects } from '../config';
 
 export const NoteType = PropTypes.shape({
   name: PropTypes.string.isRequired,
+  duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   velocity: PropTypes.number,
   // pitch: PropTypes.string,
   // octave: PropTypes.number,

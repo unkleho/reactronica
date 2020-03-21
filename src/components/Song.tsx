@@ -12,7 +12,18 @@ export const SongContext = React.createContext<SongContextProps>({
   isPlaying: false,
 });
 
-const Song = ({
+export type SongProps = {
+  isPlaying?: boolean;
+  bpm?: number;
+  swing?: number;
+  subdivision?: string;
+  swingSubdivision?: string;
+  volume?: number;
+  isMuted?: boolean;
+  children: React.ReactNode;
+};
+
+const Song: React.FC<SongProps> = ({
   isPlaying = false,
   bpm = 90,
   // subdivision = '4n',

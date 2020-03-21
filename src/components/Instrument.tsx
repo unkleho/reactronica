@@ -8,11 +8,62 @@ import PropTypes from 'prop-types';
 
 // import { SongContext } from './Song';
 import { TrackContext } from './Track';
-import { NoteType, InstrumentTypes } from '../types/propTypes';
+import {
+  NoteType as PropTypeNoteType,
+  InstrumentTypes,
+} from '../types/propTypes';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 
-const InstrumentConsumer = ({
+type NoteType = {
+  name: string;
+  velocity: number;
+  duration: number | string;
+};
+
+export type InstrumentType =
+  | 'amSynth'
+  | 'duoSynth'
+  | 'fmSynth'
+  | 'membraneSynth'
+  | 'metalSynth'
+  | 'monoSynth'
+  | 'noiseSynth'
+  | 'pluckSynth'
+  | 'synth'
+  | 'sampler';
+
+export interface InstrumentProps {
+  type?: InstrumentType;
+  notes?: NoteType[];
+  /** Should deprecate */
+  options?: any;
+  polyphony?: number;
+  oscillator?: {
+    type: 'triangle' | 'sine' | 'square';
+  };
+  envelope?: {
+    attack?: number;
+    decay?: number;
+    sustain?: number;
+    release?: number;
+  };
+  samples?: {
+    [k: string]: string;
+  };
+  mute: boolean;
+  solo: boolean;
+  onLoad?: Function;
+}
+
+interface InstrumentConsumerProps extends InstrumentProps {
+  volume?: number;
+  pan?: number;
+  effectsChain?: React.ReactNode[];
+  onInstrumentsUpdate?: Function;
+}
+
+const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // <Instrument /> Props
   type = 'synth',
   options,
@@ -226,17 +277,20 @@ const InstrumentConsumer = ({
 
 InstrumentConsumer.propTypes = {
   // <Instrument /> Props
+  // @ts-ignore
   type: InstrumentTypes.isRequired,
   options: PropTypes.object,
-  notes: PropTypes.arrayOf(NoteType), // Currently played notes.
+  // @ts-ignore
+  notes: PropTypes.arrayOf(PropTypeNoteType), // Currently played notes.
   polyphony: PropTypes.number,
-  oscillatorType: PropTypes.oneOf(['triangle', 'sine', 'square']),
-  envelopeAttack: PropTypes.number,
-  envelopeDecay: PropTypes.number,
-  envelopeSustain: PropTypes.number,
-  envelopeRelease: PropTypes.number,
+  // oscillatorType: PropTypes.oneOf(['triangle', 'sine', 'square']),
+  // envelopeAttack: PropTypes.number,
+  // envelopeDecay: PropTypes.number,
+  // envelopeSustain: PropTypes.number,
+  // envelopeRelease: PropTypes.number,
+  // @ts-ignore
   samples: PropTypes.object,
-  trackChannel: PropTypes.object, // An instance of new this.Tone.PanVol()
+  // trackChannel: PropTypes.object, // An instance of new this.Tone.PanVol()
   // <Track /> Props
   volume: PropTypes.number,
   pan: PropTypes.number,
@@ -246,7 +300,15 @@ InstrumentConsumer.propTypes = {
   onInstrumentsUpdate: PropTypes.func,
 };
 
-const Instrument = (props) => {
+const Instrument: React.FC<InstrumentProps> = ({
+  type,
+  options,
+  notes,
+  polyphony,
+  oscillator,
+  envelope,
+  samples,
+}) => {
   const {
     volume,
     pan,
@@ -268,7 +330,14 @@ const Instrument = (props) => {
       solo={solo}
       effectsChain={effectsChain}
       onInstrumentsUpdate={onInstrumentsUpdate}
-      {...props}
+      // {...props}
+      type={type}
+      options={options}
+      notes={notes}
+      polyphony={polyphony}
+      oscillator={oscillator}
+      envelope={envelope}
+      samples={samples}
     />
   );
 };

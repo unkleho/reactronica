@@ -5,7 +5,36 @@ import { TrackContext } from './Track';
 import Tone from '../lib/tone';
 import { EffectTypes } from '../types/propTypes';
 
-const EffectConsumer = ({
+export type EffectType =
+  | 'autoFilter'
+  | 'autoPanner'
+  | 'autoWah'
+  | 'bitCrusher'
+  | 'distortion'
+  | 'feedbackDelay'
+  | 'freeverb'
+  | 'panVol'
+  | 'tremolo';
+
+export interface EffectProps {
+  type?: EffectType;
+  id?: string;
+  delayTime?: string;
+  feedback?: number;
+  wet?: number;
+  low?: number;
+  mid?: number;
+  high?: number;
+  lowFrequency?: number;
+  highFrequency?: number;
+}
+
+export interface EffectConsumerProps extends EffectProps {
+  onAddToEffectsChain?: Function;
+  onRemoveFromEffectsChain?: Function;
+}
+
+const EffectConsumer: React.FC<EffectConsumerProps> = ({
   type,
   id,
   delayTime = '8n',
@@ -156,7 +185,9 @@ const EffectConsumer = ({
 };
 
 EffectConsumer.propTypes = {
+  // @ts-ignore
   type: EffectTypes.isRequired,
+  // @ts-ignore
   id: PropTypes.oneOfType([
     PropTypes.string.isRequired,
     PropTypes.number.isRequired,
@@ -174,7 +205,7 @@ EffectConsumer.propTypes = {
   onRemoveFromEffectsChain: PropTypes.func,
 };
 
-const Effect = (props) => {
+const Effect: React.FC<EffectProps> = (props) => {
   const { onAddToEffectsChain, onRemoveFromEffectsChain } = useContext(
     TrackContext,
   );

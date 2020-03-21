@@ -1,5 +1,19 @@
-export { default as Song } from './components/Song';
-export { default as Track } from './components/Track';
-export { default as Instrument } from './components/Instrument';
-export { default as Effect } from './components/Effect';
+export { default as Song, SongProps } from './components/Song';
+export {
+  default as Track,
+  TrackProps,
+  StepNoteType,
+  StepType,
+} from './components/Track';
+export {
+  default as Instrument,
+  InstrumentProps,
+  InstrumentType,
+} from './components/Instrument';
+export {
+  default as Effect,
+  EffectProps,
+  EffectType,
+} from './components/Effect';
+
 export { default as config } from './config';
