@@ -17,8 +17,8 @@ import { usePrevious } from '../lib/hooks';
 
 type NoteType = {
   name: string;
-  velocity: number;
-  duration: number | string;
+  velocity?: number;
+  duration?: number | string;
 };
 
 export type InstrumentType =
@@ -34,7 +34,7 @@ export type InstrumentType =
   | 'sampler';
 
 export interface InstrumentProps {
-  type?: InstrumentType;
+  type: InstrumentType;
   notes?: NoteType[];
   /** Should deprecate */
   options?: any;
@@ -51,8 +51,8 @@ export interface InstrumentProps {
   samples?: {
     [k: string]: string;
   };
-  mute: boolean;
-  solo: boolean;
+  mute?: boolean;
+  solo?: boolean;
   onLoad?: Function;
 }
 
