@@ -14,7 +14,8 @@ export type EffectType =
   | 'feedbackDelay'
   | 'freeverb'
   | 'panVol'
-  | 'tremolo';
+  | 'tremolo'
+  | 'eq3';
 
 export interface EffectProps {
   type?: EffectType;

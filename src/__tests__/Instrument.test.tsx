@@ -34,6 +34,7 @@ describe('Instrument', () => {
     expect(mockPolySynthConstructor).toBeCalledWith(4, 'Synth', undefined);
     expect(mockPolySynthDispose).toBeCalledTimes(0);
 
+    // @ts-ignore
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockPolySynthDispose).toBeCalledTimes(1);
@@ -57,6 +58,7 @@ describe('Instrument', () => {
       C3: '../audio/file.mp3',
     });
 
+    // @ts-ignore
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockSamplerDispose).toBeCalledTimes(1);

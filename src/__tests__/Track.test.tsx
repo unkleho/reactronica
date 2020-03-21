@@ -62,6 +62,7 @@ describe('Track', () => {
     expect(mockChannelConstructor).toBeCalledWith(0, 0);
     expect(mockPolySynthDispose).toBeCalledTimes(0);
 
+    // @ts-ignore
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockPolySynthDispose).toBeCalledTimes(1);
