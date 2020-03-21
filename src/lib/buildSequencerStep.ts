@@ -1,4 +1,9 @@
-export default function buildSequencerStep(step, i) {
+export type SequencerStep = {
+  notes: any[];
+  index: number;
+};
+
+export default function buildSequencerStep(step, i): SequencerStep {
   if (typeof step === 'string') {
     return {
       notes: [

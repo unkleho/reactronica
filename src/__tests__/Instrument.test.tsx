@@ -262,7 +262,7 @@ describe('Synth', () => {
   });
 
   it('should render synth envelopes', () => {
-    const { rerender } = render(
+    render(
       <Song isPlaying={true}>
         <Track>
           <Instrument type="synth" envelope={{ attack: 0.02 }} />

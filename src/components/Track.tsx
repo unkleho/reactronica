@@ -5,12 +5,45 @@ import equal from 'fast-deep-equal';
 import { SongContext } from './Song';
 import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
-import buildSequencerStep from '../lib/buildSequencerStep';
+import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
 import { usePrevious } from '../lib/hooks';
 
-export const TrackContext = React.createContext();
+export type StepNoteType = {
+  name: string;
+  duration?: number;
+  velocity?: number;
+};
 
-const TrackConsumer = ({
+export type StepType = StepNoteType | StepNoteType[] | string;
+
+export interface TrackProps {
+  steps?: StepType[];
+  volume?: number;
+  pan?: number;
+  mute?: boolean;
+  solo?: boolean;
+  subdivision?: string;
+  effects?: React.ReactNode[];
+  children: React.ReactNode;
+  onStepPlay?: (stepNotes: StepNoteType[], index: number) => void;
+}
+
+export interface TrackConsumerProps extends TrackProps {
+  isPlaying: boolean;
+}
+
+export const TrackContext = React.createContext({
+  volume: 0,
+  pan: 0,
+  mute: false,
+  solo: false,
+  effectsChain: null,
+  onInstrumentsUpdate: null,
+  onAddToEffectsChain: null,
+  onRemoveFromEffectsChain: null,
+});
+
+const TrackConsumer: React.FC<TrackConsumerProps> = ({
   // <Song /> props
   isPlaying,
   // <Track /> props
@@ -26,7 +59,13 @@ const TrackConsumer = ({
 }) => {
   const [effectsChain, setEffectsChain] = useState([]);
   const [instruments, setInstruments] = useState([]);
-  const sequencer = useRef();
+  const sequencer = useRef<{
+    start: Function;
+    stop: Function;
+    remove: Function;
+    add: Function;
+    dispose: Function;
+  }>();
   const instrumentsRef = useRef(instruments);
 
   useEffect(() => {
@@ -37,7 +76,7 @@ const TrackConsumer = ({
   Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
   */
   const sequencerSteps = steps.map(buildSequencerStep);
-  const prevSequencerSteps = usePrevious(sequencerSteps);
+  const prevSequencerSteps: SequencerStep[] = usePrevious(sequencerSteps);
 
   useEffect(() => {
     // -------------------------------------------------------------------------
@@ -47,7 +86,7 @@ const TrackConsumer = ({
     // Start/Stop sequencer!
     if (isPlaying) {
       sequencer.current = new Tone.Sequence(
-        (time, step) => {
+        (_, step) => {
           step.notes.forEach((note) => {
             instrumentsRef.current.map((instrument) => {
               instrument.triggerAttackRelease(
@@ -67,7 +106,7 @@ const TrackConsumer = ({
         subdivision,
       );
 
-      sequencer.current.start(0);
+      sequencer.current?.start(0);
     } else {
       if (sequencer.current) {
         sequencer.current.stop();
@@ -77,12 +116,18 @@ const TrackConsumer = ({
 
   useEffect(() => {
     if (sequencer.current) {
+      // const isEqual = equal(steps.notes, prevSequencerSteps[i].notes);
       sequencerSteps.forEach((step, i) => {
-        const isEqual = equal(steps.notes, prevSequencerSteps[i].notes);
+        const isEqual = equal(
+          sequencerSteps[i].notes,
+          prevSequencerSteps && prevSequencerSteps[i]
+            ? prevSequencerSteps[i].notes
+            : [],
+        );
 
         if (!isEqual) {
-          sequencer.current.remove(i);
-          sequencer.current.add(i, step);
+          sequencer.current?.remove(i);
+          sequencer.current?.add(i, step);
         }
       });
     }
@@ -120,13 +165,13 @@ const TrackConsumer = ({
     <TrackContext.Provider
       value={{
         effectsChain, // Used by Instrument
-        onInstrumentsUpdate: handleInstrumentsUpdate,
-        onAddToEffectsChain: handleAddToEffectsChain,
-        onRemoveFromEffectsChain: handleRemoveFromEffectsChain,
         pan,
         volume,
         mute,
         solo,
+        onInstrumentsUpdate: handleInstrumentsUpdate,
+        onAddToEffectsChain: handleAddToEffectsChain,
+        onRemoveFromEffectsChain: handleRemoveFromEffectsChain,
       }}
     >
       {children}
@@ -139,20 +184,21 @@ TrackConsumer.propTypes = {
   // <Song /> props
   isPlaying: PropTypes.bool,
   // <Track /> props
+  // @ts-ignore
   steps: PropTypes.arrayOf(StepType),
   volume: PropTypes.number,
   pan: PropTypes.number,
   mute: PropTypes.bool,
   solo: PropTypes.bool,
   subdivision: PropTypes.string, // react-music = resolution
-  effects: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.arrayOf(PropTypes.element),
-  ]),
+  // effects: PropTypes.oneOfType([
+  //   PropTypes.node,
+  //   PropTypes.arrayOf(PropTypes.element),
+  // ]),
   onStepPlay: PropTypes.func,
 };
 
-const Track = (props) => {
+const Track: React.FC<TrackProps> = (props) => {
   const { isPlaying } = React.useContext(SongContext);
 
   if (typeof window === 'undefined') {

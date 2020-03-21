@@ -8,6 +8,8 @@ import {
   mockChannelPan,
   mockPolySynthDispose,
   mockSequenceConstructor,
+  mockSequenceAdd,
+  mockSequenceRemove,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -63,5 +65,51 @@ describe('Track', () => {
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockPolySynthDispose).toBeCalledTimes(1);
+  });
+
+  it('should add and remove steps from sequencer', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3', 'D3']}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSequenceAdd).toHaveBeenLastCalledWith(1, {
+      index: 1,
+      notes: [{ name: 'D3' }],
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3', 'D3', [{ name: 'C3' }]]}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSequenceAdd).toHaveBeenLastCalledWith(2, {
+      index: 2,
+      notes: [{ name: 'C3' }],
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3', null, [{ name: 'C3' }]]}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSequenceRemove).toHaveBeenLastCalledWith(1);
   });
 });

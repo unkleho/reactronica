@@ -30,10 +30,22 @@ const InstrumentConsumer = ({
   effectsChain,
   onInstrumentsUpdate,
 }) => {
-  const instrumentRef = useRef();
+  const instrumentRef = useRef<
+    Partial<{
+      curve: number;
+      release: number;
+      triggerAttack: Function;
+      triggerAttackRelease: Function;
+      triggerRelease: Function;
+      set: Function;
+      chain: Function;
+      dispose: Function;
+      disconnect: Function;
+    }>
+  >();
   // const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
   const trackChannelBase = useRef(new Tone.Channel(volume, pan));
-  const prevNotes = usePrevious(notes);
+  const prevNotes: any[] = usePrevious(notes);
 
   // -------------------------------------------------------------------------
   // INSTRUMENT TYPE

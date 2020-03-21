@@ -20,9 +20,10 @@ describe('Effect', () => {
         <Track
           steps={['C3']}
           // TODO: Remove need for key and id prop
-          effects={<Effect type="autoFilter" id="effect-1" />}
+          // effects={}
         >
           <Instrument type="synth" />
+          <Effect type="autoFilter" id="effect-1" />
         </Track>
       </Song>,
     );
@@ -38,14 +39,16 @@ describe('Effect', () => {
       <Song isPlaying={true}>
         <Track
           steps={['C3']}
-          effects={
-            <>
-              <Effect type="autoFilter" id="effect-1" />
-              <Effect type="autoPanner" id="effect-2" />
-            </>
-          }
+          // effects={
+          //   <>
+          //     <Effect type="autoFilter" id="effect-1" />
+          //     <Effect type="autoPanner" id="effect-2" />
+          //   </>
+          // }
         >
           <Instrument type="synth" />
+          <Effect type="autoFilter" id="effect-1" />
+          <Effect type="autoPanner" id="effect-2" />
         </Track>
       </Song>,
     );
@@ -62,13 +65,14 @@ describe('Effect', () => {
       <Song isPlaying={true}>
         <Track
           steps={['C3']}
-          effects={
-            <>
-              <Effect type="autoPanner" id="effect-2" />
-            </>
-          }
+          // effects={
+          //   <>
+          //     <Effect type="autoPanner" id="effect-2" />
+          //   </>
+          // }
         >
           <Instrument type="synth" />
+          <Effect type="autoPanner" id="effect-2" />
         </Track>
       </Song>,
     );

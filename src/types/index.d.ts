@@ -1,3 +1,7 @@
+declare module 'tone';
+
+declare module 'startaudiocontext';
+
 declare module 'reactronica' {
   import * as React from 'react';
 

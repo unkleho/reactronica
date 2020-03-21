@@ -19,7 +19,36 @@ const EffectConsumer = ({
   onAddToEffectsChain,
   onRemoveFromEffectsChain,
 }) => {
-  const effect = useRef();
+  const effect = useRef<{
+    id: string | number;
+    feedback?: {
+      value: number;
+    };
+    delay?: {
+      value: number;
+    };
+    delayTime?: {
+      value: string;
+    };
+    wet?: {
+      value: number;
+    };
+    low?: {
+      value: number;
+    };
+    mid?: {
+      value: number;
+    };
+    high?: {
+      value: number;
+    };
+    lowFrequency?: {
+      value: number;
+    };
+    highFrequency?: {
+      value: number;
+    };
+  }>();
 
   useEffect(() => {
     // console.log('<Effect /> mount');
