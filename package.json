@@ -2,7 +2,10 @@
   "name": "reactronica",
   "version": "0.3.5",
   "description": "React components for making music",
-  "author": "unkleho",
+  "author": {
+    "name": "Kaho Cheung",
+    "url": "https://twitter.com/unkleho"
+  },
   "license": "MIT",
   "repository": "https://github.com/unkleho/reactronica",
   "main": "dist/index.js",
