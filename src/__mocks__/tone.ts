@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Tone JS Mock
  *
@@ -272,6 +274,8 @@ class EQ3 {
 // ----------------------------------------------------------------------------
 
 export const mockSequenceConstructor = jest.fn();
+export const mockSequenceAdd = jest.fn();
+export const mockSequenceRemove = jest.fn();
 
 class Sequence {
   constructor(callback, steps) {
@@ -279,7 +283,8 @@ class Sequence {
 
     this.start = jest.fn();
     this.stop = jest.fn();
-    this.add = jest.fn();
+    this.add = mockSequenceAdd;
+    this.remove = mockSequenceRemove;
     this.removeAll = jest.fn();
     this.dispose = jest.fn();
   }

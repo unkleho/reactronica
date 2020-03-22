@@ -4,12 +4,29 @@ import StartAudioContext from 'startaudiocontext';
 
 import Tone from '../lib/tone';
 
-export const SongContext = React.createContext();
+type SongContextProps = {
+  isPlaying: boolean;
+};
 
-const Song = ({
+export const SongContext = React.createContext<SongContextProps>({
+  isPlaying: false,
+});
+
+export type SongProps = {
+  isPlaying?: boolean;
+  bpm?: number;
+  swing?: number;
+  subdivision?: string;
+  swingSubdivision?: string;
+  volume?: number;
+  isMuted?: boolean;
+  children: React.ReactNode;
+};
+
+const Song: React.FC<SongProps> = ({
   isPlaying = false,
   bpm = 90,
-  // subdivision= '4n',
+  // subdivision = '4n',
   swing = 0,
   swingSubdivision = '8n',
   volume = 0,
