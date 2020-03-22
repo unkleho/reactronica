@@ -14,7 +14,10 @@
     "deploy:staging": "now --local-config now.staging.json",
     "alias:staging": "now alias https://reactronica.unkleho.now.sh staging.reactronica.com"
   },
-  "author": "unkleho",
+  "author": {
+    "name": "Kaho Cheung",
+    "website": "https://twitter.com/unkleho"
+  },
   "license": "ISC",
   "dependencies": {
     "@mdx-js/loader": "^1.2.2",
@@ -29,8 +32,7 @@
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
-    "reactronica": "^0.3.4",
-    "tone": "^13.4.9",
+    "reactronica": "^0.4.0-canary.0",
     "webmidi": "^2.5.1"
   },
   "devDependencies": {
