@@ -1,6 +1,6 @@
 {
   "name": "reactronica",
-  "version": "0.4.0-canary.0",
+  "version": "0.4.0-canary.1",
   "description": "React components for making music",
   "author": {
     "name": "Kaho Cheung",
@@ -27,12 +27,12 @@
   },
   "dependencies": {
     "fast-deep-equal": "^3.1.1",
-    "startaudiocontext": "^1.2.1",
-    "tone": "^13.8.25"
+    "startaudiocontext": "^1.2.1"
   },
   "peerDependencies": {
     "prop-types": ">=15.7.0",
-    "react": ">=16"
+    "react": ">=16",
+    "tone": "^13.8.25"
   },
   "devDependencies": {
     "@testing-library/react": "^10.0.1",
