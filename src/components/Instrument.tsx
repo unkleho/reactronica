@@ -88,6 +88,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       triggerAttack: Function;
       triggerAttackRelease: Function;
       triggerRelease: Function;
+      add: Function;
       set: Function;
       chain: Function;
       dispose: Function;
@@ -189,7 +190,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   }, [oscillator, type]);
 
   // -------------------------------------------------------------------------
-  // VOLUME / PAN
+  // VOLUME / PAN / MUTE / SOLO
   // -------------------------------------------------------------------------
 
   useEffect(() => {
@@ -272,6 +273,36 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     );
   }, [effectsChain]);
 
+  // -------------------------------------------------------------------------
+  // SAMPLES
+  // Run whenever `samples` change, using Tone.Sampler's `add` method to load
+  // more samples after initial mount
+  // -------------------------------------------------------------------------
+
+  useEffect(() => {
+    if (
+      type === 'sampler' &&
+      typeof onLoad === 'function' &&
+      Boolean(samples)
+    ) {
+      // Create an array of promises from `samples`
+      const loadSamplePromises = Object.keys(samples).map((key) => {
+        return new Promise((resolve) => {
+          const sample = samples[key];
+
+          // Pass `resolve` to `onLoad` parameter of Tone.Sampler
+          // When sample loads, this promise will resolve
+          instrumentRef.current.add(key, sample, resolve);
+        });
+      });
+
+      // Once all promises in array resolve, run onLoad callback
+      Promise.all(loadSamplePromises).then((event) => {
+        onLoad(event);
+      });
+    }
+  }, [samples, type]);
+
   return null;
 };
 
@@ -308,6 +339,7 @@ const Instrument: React.FC<InstrumentProps> = ({
   oscillator,
   envelope,
   samples,
+  onLoad,
 }) => {
   const {
     volume,
@@ -324,13 +356,7 @@ const Instrument: React.FC<InstrumentProps> = ({
 
   return (
     <InstrumentConsumer
-      volume={volume}
-      pan={pan}
-      mute={mute}
-      solo={solo}
-      effectsChain={effectsChain}
-      onInstrumentsUpdate={onInstrumentsUpdate}
-      // {...props}
+      // <Instrument /> Props
       type={type}
       options={options}
       notes={notes}
@@ -338,6 +364,14 @@ const Instrument: React.FC<InstrumentProps> = ({
       oscillator={oscillator}
       envelope={envelope}
       samples={samples}
+      onLoad={onLoad}
+      // <Track /> Props
+      volume={volume}
+      pan={pan}
+      mute={mute}
+      solo={solo}
+      effectsChain={effectsChain}
+      onInstrumentsUpdate={onInstrumentsUpdate}
     />
   );
 };
