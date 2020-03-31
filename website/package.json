@@ -9,7 +9,7 @@
     "start": "next start",
     "build": "next build",
     "test": "jest",
-    "link": "npm link reactronica && npm link ../node_modules/react",
+    "link": "npm link reactronica && npm link ../node_modules/react && npm link ../node_modules/react-dom",
     "deploy:prod": "now --prod",
     "deploy:staging": "now --local-config now.staging.json",
     "alias:staging": "now alias https://reactronica.unkleho.now.sh staging.reactronica.com"
