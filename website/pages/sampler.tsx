@@ -16,6 +16,8 @@ const Page = () => {
     { name: 'C3' },
     { name: 'C3' },
   ]);
+  const [key, setKey] = React.useState(0);
+  const [count, setCount] = React.useState(0);
 
   return (
     <div>
@@ -25,6 +27,7 @@ const Page = () => {
             {
               name: 'C3',
               duration: 1,
+              key: Date.now(),
             },
           ]);
         }}
@@ -56,9 +59,28 @@ const Page = () => {
         Load samples: {samplesStatus}
       </button>
 
+      {/* Test React 'key' change */}
+      <button
+        onClick={() => {
+          setKey(key + 1);
+        }}
+      >
+        Update key: {key}
+      </button>
+
+      {/* Test visual render to check if note triggers sound */}
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        Update count: {count}
+      </button>
+
       <Song isPlaying={isPlaying}>
         <Track steps={steps}>
           <Instrument
+            key={key}
             type="sampler"
             notes={notes}
             samples={samples}
