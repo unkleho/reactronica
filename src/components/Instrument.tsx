@@ -19,6 +19,8 @@ type NoteType = {
   name: string;
   velocity?: number;
   duration?: number | string;
+  /** Use unique key to differentiate from same notes, otherwise it won't play */
+  key?: string | number;
 };
 
 export type InstrumentType =
@@ -171,6 +173,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
     return function cleanup() {
       if (instrumentRef.current) {
+        console.log('dispose');
+
         instrumentRef.current.dispose();
       }
     };
@@ -221,27 +225,31 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     notes &&
       notes.forEach((note) => {
         // Check if note is playing
-        // const isPlaying =
-        //   prevNotes && prevNotes.filter((n) => n.name === note.name).length > 0;
+        const isPlaying =
+          prevNotes &&
+          prevNotes.filter((prevNote) => {
+            // Check both note name and unique key.
+            // Key helps differentiate same notes, otherwise it won't trigger
+            return prevNote.name === note.name && prevNote.key === note.key;
+          }).length > 0;
 
         // Only play note is it isn't already playing
-        // if (!isPlaying) {
-
-        if (note.duration) {
-          instrumentRef.current.triggerAttackRelease(
-            note.name,
-            note.duration,
-            undefined,
-            note.velocity,
-          );
-        } else {
-          instrumentRef.current.triggerAttack(
-            note.name,
-            undefined,
-            note.velocity,
-          );
+        if (!isPlaying) {
+          if (note.duration) {
+            instrumentRef.current.triggerAttackRelease(
+              note.name,
+              note.duration,
+              undefined,
+              note.velocity,
+            );
+          } else {
+            instrumentRef.current.triggerAttack(
+              note.name,
+              undefined,
+              note.velocity,
+            );
+          }
         }
-        // }
       });
 
     // Loop through all previous notes
@@ -262,8 +270,6 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
-    // console.log('<Instrument />', 'updateEffectsChain', effectsChain);
-
     // NOTE: Using trackChannelBase causes effects to not turn off
     instrumentRef.current.disconnect();
     instrumentRef.current.chain(
@@ -314,11 +320,15 @@ InstrumentConsumer.propTypes = {
   // @ts-ignore
   notes: PropTypes.arrayOf(PropTypeNoteType), // Currently played notes.
   polyphony: PropTypes.number,
-  // oscillatorType: PropTypes.oneOf(['triangle', 'sine', 'square']),
-  // envelopeAttack: PropTypes.number,
-  // envelopeDecay: PropTypes.number,
-  // envelopeSustain: PropTypes.number,
-  // envelopeRelease: PropTypes.number,
+  envelope: PropTypes.shape({
+    attack: PropTypes.number,
+    decay: PropTypes.number,
+    sustain: PropTypes.number,
+    release: PropTypes.number,
+  }),
+  // oscillator: PropTypes.shape({
+  //   type: PropTypes.oneOf(['triangle', 'sine', 'square']),
+  // }),
   // @ts-ignore
   samples: PropTypes.object,
   // trackChannel: PropTypes.object, // An instance of new this.Tone.PanVol()
