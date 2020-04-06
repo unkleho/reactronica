@@ -173,8 +173,6 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
     return function cleanup() {
       if (instrumentRef.current) {
-        console.log('dispose');
-
         instrumentRef.current.dispose();
       }
     };
