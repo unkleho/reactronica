@@ -32,7 +32,7 @@
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
-    "reactronica": "^0.4.0",
+    "reactronica": "^0.4.4",
     "webmidi": "^2.5.1"
   },
   "devDependencies": {
