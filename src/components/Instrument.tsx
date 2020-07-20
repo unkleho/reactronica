@@ -104,10 +104,17 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
   // -------------------------------------------------------------------------
   // CHANNEL
+  // TODO: Consider moving this to <Track>
   // -------------------------------------------------------------------------
 
   useEffect(() => {
     trackChannelBase.current = new Tone.Channel(volume, pan);
+
+    return function cleanup() {
+      if (trackChannelBase.current) {
+        trackChannelBase.current.dispose();
+      }
+    };
   }, []);
 
   // -------------------------------------------------------------------------
