@@ -7,6 +7,7 @@ import {
   mockAutoFilterConstructor,
   mockAutoPannerConstructor,
   mockPolySynthChain,
+  mockChannelConstructor,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -31,7 +32,13 @@ describe('Effect', () => {
     expect(mockAutoFilterConstructor).toBeCalled();
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-1', wet: { value: 1 } },
-      { pan: { value: 0 }, volume: { value: 0 } },
+      {
+        dispose: mockChannelConstructor,
+        mute: undefined,
+        solo: undefined,
+        pan: { value: 0 },
+        volume: { value: 0 },
+      },
       Tone.Master,
     );
 

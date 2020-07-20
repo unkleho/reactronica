@@ -41,6 +41,7 @@ const Transport = {
 export const mockChannelConstructor = jest.fn();
 export const mockChannelVolume = jest.fn();
 export const mockChannelPan = jest.fn();
+export const mockChannelDispose = jest.fn();
 
 class Channel {
   constructor(volume, pan) {
@@ -54,6 +55,7 @@ class Channel {
       value: pan,
     };
 
+    this.dispose = mockChannelDispose;
     // console.log(this.mute);
 
     mockChannelVolume(this.volume.value);
