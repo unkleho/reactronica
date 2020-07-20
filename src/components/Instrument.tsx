@@ -98,8 +98,17 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     }>
   >();
   // const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
-  const trackChannelBase = useRef(new Tone.Channel(volume, pan));
+  // const trackChannelBase = useRef(new Tone.Channel(volume, pan));
+  const trackChannelBase = useRef(null);
   const prevNotes: any[] = usePrevious(notes);
+
+  // -------------------------------------------------------------------------
+  // CHANNEL
+  // -------------------------------------------------------------------------
+
+  useEffect(() => {
+    trackChannelBase.current = new Tone.Channel(volume, pan);
+  }, []);
 
   // -------------------------------------------------------------------------
   // INSTRUMENT TYPE
