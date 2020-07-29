@@ -34,6 +34,19 @@ const Song: React.FC<SongProps> = ({
   children,
 }) => {
   useEffect(() => {
+    document.body.addEventListener(
+      'click',
+      () => {
+        // iOS Web Audio API requires this library.
+        StartAudioContext(Tone.context);
+      },
+      {
+        once: true,
+      },
+    );
+  }, []);
+
+  useEffect(() => {
     Tone.Transport.bpm.value = bpm;
     Tone.Transport.swing = swing;
     Tone.Transport.swingSubdivision = swingSubdivision;
@@ -47,9 +60,6 @@ const Song: React.FC<SongProps> = ({
       Tone.Transport.swingSubdivision = swingSubdivision;
 
       Tone.Transport.start();
-
-      // iOS Web Audio API requires this library.
-      StartAudioContext(Tone.context);
     } else {
       Tone.Transport.stop();
     }
