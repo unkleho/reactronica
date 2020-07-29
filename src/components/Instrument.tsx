@@ -169,7 +169,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
        * `polyphony` prop to 1.
        */
       instrumentRef.current = new Tone.PolySynth(
-        polyphony,
+        // polyphony,
         synth,
         buildSynthOptions({
           oscillator,
@@ -181,7 +181,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     instrumentRef.current.chain(
       ...effectsChain,
       trackChannelBase.current,
-      Tone.Master,
+      Tone.Destination,
     );
 
     // Add this Instrument to Track Context
@@ -289,7 +289,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     instrumentRef.current.chain(
       ...effectsChain,
       trackChannelBase.current,
-      Tone.Master,
+      Tone.Destination,
     );
   }, [effectsChain]);
 

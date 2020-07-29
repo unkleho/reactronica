@@ -39,7 +39,7 @@ describe('Effect', () => {
         pan: { value: 0 },
         volume: { value: 0 },
       },
-      Tone.Master,
+      Tone.Destination,
     );
 
     rerender(
@@ -65,7 +65,7 @@ describe('Effect', () => {
       { id: 'effect-2' },
       { id: 'effect-1', wet: { value: 1 } },
       { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      Tone.Destination,
     );
 
     rerender(
@@ -87,7 +87,7 @@ describe('Effect', () => {
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-2' },
       { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      Tone.Destination,
     );
 
     rerender(
@@ -103,7 +103,7 @@ describe('Effect', () => {
         pan: { value: 0 },
         volume: { value: 0 },
       },
-      Tone.Master,
+      Tone.Destination,
     );
   });
 
@@ -120,7 +120,7 @@ describe('Effect', () => {
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-1', wet: { value: 0.5 } },
       { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      Tone.Destination,
     );
   });
 
@@ -144,7 +144,7 @@ describe('Effect', () => {
         highFrequency: { value: 2500 },
       },
       { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      Tone.Destination,
     );
 
     rerender(
@@ -174,7 +174,7 @@ describe('Effect', () => {
         highFrequency: { value: 3000 },
       },
       { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      Tone.Destination,
     );
   });
 });

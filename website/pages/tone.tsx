@@ -16,9 +16,9 @@ const HomePage = () => {
   useEffect(() => {
     synth.current = new Tone.Synth();
     reverb.current = new Tone.Freeverb();
-    Tone.Master.volume.value = 0;
+    Tone.Destination.volume.value = 0;
 
-    synth.current.chain(reverb.current, Tone.Master);
+    synth.current.chain(reverb.current, Tone.Destination);
     sequence.current = new Tone.Sequence(
       (time, note) => {
         synth.current.triggerAttackRelease(note);

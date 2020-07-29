@@ -10,10 +10,10 @@
  */
 
 // ----------------------------------------------------------------------------
-// Tone.Master
+// Tone.Destination
 // ----------------------------------------------------------------------------
 
-const Master = {
+const Destination = {
   volume: {
     value: 0,
   },
@@ -293,7 +293,7 @@ class Sequence {
 }
 
 const MockTone = {
-  Master,
+  Destination,
   Transport,
   Channel,
   PolySynth,

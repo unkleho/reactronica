@@ -56,11 +56,11 @@ const Song: React.FC<SongProps> = ({
   }, [isPlaying]);
 
   useEffect(() => {
-    Tone.Master.volume.value = volume;
+    Tone.Destination.volume.value = volume;
   }, [volume]);
 
   useEffect(() => {
-    Tone.Master.mute = isMuted;
+    Tone.Destination.mute = isMuted;
   }, [isMuted]);
 
   if (typeof window === 'undefined') {

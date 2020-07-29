@@ -20,8 +20,8 @@ describe('Song', () => {
 
     expect(Tone.Transport.bpm.value).toEqual(100);
     expect(Tone.Transport.start).toBeCalledTimes(0);
-    expect(Tone.Master.volume.value).toEqual(0);
-    expect(Tone.Master.mute).toEqual(true);
+    expect(Tone.Destination.volume.value).toEqual(0);
+    expect(Tone.Destination.mute).toEqual(true);
 
     rerender(
       <Song isPlaying={true} bpm={100} volume={-3} isMuted={false}>
@@ -32,7 +32,7 @@ describe('Song', () => {
     );
 
     expect(Tone.Transport.start).toBeCalledTimes(1);
-    expect(Tone.Master.volume.value).toEqual(-3);
-    expect(Tone.Master.mute).toEqual(false);
+    expect(Tone.Destination.volume.value).toEqual(-3);
+    expect(Tone.Destination.mute).toEqual(false);
   });
 });
