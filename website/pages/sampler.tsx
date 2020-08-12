@@ -56,7 +56,19 @@ const Page = () => {
           });
         }}
       >
-        Load samples: {samplesStatus}
+        Load ukulele samples: {samplesStatus}
+      </button>
+
+      {/* Test different samples loaded callback */}
+      <button
+        onClick={() => {
+          setSetSamplesStatus('loading');
+          setSetSamples({
+            C3: '/audio/vocals/NOL_143_vocal_chop_jacuzzi_Am.wav',
+          });
+        }}
+      >
+        Load vox samples: {samplesStatus}
       </button>
 
       {/* Test React 'key' change */}
