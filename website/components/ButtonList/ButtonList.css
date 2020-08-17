@@ -1,0 +1,37 @@
+@import '../../styles/variables.css';
+
+.button-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0 0 var(--spacing-lg);
+  padding: 0;
+  font-size: var(--font-size-sm);
+}
+
+.button-list__item {
+  margin: 4px;
+  padding: var(--spacing-sm);
+  border-radius: 2em;
+  min-width: 3em;
+  cursor: pointer;
+  text-align: center;
+  color: var(--colour-grey-lighter);
+  border: 2px solid var(--colour-black);
+  background-color: var(--colour-black);
+}
+
+.button-list__item--active {
+  color: var(--colour-white);
+  background-color: var(--colour-primary);
+}
+
+/* TODO: */
+
+/* .button-list__item--tonic {
+  background-color: var(--colour-secondary);
+}
+
+.button-list__item--tonic {
+  border: 6px solid var(--colour-primary-light);
+} */
