@@ -5,7 +5,7 @@ import Tab from '../Tab';
 import { exampleUkuleleGrid } from '../../data/ukulele';
 import { gridToSamplerSteps } from '../../lib/tabUtils';
 
-import css from './TabExample.scss';
+import css from './TabExample.module.scss';
 
 const TabExample = () => {
   const [grid, setGrid] = React.useState(exampleUkuleleGrid);

@@ -8,7 +8,7 @@ import {
 } from '../../lib/tabUtils';
 import { instrumentConfig } from '../../configs';
 
-import css from './Tab.scss';
+import css from './Tab.module.scss';
 
 const Tab = ({
   grid = [],

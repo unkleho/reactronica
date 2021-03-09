@@ -10,6 +10,9 @@ import CodeBlock from '../components/CodeBlock';
 import '../node_modules/normalize.css/normalize.css';
 import '../styles/base.scss';
 
+import '../components/CodeBlock/CodeBlock.scss';
+import '../components/CodeBlock/CodeBlock.scss';
+
 class MyApp extends NextApp {
   render() {
     const { Component, pageProps, router } = this.props;

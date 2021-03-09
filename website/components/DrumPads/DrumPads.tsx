@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Song, Track, Instrument } from 'reactronica';
 
-import css from './DrumPads.scss';
+import css from './DrumPads.module.scss';
 
 type Props = {
   className?: string;

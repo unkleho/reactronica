@@ -22,7 +22,7 @@ import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
 import { useKeyPress } from '../../lib/hooks';
 import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
-import css from './DAWApp.scss';
+import css from './DAWApp.module.scss';
 
 const initialState = {
   // --------------------------------------------------------------------------

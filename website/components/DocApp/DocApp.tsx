@@ -3,7 +3,7 @@ import * as React from 'react';
 import App from '../App';
 import ReactronicaLogo from '../ReactronicaLogo';
 
-import css from './DocApp.scss';
+import css from './DocApp.module.scss';
 
 type Props = {
   className?: string;

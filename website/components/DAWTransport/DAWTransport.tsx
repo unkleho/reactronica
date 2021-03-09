@@ -4,7 +4,7 @@ import Icon from '../Icon';
 
 import * as types from '../../types';
 
-import css from './DAWTransport.scss';
+import css from './DAWTransport.module.scss';
 
 type Props = {
   isPlaying?: boolean;

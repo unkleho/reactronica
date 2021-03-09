@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Select from 'react-select';
 
-import css from './Select.scss';
+import css from './Select.module.scss';
 
 type Props = {
   value?: string | number;

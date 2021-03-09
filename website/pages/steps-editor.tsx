@@ -24,6 +24,7 @@ const Page = () => {
       <StepIndexContext.Provider value={{ currentStepIndex: 0 }}>
         <DAWStepsEditor
           clipId="Melody"
+          // @ts-ignore
           steps={steps}
           startNote="C3"
           endNote="B3"

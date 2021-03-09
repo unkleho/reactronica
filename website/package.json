@@ -24,7 +24,7 @@
     "@next/mdx": "^9.0.3",
     "@zeit/next-sass": "^1.0.1",
     "immer": "^6.0.1",
-    "next": "^9.2.2",
+    "next": "^10.0.8",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
     "prism-react-renderer": "^0.1.7",
@@ -53,7 +53,7 @@
     "stylelint-config-standard": "^18.3.0",
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.14.2",
-    "typescript": "^3.5.3",
+    "typescript": "^4.2.3",
     "webpack-filter-warnings-plugin": "^1.2.1"
   }
 }

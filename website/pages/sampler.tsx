@@ -3,7 +3,10 @@ import { Song, Track, Instrument } from 'reactronica';
 
 const Page = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [samples, setSetSamples] = React.useState();
+  const [samples, setSetSamples] = React.useState<{
+    C3?: string;
+    D3?: string;
+  }>();
   const [samplesStatus, setSetSamplesStatus] = React.useState('idle');
   const [notes, setNotes] = React.useState(null);
   const [steps] = React.useState([
