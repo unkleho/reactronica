@@ -25,7 +25,6 @@
     "@zeit/next-sass": "^1.0.1",
     "immer": "^6.0.1",
     "next": "^10.0.8",
-    "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
     "prism-react-renderer": "^0.1.7",
     "react": "^16.13.1",
@@ -33,6 +32,7 @@
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
     "reactronica": "^0.4.4",
+    "sass": "^1.32.8",
     "webmidi": "^2.5.1"
   },
   "devDependencies": {

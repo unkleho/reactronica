@@ -8,6 +8,16 @@ Website for [reactronica.com](https://reactronica.com), with documentation and e
 $ npm install
 ```
 
+## Deployment
+
+```bash
+$ npm run deploy:staging
+# or
+$ npm run deploy:prod
+```
+
+Some audio samples are Git ignored in this repo, so deployments are done using the above commands, rather than using Vercel's GitHub integration.
+
 ## Development
 
 ```bash
@@ -18,5 +28,3 @@ $ npm link reactronica
 # Stop invariant error
 $ npm link ../node_modules/react
 ```
-
-Test
