@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade to Next 10
 - Convert from `.scss` to `.module.scss`
+- Upgrade React to 17.0.1
 
 ## [0.0.6] - 2020-07-20
 
