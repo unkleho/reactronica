@@ -23,7 +23,7 @@
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^10.0.8",
     "@zeit/next-sass": "^1.0.1",
-    "immer": "^6.0.1",
+    "immer": "^8.0.1",
     "next": "^10.0.8",
     "normalize.css": "^8.0.1",
     "prism-react-renderer": "^0.1.7",
