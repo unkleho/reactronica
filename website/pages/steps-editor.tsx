@@ -1,23 +1,30 @@
 import React from 'react';
-import { Song, Track, Instrument } from 'reactronica';
+import { Song, Track, Instrument, StepNoteType } from 'reactronica';
 
 import DAWStepsEditor from '../components/DAWStepsEditor';
+import SamplerInstrument from '../components/SamplerInstrument';
 import { StepIndexContext } from '../lib/contexts/StepIndexContext';
 
 const Page = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [stepIndex, setStepIndex] = React.useState(0);
   const [notes, setNotes] = React.useState(null);
-  const [steps, setSteps] = React.useState([
-    { name: 'C3' },
-    { name: 'C3' },
-    { name: 'C3' },
-    { name: 'C3' },
-    { name: 'C3' },
-    { name: 'C3' },
-    { name: 'C3' },
-    { name: 'C3' },
+  const [steps, setSteps] = React.useState<StepNoteType[][]>([
+    [
+      { name: 'D3', duration: 8, velocity: 1 },
+      { name: 'C3', duration: 8, velocity: 0 },
+      { name: 'E4', duration: 8 },
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
   ]);
+
+  console.log(stepIndex);
 
   return (
     <div>
@@ -30,6 +37,7 @@ const Page = () => {
           // onStepsChange={(steps, noteName, index) => {
           //   setSteps(steps);
           // }}
+
           // currentStepIndex={stepIndex}
         />
       </StepIndexContext.Provider>
@@ -44,7 +52,7 @@ const Page = () => {
           ]);
         }}
         onMouseUp={() => {
-          // setNotes(null);
+          setNotes(null);
         }}
       >
         Play Note
@@ -57,24 +65,29 @@ const Page = () => {
       >
         {isPlaying ? 'Stop' : 'Play'}
       </button>
-      <Song isPlaying={isPlaying}>
+      <Song isPlaying={isPlaying} bpm={70}>
         <Track
+          volume={1}
           steps={steps}
           onStepPlay={(_, index) => {
             setStepIndex(index);
           }}
         >
-          <Instrument
+          <SamplerInstrument notes={notes} />
+          {/* <Instrument
             type="sampler"
             notes={notes}
             samples={{
-              C3: '/audio/ukulele/Fluke_Uke_060.wav',
-              D3: '/audio/ukulele/Fluke_Uke_062.wav',
+              C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
+              D3: '/audio/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
+              E3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
+              // C3: '/audio/ukulele/Fluke_Uke_060.wav',
+              // D3: '/audio/ukulele/Fluke_Uke_062.wav',
             }}
             // options={{
             //   release: 3,
             // }}
-          />
+          /> */}
         </Track>
       </Song>
     </div>

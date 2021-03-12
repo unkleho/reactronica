@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import css from './Icon.scss';
+import css from './Icon.module.scss';
 
 type Props = {
   name: 'add' | 'play' | 'remove' | 'square' | 'trash';

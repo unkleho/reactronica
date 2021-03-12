@@ -1,9 +1,7 @@
-import css from '../styles/variables.css';
-
 const theme = {
   plain: {
-    backgroundColor: css['colour-black'],
-    color: css['colour-orange'],
+    backgroundColor: 'var(--colour-black)',
+    color: 'var(--colour-orange)',
   },
   styles: [
     {
@@ -21,25 +19,25 @@ const theme = {
     {
       types: ['operator'],
       style: {
-        color: css['colour-purple'],
+        color: 'var(--colour-purple)',
       },
     },
     {
       types: ['number'],
       style: {
-        color: css['colour-yellow'],
+        color: 'var(--colour-yellow)',
       },
     },
     {
       types: ['tag'],
       style: {
-        color: css['colour-yellow'],
+        color: 'var(--colour-yellow)',
       },
     },
     {
       types: ['property', 'function'],
       style: {
-        color: css['colour-blue'],
+        color: 'var(--colour-blue)',
       },
     },
     {
@@ -51,13 +49,13 @@ const theme = {
     {
       types: ['attr-name'],
       style: {
-        color: css['colour-yellow-dark'],
+        color: 'var(--colour-yellow-dark)',
       },
     },
     {
       types: ['string'],
       style: {
-        color: css['colour-green'],
+        color: 'var(--colour-green)',
       },
     },
     {
@@ -77,7 +75,7 @@ const theme = {
         'variable',
       ],
       style: {
-        color: css['colour-pink'],
+        color: 'var(--colour-pink)',
       },
     },
     {

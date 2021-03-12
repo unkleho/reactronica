@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import useAnalytics from '../../lib/hooks/useAnalytics';
 
-import css from './App.scss';
+import css from './App.module.scss';
 
 type Props = {
   className?: string;

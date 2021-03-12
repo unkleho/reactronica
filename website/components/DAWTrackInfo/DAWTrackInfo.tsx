@@ -6,7 +6,7 @@ import Icon from '../Icon';
 
 import * as types from '../../types';
 
-import css from './DAWTrackInfo.scss';
+import css from './DAWTrackInfo.module.scss';
 
 type Props = {
   currentTrack?: {

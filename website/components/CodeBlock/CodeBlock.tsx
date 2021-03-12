@@ -2,7 +2,7 @@ import React from 'react';
 import Highlight, { defaultProps } from 'prism-react-renderer';
 
 import theme from '../../lib/codeTheme';
-import './CodeBlock.scss';
+// import './CodeBlock.scss';
 
 const CodeBlock = ({ children, className }) => {
   const language = className.replace(/language-/, '');
@@ -10,6 +10,7 @@ const CodeBlock = ({ children, className }) => {
   return (
     <Highlight
       {...defaultProps}
+      // @ts-ignore
       theme={theme}
       code={children}
       language={language}

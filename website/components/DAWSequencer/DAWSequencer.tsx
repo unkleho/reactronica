@@ -9,7 +9,7 @@ import DAWPlayhead from '../DAWPlayhead';
 
 import { Clip } from '../../types/typescript';
 
-const css = require('./DAWSequencer.scss');
+const css = require('./DAWSequencer.module.scss');
 
 type Props = {
   isPlaying: boolean;
@@ -152,6 +152,7 @@ const Sequencer: React.FC<Props> = ({
                   <DAWClip
                     id={clip.id}
                     name={clip.name}
+                    // @ts-ignore
                     steps={clip.steps}
                     bars={clip.bars}
                     trackId={track.id}

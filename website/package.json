@@ -1,7 +1,7 @@
 {
   "name": "reactronica-website",
-  "version": "0.0.6",
-  "description": "",
+  "version": "0.0.7",
+  "description": "Documentation and examples for Reactronica audio library",
   "main": "index.js",
   "homepage": "https://reactronica-music-function-state-talk.now.sh/reactconfau2020",
   "scripts": {
@@ -10,8 +10,8 @@
     "build": "next build",
     "test": "jest",
     "link": "npm link reactronica && npm link ../node_modules/react && npm link ../node_modules/react-dom",
-    "deploy:prod": "now --prod",
-    "deploy:staging": "now --local-config now.staging.json",
+    "deploy:prod": "vercel --prod",
+    "deploy:staging": "vercel --local-config vercel.staging.json",
     "alias:staging": "now alias https://reactronica.unkleho.now.sh staging.reactronica.com"
   },
   "author": {
@@ -20,19 +20,19 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@mdx-js/loader": "^1.2.2",
-    "@next/mdx": "^9.0.3",
+    "@mdx-js/loader": "^1.6.22",
+    "@next/mdx": "^10.0.8",
     "@zeit/next-sass": "^1.0.1",
     "immer": "^6.0.1",
-    "next": "^9.2.2",
-    "node-sass": "^4.12.0",
+    "next": "^10.0.8",
     "normalize.css": "^8.0.1",
     "prism-react-renderer": "^0.1.7",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
     "reactronica": "^0.4.4",
+    "sass": "^1.32.8",
     "webmidi": "^2.5.1"
   },
   "devDependencies": {
@@ -53,7 +53,7 @@
     "stylelint-config-standard": "^18.3.0",
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.14.2",
-    "typescript": "^3.5.3",
+    "typescript": "^4.2.3",
     "webpack-filter-warnings-plugin": "^1.2.1"
   }
 }

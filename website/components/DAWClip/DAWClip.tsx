@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as types from '../../types';
 import { Step } from '../../types/typescript';
 
-import css from './DAWClip.scss';
+import css from './DAWClip.module.scss';
 
 type Props = {
   id: string;

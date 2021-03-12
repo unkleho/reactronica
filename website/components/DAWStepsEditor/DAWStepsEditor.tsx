@@ -3,9 +3,9 @@ import { StepNoteType } from 'reactronica';
 import produce from 'immer';
 
 import { midiNotes } from '../../configs/midiConfig';
-
-import css from './DAWStepsEditor.scss';
 import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
+
+import css from './DAWStepsEditor.module.scss';
 
 type Props = {
   clipId?: string;
@@ -176,7 +176,7 @@ const DAWStepsEditor: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (typeof onStepEditorChange === 'function') {
-      onStepEditorChange(localSteps);
+      onStepEditorChange(localSteps as StepNoteType[][]);
     }
   }, [JSON.stringify(localSteps)]);
 
