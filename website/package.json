@@ -28,7 +28,7 @@
     "normalize.css": "^8.0.1",
     "prism-react-renderer": "^0.1.7",
     "react": "^17.0.1",
-    "react-dom": "^16.13.1",
+    "react-dom": "^17.0.1",
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
     "reactronica": "^0.4.4",

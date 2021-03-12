@@ -13,7 +13,7 @@ const Page = () => {
     [
       { name: 'D3', duration: 8, velocity: 1 },
       { name: 'C3', duration: 8, velocity: 0 },
-      { name: 'E3', duration: 8 },
+      { name: 'E4', duration: 8 },
     ],
     [],
     [],
@@ -23,6 +23,8 @@ const Page = () => {
     [],
     [],
   ]);
+
+  console.log(stepIndex);
 
   return (
     <div>
@@ -65,6 +67,7 @@ const Page = () => {
       </button>
       <Song isPlaying={isPlaying} bpm={70}>
         <Track
+          volume={1}
           steps={steps}
           onStepPlay={(_, index) => {
             setStepIndex(index);

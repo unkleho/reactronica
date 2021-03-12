@@ -3,7 +3,7 @@ import { Instrument } from 'reactronica';
 const SamplerInstrument = ({ notes }) => {
   return (
     <Instrument
-      type="sampler"
+      type="synth"
       notes={notes}
       samples={{
         C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
