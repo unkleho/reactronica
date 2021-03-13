@@ -32,6 +32,7 @@
     "react-ga": "^2.7.0",
     "react-select": "^3.0.8",
     "reactronica": "^0.4.4",
+    "recoil": "^0.1.3",
     "sass": "^1.32.8",
     "webmidi": "^2.5.1"
   },
