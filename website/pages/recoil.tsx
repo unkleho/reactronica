@@ -11,15 +11,19 @@ import {
 } from 'recoil';
 import { useKeyPress } from '../lib/hooks';
 
+// TODO: Update Reactronica types to allow string duration
+// TODO: Update Reactronica sequences when total steps change
+
 const isPlayingState = atom({
-  key: 'isPlayingState', // unique ID (with respect to other atoms/selectors)
-  default: false, // default value (aka initial value)
+  key: 'isPlayingState',
+  default: false,
 });
 
 type Track = {
   id: string;
   steps: StepType[];
   type: InstrumentType;
+  volume?: number;
   samples?: { [k: string]: string };
   // currentStepIndex: number;
 };
@@ -27,46 +31,15 @@ type Track = {
 const tracksState = atom({
   key: 'tracksState',
   default: [
-    // {
-    //   id: 'melody',
-    //   steps: ['C3', 'D3', 'Eb3', 'G3'],
-    //   type: 'synth',
-    // },
-    {
-      id: 'samples',
-      steps: [
-        [
-          {
-            name: 'D3',
-            duration: '1n',
-          },
-        ],
-        null,
-        null,
-        null,
-      ],
-      type: 'sampler',
-      samples: {
-        C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
-        D3: '/audio/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
-        E3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
-      },
-    },
     {
       id: 'kalimba',
+      volume: -0,
       steps: [
         [
           {
             name: 'C3',
-            // TODO: Update Reactronica types to allow string duration
-            // TODO: Build duration function
-            duration: getDuration(8, 70),
-            velocity: 1,
-          },
-          {
-            name: 'C5',
-            duration: getDuration(8, 70),
-            velocity: 0.3,
+            duration: getDuration(16, 70),
+            velocity: 0,
           },
         ],
         null,
@@ -74,9 +47,74 @@ const tracksState = atom({
         null,
         [
           {
-            name: 'C1',
-            duration: getDuration(4, 70),
-            velocity: 0.5,
+            name: 'C5',
+            duration: getDuration(8, 70),
+            velocity: 0.2,
+          },
+        ],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
+      type: 'sampler',
+      samples: {
+        C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
+      },
+    },
+    // {
+    //   id: 'melody',
+    //   steps: ['C3', 'D3', 'Eb3', 'G3', null, null, null, null],
+    //   type: 'fmSynth',
+    // },
+    {
+      id: 'beats',
+      volume: -6,
+      steps: [
+        [
+          {
+            name: 'D3',
+            duration: getDuration(8, 70),
+          },
+        ],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
+      type: 'sampler',
+      samples: {
+        D3: '/audio/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
+      },
+    },
+    {
+      id: 'guitar',
+      volume: -6,
+      steps: [
+        [
+          {
+            name: 'C3',
+            duration: getDuration(8, 70),
+          },
+        ],
+        null,
+        null,
+        null,
+        [
+          {
+            name: 'C4',
+            velocity: 0,
+            duration: getDuration(6, 70),
           },
         ],
         null,
@@ -85,7 +123,7 @@ const tracksState = atom({
       ],
       type: 'sampler',
       samples: {
-        C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
+        C3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
       },
     },
   ] as Track[],
@@ -134,7 +172,7 @@ function Audio() {
   const tracks = useRecoilValue(tracksState);
   const setCurrentStepIndex = useSetRecoilState(currentStepIndexState);
 
-  console.log('Audio');
+  console.log('Audio', isPlaying);
 
   return (
     <Song isPlaying={isPlaying} bpm={70}>
@@ -142,6 +180,7 @@ function Audio() {
         return (
           <Track
             steps={track.steps}
+            volume={track.volume}
             onStepPlay={(_, index) => {
               setCurrentStepIndex(index);
             }}
