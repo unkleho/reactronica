@@ -1,9 +1,11 @@
+import { StepNoteType, StepType } from 'components/Track';
+
 export type SequencerStep = {
-  notes: any[];
+  notes: StepNoteType[];
   index: number;
 };
 
-export default function buildSequencerStep(step, i): SequencerStep {
+export default function buildSequencerStep(step: StepType, i): SequencerStep {
   if (typeof step === 'string') {
     return {
       notes: [
@@ -13,13 +15,13 @@ export default function buildSequencerStep(step, i): SequencerStep {
       ],
       index: i,
     };
-  } else if (step && step.note) {
+  } else if (step && (step as StepNoteType).name) {
     return {
       notes: [
         {
-          name: step.name,
-          duration: step.duration,
-          velocity: step.velocity,
+          name: (step as StepNoteType).name,
+          duration: (step as StepNoteType).duration,
+          velocity: (step as StepNoteType).velocity,
         },
       ],
       index: i,
