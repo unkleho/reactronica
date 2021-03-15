@@ -71,7 +71,7 @@ const tracksState = atom({
     },
     // {
     //   id: 'melody',
-    //   steps: ['C3', 'D3', 'Eb3', 'G3', null, null, null, null],
+    //   steps: [[{ name: 'C3' }], 'D3', 'Eb3', 'G3', null, null, null, null],
     //   type: 'fmSynth',
     // },
     {
