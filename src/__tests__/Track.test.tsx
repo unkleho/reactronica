@@ -31,7 +31,7 @@ describe('Track', () => {
     rerender(
       <Song isPlaying={true} bpm={100}>
         <Track
-          steps={['C3', null, [{ name: 'C3' }, { name: 'G3' }]]}
+          steps={['C3', null, [{ name: 'C3' }, { name: 'G3' }], { name: 'E3' }]}
           pan={0}
           volume={0}
           mute={true}
@@ -48,6 +48,7 @@ describe('Track', () => {
       { index: 0, notes: [{ name: 'C3' }] },
       { index: 1, notes: [] },
       { index: 2, notes: [{ name: 'C3' }, { name: 'G3' }] },
+      { index: 3, notes: [{ name: 'E3' }] },
     ]);
   });
 

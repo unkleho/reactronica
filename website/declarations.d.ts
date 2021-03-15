@@ -10,3 +10,6 @@ declare namespace JSX {
     'ion-icon': any;
   }
 }
+
+declare module '*.mdx';
+declare module '*.md';
