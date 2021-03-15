@@ -22,6 +22,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
+    "test:watch": "npm run test -- --watch",
     "lint": "tsdx lint",
     "prepare": "tsdx build"
   },

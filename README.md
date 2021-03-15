@@ -94,6 +94,9 @@ const Example = () => {
           }}
           // Add some notes here to play
           notes={[{ name: 'C3' }]}
+          onLoad={(buffers) => {
+            // Runs when all samples are loaded
+          }}
         />
       </Track>
     </Song>
