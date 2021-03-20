@@ -8,6 +8,7 @@ import {
   useRecoilValue,
   useSetRecoilState,
   atomFamily,
+  selectorFamily,
 } from 'recoil';
 import { useKeyPress } from '../lib/hooks';
 
@@ -28,158 +29,352 @@ type Track = {
   // currentStepIndex: number;
 };
 
-const tracksState = atom({
+type Clip = {
+  id: string;
+  // trackId: string;
+  steps: StepType[];
+};
+
+const playingClipsState = atom({
+  key: 'playingClipsState',
+  default: {
+    beats: 'beats1',
+    kalimba: 'kalimba1',
+    guitar: 'guitar0',
+  },
+});
+
+const defaultClips = [
+  {
+    id: 'beats0',
+    trackId: 'beats',
+    steps: [null, null, null, null, null, null, null, null],
+  },
+  {
+    id: 'beats1',
+    trackId: 'beats',
+    steps: [
+      [
+        {
+          name: 'E3',
+          duration: getDuration(8, 70),
+        },
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'beats2',
+    trackId: 'beats',
+    steps: [
+      [
+        {
+          name: 'C3',
+          duration: getDuration(8, 70),
+        },
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'beats3',
+    trackId: 'beats',
+    steps: [
+      [
+        {
+          name: 'D3',
+          duration: getDuration(8, 70),
+        },
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'guitar0',
+    trackId: 'guitar',
+    steps: [null, null, null, null, null, null, null, null],
+  },
+  {
+    id: 'guitar1',
+    trackId: 'guitar',
+    steps: [
+      [
+        {
+          name: 'C3',
+          velocity: 1,
+          duration: getDuration(8, 70),
+        },
+      ],
+      null,
+      null,
+      null,
+      [
+        {
+          name: 'C4',
+          velocity: 0,
+          duration: getDuration(6, 70),
+        },
+      ],
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'kalimba0',
+    trackId: 'kalimba',
+    steps: [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'kalimba1',
+    trackId: 'kalimba',
+    steps: [
+      [
+        {
+          name: 'C3',
+          duration: getDuration(16, 70),
+          velocity: 1,
+        },
+      ],
+      null,
+      null,
+      null,
+      [
+        // {
+        //   name: 'C5',
+        //   duration: getDuration(8, 70),
+        //   velocity: 0.2,
+        // },
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+];
+
+const clipState = selectorFamily<Clip, string>({
+  key: 'clipState',
+  get: (id) => () => {
+    return defaultClips.find((c) => c.id === id);
+  },
+});
+
+const trackClipsState = selectorFamily<Clip[], string>({
+  key: 'trackClipsState',
+  get: (trackId) => () => {
+    return defaultClips.filter((c) => c.trackId === trackId);
+  },
+});
+
+const playingClipIdState = selectorFamily<string, string>({
+  key: 'playingClipIdState',
+  get: (trackId) => ({ get }) => {
+    return get(playingClipsState)[trackId];
+  },
+  set: (trackId) => ({ get, set }, newClipId) => {
+    const playingClips = get(playingClipsState);
+    const newPlayingClips = {
+      ...playingClips,
+      [trackId]: newClipId,
+    };
+    set(playingClipsState, newPlayingClips);
+  },
+});
+
+const tracksState = selector<Track[]>({
   key: 'tracksState',
-  default: [
-    {
-      id: 'kalimba',
-      volume: -0,
-      steps: [
-        [
-          {
-            name: 'C3',
-            duration: getDuration(16, 70),
-            velocity: 0,
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            name: 'C5',
-            duration: getDuration(8, 70),
-            velocity: 0.2,
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-      ],
-      type: 'sampler',
-      samples: {
-        C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
+  get: ({ get }) => {
+    const playingClips = get(playingClipsState);
+
+    return [
+      {
+        id: 'beats',
+        volume: -8,
+        steps: get(clipState(playingClips.beats))?.steps,
+        type: 'sampler',
+        samples: {
+          C3: '/audio/vt2_140_drum_loop_kauket_full.wav',
+          D3: '/audio/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
+          E3: '/audio/DECAP_140_drum_loop_faded_slappy_knock_bounce.wav',
+        },
       },
-    },
-    // {
-    //   id: 'melody',
-    //   steps: [[{ name: 'C3' }], 'D3', 'Eb3', 'G3', null, null, null, null],
-    //   type: 'fmSynth',
-    // },
-    {
-      id: 'beats',
-      volume: -6,
-      steps: [
-        [
-          {
-            name: 'D3',
-            duration: getDuration(8, 70),
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-      ],
-      type: 'sampler',
-      samples: {
-        D3: '/audio/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
+      {
+        id: 'kalimba',
+        volume: -0,
+        steps: get(clipState(playingClips.kalimba))?.steps,
+        type: 'sampler',
+        samples: {
+          C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
+        },
       },
-    },
-    {
-      id: 'guitar',
-      volume: -6,
-      steps: [
-        [
-          {
-            name: 'C3',
-            duration: getDuration(8, 70),
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            name: 'C4',
-            velocity: 0,
-            duration: getDuration(6, 70),
-          },
-        ],
-        null,
-        null,
-        null,
-      ],
-      type: 'sampler',
-      samples: {
-        C3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
+      // {
+      //   id: 'melody',
+      //   steps: [[{ name: 'C3' }], 'D3', 'Eb3', 'G3', null, null, null, null],
+      //   type: 'fmSynth',
+      // },
+      {
+        id: 'guitar',
+        volume: -6,
+        steps: get(clipState(playingClips.guitar))?.steps,
+        type: 'sampler',
+        samples: {
+          C3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
+        },
       },
-    },
-  ] as Track[],
+    ];
+  },
 });
 
 function getDuration(totalBeats: number, bpm: number): number {
   return (60 / bpm) * totalBeats;
 }
 
-// const myAtomFamily = atomFamily({
-//   key: 'myAtomFamily',
-//   default: (param) => param,
-// });
+const trackIdsState = selector({
+  key: 'trackIds',
+  get: ({ get }) => get(tracksState).map((t) => t.id),
+});
+
+const singleTrackState = selectorFamily({
+  key: 'singleTrack',
+  get: (id: string) => ({ get }) => {
+    return get(tracksState).find((t) => t.id === id);
+  },
+});
 
 const currentStepIndexState = atom({
   key: 'currentStepIndexState',
   default: 0,
 });
 
-// const charCountState = selector({
-//   key: 'charCountState', // unique ID (with respect to other atoms/selectors)
-//   get: ({ get }) => {
-//     const text = get(textState);
+const UITrack = ({ id }) => {
+  const track = useRecoilValue(singleTrackState(id));
+  const clips = useRecoilValue(trackClipsState(id));
 
-//     return text.length;
-//   },
-// });
+  const [playingClipId, setPlayingClipId] = useRecoilState(
+    playingClipIdState(id),
+  );
+
+  return (
+    <div>
+      {track.id}
+      <div>
+        {/* <button
+          style={{
+            fontWeight: playingClipId === null ? 'bold' : 'normal',
+          }}
+          onClick={() => {
+            setPlayingClipId(null);
+          }}
+        >
+          None
+        </button> */}
+
+        {clips.map((clip) => {
+          return (
+            <button
+              key={clip.id}
+              style={{
+                fontWeight: clip.id === playingClipId ? 'bold' : 'normal',
+              }}
+              onClick={() => {
+                setPlayingClipId(clip.id);
+              }}
+            >
+              {clip.id}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 function Interface() {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const currentStepIndex = useRecoilValue(currentStepIndexState);
+  // const [tracks, setTracks] = useRecoilState(tracksState);
+  const trackIds = useRecoilValue(trackIdsState);
   useKeyPress(' ', () => {
     setIsPlaying(!isPlaying);
   });
 
+  console.log('Interface render', trackIds);
+
   return (
     <>
-      <p>{currentStepIndex}</p>
+      <Playhead />
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
+
+      {trackIds.map((id) => (
+        <UITrack id={id} key={id}></UITrack>
+      ))}
     </>
   );
 }
+
+const Playhead = () => {
+  const currentStepIndex = useRecoilValue(currentStepIndexState);
+  return <p>{currentStepIndex}</p>;
+};
 
 function Audio() {
   const isPlaying = useRecoilValue(isPlayingState);
   const tracks = useRecoilValue(tracksState);
   const setCurrentStepIndex = useSetRecoilState(currentStepIndexState);
 
-  console.log('Audio', isPlaying);
+  // console.log('Audio', isPlaying);
+
+  console.log(tracks);
 
   return (
     <Song isPlaying={isPlaying} bpm={70}>
       {tracks.map((track) => {
         return (
           <Track
-            steps={track.steps}
+            steps={track.steps || []}
             volume={track.volume}
             onStepPlay={(_, index) => {
               setCurrentStepIndex(index);
