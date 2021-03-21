@@ -41,6 +41,7 @@ const playingClipsState = atom({
     beats: 'beats1',
     kalimba: 'kalimba1',
     guitar: 'guitar0',
+    harp: 'harp0',
   },
 });
 
@@ -194,6 +195,54 @@ const defaultClips = [
       null,
     ],
   },
+  {
+    id: 'harp0',
+    trackId: 'harp',
+    steps: [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'harp1',
+    trackId: 'harp',
+    volume: -20,
+    steps: [
+      {
+        name: 'C3',
+        duration: getDuration(16, 70),
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
 ];
 
 const clipState = selectorFamily<Clip, string>({
@@ -265,6 +314,15 @@ const tracksState = selector<Track[]>({
           C3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
         },
       },
+      {
+        id: 'harp',
+        volume: -6,
+        steps: get(clipState(playingClips.harp))?.steps,
+        type: 'sampler',
+        samples: {
+          C3: '/audio/SO_EH_140_harp_imona_Cm.wav',
+        },
+      },
     ];
   },
 });
@@ -297,6 +355,8 @@ const UITrack = ({ id }) => {
   const [playingClipId, setPlayingClipId] = useRecoilState(
     playingClipIdState(id),
   );
+
+  console.log('UITrack', id, playingClipId);
 
   return (
     <div>
