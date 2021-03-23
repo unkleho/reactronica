@@ -278,6 +278,7 @@ class EQ3 {
 export const mockSequenceConstructor = jest.fn();
 export const mockSequenceAdd = jest.fn();
 export const mockSequenceRemove = jest.fn();
+export const mockSequenceRemoveAll = jest.fn();
 
 class Sequence {
   constructor(callback, steps) {
@@ -287,7 +288,7 @@ class Sequence {
     this.stop = jest.fn();
     this.add = mockSequenceAdd;
     this.remove = mockSequenceRemove;
-    this.removeAll = jest.fn();
+    this.removeAll = mockSequenceRemoveAll;
     this.dispose = jest.fn();
   }
 }

@@ -7,18 +7,13 @@ import {
   useRecoilState,
   useRecoilValue,
   useSetRecoilState,
-  atomFamily,
+  // atomFamily,
   selectorFamily,
 } from 'recoil';
 import { useKeyPress } from '../lib/hooks';
 
 // TODO: Update Reactronica types to allow string duration
 // TODO: Update Reactronica sequences when total steps change
-
-const isPlayingState = atom({
-  key: 'isPlayingState',
-  default: false,
-});
 
 type Track = {
   id: string;
@@ -35,6 +30,11 @@ type Clip = {
   steps: StepType[];
 };
 
+const isPlayingState = atom({
+  key: 'isPlayingState',
+  default: false,
+});
+
 const playingClipsState = atom({
   key: 'playingClipsState',
   default: {
@@ -49,7 +49,7 @@ const defaultClips = [
   {
     id: 'beats0',
     trackId: 'beats',
-    steps: [null, null, null, null, null, null, null, null],
+    steps: [],
   },
   {
     id: 'beats1',
@@ -356,7 +356,7 @@ const UITrack = ({ id }) => {
     playingClipIdState(id),
   );
 
-  console.log('UITrack', id, playingClipId);
+  // console.log('UITrack', id, playingClipId);
 
   return (
     <div>
@@ -401,7 +401,7 @@ function Interface() {
     setIsPlaying(!isPlaying);
   });
 
-  console.log('Interface render', trackIds);
+  // console.log('Interface render', trackIds);
 
   return (
     <>
@@ -427,7 +427,7 @@ function Audio() {
 
   // console.log('Audio', isPlaying);
 
-  console.log(tracks);
+  // console.log(tracks);
 
   return (
     <Song isPlaying={isPlaying} bpm={70}>

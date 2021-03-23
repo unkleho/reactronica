@@ -65,6 +65,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     remove: Function;
     add: Function;
     dispose: Function;
+    removeAll: Function;
   }>();
   const instrumentsRef = useRef(instruments);
 
@@ -116,20 +117,28 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
 
   useEffect(() => {
     if (sequencer.current) {
-      // const isEqual = equal(steps.notes, prevSequencerSteps[i].notes);
-      sequencerSteps.forEach((step, i) => {
-        const isEqual = equal(
-          sequencerSteps[i].notes,
-          prevSequencerSteps && prevSequencerSteps[i]
-            ? prevSequencerSteps[i].notes
-            : [],
-        );
+      if (prevSequencerSteps?.length === sequencerSteps.length) {
+        // When steps length is the same, update steps in a more efficient way
+        sequencerSteps.forEach((step, i) => {
+          const isEqual = equal(
+            sequencerSteps[i].notes,
+            prevSequencerSteps && prevSequencerSteps[i]
+              ? prevSequencerSteps[i].notes
+              : [],
+          );
 
-        if (!isEqual) {
-          sequencer.current?.remove(i);
-          sequencer.current?.add(i, step);
-        }
-      });
+          if (!isEqual) {
+            sequencer.current?.remove(i);
+            sequencer.current?.add(i, step);
+          }
+        });
+      } else {
+        // When new steps are less or more then prev, remove all and add new steps
+        sequencer.current.removeAll();
+        sequencerSteps.forEach((step, i) => {
+          sequencer.current.add(i, step);
+        });
+      }
     }
   }, [JSON.stringify(sequencerSteps)]);
 

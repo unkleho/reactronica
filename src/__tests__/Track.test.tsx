@@ -10,6 +10,7 @@ import {
   mockSequenceConstructor,
   mockSequenceAdd,
   mockSequenceRemove,
+  mockSequenceRemoveAll,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -114,5 +115,23 @@ describe('Track', () => {
     );
 
     expect(mockSequenceRemove).toHaveBeenLastCalledWith(1);
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3', null]}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSequenceRemoveAll).toHaveBeenLastCalledWith();
+    expect(mockSequenceAdd).toHaveBeenCalledWith(0, {
+      index: 0,
+      notes: [{ name: 'C3' }],
+    });
+    expect(mockSequenceAdd).toHaveBeenCalledWith(1, {
+      index: 1,
+      notes: [],
+    });
   });
 });
