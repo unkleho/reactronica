@@ -13,7 +13,6 @@ import {
 import { useKeyPress } from '../lib/hooks';
 
 // TODO: Update Reactronica types to allow string duration
-// TODO: Update Reactronica sequences when total steps change
 
 type Track = {
   id: string;
@@ -286,9 +285,10 @@ const tracksState = selector<Track[]>({
         steps: get(clipState(playingClips.beats))?.steps,
         type: 'sampler',
         samples: {
-          C3: '/audio/vt2_140_drum_loop_kauket_full.wav',
-          D3: '/audio/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
-          E3: '/audio/DECAP_140_drum_loop_faded_slappy_knock_bounce.wav',
+          C3: '/audio/samples/vt2_140_drum_loop_kauket_full.wav',
+          D3: '/audio/samples/DECAP_140_drum_loop_baptized_bouncy_rimshot.wav',
+          E3:
+            '/audio/samples/DECAP_140_drum_loop_faded_slappy_knock_bounce.wav',
         },
       },
       {
@@ -297,7 +297,7 @@ const tracksState = selector<Track[]>({
         steps: get(clipState(playingClips.kalimba))?.steps,
         type: 'sampler',
         samples: {
-          C3: '/audio/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
+          C3: '/audio/samples/DBC_70_lofi_melodic_kalimba_action_Cm.wav',
         },
       },
       // {
@@ -311,7 +311,7 @@ const tracksState = selector<Track[]>({
         steps: get(clipState(playingClips.guitar))?.steps,
         type: 'sampler',
         samples: {
-          C3: '/audio/OS_NC_140_Cm_Octagon_Guitar.wav',
+          C3: '/audio/samples/OS_NC_140_Cm_Octagon_Guitar.wav',
         },
       },
       {
@@ -320,7 +320,7 @@ const tracksState = selector<Track[]>({
         steps: get(clipState(playingClips.harp))?.steps,
         type: 'sampler',
         samples: {
-          C3: '/audio/SO_EH_140_harp_imona_Cm.wav',
+          C3: '/audio/samples/SO_EH_140_harp_imona_Cm.wav',
         },
       },
     ];
