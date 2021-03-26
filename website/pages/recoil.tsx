@@ -42,6 +42,7 @@ const playingClipsState = atom({
     kalimba: 'kalimba1',
     guitar: 'guitar0',
     harp: 'harp0',
+    vocal: 'vocal0',
   },
 });
 
@@ -243,6 +244,55 @@ const defaultClips = [
       null,
     ],
   },
+  {
+    id: 'vocal0',
+    trackId: 'vocal',
+    volume: 0,
+    steps: [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
+  {
+    id: 'vocal1',
+    trackId: 'vocal',
+    volume: 0,
+    steps: [
+      {
+        name: 'C3',
+        duration: getDuration(2, 70),
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
+  },
 ];
 
 const clipState = selectorFamily<Clip, string>({
@@ -307,7 +357,7 @@ const tracksState = selector<Track[]>({
       // },
       {
         id: 'guitar',
-        volume: -6,
+        volume: -4,
         steps: get(clipState(playingClips.guitar))?.steps,
         type: 'sampler',
         samples: {
@@ -321,6 +371,15 @@ const tracksState = selector<Track[]>({
         type: 'sampler',
         samples: {
           C3: '/audio/SO_EH_140_harp_imona_Cm.wav',
+        },
+      },
+      {
+        id: 'vocal',
+        volume: -6,
+        steps: get(clipState(playingClips.vocal))?.steps,
+        type: 'sampler',
+        samples: {
+          C3: '/audio/CPAVX_VOX_HIT_125_09.wav',
         },
       },
     ];
