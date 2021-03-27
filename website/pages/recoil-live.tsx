@@ -10,16 +10,13 @@ import {
   // atomFamily,
   selectorFamily,
 } from 'recoil';
+import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 
 const isPlayingState = atom({
   key: 'isPlayingState',
   default: false,
 });
-
-function getDuration(totalBeats: number, bpm: number): number {
-  return (60 / bpm) * totalBeats;
-}
 
 const samples = [
   {
@@ -77,6 +74,11 @@ const samples = [
     file: '/audio/samples/SO_TR_120_combo_baglama_mey_guzel_Cm_2.wav',
   },
   {
+    id: 'strum5',
+    note: 'G4',
+    file: '/audio/samples/SO_TR_120_combo_baglama_mey_guzel_Cm_5.wav',
+  },
+  {
     id: 'guitar1',
     note: 'C5',
     file: '/audio/samples/OS_NC_140_Cm_Octagon_Guitar_1.wav',
@@ -107,13 +109,15 @@ const tracksState = atom({
   default: [
     {
       id: 'sampler',
+      // range: [0, 8],
+      range: [8, 16],
       steps: [
         // 1 ------------------------------------------------------------------
         [
           { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
-          // { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
-          // { id: 'soul1', duration: getDuration(4, 70), velocity: 0.8 },
+          { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
         ],
         null,
         null,
@@ -126,8 +130,9 @@ const tracksState = atom({
         // 5 ------------------------------------------------------------------
         [
           { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'guitar2', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
+          { id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 },
         ],
         null,
         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.7 }],
@@ -135,7 +140,10 @@ const tracksState = atom({
         // 7 ------------------------------------------------------------------
         [{ id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 }],
         null,
-        [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
+        [
+          { id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 },
+          // { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
+        ],
         null,
       ],
     },
@@ -145,7 +153,7 @@ const tracksState = atom({
         [
           {
             name: 'C1',
-            duration: getDuration(2, 70),
+            duration: getDuration(3, 70),
             velocity: 1,
           },
         ],
@@ -169,7 +177,7 @@ const tracksState = atom({
         [
           {
             name: 'G#0',
-            duration: getDuration(1, 70),
+            duration: getDuration(2, 70),
             velocity: 1,
           },
         ],
@@ -206,18 +214,20 @@ const RecoilLivePage = () => {
     <>
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
       <p>{currentStep}</p>
-      <Song bpm={70} isPlaying={isPlaying}>
+      <Song bpm={70} isPlaying={isPlaying} volume={0}>
         {tracks.slice(0, 1).map((track) => {
           return (
             <Track
-              steps={track.steps.map((stepNotes) => {
-                return stepNotes
-                  ? stepNotes.map((stepNote) => ({
-                      ...stepNote,
-                      name: getSampleNote(stepNote.id),
-                    }))
-                  : null;
-              })}
+              steps={track.steps
+                .slice(track.range[0], track.range[1])
+                .map((stepNotes) => {
+                  return stepNotes
+                    ? stepNotes.map((stepNote) => ({
+                        ...stepNote,
+                        name: getSampleNote(stepNote.id),
+                      }))
+                    : null;
+                })}
               key={track.id}
               onStepPlay={(stepNotes, index) => {
                 setCurrentState(index);

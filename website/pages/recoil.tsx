@@ -10,6 +10,7 @@ import {
   // atomFamily,
   selectorFamily,
 } from 'recoil';
+import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 
 // TODO: Update Reactronica types to allow string duration
@@ -385,10 +386,6 @@ const tracksState = selector<Track[]>({
     ];
   },
 });
-
-function getDuration(totalBeats: number, bpm: number): number {
-  return (60 / bpm) * totalBeats;
-}
 
 const trackIdsState = selector({
   key: 'trackIds',

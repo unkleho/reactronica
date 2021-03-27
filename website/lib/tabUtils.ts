@@ -6,9 +6,9 @@ import { instrumentConfig } from '../configs';
  *
  */
 
-export function getDuration(bpm, bars) {
-  return ((bars * 240) / bpm) * 1000;
-}
+// function getDuration(bpm, bars) {
+//   return ((bars * 240) / bpm) * 1000;
+// }
 
 export function getStringNote(instrument, stringIndex) {
   return instrumentConfig[instrument].strings[stringIndex];
