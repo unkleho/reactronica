@@ -10,9 +10,10 @@ export function useKeyPress(targetKey, handler) {
 
   // Add event listeners
   React.useEffect(() => {
-    const upHandler = ({ key }) => {
+    const upHandler = (event: KeyboardEvent) => {
+      const { key } = event;
       if (key === targetKeyRef.current) {
-        handlerRef.current();
+        handlerRef.current(event);
       }
     };
 

@@ -1,1 +1,1 @@
-export { default } from './StepsEditor';
+export { default } from './PianoRoll';

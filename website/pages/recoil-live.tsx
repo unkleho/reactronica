@@ -212,7 +212,9 @@ const RecoilLivePage = () => {
     };
   }, {});
 
-  useKeyPress(' ', () => {
+  useKeyPress(' ', (event: KeyboardEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
     setIsPlaying(!isPlaying);
   });
 
@@ -221,7 +223,12 @@ const RecoilLivePage = () => {
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
       <p>{currentStep}</p>
 
-      <StepsEditorV2 steps={[null, null]} />
+      <StepsEditorV2
+        currentStepIndex={currentStep}
+        steps={[null, null]}
+        startNote="C3"
+        endNote="C4"
+      />
 
       <Song bpm={70} isPlaying={isPlaying} volume={0}>
         {tracks.slice(0, 1).map((track) => {

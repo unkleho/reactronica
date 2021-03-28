@@ -3,14 +3,14 @@ import { StepNoteType } from 'reactronica';
 import produce from 'immer';
 
 import { midiNotes } from '../../configs/midiConfig';
-import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
+// import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
-import css from './StepsEditor.module.scss';
+import css from './PianoRoll.module.scss';
 
 type Props = {
   clipId?: string;
   clipName?: string;
-  // currentStepIndex?: number;
+  currentStepIndex?: number;
   stepIndexOffset?: number;
   steps?: StepNoteType[][];
   // defaultSteps?: StepNoteType[][];
@@ -91,8 +91,8 @@ const types = {
  * as it changes on every step tick. This bypasses other components, making
  * it better for performance.
  */
-const StepsHeader = ({ emptyArray, stepIndexOffset }) => {
-  const { currentStepIndex } = React.useContext(StepIndexContext);
+const StepsHeader = ({ currentStepIndex, emptyArray, stepIndexOffset }) => {
+  // const { currentStepIndex } = React.useContext(StepIndexContext);
 
   return (
     <div className={[css.row, css.header].join(' ')}>
@@ -116,10 +116,11 @@ const StepsHeader = ({ emptyArray, stepIndexOffset }) => {
   );
 };
 
-const StepsEditorV2: React.FC<Props> = ({
+const PianoRoll = ({
   clipId,
   clipName,
   stepIndexOffset = 0,
+  currentStepIndex,
   steps = [],
   subdivision = 8,
   startNote = 'C2',
@@ -129,7 +130,7 @@ const StepsEditorV2: React.FC<Props> = ({
   onStepEditorChange,
   onKeyboardDown,
   onKeyboardUp,
-}) => {
+}: Props) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const { localSteps, selectedStepNoteName, selectedStepIndex } = state;
 
@@ -315,6 +316,7 @@ const StepsEditorV2: React.FC<Props> = ({
         {/* --------------------------------------------------------------- */}
 
         <StepsHeader
+          currentStepIndex={currentStepIndex}
           emptyArray={emptyArray}
           stepIndexOffset={stepIndexOffset}
         />
@@ -406,4 +408,4 @@ const StepsEditorV2: React.FC<Props> = ({
   );
 };
 
-export default StepsEditorV2;
+export default PianoRoll;

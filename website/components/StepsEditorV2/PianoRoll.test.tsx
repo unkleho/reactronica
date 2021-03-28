@@ -1,19 +1,19 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 
-import StepsEditor from './StepsEditor';
+import PianoRoll from './PianoRoll';
 import { melodySteps } from '../../__tests__';
 
 afterEach(cleanup);
 
-describe('StepsEditor', () => {
+describe('PianoRoll', () => {
   it('should render component', () => {
-    render(<StepsEditor />);
+    render(<PianoRoll />);
   });
 
   it('should render with current steps and keyboard', () => {
     const { getAllByTestId, getByTestId } = render(
-      <StepsEditor defaultSteps={melodySteps} subdivision={16} />,
+      <PianoRoll defaultSteps={melodySteps} subdivision={16} />,
     );
 
     const headerCells = getAllByTestId('header');
@@ -34,7 +34,7 @@ describe('StepsEditor', () => {
 
   it('should add current step after click and send new steps in callback', () => {
     const { getByTestId } = render(
-      <StepsEditor
+      <PianoRoll
         defaultSteps={melodySteps}
         subdivision={16}
         onStepEditorClick={(steps, note, index) => {
@@ -56,7 +56,7 @@ describe('StepsEditor', () => {
 
   it('should add current step on index without notes', () => {
     const { getByTestId } = render(
-      <StepsEditor
+      <PianoRoll
         defaultSteps={melodySteps}
         subdivision={16}
         // onStepEditorClick={(steps, note, index) => {
@@ -78,7 +78,7 @@ describe('StepsEditor', () => {
 
   it('should remove current step after click and send new steps in callback', () => {
     const { getByTestId } = render(
-      <StepsEditor
+      <PianoRoll
         defaultSteps={melodySteps}
         subdivision={16}
         onStepEditorClick={(steps, note, index) => {
@@ -96,14 +96,14 @@ describe('StepsEditor', () => {
 
   it('should change all steps when defaultSteps is updated', () => {
     const { getAllByTestId, getByTestId, rerender } = render(
-      <StepsEditor defaultSteps={melodySteps} subdivision={16} />,
+      <PianoRoll defaultSteps={melodySteps} subdivision={16} />,
     );
 
     const currentStepButtonsPrev = getAllByTestId(/-current/);
     expect(currentStepButtonsPrev.length).toBe(6);
 
     rerender(
-      <StepsEditor
+      <PianoRoll
         defaultSteps={[
           [
             {
