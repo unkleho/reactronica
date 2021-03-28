@@ -10,6 +10,7 @@ import {
   // atomFamily,
   selectorFamily,
 } from 'recoil';
+import StepsEditorV2 from '../components/StepsEditorV2';
 import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 
@@ -98,6 +99,11 @@ const samples = [
     note: 'F5',
     file: '/audio/samples/OS_NC_140_Cm_Octagon_Guitar_4.wav',
   },
+  {
+    id: 'noNoVox',
+    note: 'G5',
+    file: '/audio/samples/OS_SJ_SFX_Cm_Vocal_Adlib_No_No.wav',
+  },
 ];
 
 function getSampleNote(id) {
@@ -112,9 +118,9 @@ const tracksState = atom({
       // range: [0, 8],
       range: [8, 16],
       steps: [
-        // 1 ------------------------------------------------------------------
+        // 0 ------------------------------------------------------------------
         [
-          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
+          // { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
           { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
@@ -122,12 +128,12 @@ const tracksState = atom({
         null,
         null,
         null,
-        // 3 ------------------------------------------------------------------
+        // 4 ------------------------------------------------------------------
         [{ id: 'soul2', duration: getDuration(3, 70), velocity: 0.8 }],
         null,
         null,
         null,
-        // 5 ------------------------------------------------------------------
+        // 8 ------------------------------------------------------------------
         [
           { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
@@ -137,14 +143,14 @@ const tracksState = atom({
         null,
         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.7 }],
         null,
-        // 7 ------------------------------------------------------------------
+        // 12 ------------------------------------------------------------------
         [{ id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 }],
         null,
+        [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
         [
-          { id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 },
+          // { id: 'noNoVox', duration: getDuration(2, 70), velocity: 0.4 },
           // { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
         ],
-        null,
       ],
     },
     {
@@ -214,6 +220,9 @@ const RecoilLivePage = () => {
     <>
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
       <p>{currentStep}</p>
+
+      <StepsEditorV2 steps={[null, null]} />
+
       <Song bpm={70} isPlaying={isPlaying} volume={0}>
         {tracks.slice(0, 1).map((track) => {
           return (

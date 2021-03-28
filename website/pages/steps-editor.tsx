@@ -10,11 +10,7 @@ const Page = () => {
   const [stepIndex, setStepIndex] = React.useState(0);
   const [notes, setNotes] = React.useState(null);
   const [steps, setSteps] = React.useState<StepNoteType[][]>([
-    [
-      { name: 'D3', duration: 8, velocity: 1 },
-      { name: 'C3', duration: 8, velocity: 0 },
-      { name: 'E4', duration: 8 },
-    ],
+    [{ name: 'D3', velocity: 1 }, { name: 'C3', velocity: 0 }, { name: 'E4' }],
     [],
     [],
     [],
