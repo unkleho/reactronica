@@ -43,7 +43,7 @@ export function useKeyPress(
       }
 
       if (typeof downHandler === 'function') {
-        window.addEventListener('keydown', keyUpHandler);
+        window.addEventListener('keydown', keyDownHandler);
       }
     };
   }, []);

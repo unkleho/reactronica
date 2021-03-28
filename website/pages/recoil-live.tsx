@@ -132,7 +132,7 @@ const tracksState = atom({
       steps: [
         // 0 ------------------------------------------------------------------
         [
-          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
+          // { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
           { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
@@ -161,7 +161,7 @@ const tracksState = atom({
         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
         [
           // { id: 'noNoVox', duration: getDuration(2, 70), velocity: 0.4 },
-          // { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
+          { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
         ],
       ],
     },
