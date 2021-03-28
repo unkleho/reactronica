@@ -4,25 +4,49 @@ import React from 'react';
  * Call function on key press
  * https://github.com/jacobbuck/react-use-keypress/blob/master/src/index.js
  */
-export function useKeyPress(targetKey, handler) {
+export function useKeyPress(
+  targetKey: string,
+  upHandler?: (event: KeyboardEvent) => void,
+  downHandler?: (event: KeyboardEvent) => void,
+) {
   const targetKeyRef = useLatest(targetKey);
-  const handlerRef = useLatest(handler);
+  const upHandlerRef = useLatest(upHandler);
+  const downHandlerRef = useLatest(downHandler);
 
   // Add event listeners
   React.useEffect(() => {
-    const upHandler = (event: KeyboardEvent) => {
+    const keyUpHandler = (event: KeyboardEvent) => {
       const { key } = event;
       if (key === targetKeyRef.current) {
-        handlerRef.current(event);
+        upHandlerRef.current(event);
       }
     };
 
-    window.addEventListener('keyup', upHandler);
+    const keyDownHandler = (event: KeyboardEvent) => {
+      const { key } = event;
+      if (key === targetKeyRef.current) {
+        downHandlerRef.current(event);
+      }
+    };
+
+    if (typeof upHandler === 'function') {
+      window.addEventListener('keyup', keyUpHandler);
+    }
+
+    if (typeof downHandler === 'function') {
+      window.addEventListener('keydown', keyDownHandler);
+    }
     // Remove event listeners on cleanup
     return () => {
-      window.removeEventListener('keyup', upHandler);
+      if (typeof upHandler === 'function') {
+        window.removeEventListener('keyup', keyUpHandler);
+      }
+
+      if (typeof downHandler === 'function') {
+        window.addEventListener('keydown', keyUpHandler);
+      }
     };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
+  }, []);
 }
 
 /**

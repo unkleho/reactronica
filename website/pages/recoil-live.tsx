@@ -10,6 +10,7 @@ import {
   // atomFamily,
   selectorFamily,
 } from 'recoil';
+import { StepNoteType } from '../../dist';
 import StepsEditorV2 from '../components/StepsEditorV2';
 import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
@@ -110,6 +111,17 @@ function getSampleNote(id) {
   return samples.find((s) => s.id === id).note;
 }
 
+function transformIdStepNotes(idStepNotes): StepNoteType[][] {
+  return idStepNotes.map((stepNotes) => {
+    return stepNotes
+      ? stepNotes.map((stepNote) => ({
+          ...stepNote,
+          name: getSampleNote(stepNote.id),
+        }))
+      : null;
+  });
+}
+
 const tracksState = atom({
   key: 'tracksState',
   default: [
@@ -120,7 +132,7 @@ const tracksState = atom({
       steps: [
         // 0 ------------------------------------------------------------------
         [
-          // { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
           { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
@@ -137,7 +149,7 @@ const tracksState = atom({
         [
           { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
+          // { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
           { id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 },
         ],
         null,
@@ -212,38 +224,40 @@ const RecoilLivePage = () => {
     };
   }, {});
 
-  useKeyPress(' ', (event: KeyboardEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-    setIsPlaying(!isPlaying);
-  });
+  const sampleSteps = transformIdStepNotes(
+    tracks[0].steps.slice(tracks[0].range[0], tracks[0].range[1]),
+  );
+
+  useKeyPress(
+    ' ',
+    () => {
+      setIsPlaying(!isPlaying);
+    },
+    (event) => {
+      event.preventDefault();
+    },
+  );
+
+  // console.log(sampleSteps);
 
   return (
     <>
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
-      <p>{currentStep}</p>
 
       <StepsEditorV2
         currentStepIndex={currentStep}
-        steps={[null, null]}
+        steps={sampleSteps}
         startNote="C3"
-        endNote="C4"
+        endNote="C5"
       />
 
       <Song bpm={70} isPlaying={isPlaying} volume={0}>
         {tracks.slice(0, 1).map((track) => {
           return (
             <Track
-              steps={track.steps
-                .slice(track.range[0], track.range[1])
-                .map((stepNotes) => {
-                  return stepNotes
-                    ? stepNotes.map((stepNote) => ({
-                        ...stepNote,
-                        name: getSampleNote(stepNote.id),
-                      }))
-                    : null;
-                })}
+              steps={transformIdStepNotes(
+                track.steps.slice(track.range[0], track.range[1]),
+              )}
               key={track.id}
               onStepPlay={(stepNotes, index) => {
                 setCurrentState(index);

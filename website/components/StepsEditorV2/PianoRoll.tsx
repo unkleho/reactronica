@@ -3,7 +3,6 @@ import { StepNoteType } from 'reactronica';
 import produce from 'immer';
 
 import { midiNotes } from '../../configs/midiConfig';
-// import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
 import css from './PianoRoll.module.scss';
 
@@ -13,7 +12,6 @@ type Props = {
   currentStepIndex?: number;
   stepIndexOffset?: number;
   steps?: StepNoteType[][];
-  // defaultSteps?: StepNoteType[][];
   subdivision?: number;
   startNote?: string;
   endNote?: string;
@@ -159,8 +157,8 @@ const PianoRoll = ({
   }, [noteNames]);
 
   // --------------------------------------------------------------------------
-  // Assign local steps if clipId changes
-  // localSteps are needed for performance. Yhere could be an interaction delay
+  // Assign local steps if steps changes
+  // localSteps are needed for performance. There could be an interaction delay
   // if relying on `steps` prop.
   // --------------------------------------------------------------------------
 
@@ -169,7 +167,7 @@ const PianoRoll = ({
       type: types.SET_LOCAL_STEPS,
       localSteps: steps,
     });
-  }, [clipId]);
+  }, [steps]);
 
   // --------------------------------------------------------------------------
   // Run onStepEditorChange callback whenever localSteps change
