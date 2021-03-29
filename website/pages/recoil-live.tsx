@@ -27,6 +27,11 @@ const samples = [
     file: '/audio/samples/DECAP_140_drum_loop_faded_slappy_knock_bounce.wav',
   },
   {
+    id: 'beat2',
+    note: 'C#3',
+    file: '/audio/samples/BTB_Drum_Loop_20_FULL_140_Cmin.wav',
+  },
+  {
     id: 'kalimba1',
     note: 'D3',
     file: '/audio/samples/DBC_70_lofi_melodic_kalimba_action_Cm_1.wav',
@@ -105,6 +110,11 @@ const samples = [
     note: 'G5',
     file: '/audio/samples/OS_SJ_SFX_Cm_Vocal_Adlib_No_No.wav',
   },
+  {
+    id: 'compassVox1',
+    note: 'G#5',
+    file: '/audio/samples/st2_kit_compass_vocal_3_loop_70_Cm.wav',
+  },
 ];
 
 function getSampleNote(id) {
@@ -132,10 +142,11 @@ const tracksState = atom({
       steps: [
         // 0 ------------------------------------------------------------------
         [
-          // { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
+          // { id: 'kalimba1', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'guitar4', duration: getDuration(8, 70), velocity: 1 },
           { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
+          // { id: 'compassVox1', duration: getDuration(4, 70), velocity: 0.6 },
         ],
         null,
         null,
@@ -149,7 +160,8 @@ const tracksState = atom({
         [
           { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
-          // { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
+          // { id: 'compassVox1', duration: getDuration(7, 70), velocity: 0.5 },
+          { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
           { id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 },
         ],
         null,
@@ -161,7 +173,7 @@ const tracksState = atom({
         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
         [
           // { id: 'noNoVox', duration: getDuration(2, 70), velocity: 0.4 },
-          { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
+          // { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
         ],
       ],
     },
