@@ -51,6 +51,9 @@ module.exports = withMDX({
   cssLoaderOptions: {
     localIdentName: '[name]_[local]_[hash:base64:5]',
   },
+  future: {
+    webpack5: true,
+  },
 });
 
 // module.exports = withSass(

@@ -15,11 +15,6 @@ import StepsEditorV2 from '../components/StepsEditorV2';
 import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 
-const isPlayingState = atom({
-  key: 'isPlayingState',
-  default: false,
-});
-
 const samples = [
   {
     id: 'beat1',
@@ -132,49 +127,51 @@ function transformIdStepNotes(idStepNotes): StepNoteType[][] {
   });
 }
 
+const isPlayingState = atom({
+  key: 'isPlayingState',
+  default: false,
+});
+
 const tracksState = atom({
   key: 'tracksState',
   default: [
     {
       id: 'sampler',
-      // range: [0, 8],
-      range: [8, 16],
+      range: [0, 8],
+      // range: [8, 16],
       steps: [
         // 0 ------------------------------------------------------------------
         [
-          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
-          // { id: 'kalimba1', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'guitar4', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
-          // { id: 'compassVox1', duration: getDuration(4, 70), velocity: 0.6 },
-        ],
-        null,
-        null,
-        null,
-        // 4 ------------------------------------------------------------------
-        [{ id: 'soul2', duration: getDuration(3, 70), velocity: 0.8 }],
-        null,
-        null,
-        null,
-        // 8 ------------------------------------------------------------------
-        [
-          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'beat1', duration: getDuration(8, 70), velocity: 1 },
           // { id: 'compassVox1', duration: getDuration(7, 70), velocity: 0.5 },
-          { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
+          // { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
           { id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 },
         ],
         null,
         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.7 }],
         null,
-        // 12 ------------------------------------------------------------------
+        // 4 ------------------------------------------------------------------
         [{ id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 }],
         null,
         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
+        null,
+        // 8 ------------------------------------------------------------------
         [
-          // { id: 'noNoVox', duration: getDuration(2, 70), velocity: 0.4 },
-          // { id: 'strum2', duration: getDuration(2, 70), velocity: 0.7 },
+          { id: 'guitar4', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'beat2', duration: getDuration(8, 70), velocity: 1 },
+          { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
+          // { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
+          // { id: 'compassVox1', duration: getDuration(4, 70), velocity: 0.6 },
         ],
+        null,
+        null,
+        null,
+        // 12 ------------------------------------------------------------------
+        [{ id: 'soul2', duration: getDuration(3, 70), velocity: 0.8 }],
+        null,
+        null,
+        null,
       ],
     },
     {
@@ -250,7 +247,22 @@ const RecoilLivePage = () => {
     },
   );
 
-  // console.log(sampleSteps);
+  React.useEffect(() => {
+    window.playMusic = () => {
+      setIsPlaying(true);
+    };
+    window.stopMusic = () => {
+      setIsPlaying(false);
+    };
+  }, []);
+
+  console.log(
+    currentStep,
+    tracks[0].steps[currentStep + tracks[0].range[0]]
+      ? tracks[0].steps[currentStep + tracks[0].range[0]].map((s) => s.id)
+      : null,
+    tracks[1].steps[currentStep] ? 'sub' : null,
+  );
 
   return (
     <>
