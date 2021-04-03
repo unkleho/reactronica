@@ -19,12 +19,13 @@ const Page = () => {
     [],
     [],
   ]);
+  const [totalSteps, setTotalSteps] = React.useState(8);
 
   console.log(stepIndex);
 
   return (
     <div>
-      <StepIndexContext.Provider value={{ currentStepIndex: 0 }}>
+      <StepIndexContext.Provider value={{ currentStepIndex: stepIndex }}>
         <DAWStepsEditor
           clipId="Melody"
           steps={steps}
@@ -61,10 +62,19 @@ const Page = () => {
       >
         {isPlaying ? 'Stop' : 'Play'}
       </button>
+
+      <button
+        onClick={() => {
+          setTotalSteps(totalSteps === 8 ? 4 : 8);
+        }}
+      >
+        {totalSteps}
+      </button>
+
       <Song isPlaying={isPlaying} bpm={70}>
         <Track
           volume={1}
-          steps={steps}
+          steps={steps.slice(0, totalSteps)}
           onStepPlay={(_, index) => {
             setStepIndex(index);
           }}

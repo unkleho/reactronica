@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.8] - 2021-03-23
 
+- Update to Next 10.1
 - Add Recoil and experiment with atomic state management goodness.
 
 ## [0.0.7] - 2021-03-10

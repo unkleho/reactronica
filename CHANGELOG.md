@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.7] - 2021-03-23
 
-- Fix Track `steps` updating when new steps are different length to previous `steps`
+- Fix Track `steps` updating when new steps are different length to previous `steps`. Can't update steps length while music is playing though, still need to stop and play again.
 
 ## [0.4.6] - 2021-03-15
 
