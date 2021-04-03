@@ -1,9 +1,9 @@
 {
   "name": "reactronica-website",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Documentation and examples for Reactronica audio library",
   "main": "index.js",
-  "homepage": "https://reactronica-music-function-state-talk.now.sh/reactconfau2020",
+  "homepage": "https://reactronica.com",
   "scripts": {
     "dev": "next -p 4010",
     "start": "next start",
