@@ -95,7 +95,9 @@ export const midiNotes = [
   'A7',
   'A#7',
   'B7',
-];
+] as const;
+
+export type MidiNote = typeof midiNotes[number];
 
 // GRRR, lots of things break if uppercase notes are used.
 // Temporary fix
