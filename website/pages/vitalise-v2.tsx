@@ -1,12 +1,13 @@
 import React from 'react';
 import { Instrument, InstrumentType, Song, StepType, Track } from 'reactronica';
-import { RecoilRoot, atom, useRecoilState } from 'recoil';
+import { RecoilRoot, atom, useRecoilState, useRecoilValue } from 'recoil';
 import StepsEditorV2 from '../components/StepsEditorV2';
 import { MidiNote } from '../configs/midiConfig';
+import { slabSong, vitaliseSampleFiles } from '../data/vitalise';
 import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 import {
-  SampleId,
+  // SampleId,
   transformIdStepNotes,
   createInstrumentSamples,
 } from '../lib/sample-utils';
@@ -16,12 +17,17 @@ const isPlayingState = atom({
   default: false,
 });
 
+const songsState = atom({
+  key: 'songsState',
+  default: [slabSong],
+});
+
 type TrackType = {
   id: string;
   range?: [number, number];
   steps: (
     | {
-        id: SampleId;
+        id: string;
         duration: number;
         velocity: number;
       }
@@ -121,60 +127,56 @@ const currentStepIndexState = atom({
   default: 0,
 });
 
-const instrumentSamples = createInstrumentSamples();
+const instrumentSamples = createInstrumentSamples(vitaliseSampleFiles);
 
 const RecoilLivePage = () => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const [tracks, setTracks] = useRecoilState(tracksState);
   const [currentStep, setCurrentState] = useRecoilState(currentStepIndexState);
+  // const [tracks, setTracks] = useRecoilState(tracksState);
+  const songs = useRecoilValue(songsState);
+  const song = songs[0];
+  const tracks = song.tracks;
+  const clips = song.clips;
 
-  const sampleSteps = transformIdStepNotes(
-    tracks[0].steps.slice(tracks[0].range[0], tracks[0].range[1]),
-  );
+  // For PianoRoll, move to component?
+  const sampleSteps = transformIdStepNotes(clips[0].steps, vitaliseSampleFiles);
 
   useKeyPress(
     ' ',
-    () => {
-      setIsPlaying(!isPlaying);
-    },
-    (event) => {
-      event.preventDefault();
-    },
+    () => setIsPlaying(!isPlaying),
+    (e) => e.preventDefault(),
   );
 
-  React.useEffect(() => {
-    window.playMusic = () => {
-      setIsPlaying(true);
-    };
-    window.stopMusic = () => {
-      setIsPlaying(false);
-    };
-  }, []);
-
-  console.log(
-    currentStep,
-    tracks[0].steps[currentStep + tracks[0].range[0]]
-      ? tracks[0].steps[currentStep + tracks[0].range[0]].map((s) => s.id)
-      : null,
-    tracks[1].steps[currentStep] ? 'sub' : null,
-  );
+  // console.log(
+  //   currentStep,
+  //   tracks[0].steps[currentStep + tracks[0].range[0]]
+  //     ? tracks[0].steps[currentStep + tracks[0].range[0]].map((s) => s.id)
+  //     : null,
+  //   tracks[1].steps[currentStep] ? 'sub' : null,
+  // );
 
   return (
     <>
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
 
+      {/* Move to component? */}
       <StepsEditorV2
         currentStepIndex={currentStep}
         steps={sampleSteps}
         startNote="C0"
         endNote="C2"
+        subdivision={16}
       />
 
-      <Song bpm={70} isPlaying={isPlaying} volume={0}>
-        {tracks.slice(0, 1).map((track) => {
+      <Song bpm={song.bpm} isPlaying={isPlaying} volume={0}>
+        {tracks.map((track) => {
+          const { clipId } = track;
+          const clip = clips.find((clip) => clip.id === clipId);
+          const steps = transformIdStepNotes(clip.steps, vitaliseSampleFiles);
+
           return (
             <Track
-              steps={sampleSteps}
+              steps={steps}
               key={track.id}
               onStepPlay={(stepNotes, index) => {
                 setCurrentState(index);
@@ -188,7 +190,7 @@ const RecoilLivePage = () => {
           );
         })}
 
-        <Track steps={tracks[1].steps} key={'sub'}>
+        {/* <Track steps={tracks[1].steps} key={'sub'}>
           <Instrument
             type="sampler"
             samples={{
@@ -196,7 +198,7 @@ const RecoilLivePage = () => {
               C1: '/audio/samples/Diginoiz_-_TDS_808_Kick_C_5.wav',
             }}
           ></Instrument>
-        </Track>
+        </Track> */}
       </Song>
     </>
   );
