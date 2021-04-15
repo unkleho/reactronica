@@ -55,6 +55,7 @@ export interface InstrumentProps {
   };
   mute?: boolean;
   solo?: boolean;
+  /** TODO: Type properly and consider loading status */
   onLoad?: Function;
 }
 

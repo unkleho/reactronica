@@ -6,21 +6,30 @@ export interface SampleFile {
   file: string;
 }
 
-type IdStepNote = {
+export type IdStepNoteType = {
   id: string;
-  [key: string]: any;
+  duration?: number | string;
+  velocity?: number;
 };
+
+export type IdStepNote = IdStepNoteType | IdStepNoteType[];
 
 // export type SampleId = typeof samples[number]['id'];
 
-export function getSampleNote(id: string, sampleFiles: SampleFile[]) {
+/**
+ * Get MIDI note by `SampleFile` ID
+ */
+export function getSampleNote(id: string, sampleFiles: SampleFile[]): MidiNote {
   const index = sampleFiles.findIndex((s) => s.id === id);
 
   return midiNotes[index];
 }
 
+/**
+ * Convert step notes with IDs to Reactronica step notes
+ */
 export function transformIdStepNotes(
-  idStepNotes: IdStepNote[][],
+  idStepNotes: IdStepNote[],
   sampleFiles: SampleFile[],
 ): StepNoteType[][] {
   return idStepNotes.map((stepNotes) => {

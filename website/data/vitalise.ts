@@ -1,7 +1,26 @@
 import { getDuration } from '../lib/get-duration';
-import { SampleFile } from '../lib/sample-utils';
+import { SampleFile, IdStepNote } from '../lib/sample-utils';
 
-export const slabSong = {
+export interface VitaliseSong {
+  id: string;
+  bpm: number;
+  clips: VitaliseClip[];
+  tracks: VitaliseTrack[];
+}
+
+export interface VitaliseClip {
+  id: string;
+  steps: IdStepNote[];
+}
+
+export interface VitaliseTrack {
+  id: string;
+  currentClipId: string;
+  clipIds: string[];
+  sampleFileIds: string[];
+}
+
+export const slabSong: VitaliseSong = {
   id: 'slab',
   bpm: 85,
   clips: [
@@ -13,22 +32,17 @@ export const slabSong = {
             id: 'wonkyBeat1',
             duration: getDuration(16, 85),
           },
-          // {
-          //   id: 'guitarChords1',
-          //   duration: getDuration(16, 85),
-          // },
           {
             id: 'slimePiano1',
             duration: getDuration(4, 85),
           },
+          // {
+          //   id: 'futureVoxLoop',
+          //   duration: getDuration(8, 85),
+          // },
         ],
         null,
-        [
-          {
-            id: 'sirenVox',
-            duration: getDuration(12, 85),
-          },
-        ],
+        null,
         null,
         [
           {
@@ -39,11 +53,82 @@ export const slabSong = {
         null,
         null,
         null,
+        [
+          {
+            id: 'slimePiano1',
+            duration: getDuration(4, 85),
+          },
+        ],
+        null,
+        null,
+        null,
+        [
+          {
+            id: 'slimePiano2',
+            duration: getDuration(4, 85),
+          },
+          // {
+          //   id: 'junglePad',
+          //   duration: getDuration(4, 85),
+          // },
+        ],
+        null,
+        null,
+        null,
+      ],
+    },
+    {
+      id: 'clip2',
+      steps: [
+        [
+          {
+            id: 'wonkyBeat1',
+            duration: getDuration(16, 85),
+          },
+          {
+            id: 'guitarChords1',
+            duration: getDuration(16, 85),
+          },
+          {
+            id: 'doubleVox1',
+            duration: getDuration(12, 85),
+            velocity: 0.4,
+          },
+        ],
+        null,
+        [
+          {
+            id: 'sirenVox',
+            duration: getDuration(12, 85),
+          },
+        ],
         null,
         null,
         null,
         null,
         null,
+        [
+          {
+            id: 'rap2',
+            duration: getDuration(4, 85),
+            velocity: 0.3,
+          },
+          // {
+          //   id: 'doubleVox3',
+          //   duration: getDuration(8, 85),
+          //   velocity: 0.4,
+          // },
+        ],
+        null,
+        null,
+        null,
+        [
+          {
+            id: 'rap4',
+            duration: getDuration(4, 85),
+            velocity: 0.3,
+          },
+        ],
         null,
         null,
         null,
@@ -53,18 +138,34 @@ export const slabSong = {
   tracks: [
     {
       id: 'slabTrack',
-      clipId: 'clip1',
-      sampleIds: [
+      currentClipId: 'clip2',
+      clipIds: ['clip1', 'clip2'],
+      sampleFileIds: [
         'wonkyBeat1',
-        'wonkeyBeat2',
+        'wonkyBeat2',
         'slimePiano1',
         'slimePiano2',
         'sirenVox',
         'guitarChords1',
+        'rap1',
+        'rap2',
+        'rap3',
+        'rap4',
+        'futureVoxLoop',
+        'junglePad',
+        'doubleVox1',
+        'doubleVox2',
+        'doubleVox3',
+        'doubleVox4',
+        'doubleVox5',
       ],
     },
   ],
 };
+
+// export const kalimbaSong = {
+
+// }
 
 export const vitaliseSampleFiles: SampleFile[] = [
   {
@@ -181,5 +282,55 @@ export const vitaliseSampleFiles: SampleFile[] = [
   {
     id: 'sirenVox',
     file: '/audio/samples/BL_Gsharpm_85_BVs_Siren.wav',
+  },
+  {
+    id: 'rap1',
+    file: '/audio/samples/SMT_Vox_11_Yay_85_Gsharpm_1.wav',
+  },
+  {
+    id: 'rap2',
+    file: '/audio/samples/SMT_Vox_11_Yay_85_Gsharpm_2.wav',
+  },
+  {
+    id: 'rap3',
+    file: '/audio/samples/SMT_Vox_11_Yay_85_Gsharpm_3.wav',
+  },
+  {
+    id: 'rap4',
+    file: '/audio/samples/SMT_Vox_11_Yay_85_Gsharpm_4.wav',
+  },
+  {
+    id: 'futureVoxLoop',
+    file: '/audio/samples/fv_mel_85_futur_Gsharpm.wav',
+  },
+  {
+    id: 'junglePad',
+    file:
+      '/audio/samples/FALTY_DL_synth_pad_loop_euphoric_junglism_85_Gsharpmin.wav',
+  },
+  {
+    id: 'doubleVox1',
+    file:
+      '/audio/samples/VPI_kit2_brake_vocal_double_dry_85_gsharp_minor_1.wav',
+  },
+  {
+    id: 'doubleVox2',
+    file:
+      '/audio/samples/VPI_kit2_brake_vocal_double_dry_85_gsharp_minor_2.wav',
+  },
+  {
+    id: 'doubleVox3',
+    file:
+      '/audio/samples/VPI_kit2_brake_vocal_double_dry_85_gsharp_minor_3.wav',
+  },
+  {
+    id: 'doubleVox4',
+    file:
+      '/audio/samples/VPI_kit2_brake_vocal_double_dry_85_gsharp_minor_4.wav',
+  },
+  {
+    id: 'doubleVox5',
+    file:
+      '/audio/samples/VPI_kit2_brake_vocal_double_dry_85_gsharp_minor_5.wav',
   },
 ];

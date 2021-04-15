@@ -3,7 +3,7 @@ import { Instrument, InstrumentType, Song, StepType, Track } from 'reactronica';
 import { RecoilRoot, atom, useRecoilState, useRecoilValue } from 'recoil';
 import StepsEditorV2 from '../components/StepsEditorV2';
 import { MidiNote } from '../configs/midiConfig';
-import { slabSong, vitaliseSampleFiles } from '../data/vitalise';
+import { slabSong, vitaliseSampleFiles, VitaliseSong } from '../data/vitalise';
 import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 import {
@@ -12,12 +12,12 @@ import {
   createInstrumentSamples,
 } from '../lib/sample-utils';
 
-const isPlayingState = atom({
+const isPlayingState = atom<boolean>({
   key: 'isPlayingState',
   default: false,
 });
 
-const songsState = atom({
+const songsState = atom<VitaliseSong[]>({
   key: 'songsState',
   default: [slabSong],
 });
@@ -122,24 +122,26 @@ const tracksState = atom<TrackType[]>({
   ],
 });
 
-const currentStepIndexState = atom({
+const currentStepIndexState = atom<number>({
   key: 'currentStepIndexState',
   default: 0,
 });
 
-const instrumentSamples = createInstrumentSamples(vitaliseSampleFiles);
-
 const RecoilLivePage = () => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
   const [currentStep, setCurrentState] = useRecoilState(currentStepIndexState);
-  // const [tracks, setTracks] = useRecoilState(tracksState);
   const songs = useRecoilValue(songsState);
   const song = songs[0];
-  const tracks = song.tracks;
-  const clips = song.clips;
+  const { tracks, clips } = song;
 
-  // For PianoRoll, move to component?
-  const sampleSteps = transformIdStepNotes(clips[0].steps, vitaliseSampleFiles);
+  const { currentClipId } = tracks[0];
+  const currentClip = clips.find((clip) => clip.id === currentClipId);
+
+  // TODO: For PianoRoll, move to component?
+  const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
+    tracks[0].sampleFileIds.includes(sampleFile.id),
+  );
+  const sampleSteps = transformIdStepNotes(currentClip.steps, sampleFiles);
 
   useKeyPress(
     ' ',
@@ -147,32 +149,29 @@ const RecoilLivePage = () => {
     (e) => e.preventDefault(),
   );
 
-  // console.log(
-  //   currentStep,
-  //   tracks[0].steps[currentStep + tracks[0].range[0]]
-  //     ? tracks[0].steps[currentStep + tracks[0].range[0]].map((s) => s.id)
-  //     : null,
-  //   tracks[1].steps[currentStep] ? 'sub' : null,
-  // );
-
   return (
     <>
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
 
-      {/* Move to component? */}
+      {/* TODO: Move to component? */}
       <StepsEditorV2
         currentStepIndex={currentStep}
         steps={sampleSteps}
         startNote="C0"
-        endNote="C2"
+        endNote="C1"
         subdivision={16}
       />
 
       <Song bpm={song.bpm} isPlaying={isPlaying} volume={0}>
         {tracks.map((track) => {
-          const { clipId } = track;
-          const clip = clips.find((clip) => clip.id === clipId);
-          const steps = transformIdStepNotes(clip.steps, vitaliseSampleFiles);
+          const { currentClipId, sampleFileIds } = track;
+          const clip = clips.find((clip) => clip.id === currentClipId);
+
+          const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
+            sampleFileIds.includes(sampleFile.id),
+          );
+          const steps = transformIdStepNotes(clip.steps, sampleFiles);
+          const instrumentSamples = createInstrumentSamples(sampleFiles);
 
           return (
             <Track
@@ -185,6 +184,10 @@ const RecoilLivePage = () => {
               <Instrument
                 type="sampler"
                 samples={instrumentSamples}
+                // TODO: Causes buffer errors for some reason
+                // onLoad={(s) => {
+                //   console.log(s);
+                // }}
               ></Instrument>
             </Track>
           );
