@@ -1,9 +1,22 @@
 import React from 'react';
 import { Instrument, InstrumentType, Song, StepType, Track } from 'reactronica';
-import { RecoilRoot, atom, useRecoilState, useRecoilValue } from 'recoil';
+import {
+  RecoilRoot,
+  atom,
+  useRecoilState,
+  useRecoilValue,
+  selectorFamily,
+  selector,
+} from 'recoil';
 import StepsEditorV2 from '../components/StepsEditorV2';
 import { MidiNote } from '../configs/midiConfig';
-import { slabSong, vitaliseSampleFiles, VitaliseSong } from '../data/vitalise';
+import {
+  emptySteps,
+  slabSong,
+  vitaliseSampleFiles,
+  VitaliseSong,
+  VitaliseTrack,
+} from '../data/vitalise';
 import { getDuration } from '../lib/get-duration';
 import { useKeyPress } from '../lib/hooks';
 import {
@@ -20,6 +33,75 @@ const isPlayingState = atom<boolean>({
 const songsState = atom<VitaliseSong[]>({
   key: 'songsState',
   default: [slabSong],
+});
+
+const currentSongIdState = atom<string>({
+  key: 'currentSongIdState',
+  default: 'slab',
+});
+
+const currentSongState = selector<VitaliseSong>({
+  key: 'currentSongState',
+  get: ({ get }) => {
+    const songs: VitaliseSong[] = get(songsState);
+    const songId = get(currentSongIdState);
+    return songs.find((song) => song.id === songId);
+  },
+  set: ({ set, get }, newSong) => {
+    const songId = get(currentSongIdState);
+
+    set(songsState, (prevSongs) => {
+      return prevSongs.map((prevSong) => {
+        if (prevSong.id === songId) {
+          return newSong;
+        }
+
+        return prevSong;
+      });
+    });
+  },
+});
+
+const trackState = selectorFamily<VitaliseTrack, string>({
+  key: 'trackState',
+  get: (trackId) => ({ get }) => {
+    const song = get(currentSongState);
+    const { tracks } = song;
+    return tracks.find((track) => track.id === trackId);
+  },
+  set: (trackId) => ({ set }, newTrack) => {
+    set(currentSongState, (prevSong) => {
+      return {
+        ...prevSong,
+        tracks: prevSong.tracks.map((prevTrack) => {
+          return prevTrack.id === trackId ? newTrack : prevTrack;
+        }),
+      };
+    });
+  },
+});
+
+const currentClipIdState = selectorFamily<string, string>({
+  key: 'currentClipIdState',
+  get: (trackId) => ({ get }) => {
+    const track = get(trackState(trackId));
+    return track.currentClipId;
+  },
+  set: (trackId) => ({ set, get }) => {
+    const track = get(trackState(trackId));
+  },
+});
+
+const currentClipState = selectorFamily({
+  key: 'currentClipState',
+  get: () => ({ get }) => {
+    const songs: VitaliseSong[] = get(songsState);
+    const currentClipId = songs[0].tracks[0].currentClipId;
+    return currentClipId;
+  },
+  // set: () => ({ set }, newValue) => {
+  //   set(songsState, prevSongs => )
+  // }
 });
 
 type TrackType = {
@@ -130,18 +212,17 @@ const currentStepIndexState = atom<number>({
 const RecoilLivePage = () => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
   const [currentStep, setCurrentState] = useRecoilState(currentStepIndexState);
-  const songs = useRecoilValue(songsState);
-  const song = songs[0];
+  const song = useRecoilValue(currentSongState);
   const { tracks, clips } = song;
 
-  const { currentClipId } = tracks[0];
+  const { currentClipId } = tracks[1];
   const currentClip = clips.find((clip) => clip.id === currentClipId);
 
   // TODO: For PianoRoll, move to component?
   const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
-    tracks[0].sampleFileIds.includes(sampleFile.id),
+    tracks[1].sampleFileIds.includes(sampleFile.id),
   );
-  const sampleSteps = transformIdStepNotes(currentClip.steps, sampleFiles);
+  const sampleSteps = transformIdStepNotes(currentClip?.steps, sampleFiles);
 
   useKeyPress(
     ' ',
@@ -152,6 +233,13 @@ const RecoilLivePage = () => {
   return (
     <>
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
+      <p>{song.bpm}</p>
+
+      <div>
+        {tracks.map(({ id }) => {
+          return <SessionTrack trackId={id} key={id} />;
+        })}
+      </div>
 
       {/* TODO: Move to component? */}
       <StepsEditorV2
@@ -170,12 +258,12 @@ const RecoilLivePage = () => {
           const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
             sampleFileIds.includes(sampleFile.id),
           );
-          const steps = transformIdStepNotes(clip.steps, sampleFiles);
+          const steps = transformIdStepNotes(clip?.steps, sampleFiles);
           const instrumentSamples = createInstrumentSamples(sampleFiles);
 
           return (
             <Track
-              steps={steps}
+              steps={steps?.length ? steps : emptySteps}
               key={track.id}
               onStepPlay={(stepNotes, index) => {
                 setCurrentState(index);
@@ -204,6 +292,48 @@ const RecoilLivePage = () => {
         </Track> */}
       </Song>
     </>
+  );
+};
+
+const SessionTrack = ({ trackId }) => {
+  const [track, setTrack] = useRecoilState(trackState(trackId));
+  const { currentClipId } = track;
+
+  return (
+    <div>
+      <p>{track.id}</p>
+      <div>
+        <button
+          onClick={() => {
+            setTrack({
+              ...track,
+              currentClipId: null,
+            });
+          }}
+        >
+          Clear
+        </button>
+
+        {track.clipIds.map((clipId) => {
+          return (
+            <button
+              onClick={() => {
+                setTrack({
+                  ...track,
+                  currentClipId: clipId,
+                });
+              }}
+              style={{
+                fontWeight: clipId === currentClipId ? 'bold' : 'normal',
+              }}
+              key={clipId}
+            >
+              {clipId}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 

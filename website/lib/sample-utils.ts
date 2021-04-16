@@ -29,7 +29,7 @@ export function getSampleNote(id: string, sampleFiles: SampleFile[]): MidiNote {
  * Convert step notes with IDs to Reactronica step notes
  */
 export function transformIdStepNotes(
-  idStepNotes: IdStepNote[],
+  idStepNotes: IdStepNote[] = [],
   sampleFiles: SampleFile[],
 ): StepNoteType[][] {
   return idStepNotes.map((stepNotes) => {

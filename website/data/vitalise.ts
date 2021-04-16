@@ -28,18 +28,18 @@ export const slabSong: VitaliseSong = {
       id: 'clip1',
       steps: [
         [
-          {
-            id: 'wonkyBeat1',
-            duration: getDuration(16, 85),
-          },
+          // {
+          //   id: 'wonkyBeat1',
+          //   duration: getDuration(16, 85),
+          // },
           {
             id: 'slimePiano1',
             duration: getDuration(4, 85),
           },
-          // {
-          //   id: 'futureVoxLoop',
-          //   duration: getDuration(8, 85),
-          // },
+          {
+            id: 'futureVoxLoop',
+            duration: getDuration(8, 85),
+          },
         ],
         null,
         null,
@@ -81,10 +81,10 @@ export const slabSong: VitaliseSong = {
       id: 'clip2',
       steps: [
         [
-          {
-            id: 'wonkyBeat1',
-            duration: getDuration(16, 85),
-          },
+          // {
+          //   id: 'wonkyBeat1',
+          //   duration: getDuration(16, 85),
+          // },
           {
             id: 'guitarChords1',
             duration: getDuration(16, 85),
@@ -134,15 +134,71 @@ export const slabSong: VitaliseSong = {
         null,
       ],
     },
+    {
+      id: 'beat1',
+      steps: [
+        [
+          {
+            id: 'wonkyBeat1',
+            duration: getDuration(16, 85),
+          },
+        ],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
+    },
+    {
+      id: 'beat2',
+      steps: [
+        [
+          {
+            id: 'wonkyBeat2',
+            duration: getDuration(16, 85),
+          },
+        ],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
+    },
   ],
   tracks: [
+    {
+      id: 'beat',
+      currentClipId: 'beat1',
+      clipIds: ['beat1', 'beat2'],
+      sampleFileIds: ['wonkyBeat1', 'wonkyBeat2'],
+    },
     {
       id: 'slabTrack',
       currentClipId: 'clip2',
       clipIds: ['clip1', 'clip2'],
       sampleFileIds: [
-        'wonkyBeat1',
-        'wonkyBeat2',
         'slimePiano1',
         'slimePiano2',
         'sirenVox',
@@ -333,4 +389,23 @@ export const vitaliseSampleFiles: SampleFile[] = [
     file:
       '/audio/samples/VPI_kit2_brake_vocal_double_dry_85_gsharp_minor_5.wav',
   },
+];
+
+export const emptySteps = [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
 ];
