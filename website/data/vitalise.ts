@@ -36,10 +36,10 @@ export const slabSong: VitaliseSong = {
             id: 'slimePiano1',
             duration: getDuration(4, 85),
           },
-          {
-            id: 'futureVoxLoop',
-            duration: getDuration(8, 85),
-          },
+          // {
+          //   id: 'futureVoxLoop',
+          //   duration: getDuration(8, 85),
+          // },
         ],
         null,
         null,
@@ -89,11 +89,11 @@ export const slabSong: VitaliseSong = {
             id: 'guitarChords1',
             duration: getDuration(16, 85),
           },
-          {
-            id: 'doubleVox1',
-            duration: getDuration(12, 85),
-            velocity: 0.4,
-          },
+          // {
+          //   id: 'doubleVox1',
+          //   duration: getDuration(12, 85),
+          //   velocity: 0.4,
+          // },
         ],
         null,
         [
@@ -186,6 +186,37 @@ export const slabSong: VitaliseSong = {
         null,
       ],
     },
+    {
+      id: 'futureVoxLoop',
+      steps: [
+        [
+          {
+            id: 'futureVoxLoop',
+            duration: getDuration(8, 85),
+          },
+        ],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        [
+          {
+            id: 'futureVoxLoop',
+            duration: getDuration(8, 85),
+          },
+        ],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
+    },
   ],
   tracks: [
     {
@@ -195,7 +226,7 @@ export const slabSong: VitaliseSong = {
       sampleFileIds: ['wonkyBeat1', 'wonkyBeat2'],
     },
     {
-      id: 'slabTrack',
+      id: 'clip',
       currentClipId: 'clip2',
       clipIds: ['clip1', 'clip2'],
       sampleFileIds: [
@@ -215,6 +246,12 @@ export const slabSong: VitaliseSong = {
         'doubleVox4',
         'doubleVox5',
       ],
+    },
+    {
+      id: 'futureVoxLoop',
+      currentClipId: 'futureVoxLoop',
+      clipIds: ['futureVoxLoop'],
+      sampleFileIds: ['futureVoxLoop'],
     },
   ],
 };

@@ -7,12 +7,14 @@ import {
   useRecoilValue,
   selectorFamily,
   selector,
+  DefaultValue,
 } from 'recoil';
 import StepsEditorV2 from '../components/StepsEditorV2';
 import { MidiNote } from '../configs/midiConfig';
 import {
   emptySteps,
   slabSong,
+  VitaliseClip,
   vitaliseSampleFiles,
   VitaliseSong,
   VitaliseTrack,
@@ -30,16 +32,25 @@ const isPlayingState = atom<boolean>({
   default: false,
 });
 
+/**
+ * List of songs
+ */
 const songsState = atom<VitaliseSong[]>({
   key: 'songsState',
   default: [slabSong],
 });
 
+/**
+ * Current song ID
+ */
 const currentSongIdState = atom<string>({
   key: 'currentSongIdState',
   default: 'slab',
 });
 
+/**
+ * Current song data
+ */
 const currentSongState = selector<VitaliseSong>({
   key: 'currentSongState',
   get: ({ get }) => {
@@ -62,6 +73,9 @@ const currentSongState = selector<VitaliseSong>({
   },
 });
 
+/**
+ * Tracks of current song
+ */
 const trackState = selectorFamily<VitaliseTrack, string>({
   key: 'trackState',
   get: (trackId) => ({ get }) => {
@@ -81,27 +95,44 @@ const trackState = selectorFamily<VitaliseTrack, string>({
   },
 });
 
-const currentClipIdState = selectorFamily<string, string>({
-  key: 'currentClipIdState',
-  get: (trackId) => ({ get }) => {
-    const track = get(trackState(trackId));
-    return track.currentClipId;
-  },
-  set: (trackId) => ({ set, get }) => {
-    const track = get(trackState(trackId));
+const currentSessionTrackIdState = atom<string>({
+  key: 'currentSessionTrackIdState',
+  default: 'clip',
+});
+
+const currentSessionTrackState = selector<VitaliseTrack>({
+  key: 'currentSessionTrackState',
+  get: ({ get }) => {
+    const song: VitaliseSong = get(currentSongState);
+    const { tracks } = song;
+    const currentSessionTrackId = get(currentSessionTrackIdState);
+    const currentSessionTrack = tracks.find(
+      (track) => track.id === currentSessionTrackId,
+    );
+
+    return currentSessionTrack;
   },
 });
 
-const currentClipState = selectorFamily({
+/**
+ * ID of current clip shown in session view
+ */
+const currentSessionClipIdState = atom<string>({
+  key: 'currentSessionClipIdState',
+  default: 'clip1',
+});
+
+/**
+ * Current session clip data, eg. steps
+ */
+const currentSessionClipState = selector<VitaliseClip>({
   key: 'currentClipState',
-  get: () => ({ get }) => {
-    const songs: VitaliseSong[] = get(songsState);
-    const currentClipId = songs[0].tracks[0].currentClipId;
-    return currentClipId;
+  get: ({ get }) => {
+    const song: VitaliseSong = get(currentSongState);
+    const currentClipId = get(currentSessionClipIdState);
+    const currentClip = song.clips.find((clip) => clip.id === currentClipId);
+    return currentClip;
   },
-  // set: () => ({ set }, newValue) => {
-  //   set(songsState, prevSongs => )
-  // }
 });
 
 type TrackType = {
@@ -215,14 +246,20 @@ const RecoilLivePage = () => {
   const song = useRecoilValue(currentSongState);
   const { tracks, clips } = song;
 
-  const { currentClipId } = tracks[1];
-  const currentClip = clips.find((clip) => clip.id === currentClipId);
+  const currentSessionClip = useRecoilValue(currentSessionClipState);
+  const currentSessionTrack = useRecoilValue(currentSessionTrackState);
 
   // TODO: For PianoRoll, move to component?
+  // TODO: Move to Recoil?
   const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
-    tracks[1].sampleFileIds.includes(sampleFile.id),
+    currentSessionTrack.sampleFileIds.includes(sampleFile.id),
   );
-  const sampleSteps = transformIdStepNotes(currentClip?.steps, sampleFiles);
+
+  // TODO: Move to Recoil?
+  const sampleSteps = transformIdStepNotes(
+    currentSessionClip?.steps,
+    sampleFiles,
+  );
 
   useKeyPress(
     ' ',
@@ -297,6 +334,12 @@ const RecoilLivePage = () => {
 
 const SessionTrack = ({ trackId }) => {
   const [track, setTrack] = useRecoilState(trackState(trackId));
+  const [currentSessionClipId, setCurrentSessionClipId] = useRecoilState(
+    currentSessionClipIdState,
+  );
+  const [currentSessionTrackId, setCurrentSessionTrackId] = useRecoilState(
+    currentSessionTrackIdState,
+  );
   const { currentClipId } = track;
 
   return (
@@ -322,6 +365,8 @@ const SessionTrack = ({ trackId }) => {
                   ...track,
                   currentClipId: clipId,
                 });
+                setCurrentSessionClipId(clipId);
+                setCurrentSessionTrackId(trackId);
               }}
               style={{
                 fontWeight: clipId === currentClipId ? 'bold' : 'normal',
