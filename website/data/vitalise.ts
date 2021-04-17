@@ -81,19 +81,10 @@ export const slabSong: VitaliseSong = {
       id: 'clip2',
       steps: [
         [
-          // {
-          //   id: 'wonkyBeat1',
-          //   duration: getDuration(16, 85),
-          // },
           {
             id: 'guitarChords1',
             duration: getDuration(16, 85),
           },
-          // {
-          //   id: 'doubleVox1',
-          //   duration: getDuration(12, 85),
-          //   velocity: 0.4,
-          // },
         ],
         null,
         [
@@ -113,11 +104,6 @@ export const slabSong: VitaliseSong = {
             duration: getDuration(4, 85),
             velocity: 0.3,
           },
-          // {
-          //   id: 'doubleVox3',
-          //   duration: getDuration(8, 85),
-          //   velocity: 0.4,
-          // },
         ],
         null,
         null,

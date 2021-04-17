@@ -1,7 +1,13 @@
-import { Clip } from '../types/typescript';
+import { StepNoteType } from 'reactronica';
+import { TimeNote } from '../types/typescript';
 
-export function buildSteps(clip: Clip, subdivision = 16, notesPerBar = 4) {
-  const { bars, notes } = clip;
+export function buildSteps(
+  notes: TimeNote[] = [],
+  bars,
+  subdivision = 16,
+  notesPerBar = 4,
+): StepNoteType[][] {
+  // const { bars, notes } = clip;
   const totalSteps = bars * subdivision;
 
   // To pass ts-jest test

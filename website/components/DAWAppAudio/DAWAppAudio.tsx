@@ -1,7 +1,7 @@
 import React from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
-import { buildSteps } from '../../lib/stepUtils';
+import { buildSteps } from '../../lib/step-utils';
 import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
 type Props = {
@@ -29,7 +29,7 @@ const DawAppAudio: React.FC<Props> = ({ isPlaying, bpm, tracks, clips }) => {
         });
 
         const trackSteps = trackClips.reduce((prev, curr) => {
-          return [...prev, ...buildSteps(curr)];
+          return [...prev, ...buildSteps(curr.notes, curr.bars)];
         }, []);
 
         return (

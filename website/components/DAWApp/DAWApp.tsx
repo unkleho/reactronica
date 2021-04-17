@@ -18,7 +18,7 @@ import {
   vocalClip1,
   vocalClip2,
 } from '../../data/daw2';
-import { buildSteps, convertStepsToNotes } from '../../lib/stepUtils';
+import { buildSteps, convertStepsToNotes } from '../../lib/step-utils';
 import { useKeyPress } from '../../lib/hooks';
 import { StepIndexContext } from '../../lib/contexts/StepIndexContext';
 
@@ -62,7 +62,10 @@ const initialState = {
       pan: 50,
       mute: false,
       solo: false,
-      steps: [...buildSteps(melodyClip1), ...buildSteps(melodyClip2)],
+      steps: [
+        ...buildSteps(melodyClip1.notes, melodyClip1.bars),
+        ...buildSteps(melodyClip2.notes, melodyClip2.bars),
+      ],
       clips: [{ id: 'melody1' }, { id: 'melody2' }],
       notes: [],
       effects: [
@@ -79,7 +82,10 @@ const initialState = {
       pan: 50,
       mute: false,
       solo: false,
-      steps: [...buildSteps(beatClip1), ...buildSteps(beatClip2)],
+      steps: [
+        ...buildSteps(beatClip1.notes, beatClip1.bars),
+        ...buildSteps(beatClip2.notes, beatClip2.bars),
+      ],
       clips: [{ id: 'beat1' }, { id: 'beat2' }],
       notes: [],
       effects: [],
@@ -91,7 +97,10 @@ const initialState = {
       pan: 50,
       mute: false,
       solo: false,
-      steps: [...buildSteps(vocalClip1), ...buildSteps(vocalClip2)],
+      steps: [
+        ...buildSteps(vocalClip1.notes, vocalClip1.bars),
+        ...buildSteps(vocalClip2.notes, vocalClip2.bars),
+      ],
       clips: [{ id: 'vocalClip1' }, { id: 'vocalClip2' }],
       notes: [],
       effects: [],
@@ -269,7 +278,7 @@ function appSelector(state) {
   // --------------------------------------------------------------------------
   // Current Steps
   // --------------------------------------------------------------------------
-  const currentSteps = buildSteps(currentClip);
+  const currentSteps = buildSteps(currentClip.notes, currentClip.bars);
 
   return {
     ...state,
@@ -283,7 +292,7 @@ function appSelector(state) {
             ...trackClip,
             name: clip.name,
             notes: clip.notes,
-            steps: buildSteps(clip),
+            steps: buildSteps(clip.notes, clip.bars),
           };
         }),
       };

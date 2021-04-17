@@ -1,7 +1,9 @@
 // Melody clip with notes that will need to have buildSteps() run on it.
 
+import { Clip } from '../types/typescript';
+
 const melodyNoteLength = '4n';
-export const melodyClip1 = {
+export const melodyClip1: Clip = {
   id: 'melody1',
   name: 'Melody 1',
   bars: 1,
@@ -84,7 +86,7 @@ export const melodyClip1 = {
   ],
 };
 
-export const melodyClip2 = {
+export const melodyClip2: Clip = {
   id: 'melody2',
   name: 'Melody 2',
   bars: 1,
@@ -172,7 +174,7 @@ export const melodyClip2 = {
 
 // Beat clip with notes that will need to have buildSteps() run on it.
 const hatVelocity = 0.1;
-export const beatClip1 = {
+export const beatClip1: Clip = {
   id: 'beat1',
   name: 'Beat 1',
   bars: 1,
@@ -305,7 +307,7 @@ export const beatClip1 = {
   ],
 };
 
-export const beatClip2 = {
+export const beatClip2: Clip = {
   id: 'beat2',
   name: 'Beat 2',
   bars: 1,
@@ -452,7 +454,7 @@ export const beatClip2 = {
 };
 
 // Vocals
-export const vocalClip1 = {
+export const vocalClip1: Clip = {
   id: 'vocalClip1',
   name: 'Vocal 1',
   bars: 1,
@@ -466,7 +468,7 @@ export const vocalClip1 = {
   ],
 };
 
-export const vocalClip2 = {
+export const vocalClip2: Clip = {
   id: 'vocalClip2',
   name: 'Vocal 2',
   bars: 1,
