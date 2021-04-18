@@ -50,6 +50,11 @@ export const slabSong: VitaliseSong = {
           id: 'slimePiano2',
           duration: getDuration(4, 85),
         },
+        {
+          start: '4.1.1',
+          id: 'slimePiano1',
+          duration: getDuration(4, 85),
+        },
       ],
       steps: [
         [

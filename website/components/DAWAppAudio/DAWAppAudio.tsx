@@ -29,7 +29,7 @@ const DawAppAudio: React.FC<Props> = ({ isPlaying, bpm, tracks, clips }) => {
         });
 
         const trackSteps = trackClips.reduce((prev, curr) => {
-          return [...prev, ...buildSteps(curr.notes, curr.bars)];
+          return [...prev, ...buildSteps(curr.notes, curr.bars, 16)];
         }, []);
 
         return (

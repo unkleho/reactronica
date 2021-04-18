@@ -1,5 +1,7 @@
+import { Clip } from '../types/typescript';
+
 // Melody clip with notes that will need to have buildSteps() run on it.
-export const melodyClip1 = {
+export const melodyClip1: Clip = {
   id: 'melody1',
   name: 'Melody 1',
   bars: 1,

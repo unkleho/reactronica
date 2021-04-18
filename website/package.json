@@ -42,6 +42,7 @@
     "@types/react": "^16.9.1",
     "dotenv": "^8.2.0",
     "hygen": "^4.0.8",
+    "jest": "^26.6.3",
     "postcss-extend-rule": "^3.0.0",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
@@ -53,6 +54,7 @@
     "stylelint-config-standard": "^18.3.0",
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.14.2",
+    "ts-jest": "^26.5.5",
     "typescript": "^4.2.3",
     "webpack-filter-warnings-plugin": "^1.2.1"
   }

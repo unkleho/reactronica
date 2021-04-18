@@ -268,7 +268,8 @@ const RecoilLivePage = () => {
   );
 
   // TS error because Reactronica name: string, not MidiNote
-  const newSteps = buildSteps(timeSteps, 1, 16, 16);
+  // @ts-ignore
+  const newSteps = buildSteps(timeSteps, 4, 4);
 
   console.log(newSteps);
 

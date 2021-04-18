@@ -63,8 +63,8 @@ const initialState = {
       mute: false,
       solo: false,
       steps: [
-        ...buildSteps(melodyClip1.notes, melodyClip1.bars),
-        ...buildSteps(melodyClip2.notes, melodyClip2.bars),
+        ...buildSteps(melodyClip1.notes, melodyClip1.bars, 16),
+        ...buildSteps(melodyClip2.notes, melodyClip2.bars, 16),
       ],
       clips: [{ id: 'melody1' }, { id: 'melody2' }],
       notes: [],
@@ -83,8 +83,8 @@ const initialState = {
       mute: false,
       solo: false,
       steps: [
-        ...buildSteps(beatClip1.notes, beatClip1.bars),
-        ...buildSteps(beatClip2.notes, beatClip2.bars),
+        ...buildSteps(beatClip1.notes, beatClip1.bars, 16),
+        ...buildSteps(beatClip2.notes, beatClip2.bars, 16),
       ],
       clips: [{ id: 'beat1' }, { id: 'beat2' }],
       notes: [],
@@ -98,8 +98,8 @@ const initialState = {
       mute: false,
       solo: false,
       steps: [
-        ...buildSteps(vocalClip1.notes, vocalClip1.bars),
-        ...buildSteps(vocalClip2.notes, vocalClip2.bars),
+        ...buildSteps(vocalClip1.notes, vocalClip1.bars, 16),
+        ...buildSteps(vocalClip2.notes, vocalClip2.bars, 16),
       ],
       clips: [{ id: 'vocalClip1' }, { id: 'vocalClip2' }],
       notes: [],
@@ -278,7 +278,7 @@ function appSelector(state) {
   // --------------------------------------------------------------------------
   // Current Steps
   // --------------------------------------------------------------------------
-  const currentSteps = buildSteps(currentClip.notes, currentClip.bars);
+  const currentSteps = buildSteps(currentClip.notes, currentClip.bars, 16);
 
   return {
     ...state,
@@ -292,7 +292,7 @@ function appSelector(state) {
             ...trackClip,
             name: clip.name,
             notes: clip.notes,
-            steps: buildSteps(clip.notes, clip.bars),
+            steps: buildSteps(clip.notes, clip.bars, 16),
           };
         }),
       };
