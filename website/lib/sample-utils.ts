@@ -1,4 +1,4 @@
-import { StepNoteType } from 'reactronica';
+import { StepNoteType, StepType } from 'reactronica';
 import { midiNotes, MidiNote } from '../configs/midiConfig';
 
 export interface SampleFile {
@@ -26,19 +26,39 @@ export function getSampleNote(id: string, sampleFiles: SampleFile[]): MidiNote {
 }
 
 /**
- * Convert step notes with IDs to Reactronica step notes
+ * Convert step notes with IDs to Reactronica step notes with `name` note
  */
 export function transformIdStepNotes(
   idStepNotes: IdStepNote[] = [],
   sampleFiles: SampleFile[],
-): StepNoteType[][] {
+): StepType[] {
   return idStepNotes.map((stepNotes) => {
-    return stepNotes
-      ? stepNotes.map((stepNote) => ({
-          ...stepNote,
-          name: getSampleNote(stepNote.id, sampleFiles),
-        }))
-      : null;
+    if (!stepNotes) {
+      return null;
+    }
+
+    if (Array.isArray(stepNotes)) {
+      // Multiple notes
+      return stepNotes.map((stepNote) => ({
+        ...stepNote,
+        name: getSampleNote(stepNote.id, sampleFiles),
+      }));
+    } else if (stepNotes.id) {
+      // Single note
+      return {
+        ...stepNotes,
+        name: getSampleNote(stepNotes.id, sampleFiles),
+      };
+    }
+
+    return null;
+
+    // return stepNotes
+    //   ? stepNotes.map((stepNote) => ({
+    //       ...stepNote,
+    //       name: getSampleNote(stepNote.id, sampleFiles),
+    //     }))
+    //   : null;
   });
 }
 

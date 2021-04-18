@@ -26,6 +26,7 @@ import {
   transformIdStepNotes,
   createInstrumentSamples,
 } from '../lib/sample-utils';
+import { buildSteps } from '../lib/step-utils';
 
 const isPlayingState = atom<boolean>({
   key: 'isPlayingState',
@@ -135,105 +136,105 @@ const currentSessionClipState = selector<VitaliseClip>({
   },
 });
 
-type TrackType = {
-  id: string;
-  range?: [number, number];
-  steps: (
-    | {
-        id: string;
-        duration: number;
-        velocity: number;
-      }
-    | {
-        name: MidiNote;
-        duration: number;
-        velocity: number;
-      }
-  )[][];
-};
+// type TrackType = {
+//   id: string;
+//   range?: [number, number];
+//   steps: (
+//     | {
+//         id: string;
+//         duration: number;
+//         velocity: number;
+//       }
+//     | {
+//         name: MidiNote;
+//         duration: number;
+//         velocity: number;
+//       }
+//   )[][];
+// };
 
-const tracksState = atom<TrackType[]>({
-  key: 'tracksState',
-  default: [
-    {
-      id: 'sampler',
-      range: [0, 8],
-      // range: [8, 16],
-      steps: [
-        // 0 ------------------------------------------------------------------
-        [
-          { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'beat1', duration: getDuration(8, 70), velocity: 0.6 },
-          { id: 'compassVox1', duration: getDuration(7, 70), velocity: 0.5 },
-          // { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
-          // { id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 },
-        ],
-        null,
-        [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.7 }],
-        null,
-        // 4 ------------------------------------------------------------------
-        [{ id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 }],
-        null,
-        [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
-        [{ id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 }],
-        // 8 ------------------------------------------------------------------
-        [
-          { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
-          // { id: 'beat2', duration: getDuration(8, 70), velocity: 1 },
-          { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
-          // { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
-        ],
-        null,
-        null,
-        null,
-        // 12 ------------------------------------------------------------------
-        [{ id: 'soul2', duration: getDuration(3, 70), velocity: 0.8 }],
-        null,
-        null,
-        null,
-      ],
-    },
-    {
-      id: 'sub',
-      steps: [
-        [
-          {
-            name: 'C1',
-            duration: getDuration(3, 70),
-            velocity: 1,
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        [
-          {
-            name: 'C1',
-            duration: getDuration(1, 70),
-            velocity: 1,
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            name: 'G#0',
-            duration: getDuration(2, 70),
-            velocity: 1,
-          },
-        ],
-        null,
-        null,
-        null,
-      ],
-    },
-  ],
-});
+// const tracksState = atom<TrackType[]>({
+//   key: 'tracksState',
+//   default: [
+//     {
+//       id: 'sampler',
+//       range: [0, 8],
+//       // range: [8, 16],
+//       steps: [
+//         // 0 ------------------------------------------------------------------
+//         [
+//           { id: 'guitar1', duration: getDuration(8, 70), velocity: 1 },
+//           { id: 'beat1', duration: getDuration(8, 70), velocity: 0.6 },
+//           { id: 'compassVox1', duration: getDuration(7, 70), velocity: 0.5 },
+//           // { id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 },
+//           // { id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 },
+//         ],
+//         null,
+//         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.7 }],
+//         null,
+//         // 4 ------------------------------------------------------------------
+//         [{ id: 'soul4', duration: getDuration(1, 70), velocity: 0.8 }],
+//         null,
+//         [{ id: 'soul4', duration: getDuration(2, 70), velocity: 0.6 }],
+//         [{ id: 'strum5', duration: getDuration(2, 70), velocity: 0.7 }],
+//         // 8 ------------------------------------------------------------------
+//         [
+//           { id: 'guitar3', duration: getDuration(8, 70), velocity: 1 },
+//           // { id: 'beat2', duration: getDuration(8, 70), velocity: 1 },
+//           { id: 'kalimba2', duration: getDuration(8, 70), velocity: 1 },
+//           // { id: 'soul3', duration: getDuration(4, 70), velocity: 0.8 },
+//         ],
+//         null,
+//         null,
+//         null,
+//         // 12 ------------------------------------------------------------------
+//         [{ id: 'soul2', duration: getDuration(3, 70), velocity: 0.8 }],
+//         null,
+//         null,
+//         null,
+//       ],
+//     },
+//     {
+//       id: 'sub',
+//       steps: [
+//         [
+//           {
+//             name: 'C1',
+//             duration: getDuration(3, 70),
+//             velocity: 1,
+//           },
+//         ],
+//         null,
+//         null,
+//         null,
+//         null,
+//         null,
+//         null,
+//         null,
+//         [
+//           {
+//             name: 'C1',
+//             duration: getDuration(1, 70),
+//             velocity: 1,
+//           },
+//         ],
+//         null,
+//         null,
+//         null,
+//         [
+//           {
+//             name: 'G#0',
+//             duration: getDuration(2, 70),
+//             velocity: 1,
+//           },
+//         ],
+//         null,
+//         null,
+//         null,
+//       ],
+//     },
+//   ],
+// });
 
 const currentStepIndexState = atom<number>({
   key: 'currentStepIndexState',
@@ -260,6 +261,16 @@ const RecoilLivePage = () => {
     currentSessionClip?.steps,
     sampleFiles,
   );
+
+  const timeSteps = transformIdStepNotes(
+    currentSessionClip?.stepsNew,
+    sampleFiles,
+  );
+
+  // TS error because Reactronica name: string, not MidiNote
+  const newSteps = buildSteps(timeSteps, 1, 16, 16);
+
+  console.log(newSteps);
 
   useKeyPress(
     ' ',
@@ -385,6 +396,7 @@ const SessionTrack = ({ trackId }) => {
 const RecoilPage = () => {
   return (
     <RecoilRoot>
+      {/* Test */}
       <RecoilLivePage />
     </RecoilRoot>
   );

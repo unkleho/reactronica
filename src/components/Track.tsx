@@ -8,11 +8,12 @@ import Tone from '../lib/tone';
 import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
 import { usePrevious } from '../lib/hooks';
 
-export type StepNoteType = {
+export interface StepNoteType {
+  // TODO: Restrict to 'C0' etc
   name: string;
-  duration?: number;
+  duration?: number | string;
   velocity?: number;
-};
+}
 
 export type StepType = StepNoteType | StepNoteType[] | string;
 

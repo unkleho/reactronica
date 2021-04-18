@@ -1,5 +1,6 @@
 import { getDuration } from '../lib/get-duration';
 import { SampleFile, IdStepNote } from '../lib/sample-utils';
+import { TimeNote } from '../types/typescript';
 
 export interface VitaliseSong {
   id: string;
@@ -11,6 +12,11 @@ export interface VitaliseSong {
 export interface VitaliseClip {
   id: string;
   steps: IdStepNote[];
+  stepsNew?: IdTimeNote[];
+}
+
+export interface IdTimeNote extends Omit<TimeNote, 'name'> {
+  id: string;
 }
 
 export interface VitaliseTrack {
@@ -26,20 +32,31 @@ export const slabSong: VitaliseSong = {
   clips: [
     {
       id: 'clip1',
+      // steps: [
+      //   {
+      //     start: '1.1.1',
+      //     id: 'slimePiano1',
+      //     duration: getDuration(4, 85),
+      //   },
+      // ],
+      stepsNew: [
+        {
+          start: '1.1.1',
+          id: 'slimePiano1',
+          duration: getDuration(4, 85),
+        },
+        {
+          start: '1.1.1',
+          id: 'slimePiano2',
+          duration: getDuration(4, 85),
+        },
+      ],
       steps: [
         [
-          // {
-          //   id: 'wonkyBeat1',
-          //   duration: getDuration(16, 85),
-          // },
           {
             id: 'slimePiano1',
             duration: getDuration(4, 85),
           },
-          // {
-          //   id: 'futureVoxLoop',
-          //   duration: getDuration(8, 85),
-          // },
         ],
         null,
         null,
@@ -213,8 +230,9 @@ export const slabSong: VitaliseSong = {
     },
     {
       id: 'clip',
-      currentClipId: 'clip2',
+      currentClipId: 'clip1',
       clipIds: ['clip1', 'clip2'],
+      // clipIds: ['clip1'],
       sampleFileIds: [
         'slimePiano1',
         'slimePiano2',
