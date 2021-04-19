@@ -1,4 +1,4 @@
-import { StepNoteType } from 'reactronica';
+import { StepNoteType, StepType } from 'reactronica';
 import { TimeNote } from '../types/typescript';
 
 export type StepsPerBar = 4 | 8 | 16;
@@ -48,9 +48,9 @@ export function buildSteps(
   return steps;
 }
 
-export function buildClip(steps, id, subdivision = 16, notesPerBar = 4) {
+export function buildClip(steps, id, bars = 1, stepsPerBar: StepsPerBar = 16) {
   const notes = steps.reduce((prev, curr, i) => {
-    const timeKey = buildTimeKey(i, subdivision, notesPerBar);
+    const timeKey = getTimeKey(i, bars, stepsPerBar);
 
     return [
       ...prev,
@@ -69,9 +69,16 @@ export function buildClip(steps, id, subdivision = 16, notesPerBar = 4) {
   };
 }
 
-export function convertStepsToNotes(steps, subdivision = 16, notesPerBar = 4) {
+/**
+ * Convert Reactronica steps to `TimeNotes`
+ */
+export function convertStepsToNotes(
+  steps: StepNoteType[][],
+  bars: number,
+  stepsPerBar: StepsPerBar,
+): TimeNote[] {
   const notes = steps.reduce((prev, curr, i) => {
-    const timeKey = buildTimeKey(i, subdivision, notesPerBar);
+    const timeKey = getTimeKey(i, bars, stepsPerBar);
 
     return [
       ...prev,
@@ -83,16 +90,7 @@ export function convertStepsToNotes(steps, subdivision = 16, notesPerBar = 4) {
     ];
   }, []);
 
-  return notes;
-}
-
-function buildTimeKey(i, subdivision, notesPerBar) {
-  const barKey = Math.ceil((i + 1) / subdivision);
-  const noteKey = Math.ceil((i + 1) / notesPerBar) % notesPerBar || notesPerBar;
-  const sixteenthsKey = (i % notesPerBar) + 1;
-  const timeKey = `${barKey}.${noteKey}.${sixteenthsKey}`;
-
-  return timeKey;
+  return notes as TimeNote[];
 }
 
 /**
