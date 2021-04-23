@@ -2,7 +2,7 @@ import { ApolloProvider, gql, useQuery, useSubscription } from '@apollo/client';
 import { client } from '../lib/apollo-client';
 
 const SONGS = gql`
-  subscription {
+  subscription getSong {
     songs {
       id
       name
