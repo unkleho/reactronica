@@ -20,9 +20,11 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.3.15",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^10.0.8",
     "@zeit/next-sass": "^1.0.1",
+    "graphql": "^15.5.0",
     "immer": "^6.0.1",
     "next": "^10.1.1",
     "normalize.css": "^8.0.1",
@@ -34,6 +36,7 @@
     "reactronica": "^0.4.6",
     "recoil": "^0.2.0",
     "sass": "^1.32.8",
+    "subscriptions-transport-ws": "^0.9.18",
     "webmidi": "^2.5.1"
   },
   "devDependencies": {
