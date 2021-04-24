@@ -280,7 +280,7 @@ const RecoilLivePage = () => {
   );
 
   return (
-    <>
+    <div className="p-8">
       <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
       <p>{song.bpm}</p>
 
@@ -340,7 +340,7 @@ const RecoilLivePage = () => {
           ></Instrument>
         </Track> */}
       </Song>
-    </>
+    </div>
   );
 };
 

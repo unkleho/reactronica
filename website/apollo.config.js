@@ -2,9 +2,6 @@ require('dotenv').config({
   path: './env.local',
 });
 
-// apollo schema:download --endpoint
-// apollo codegen:generate ./types/graphql.d.ts --addTypename --localSchemaFile schema.json --target typescript --outputFlat
-
 module.exports = {
   client: {
     includes: ['**/*.tsx'],

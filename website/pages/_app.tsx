@@ -5,6 +5,8 @@ import Head from 'next/head';
 import '../node_modules/normalize.css/normalize.css';
 import '../styles/base.scss';
 
+import 'tailwindcss/tailwind.css';
+
 import '../components/CodeBlock/CodeBlock.scss';
 
 class MyApp extends NextApp {
