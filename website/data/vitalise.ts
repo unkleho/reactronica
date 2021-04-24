@@ -11,8 +11,7 @@ export interface VitaliseSong {
 
 export interface VitaliseClip {
   id: string;
-  steps: IdStepNote[];
-  stepsNew?: IdTimeNote[];
+  steps: IdTimeNote[];
 }
 
 export interface IdTimeNote extends Omit<TimeNote, 'name'> {
@@ -32,197 +31,89 @@ export const slabSong: VitaliseSong = {
   clips: [
     {
       id: 'clip1',
-      // steps: [
-      //   {
-      //     start: '1.1.1',
-      //     id: 'slimePiano1',
-      //     duration: getDuration(4, 85),
-      //   },
-      // ],
-      stepsNew: [
+      steps: [
         {
           start: '1.1.1',
           id: 'slimePiano1',
           duration: getDuration(4, 85),
         },
         {
-          start: '1.1.1',
+          start: '2.1.1',
           id: 'slimePiano2',
           duration: getDuration(4, 85),
         },
         {
-          start: '4.1.1',
+          start: '3.1.1',
           id: 'slimePiano1',
           duration: getDuration(4, 85),
         },
-      ],
-      steps: [
-        [
-          {
-            id: 'slimePiano1',
-            duration: getDuration(4, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            id: 'slimePiano2',
-            duration: getDuration(4, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            id: 'slimePiano1',
-            duration: getDuration(4, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            id: 'slimePiano2',
-            duration: getDuration(4, 85),
-          },
-          // {
-          //   id: 'junglePad',
-          //   duration: getDuration(4, 85),
-          // },
-        ],
-        null,
-        null,
-        null,
+        {
+          start: '4.1.1',
+          id: 'slimePiano2',
+          duration: getDuration(4, 85),
+        },
       ],
     },
     {
       id: 'clip2',
       steps: [
-        [
-          {
-            id: 'guitarChords1',
-            duration: getDuration(16, 85),
-          },
-        ],
-        null,
-        [
-          {
-            id: 'sirenVox',
-            duration: getDuration(12, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        [
-          {
-            id: 'rap2',
-            duration: getDuration(4, 85),
-            velocity: 0.3,
-          },
-        ],
-        null,
-        null,
-        null,
-        [
-          {
-            id: 'rap4',
-            duration: getDuration(4, 85),
-            velocity: 0.3,
-          },
-        ],
-        null,
-        null,
-        null,
+        {
+          start: '1.1.1',
+          id: 'guitarChords1',
+          duration: getDuration(16, 85),
+        },
+        {
+          start: '1.3.1',
+          id: 'sirenVox',
+          duration: getDuration(12, 85),
+        },
+        {
+          start: '3.1.1',
+          id: 'rap2',
+          duration: getDuration(4, 85),
+          velocity: 0.3,
+        },
+        {
+          start: '4.1.1',
+          id: 'rap4',
+          duration: getDuration(4, 85),
+          velocity: 0.3,
+        },
       ],
     },
     {
       id: 'beat1',
       steps: [
-        [
-          {
-            id: 'wonkyBeat1',
-            duration: getDuration(16, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        {
+          start: '1.1.1',
+          id: 'wonkyBeat1',
+          duration: getDuration(16, 85),
+        },
       ],
     },
     {
       id: 'beat2',
       steps: [
-        [
-          {
-            id: 'wonkyBeat2',
-            duration: getDuration(16, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        {
+          start: '1.1.1',
+          id: 'wonkyBeat2',
+          duration: getDuration(16, 85),
+        },
       ],
     },
     {
       id: 'futureVoxLoop',
       steps: [
-        [
-          {
-            id: 'futureVoxLoop',
-            duration: getDuration(8, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        [
-          {
-            id: 'futureVoxLoop',
-            duration: getDuration(8, 85),
-          },
-        ],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        {
+          start: '1.1.1',
+          id: 'futureVoxLoop',
+          duration: getDuration(8, 85),
+        },
+        {
+          start: '3.1.1',
+          id: 'futureVoxLoop',
+          duration: getDuration(8, 85),
+        },
       ],
     },
   ],

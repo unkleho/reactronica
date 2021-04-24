@@ -243,7 +243,9 @@ const currentStepIndexState = atom<number>({
 
 const RecoilLivePage = () => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const [currentStep, setCurrentState] = useRecoilState(currentStepIndexState);
+  const [currentStepIndex, setCurrentStepIndexState] = useRecoilState(
+    currentStepIndexState,
+  );
   const song = useRecoilValue(currentSongState);
   const { tracks, clips } = song;
 
@@ -257,21 +259,14 @@ const RecoilLivePage = () => {
   );
 
   // TODO: Move to Recoil?
-  const sampleSteps = transformIdStepNotes(
-    currentSessionClip?.steps,
-    sampleFiles,
-  );
-
   const timeSteps = transformIdStepNotes(
-    currentSessionClip?.stepsNew,
+    currentSessionClip?.steps,
     sampleFiles,
   );
 
   // TS error because Reactronica name: string, not MidiNote
   // @ts-ignore
-  const newSteps = buildSteps(timeSteps, 4, 4);
-
-  console.log(newSteps);
+  const currentSteps = buildSteps(timeSteps, 4, 4);
 
   useKeyPress(
     ' ',
@@ -292,8 +287,9 @@ const RecoilLivePage = () => {
 
       {/* TODO: Move to component? */}
       <StepsEditorV2
-        currentStepIndex={currentStep}
-        steps={sampleSteps}
+        currentStepIndex={currentStepIndex}
+        steps={currentSteps}
+        // steps={timeSteps}
         startNote="C0"
         endNote="C1"
         subdivision={16}
@@ -307,7 +303,9 @@ const RecoilLivePage = () => {
           const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
             sampleFileIds.includes(sampleFile.id),
           );
-          const steps = transformIdStepNotes(clip?.steps, sampleFiles);
+          const timeSteps = transformIdStepNotes(clip?.steps, sampleFiles);
+          // @ts-ignore
+          const steps = buildSteps(timeSteps, 4, 4);
           const instrumentSamples = createInstrumentSamples(sampleFiles);
 
           return (
@@ -315,7 +313,7 @@ const RecoilLivePage = () => {
               steps={steps?.length ? steps : emptySteps}
               key={track.id}
               onStepPlay={(stepNotes, index) => {
-                setCurrentState(index);
+                setCurrentStepIndexState(index);
               }}
             >
               <Instrument
