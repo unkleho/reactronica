@@ -1,6 +1,6 @@
-import { getDuration } from '../lib/get-duration';
-import { SampleFile, IdStepNote } from '../lib/sample-utils';
-import { TimeNote } from '../types/typescript';
+import { getDuration } from '../get-duration';
+import { SampleFile, IdStepNote } from '../sample-utils';
+import { TimeNote } from '../../types/typescript';
 
 export interface VitaliseSong {
   id: string;

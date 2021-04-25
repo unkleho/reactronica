@@ -1,159 +1,26 @@
 import React from 'react';
-import { Instrument, InstrumentType, Song, StepType, Track } from 'reactronica';
-import {
-  RecoilRoot,
-  atom,
-  useRecoilState,
-  useRecoilValue,
-  selectorFamily,
-  selector,
-  DefaultValue,
-} from 'recoil';
+import { Instrument, Song, Track } from 'reactronica';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import SessionTransport from '../components/SessionTransport';
 import StepsEditorV2 from '../components/StepsEditorV2';
-import { MidiNote } from '../configs/midiConfig';
-import {
-  emptySteps,
-  slabSong,
-  VitaliseClip,
-  vitaliseSampleFiles,
-  VitaliseSong,
-  VitaliseTrack,
-} from '../data/vitalise';
-import { getDuration } from '../lib/get-duration';
+import { emptySteps, vitaliseSampleFiles } from '../lib/vitalise/data';
 import { useKeyPress } from '../lib/hooks';
 import {
-  // SampleId,
   transformIdStepNotes,
   createInstrumentSamples,
 } from '../lib/sample-utils';
 import { buildSteps } from '../lib/step-utils';
-
-const isPlayingState = atom<boolean>({
-  key: 'isPlayingState',
-  default: false,
-});
-
-/**
- * List of songs
- */
-const songsState = atom<VitaliseSong[]>({
-  key: 'songsState',
-  default: [slabSong],
-});
-
-/**
- * Current song ID
- */
-const currentSongIdState = atom<string>({
-  key: 'currentSongIdState',
-  default: 'slab',
-});
-
-/**
- * Current song data
- */
-const currentSongState = selector<VitaliseSong>({
-  key: 'currentSongState',
-  get: ({ get }) => {
-    const songs: VitaliseSong[] = get(songsState);
-    const songId = get(currentSongIdState);
-    return songs.find((song) => song.id === songId);
-  },
-  set: ({ set, get }, newSong) => {
-    const songId = get(currentSongIdState);
-
-    set(songsState, (prevSongs) => {
-      return prevSongs.map((prevSong) => {
-        if (prevSong.id === songId) {
-          return newSong;
-        }
-
-        return prevSong;
-      });
-    });
-  },
-});
-
-/**
- * Tracks of current song
- */
-const trackState = selectorFamily<VitaliseTrack, string>({
-  key: 'trackState',
-  get: (trackId) => ({ get }) => {
-    const song = get(currentSongState);
-    const { tracks } = song;
-    return tracks.find((track) => track.id === trackId);
-  },
-  set: (trackId) => ({ set }, newTrack) => {
-    set(currentSongState, (prevSong) => {
-      return {
-        ...prevSong,
-        tracks: prevSong.tracks.map((prevTrack) => {
-          return prevTrack.id === trackId ? newTrack : prevTrack;
-        }),
-      };
-    });
-  },
-});
-
-const trackClipsState = selectorFamily<VitaliseClip[], string>({
-  key: 'trackClipsState',
-  get: (trackId) => ({ get }) => {
-    const song = get(currentSongState);
-    const track = get(trackState(trackId));
-    const clips = song.clips.filter((clip) => {
-      return track.clipIds.includes(clip.id);
-    });
-
-    return clips;
-  },
-});
-
-const currentSessionTrackIdState = atom<string>({
-  key: 'currentSessionTrackIdState',
-  default: 'clip',
-});
-
-const currentSessionTrackState = selector<VitaliseTrack>({
-  key: 'currentSessionTrackState',
-  get: ({ get }) => {
-    const song: VitaliseSong = get(currentSongState);
-    const { tracks } = song;
-    const currentSessionTrackId = get(currentSessionTrackIdState);
-    const currentSessionTrack = tracks.find(
-      (track) => track.id === currentSessionTrackId,
-    );
-
-    return currentSessionTrack;
-  },
-});
-
-/**
- * ID of current clip shown in session view
- */
-const currentSessionClipIdState = atom<string>({
-  key: 'currentSessionClipIdState',
-  default: 'clip1',
-});
-
-/**
- * Current session clip data, eg. steps
- */
-const currentSessionClipState = selector<VitaliseClip>({
-  key: 'currentClipState',
-  get: ({ get }) => {
-    const song: VitaliseSong = get(currentSongState);
-    const currentClipId = get(currentSessionClipIdState);
-    const currentClip = song.clips.find((clip) => clip.id === currentClipId);
-    return currentClip;
-  },
-});
-
-const currentStepIndexState = atom<number>({
-  key: 'currentStepIndexState',
-  default: 0,
-});
+import {
+  currentSessionClipIdState,
+  currentSessionClipState,
+  currentSessionTrackIdState,
+  currentSessionTrackState,
+  currentSongState,
+  currentStepIndexState,
+  isPlayingState,
+  trackClipsState,
+  trackState,
+} from '../lib/vitalise/atoms';
 
 const RecoilLivePage = () => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
@@ -190,12 +57,14 @@ const RecoilLivePage = () => {
 
   return (
     <div className="p-8">
-      <SessionTransport
-        isPlaying={isPlaying}
-        bpm={song.bpm}
-        className="mb-2"
-        onPlayClick={() => setIsPlaying(!isPlaying)}
-      />
+      <div>
+        <SessionTransport
+          isPlaying={isPlaying}
+          bpm={song.bpm}
+          className="mb-2"
+          onPlayClick={() => setIsPlaying(!isPlaying)}
+        />
+      </div>
 
       <div className="flex mb-2 border border-black">
         {tracks.map(({ id }) => {
