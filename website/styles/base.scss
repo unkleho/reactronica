@@ -78,22 +78,23 @@ li {
 }
 
 button {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.6em;
-  color: var(--colour-text);
-  font-size: 1em;
-  background-color: var(--colour-button);
-  border: none;
-  border-right: 2px solid var(--colour-black);
-  border-bottom: 2px solid var(--colour-black);
-  border-radius: var(--border-radius);
-  cursor: pointer;
+  text-align: left;
+  // display: inline-flex;
+  // align-items: center;
+  // padding: 0.6em;
+  // color: var(--colour-text);
+  // font-size: 1em;
+  // background-color: var(--colour-button);
+  // border: none;
+  // border-right: 2px solid var(--colour-black);
+  // border-bottom: 2px solid var(--colour-black);
+  // border-radius: var(--border-radius);
+  // cursor: pointer;
 }
 
-button:hover {
-  color: var(--colour-secondary);
-}
+// button:hover {
+//   color: var(--colour-secondary);
+// }
 
 a:link,
 a:visited {

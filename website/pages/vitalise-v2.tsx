@@ -9,6 +9,7 @@ import {
   selector,
   DefaultValue,
 } from 'recoil';
+import SessionTransport from '../components/SessionTransport';
 import StepsEditorV2 from '../components/StepsEditorV2';
 import { MidiNote } from '../configs/midiConfig';
 import {
@@ -96,6 +97,19 @@ const trackState = selectorFamily<VitaliseTrack, string>({
   },
 });
 
+const trackClipsState = selectorFamily<VitaliseClip[], string>({
+  key: 'trackClipsState',
+  get: (trackId) => ({ get }) => {
+    const song = get(currentSongState);
+    const track = get(trackState(trackId));
+    const clips = song.clips.filter((clip) => {
+      return track.clipIds.includes(clip.id);
+    });
+
+    return clips;
+  },
+});
+
 const currentSessionTrackIdState = atom<string>({
   key: 'currentSessionTrackIdState',
   default: 'clip',
@@ -135,6 +149,185 @@ const currentSessionClipState = selector<VitaliseClip>({
     return currentClip;
   },
 });
+
+const currentStepIndexState = atom<number>({
+  key: 'currentStepIndexState',
+  default: 0,
+});
+
+const RecoilLivePage = () => {
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
+  const [currentStepIndex, setCurrentStepIndexState] = useRecoilState(
+    currentStepIndexState,
+  );
+  const song = useRecoilValue(currentSongState);
+  const { tracks, clips } = song;
+
+  const currentSessionClip = useRecoilValue(currentSessionClipState);
+  const currentSessionTrack = useRecoilValue(currentSessionTrackState);
+
+  // TODO: For PianoRoll, move to component?
+  // TODO: Move to Recoil?
+  const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
+    currentSessionTrack.sampleFileIds.includes(sampleFile.id),
+  );
+
+  // TODO: Move to Recoil?
+  const timeSteps = transformIdStepNotes(
+    currentSessionClip?.steps,
+    sampleFiles,
+  );
+
+  // TS error because Reactronica name: string, not MidiNote
+  // @ts-ignore
+  const currentSteps = buildSteps(timeSteps, 4, 4);
+
+  useKeyPress(
+    ' ',
+    () => setIsPlaying(!isPlaying),
+    (e) => e.preventDefault(),
+  );
+
+  return (
+    <div className="p-8">
+      <SessionTransport
+        isPlaying={isPlaying}
+        bpm={song.bpm}
+        className="mb-2"
+        onPlayClick={() => setIsPlaying(!isPlaying)}
+      />
+
+      <div className="flex mb-2 border border-black">
+        {tracks.map(({ id }) => {
+          return <SessionTrack trackId={id} key={id} />;
+        })}
+      </div>
+
+      {/* TODO: Move to component? */}
+      <StepsEditorV2
+        currentStepIndex={currentStepIndex}
+        steps={currentSteps}
+        startNote="C0"
+        endNote="C1"
+        subdivision={16}
+      />
+
+      <Song bpm={song.bpm} isPlaying={isPlaying} volume={0}>
+        {tracks.map((track) => {
+          const { currentClipId, sampleFileIds } = track;
+          const clip = clips.find((clip) => clip.id === currentClipId);
+
+          const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
+            sampleFileIds.includes(sampleFile.id),
+          );
+          const timeSteps = transformIdStepNotes(clip?.steps, sampleFiles);
+          // @ts-ignore
+          const steps = buildSteps(timeSteps, 4, 4);
+          const instrumentSamples = createInstrumentSamples(sampleFiles);
+
+          return (
+            <Track
+              steps={steps?.length ? steps : emptySteps}
+              key={track.id}
+              onStepPlay={(stepNotes, index) => {
+                setCurrentStepIndexState(index);
+              }}
+            >
+              <Instrument
+                type="sampler"
+                samples={instrumentSamples}
+                // TODO: Causes buffer errors for some reason
+                // onLoad={(s) => {
+                //   console.log(s);
+                // }}
+              ></Instrument>
+            </Track>
+          );
+        })}
+
+        {/* <Track steps={tracks[1].steps} key={'sub'}>
+          <Instrument
+            type="sampler"
+            samples={{
+              // C1: '/audio/samples/DECAP_808_long_midrange_distorted_C.wav',
+              C1: '/audio/samples/Diginoiz_-_TDS_808_Kick_C_5.wav',
+            }}
+          ></Instrument>
+        </Track> */}
+      </Song>
+    </div>
+  );
+};
+
+const SessionTrack = ({ trackId }) => {
+  const [track, setTrack] = useRecoilState(trackState(trackId));
+  const [currentSessionClipId, setCurrentSessionClipId] = useRecoilState(
+    currentSessionClipIdState,
+  );
+  const [currentSessionTrackId, setCurrentSessionTrackId] = useRecoilState(
+    currentSessionTrackIdState,
+  );
+  const { currentClipId } = track;
+  const clips = useRecoilValue(trackClipsState(trackId));
+
+  return (
+    <div className="flex-1 border-black border-r last:border-none">
+      <div className="bg-grey border-black border-b-2">
+        <p className="px-2 py-1 text-xs font-bold">{track.name}</p>
+      </div>
+      <div className="flex flex-col">
+        <button
+          className="px-2 py-1 bg-grey border-black border-b text-xs"
+          onClick={() => {
+            setTrack({
+              ...track,
+              currentClipId: null,
+            });
+          }}
+        >
+          Clear
+        </button>
+
+        {clips.map((clip) => {
+          return (
+            <button
+              className={[
+                'px-2 py-1 bg-grey border-black border-b last:border-none',
+                'text-xs',
+                clip.id === currentClipId ? 'font-bold text-secondary' : '',
+              ].join(' ')}
+              style={{
+                fontWeight: clip.id === currentClipId ? 'bold' : 'normal',
+              }}
+              key={clip.id}
+              onClick={() => {
+                setTrack({
+                  ...track,
+                  currentClipId: clip.id,
+                });
+                setCurrentSessionClipId(clip.id);
+                setCurrentSessionTrackId(trackId);
+              }}
+            >
+              {clip.name}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const RecoilPage = () => {
+  return (
+    <RecoilRoot>
+      {/* Test */}
+      <RecoilLivePage />
+    </RecoilRoot>
+  );
+};
+
+export default RecoilPage;
 
 // type TrackType = {
 //   id: string;
@@ -235,170 +428,3 @@ const currentSessionClipState = selector<VitaliseClip>({
 //     },
 //   ],
 // });
-
-const currentStepIndexState = atom<number>({
-  key: 'currentStepIndexState',
-  default: 0,
-});
-
-const RecoilLivePage = () => {
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const [currentStepIndex, setCurrentStepIndexState] = useRecoilState(
-    currentStepIndexState,
-  );
-  const song = useRecoilValue(currentSongState);
-  const { tracks, clips } = song;
-
-  const currentSessionClip = useRecoilValue(currentSessionClipState);
-  const currentSessionTrack = useRecoilValue(currentSessionTrackState);
-
-  // TODO: For PianoRoll, move to component?
-  // TODO: Move to Recoil?
-  const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
-    currentSessionTrack.sampleFileIds.includes(sampleFile.id),
-  );
-
-  // TODO: Move to Recoil?
-  const timeSteps = transformIdStepNotes(
-    currentSessionClip?.steps,
-    sampleFiles,
-  );
-
-  // TS error because Reactronica name: string, not MidiNote
-  // @ts-ignore
-  const currentSteps = buildSteps(timeSteps, 4, 4);
-
-  useKeyPress(
-    ' ',
-    () => setIsPlaying(!isPlaying),
-    (e) => e.preventDefault(),
-  );
-
-  return (
-    <div className="p-8">
-      <p>{isPlaying ? 'Playing' : 'Stopped'}</p>
-      <p>{song.bpm}</p>
-
-      <div>
-        {tracks.map(({ id }) => {
-          return <SessionTrack trackId={id} key={id} />;
-        })}
-      </div>
-
-      {/* TODO: Move to component? */}
-      <StepsEditorV2
-        currentStepIndex={currentStepIndex}
-        steps={currentSteps}
-        // steps={timeSteps}
-        startNote="C0"
-        endNote="C1"
-        subdivision={16}
-      />
-
-      <Song bpm={song.bpm} isPlaying={isPlaying} volume={0}>
-        {tracks.map((track) => {
-          const { currentClipId, sampleFileIds } = track;
-          const clip = clips.find((clip) => clip.id === currentClipId);
-
-          const sampleFiles = vitaliseSampleFiles.filter((sampleFile) =>
-            sampleFileIds.includes(sampleFile.id),
-          );
-          const timeSteps = transformIdStepNotes(clip?.steps, sampleFiles);
-          // @ts-ignore
-          const steps = buildSteps(timeSteps, 4, 4);
-          const instrumentSamples = createInstrumentSamples(sampleFiles);
-
-          return (
-            <Track
-              steps={steps?.length ? steps : emptySteps}
-              key={track.id}
-              onStepPlay={(stepNotes, index) => {
-                setCurrentStepIndexState(index);
-              }}
-            >
-              <Instrument
-                type="sampler"
-                samples={instrumentSamples}
-                // TODO: Causes buffer errors for some reason
-                // onLoad={(s) => {
-                //   console.log(s);
-                // }}
-              ></Instrument>
-            </Track>
-          );
-        })}
-
-        {/* <Track steps={tracks[1].steps} key={'sub'}>
-          <Instrument
-            type="sampler"
-            samples={{
-              // C1: '/audio/samples/DECAP_808_long_midrange_distorted_C.wav',
-              C1: '/audio/samples/Diginoiz_-_TDS_808_Kick_C_5.wav',
-            }}
-          ></Instrument>
-        </Track> */}
-      </Song>
-    </div>
-  );
-};
-
-const SessionTrack = ({ trackId }) => {
-  const [track, setTrack] = useRecoilState(trackState(trackId));
-  const [currentSessionClipId, setCurrentSessionClipId] = useRecoilState(
-    currentSessionClipIdState,
-  );
-  const [currentSessionTrackId, setCurrentSessionTrackId] = useRecoilState(
-    currentSessionTrackIdState,
-  );
-  const { currentClipId } = track;
-
-  return (
-    <div>
-      <p>{track.id}</p>
-      <div>
-        <button
-          onClick={() => {
-            setTrack({
-              ...track,
-              currentClipId: null,
-            });
-          }}
-        >
-          Clear
-        </button>
-
-        {track.clipIds.map((clipId) => {
-          return (
-            <button
-              onClick={() => {
-                setTrack({
-                  ...track,
-                  currentClipId: clipId,
-                });
-                setCurrentSessionClipId(clipId);
-                setCurrentSessionTrackId(trackId);
-              }}
-              style={{
-                fontWeight: clipId === currentClipId ? 'bold' : 'normal',
-              }}
-              key={clipId}
-            >
-              {clipId}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-const RecoilPage = () => {
-  return (
-    <RecoilRoot>
-      {/* Test */}
-      <RecoilLivePage />
-    </RecoilRoot>
-  );
-};
-
-export default RecoilPage;

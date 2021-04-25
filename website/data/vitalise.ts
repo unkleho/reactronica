@@ -11,6 +11,7 @@ export interface VitaliseSong {
 
 export interface VitaliseClip {
   id: string;
+  name: string;
   steps: IdTimeNote[];
 }
 
@@ -20,6 +21,7 @@ export interface IdTimeNote extends Omit<TimeNote, 'name'> {
 
 export interface VitaliseTrack {
   id: string;
+  name: string;
   currentClipId: string;
   clipIds: string[];
   sampleFileIds: string[];
@@ -31,6 +33,7 @@ export const slabSong: VitaliseSong = {
   clips: [
     {
       id: 'clip1',
+      name: 'Piano',
       steps: [
         {
           start: '1.1.1',
@@ -56,6 +59,7 @@ export const slabSong: VitaliseSong = {
     },
     {
       id: 'clip2',
+      name: 'Guitar',
       steps: [
         {
           start: '1.1.1',
@@ -83,6 +87,7 @@ export const slabSong: VitaliseSong = {
     },
     {
       id: 'beat1',
+      name: 'Beat 1',
       steps: [
         {
           start: '1.1.1',
@@ -93,6 +98,7 @@ export const slabSong: VitaliseSong = {
     },
     {
       id: 'beat2',
+      name: 'Beat 2',
       steps: [
         {
           start: '1.1.1',
@@ -103,6 +109,7 @@ export const slabSong: VitaliseSong = {
     },
     {
       id: 'futureVoxLoop',
+      name: 'Future Vox',
       steps: [
         {
           start: '1.1.1',
@@ -116,19 +123,37 @@ export const slabSong: VitaliseSong = {
         },
       ],
     },
+    {
+      id: 'doubleVox1',
+      name: 'Double Vox',
+      steps: [
+        {
+          start: '1.1.1',
+          id: 'doubleVox1',
+          duration: getDuration(16, 85),
+          velocity: 0.5,
+        },
+        // {
+        //   start: '3.1.1',
+        //   id: 'futureVoxLoop',
+        //   duration: getDuration(8, 85),
+        // },
+      ],
+    },
   ],
   tracks: [
     {
       id: 'beat',
+      name: 'Beat',
       currentClipId: 'beat1',
       clipIds: ['beat1', 'beat2'],
       sampleFileIds: ['wonkyBeat1', 'wonkyBeat2'],
     },
     {
       id: 'clip',
+      name: 'Clip',
       currentClipId: 'clip1',
       clipIds: ['clip1', 'clip2'],
-      // clipIds: ['clip1'],
       sampleFileIds: [
         'slimePiano1',
         'slimePiano2',
@@ -140,18 +165,27 @@ export const slabSong: VitaliseSong = {
         'rap4',
         'futureVoxLoop',
         'junglePad',
+      ],
+    },
+    {
+      id: 'futureVoxLoop',
+      name: 'Future Vox',
+      currentClipId: 'futureVoxLoop',
+      clipIds: ['futureVoxLoop'],
+      sampleFileIds: ['futureVoxLoop'],
+    },
+    {
+      id: 'doubleVox',
+      name: 'Double Vox',
+      currentClipId: null,
+      clipIds: ['doubleVox1'],
+      sampleFileIds: [
         'doubleVox1',
         'doubleVox2',
         'doubleVox3',
         'doubleVox4',
         'doubleVox5',
       ],
-    },
-    {
-      id: 'futureVoxLoop',
-      currentClipId: 'futureVoxLoop',
-      clipIds: ['futureVoxLoop'],
-      sampleFileIds: ['futureVoxLoop'],
     },
   ],
 };
