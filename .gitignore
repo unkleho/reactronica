@@ -22,9 +22,3 @@ yarn-debug.log*
 yarn-error.log*
 
 *.code-workspace
-
-# Zeit Now
-.now
-
-# samples
-website/public/audio
