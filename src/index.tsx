@@ -17,3 +17,4 @@ export {
 } from './components/Effect';
 
 export { default as config } from './config';
+export { MidiNote, midiNotes } from './types/midi-notes';

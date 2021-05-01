@@ -1,4 +1,5 @@
 import { StepNoteType, StepType } from 'components/Track';
+import { MidiNote } from '../types/midi-notes';
 
 export type SequencerStep = {
   notes: StepNoteType[];
@@ -10,7 +11,7 @@ export default function buildSequencerStep(step: StepType, i): SequencerStep {
     return {
       notes: [
         {
-          name: step,
+          name: step as MidiNote,
         },
       ],
       index: i,

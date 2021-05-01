@@ -7,15 +7,15 @@ import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
 import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
 import { usePrevious } from '../lib/hooks';
+import { MidiNote } from '../types/midi-notes';
 
 export interface StepNoteType {
-  // TODO: Restrict to 'C0' etc
-  name: string;
+  name: MidiNote;
   duration?: number | string;
   velocity?: number;
 }
 
-export type StepType = StepNoteType | StepNoteType[] | string;
+export type StepType = StepNoteType | StepNoteType[] | string | null;
 
 export interface TrackProps {
   steps?: StepType[];
