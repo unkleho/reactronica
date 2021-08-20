@@ -104,22 +104,6 @@ const Example = () => {
 };
 ```
 
-## Development
-
-```bash
-# Link local version of Reactronica
-$ npm link
-# Start Reactronica component build watch
-$ npm start
-# To run website docs, in new terminal:
-$ cd website
-# Link local version of Reactronica to website and use React version from Reactronica
-# (Otherwise you'll get a `Hooks can only be called inside the body of a function component.`)
-$ npm run link
-# Start up website!
-$ npm start
-```
-
 ## Thanks
 
 - https://tonejs.github.io/
