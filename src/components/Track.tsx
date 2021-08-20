@@ -15,7 +15,8 @@ export interface StepNoteType {
   velocity?: number;
 }
 
-export type StepType = StepNoteType | StepNoteType[] | string | null;
+// TODO: Replace string with MidiNote after fixing TS issues in `buildSequencerSteps`
+export type StepType = StepNoteType | StepNoteType[] | string | string[] | null;
 
 export interface TrackProps {
   steps?: StepType[];

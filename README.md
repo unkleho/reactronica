@@ -75,7 +75,7 @@ const Example = () => {
         pan={0}
         // Callback for every tick
         onStepPlay={(step, index) => {
-          doSomething(step, index);
+          console.log(step, index);
         }}
       >
         <Instrument type="synth" />
