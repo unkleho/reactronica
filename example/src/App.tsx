@@ -21,11 +21,23 @@ function App() {
       <Song isPlaying={isPlaying} bpm={90}>
         <Track
           steps={['C3', null, ['G3', 'E3'], null]}
-          onStepPlay={(steps) => {
-            console.log(steps);
-          }}
+          // onStepPlay={(steps) => {
+          //   console.log(steps);
+          // }}
         >
           <Instrument type="amSynth"></Instrument>
+        </Track>
+
+        <Track steps={['C3', null, 'C3', 'C3']}>
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: '/snare-top-off17.wav',
+            }}
+            onLoad={(buffers) => {
+              console.log(buffers);
+            }}
+          ></Instrument>
         </Track>
       </Song>
     </div>

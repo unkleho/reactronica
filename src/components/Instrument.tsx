@@ -51,12 +51,13 @@ export interface InstrumentProps {
     release?: number;
   };
   samples?: {
+    /** TODO: Change to MidiNote */
     [k: string]: string;
   };
   mute?: boolean;
   solo?: boolean;
   /** TODO: Type properly and consider loading status */
-  onLoad?: Function;
+  onLoad?: (buffers: any[]) => void;
 }
 
 interface InstrumentConsumerProps extends InstrumentProps {
@@ -308,7 +309,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     ) {
       // Create an array of promises from `samples`
       const loadSamplePromises = Object.keys(samples).map((key) => {
-        return new Promise((resolve) => {
+        return new Promise((resolve: (buffer: any) => void) => {
           const sample = samples[key];
 
           // Pass `resolve` to `onLoad` parameter of Tone.Sampler
