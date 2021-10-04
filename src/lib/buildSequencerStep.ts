@@ -29,7 +29,7 @@ export default function buildSequencerStep(step: StepType, i): SequencerStep {
     };
   } else if (Array.isArray(step)) {
     return {
-      notes: step.map((s) => {
+      notes: (step as Array<StepNoteType | MidiNote>).map((s) => {
         if (typeof s === 'string') {
           return {
             name: s,

@@ -45,7 +45,7 @@
     "react-dom": "^16.14.0",
     "tsdx": "^0.13.3",
     "tslib": "^1.14.1",
-    "typescript": "^3.9.9"
+    "typescript": "^3.7.3"
   },
   "husky": {
     "hooks": {
