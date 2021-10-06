@@ -14,6 +14,9 @@ import {
 } from '../types/propTypes';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
+import { MidiNote } from '../types/midi-notes';
+
+// type MidiNote = 'C3' | 'D3';
 
 type NoteType = {
   name: string;
@@ -51,9 +54,9 @@ export interface InstrumentProps {
     release?: number;
   };
   samples?: {
-    /** TODO: Change to MidiNote */
-    [k: string]: string;
+    [key in MidiNote]?: string;
   };
+  // samples?: Record<MidiNote, string>;
   mute?: boolean;
   solo?: boolean;
   /** TODO: Type properly and consider loading status */
