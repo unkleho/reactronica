@@ -14,6 +14,7 @@ import {
 } from '../types/propTypes';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
+// import { MidiNote } from '../types/midi-notes';
 
 type NoteType = {
   name: string;
@@ -51,9 +52,12 @@ export interface InstrumentProps {
     release?: number;
   };
   samples?: {
-    /** TODO: Change to MidiNote */
     [k: string]: string;
   };
+  // TODO: Add in next version
+  // samples?: {
+  //   [key in MidiNote]?: string;
+  // };
   mute?: boolean;
   solo?: boolean;
   /** TODO: Type properly and consider loading status */
@@ -302,11 +306,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
-    if (
-      type === 'sampler' &&
-      typeof onLoad === 'function' &&
-      Boolean(samples)
-    ) {
+    if (type === 'sampler' && Boolean(samples)) {
       // Create an array of promises from `samples`
       const loadSamplePromises = Object.keys(samples).map((key) => {
         return new Promise((resolve: (buffer: any) => void) => {
@@ -315,12 +315,15 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
           // Pass `resolve` to `onLoad` parameter of Tone.Sampler
           // When sample loads, this promise will resolve
           instrumentRef.current.add(key, sample, resolve);
+          // TODO: Investigate removing samples, may need to keep previous samples state
         });
       });
 
       // Once all promises in array resolve, run onLoad callback
       Promise.all(loadSamplePromises).then((event) => {
-        onLoad(event);
+        if (typeof onLoad === 'function') {
+          onLoad(event);
+        }
       });
     }
   }, [samples, type]);

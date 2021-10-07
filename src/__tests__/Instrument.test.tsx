@@ -14,6 +14,7 @@ import {
   mockSamplerConstructor,
   mockSamplerDispose,
   mockPolySynthSet,
+  mockSamplerAdd,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -62,6 +63,54 @@ describe('Instrument', () => {
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockSamplerDispose).toBeCalledTimes(1);
+  });
+
+  it('should add and remove samples from sampler Instrument', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: '../audio/file1.mp3',
+            }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: '../audio/file1.mp3',
+              D3: '../audio/file2.mp3',
+            }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSamplerAdd).toHaveBeenNthCalledWith(
+      1,
+      'C3',
+      '../audio/file1.mp3',
+      expect.any(Function),
+    );
+    expect(mockSamplerAdd).toHaveBeenNthCalledWith(
+      2,
+      'C3',
+      '../audio/file1.mp3',
+      expect.any(Function),
+    );
+    expect(mockSamplerAdd).toHaveBeenNthCalledWith(
+      3,
+      'D3',
+      '../audio/file2.mp3',
+      expect.any(Function),
+    );
   });
 
   it('should trigger and release note', () => {
