@@ -195,11 +195,13 @@ class PluckSynth {
 
 export const mockSamplerConstructor = jest.fn();
 export const mockSamplerDispose = jest.fn();
+export const mockSamplerAdd = jest.fn();
 
 class Sampler {
   constructor(samples) {
     mockSamplerConstructor(samples);
 
+    this.add = mockSamplerAdd;
     this.dispose = mockSamplerDispose;
     this.chain = jest.fn();
     this.disconnect = jest.fn();

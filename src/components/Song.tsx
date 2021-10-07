@@ -20,7 +20,7 @@ export type SongProps = {
   swingSubdivision?: string;
   volume?: number;
   isMuted?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const Song: React.FC<SongProps> = ({

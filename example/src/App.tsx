@@ -5,6 +5,7 @@ import './App.css';
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasSamples, setHasSamples] = useState(true);
 
   return (
     <div className="App">
@@ -14,6 +15,9 @@ function App() {
         <p>
           <button type="button" onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? 'Stop' : 'Play'}
+          </button>
+          <button type="button" onClick={() => setHasSamples(true)}>
+            {hasSamples ? 'Remove' : 'Add'} samples
           </button>
         </p>
       </header>
@@ -31,12 +35,20 @@ function App() {
         <Track steps={['C3', null, 'C3', 'C3']}>
           <Instrument
             type="sampler"
+            // samples={
+            //   hasSamples
+            //     ? {
+            //         C3: '/snare-top-off17.wav',
+            //       }
+            //     : {}
+            // }
             samples={{
               C3: '/snare-top-off17.wav',
             }}
-            onLoad={(buffers) => {
-              console.log(buffers);
-            }}
+            // onLoad={(buffers) => {
+            //   console.log('loaded');
+            //   console.log(buffers);
+            // }}
           ></Instrument>
         </Track>
       </Song>
