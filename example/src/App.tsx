@@ -1,23 +1,38 @@
 import React, { useState } from 'react';
 import { Song, Track, Instrument } from 'reactronica';
-import logo from './logo.svg';
 import './App.css';
+
+const snareSample = '/snare-top-off17.wav';
+const kickSample = '/st2_kick_one_shot_low_punch_basic.wav';
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasSamples, setHasSamples] = useState(true);
+  const [samples, setSamples] = useState<object | null>(null);
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Vite + React + Reactronica!</p>
         <p>
           <button type="button" onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? 'Stop' : 'Play'}
           </button>
-          <button type="button" onClick={() => setHasSamples(true)}>
-            {hasSamples ? 'Remove' : 'Add'} samples
+          <button
+            type="button"
+            onClick={() => {
+              if (samples) {
+                console.log('Clear samples');
+                setSamples(null);
+              } else {
+                console.log('Add samples');
+                setSamples({
+                  C3: kickSample,
+                  D3: snareSample,
+                });
+              }
+            }}
+          >
+            {samples ? 'Remove' : 'Add'} samples
           </button>
         </p>
       </header>
@@ -32,19 +47,10 @@ function App() {
           <Instrument type="amSynth"></Instrument>
         </Track>
 
-        <Track steps={['C3', null, 'C3', 'C3']}>
+        <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
           <Instrument
             type="sampler"
-            // samples={
-            //   hasSamples
-            //     ? {
-            //         C3: '/snare-top-off17.wav',
-            //       }
-            //     : {}
-            // }
-            samples={{
-              C3: '/snare-top-off17.wav',
-            }}
+            samples={samples || {}}
             // onLoad={(buffers) => {
             //   console.log('loaded');
             //   console.log(buffers);

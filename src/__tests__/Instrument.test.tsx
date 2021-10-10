@@ -59,7 +59,6 @@ describe('Instrument', () => {
       C3: '../audio/file.mp3',
     });
 
-    // @ts-ignore
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockSamplerDispose).toBeCalledTimes(1);
@@ -93,22 +92,31 @@ describe('Instrument', () => {
       </Song>,
     );
 
+    // TODO: Figure out what to do in this scenario
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument
+            type="sampler"
+            samples={{
+              D3: '../audio/file2.mp3',
+              E3: '../audio/file3.mp3',
+            }}
+          />
+        </Track>
+      </Song>,
+    );
+
     expect(mockSamplerAdd).toHaveBeenNthCalledWith(
       1,
-      'C3',
-      '../audio/file1.mp3',
+      'D3',
+      '../audio/file2.mp3',
       expect.any(Function),
     );
     expect(mockSamplerAdd).toHaveBeenNthCalledWith(
       2,
-      'C3',
-      '../audio/file1.mp3',
-      expect.any(Function),
-    );
-    expect(mockSamplerAdd).toHaveBeenNthCalledWith(
-      3,
-      'D3',
-      '../audio/file2.mp3',
+      'E3',
+      '../audio/file3.mp3',
       expect.any(Function),
     );
   });

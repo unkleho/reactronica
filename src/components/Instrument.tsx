@@ -5,6 +5,7 @@ import React, {
   // useLayoutEffect
 } from 'react';
 import PropTypes from 'prop-types';
+// import equal from 'fast-deep-equal';
 
 // import { SongContext } from './Song';
 import { TrackContext } from './Track';
@@ -126,6 +127,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // -------------------------------------------------------------------------
   // INSTRUMENT TYPE
   // -------------------------------------------------------------------------
+
+  const prevType = usePrevious<InstrumentType>(type);
 
   useEffect(() => {
     if (type === 'sampler') {
@@ -303,28 +306,64 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // SAMPLES
   // Run whenever `samples` change, using Tone.Sampler's `add` method to load
   // more samples after initial mount
+  // TODO: Check if first mount, as sampler constructor has already loaded samples
   // -------------------------------------------------------------------------
 
+  const prevSamples = usePrevious(samples);
+
   useEffect(() => {
-    if (type === 'sampler' && Boolean(samples)) {
-      // Create an array of promises from `samples`
-      const loadSamplePromises = Object.keys(samples).map((key) => {
-        return new Promise((resolve: (buffer: any) => void) => {
-          const sample = samples[key];
+    // When sampler is initiated, it already loads samples.
+    // We'll use !isFirstSamplerInit to skip adding samples if sampler has been
+    // initiated in this render.
+    const isFirstSamplerInit = type === 'sampler' && prevType !== type;
 
-          // Pass `resolve` to `onLoad` parameter of Tone.Sampler
-          // When sample loads, this promise will resolve
-          instrumentRef.current.add(key, sample, resolve);
-          // TODO: Investigate removing samples, may need to keep previous samples state
+    if (type === 'sampler' && Boolean(samples) && !isFirstSamplerInit) {
+      // const isEqual = equal(samples, prevSamples);
+      const prevSampleKeys = Object.keys(prevSamples);
+      const sampleKeys = Object.keys(samples);
+
+      // Samples to add
+      const addSampleKeys = sampleKeys.filter(
+        (key) => !prevSampleKeys.includes(key),
+      );
+
+      // Samples to remove
+      // const removeSampleKeys = prevSampleKeys.filter(
+      //   (key) => !sampleKeys.includes(key),
+      // );
+
+      // console.log(addSampleKeys, removeSampleKeys);
+
+      if (addSampleKeys.length) {
+        // Create an array of promises from `samples`
+        const loadSamplePromises = addSampleKeys.map((key) => {
+          return new Promise((resolve: (buffer: any) => void) => {
+            const sample = samples[key];
+            const prevSample = prevSamples ? (prevSamples as object)[key] : '';
+
+            // Only update sample if different than before
+            if (sample !== prevSample) {
+              // Pass `resolve` to `onLoad` parameter of Tone.Sampler
+              // When sample loads, this promise will resolve
+              instrumentRef.current.add(key, sample, resolve);
+            } else {
+              resolve(null);
+            }
+          });
         });
-      });
 
-      // Once all promises in array resolve, run onLoad callback
-      Promise.all(loadSamplePromises).then((event) => {
-        if (typeof onLoad === 'function') {
-          onLoad(event);
-        }
-      });
+        // Once all promises in array resolve, run onLoad callback
+        Promise.all(loadSamplePromises).then((event) => {
+          if (typeof onLoad === 'function') {
+            onLoad(event);
+          }
+        });
+
+        // TODO: Work out a way to remove samples. Below doesn't work
+        // removeSampleKeys.forEach((key) => {
+        //   instrumentRef.current.add(key, null);
+        // });
+      }
     }
   }, [samples, type]);
 
