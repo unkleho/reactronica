@@ -32,7 +32,6 @@
     "tone": "^13.8.34"
   },
   "peerDependencies": {
-    "prop-types": ">=15.7.0",
     "react": ">=16"
   },
   "devDependencies": {

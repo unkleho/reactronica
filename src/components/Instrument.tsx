@@ -4,15 +4,10 @@ import React, {
   useContext,
   // useLayoutEffect
 } from 'react';
-import PropTypes from 'prop-types';
 // import equal from 'fast-deep-equal';
 
 // import { SongContext } from './Song';
 import { TrackContext } from './Track';
-import {
-  NoteType as PropTypeNoteType,
-  InstrumentTypes,
-} from '../types/propTypes';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 // import { MidiNote } from '../types/midi-notes';
@@ -368,35 +363,6 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   }, [samples, type]);
 
   return null;
-};
-
-InstrumentConsumer.propTypes = {
-  // <Instrument /> Props
-  // @ts-ignore
-  type: InstrumentTypes.isRequired,
-  options: PropTypes.object,
-  // @ts-ignore
-  notes: PropTypes.arrayOf(PropTypeNoteType), // Currently played notes.
-  polyphony: PropTypes.number,
-  envelope: PropTypes.shape({
-    attack: PropTypes.number,
-    decay: PropTypes.number,
-    sustain: PropTypes.number,
-    release: PropTypes.number,
-  }),
-  // oscillator: PropTypes.shape({
-  //   type: PropTypes.oneOf(['triangle', 'sine', 'square']),
-  // }),
-  // @ts-ignore
-  samples: PropTypes.object,
-  // trackChannel: PropTypes.object, // An instance of new this.Tone.PanVol()
-  // <Track /> Props
-  volume: PropTypes.number,
-  pan: PropTypes.number,
-  mute: PropTypes.bool,
-  solo: PropTypes.bool,
-  effectsChain: PropTypes.array,
-  onInstrumentsUpdate: PropTypes.func,
 };
 
 const Instrument: React.FC<InstrumentProps> = ({
