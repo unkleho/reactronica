@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import equal from 'fast-deep-equal';
 
 import { SongContext } from './Song';
-import { StepType } from '../types/propTypes';
 import Tone from '../lib/tone';
 import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
 import { usePrevious } from '../lib/hooks';
@@ -195,24 +193,6 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
       {effects}
     </TrackContext.Provider>
   );
-};
-
-TrackConsumer.propTypes = {
-  // <Song /> props
-  isPlaying: PropTypes.bool,
-  // <Track /> props
-  // @ts-ignore
-  steps: PropTypes.arrayOf(StepType),
-  volume: PropTypes.number,
-  pan: PropTypes.number,
-  mute: PropTypes.bool,
-  solo: PropTypes.bool,
-  subdivision: PropTypes.string, // react-music = resolution
-  // effects: PropTypes.oneOfType([
-  //   PropTypes.node,
-  //   PropTypes.arrayOf(PropTypes.element),
-  // ]),
-  onStepPlay: PropTypes.func,
 };
 
 const Track: React.FC<TrackProps> = (props) => {

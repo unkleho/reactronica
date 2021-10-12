@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import StartAudioContext from 'startaudiocontext';
 
 import Tone from '../lib/tone';
@@ -87,14 +86,6 @@ const Song: React.FC<SongProps> = ({
       {children}
     </SongContext.Provider>
   );
-};
-
-Song.propTypes = {
-  isPlaying: PropTypes.bool,
-  bpm: PropTypes.number,
-  swing: PropTypes.number,
-  swingSubdivision: PropTypes.oneOf(['8n']),
-  children: PropTypes.node,
 };
 
 export default Song;

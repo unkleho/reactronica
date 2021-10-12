@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - 2021-10-12
 
+- Remove ye olde `prop-types` in favour of `Typescript` types
 - Fix ESLint issues
 
 ## [0.6.2] - 2021-10-10

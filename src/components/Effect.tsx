@@ -1,9 +1,7 @@
 import React, { useEffect, useContext, useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import { TrackContext } from './Track';
 import Tone from '../lib/tone';
-import { EffectTypes } from '../types/propTypes';
 
 export type EffectType =
   | 'autoFilter'
@@ -184,27 +182,6 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
   }, [highFrequency]);
 
   return null;
-};
-
-EffectConsumer.propTypes = {
-  // @ts-ignore
-  type: EffectTypes.isRequired,
-  // @ts-ignore
-  id: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.number.isRequired,
-  ]),
-  delayTime: PropTypes.string,
-  feedback: PropTypes.number,
-  wet: PropTypes.number,
-  low: PropTypes.number,
-  mid: PropTypes.number,
-  high: PropTypes.number,
-  lowFrequency: PropTypes.number,
-  highFrequency: PropTypes.number,
-  // <Track /> Props
-  onAddToEffectsChain: PropTypes.func,
-  onRemoveFromEffectsChain: PropTypes.func,
 };
 
 const Effect: React.FC<EffectProps> = (props) => {
