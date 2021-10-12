@@ -95,7 +95,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
       sequencer.current = new Tone.Sequence(
         (_, step) => {
           step.notes.forEach((note) => {
-            instrumentsRef.current.map((instrument) => {
+            instrumentsRef.current.forEach((instrument) => {
               instrument.triggerAttackRelease(
                 note.name,
                 note.duration || 0.5,
@@ -119,6 +119,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
         sequencer.current.stop();
       }
     }
+    /* eslint-disable-next-line */
   }, [isPlaying]);
 
   useEffect(() => {
@@ -146,6 +147,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
         });
       }
     }
+    /* eslint-disable-next-line */
   }, [JSON.stringify(sequencerSteps)]);
 
   useEffect(() => {

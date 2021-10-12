@@ -122,6 +122,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         trackChannelBase.current.dispose();
       }
     };
+    /* eslint-disable-next-line */
   }, []);
 
   // -------------------------------------------------------------------------
@@ -201,6 +202,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         instrumentRef.current.dispose();
       }
     };
+    /* eslint-disable-next-line */
   }, [type, polyphony]);
 
   useEffect(() => {
@@ -365,6 +367,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         // });
       }
     }
+    /* eslint-disable-next-line */
   }, [samples, type]);
 
   return null;

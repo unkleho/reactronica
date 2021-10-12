@@ -124,6 +124,7 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
       // console.log('<Effect /> unmount');
       onRemoveFromEffectsChain(effect.current);
     };
+    /* eslint-disable-next-line */
   }, [type]);
 
   useEffect(() => {
