@@ -63,6 +63,7 @@ const Song: React.FC<SongProps> = ({
     } else {
       Tone.Transport.stop();
     }
+    /* eslint-disable-next-line */
   }, [isPlaying]);
 
   useEffect(() => {
