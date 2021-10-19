@@ -2,6 +2,7 @@
   "name": "reactronica-example",
   "version": "0.0.0",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview"

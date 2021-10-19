@@ -3,9 +3,11 @@ import equal from 'fast-deep-equal';
 
 import { SongContext } from './Song';
 import Tone from '../lib/tone';
+// import * as Tone from 'tone';
 import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
 import { usePrevious } from '../lib/hooks';
 import { MidiNote } from '../types/midi-notes';
+import { convertStepsToNotes } from '../lib/step-utils';
 
 export interface StepNoteType {
   name: MidiNote;
@@ -29,7 +31,7 @@ export interface TrackProps {
   subdivision?: string;
   effects?: React.ReactNode[];
   children: React.ReactNode;
-  onStepPlay?: (stepNotes: StepNoteType[], index: number) => void;
+  onStepPlay?: (stepNotes: StepType, index: number) => void;
 }
 
 export interface TrackConsumerProps extends TrackProps {
@@ -56,13 +58,14 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   pan = 0,
   mute,
   solo,
-  subdivision = '4n',
+  // subdivision = '4n',
   effects = [],
   children,
   onStepPlay,
 }) => {
   const [effectsChain, setEffectsChain] = useState([]);
   const [instruments, setInstruments] = useState([]);
+  // TODO: Use real Tone types
   const sequencer = useRef<{
     start: Function;
     stop: Function;
@@ -70,6 +73,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     add: Function;
     dispose: Function;
     removeAll: Function;
+    loop: boolean;
   }>();
   const instrumentsRef = useRef(instruments);
 
@@ -83,6 +87,14 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   const sequencerSteps = steps.map(buildSequencerStep);
   const prevSequencerSteps: SequencerStep[] = usePrevious(sequencerSteps);
 
+  const newNotes = convertStepsToNotes(steps, 1, 4);
+
+  // console.log('newNotes', newNotes);
+
+  // console.log('steps', steps);
+
+  const currentStepIndex = useRef(0);
+
   useEffect(() => {
     // -------------------------------------------------------------------------
     // STEPS
@@ -90,31 +102,57 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
 
     // Start/Stop sequencer!
     if (isPlaying) {
-      sequencer.current = new Tone.Sequence(
-        (_, step) => {
-          step.notes.forEach((note) => {
-            instrumentsRef.current.forEach((instrument) => {
-              instrument.triggerAttackRelease(
-                note.name,
-                note.duration || 0.5,
-                undefined,
-                note.velocity,
-              );
-            });
-          });
+      sequencer.current = new Tone.Part((time, step) => {
+        instrumentsRef.current.forEach((instrument) => {
+          instrument.triggerAttackRelease(
+            step.name,
+            step.duration || 0.5,
+            time,
+            step.velocity,
+          );
+        });
 
-          if (typeof onStepPlay === 'function') {
-            onStepPlay(step.notes, step.index);
-          }
-        },
-        sequencerSteps,
-        subdivision,
-      );
+        if (
+          typeof onStepPlay === 'function' &&
+          currentStepIndex.current !== step.index
+        ) {
+          onStepPlay(steps[step.index], step.index);
+        }
 
+        currentStepIndex.current = step.index;
+      }, newNotes);
+
+      sequencer.current.loop = true;
       sequencer.current?.start(0);
+
+      // sequencer.current = new Tone.Sequence(
+      //   (time, step) => {
+      //     console.log(time, step);
+
+      //     step.notes.forEach((note) => {
+      //       instrumentsRef.current.forEach((instrument) => {
+      //         instrument.triggerAttackRelease(
+      //           note.name,
+      //           note.duration || 0.5,
+      //           time,
+      //           note.velocity,
+      //         );
+      //       });
+      //     });
+
+      //     if (typeof onStepPlay === 'function') {
+      //       onStepPlay(step.notes, step.index);
+      //     }
+      //   },
+      //   sequencerSteps,
+      //   subdivision,
+      // );
+
+      // sequencer.current?.start(0);
     } else {
       if (sequencer.current) {
         sequencer.current.stop();
+        currentStepIndex.current = 0;
       }
     }
     /* eslint-disable-next-line */

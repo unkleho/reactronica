@@ -8,9 +8,10 @@ import React, {
 
 // import { SongContext } from './Song';
 import { TrackContext } from './Track';
-import Tone from '../lib/tone';
+// import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 // import { MidiNote } from '../types/midi-notes';
+import * as Tone from 'tone';
 
 type NoteType = {
   name: string;
@@ -168,18 +169,18 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       }
 
       /**
-       * PolySynth accepts other Synth types as second param, making them
+       * PolySynth accepts other Synth types as first param, making them
        * polyphonic. As this is a common use case, all Synths will be created
        * via PolySynth. Monophonic synths can easily be created by setting the
        * `polyphony` prop to 1.
        */
       instrumentRef.current = new Tone.PolySynth(
-        polyphony,
+        // polyphony,
         synth,
-        buildSynthOptions({
-          oscillator,
-          envelope,
-        }),
+        // buildSynthOptions({
+        //   oscillator,
+        //   envelope,
+        // }),
       );
     }
 

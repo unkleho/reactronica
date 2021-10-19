@@ -40,14 +40,14 @@ function App() {
       <Song isPlaying={isPlaying} bpm={90}>
         <Track
           steps={['C3', null, ['G3', 'E3'], null]}
-          // onStepPlay={(steps) => {
-          //   console.log(steps);
-          // }}
+          onStepPlay={(steps, i) => {
+            console.log(i, steps);
+          }}
         >
-          <Instrument type="amSynth"></Instrument>
+          <Instrument type="synth"></Instrument>
         </Track>
 
-        <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
+        {/* <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
           <Instrument
             type="sampler"
             samples={samples || {}}
@@ -56,7 +56,7 @@ function App() {
             //   console.log(buffers);
             // }}
           ></Instrument>
-        </Track>
+        </Track> */}
       </Song>
     </div>
   );
