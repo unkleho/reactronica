@@ -8,11 +8,24 @@ const kickSample = '/st2_kick_one_shot_low_punch_basic.wav';
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [samples, setSamples] = useState<object | null>(null);
+  const [steps, setSteps] = useState(['C3', null, ['G#3', 'G#2'], null]);
+  const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>Hello Vite + React + Reactronica!</p>
+        <p>
+          <button onClick={() => setSteps(['C3', null, ['G#3', 'G#2'], null])}>
+            ['C3', null, ['G#3', 'G#2'], null]
+          </button>
+          <button onClick={() => setSteps([null, null, ['G#3'], 'C3'])}>
+            [null, null, ['G#3'], 'C3']
+          </button>
+          <button onClick={() => setSteps([null, null, ['G#3'], null, 'C3'])}>
+            [null, null, ['G#3'], null, 'C3']
+          </button>
+        </p>
+        <p>currentStepIndex: {currentStepIndex}</p>
         <p>
           <button type="button" onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? 'Stop' : 'Play'}
@@ -39,9 +52,10 @@ function App() {
 
       <Song isPlaying={isPlaying} bpm={90}>
         <Track
-          steps={['C3', null, ['G3', 'E3'], null]}
+          steps={steps}
           onStepPlay={(steps, i) => {
             console.log(i, steps);
+            setCurrentStepIndex(i);
           }}
         >
           <Instrument type="synth"></Instrument>

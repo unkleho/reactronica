@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import equal from 'fast-deep-equal';
+// import equal from 'fast-deep-equal';
 
 import { SongContext } from './Song';
 import Tone from '../lib/tone';
 // import * as Tone from 'tone';
 import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
-import { usePrevious } from '../lib/hooks';
+// import { usePrevious } from '../lib/hooks';
 import { MidiNote } from '../types/midi-notes';
-import { convertStepsToNotes } from '../lib/step-utils';
+// import { convertStepsToNotes } from '../lib/step-utils';
 
 export interface StepNoteType {
   name: MidiNote;
@@ -58,19 +58,23 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   pan = 0,
   mute,
   solo,
-  // subdivision = '4n',
+  subdivision = '4n',
   effects = [],
   children,
   onStepPlay,
 }) => {
-  const [effectsChain, setEffectsChain] = useState([]);
+  // -------------------------------------------------------------------------
+  // INSTRUMENT/EFFECTS
+  // -------------------------------------------------------------------------
+
   const [instruments, setInstruments] = useState([]);
+  const [effectsChain, setEffectsChain] = useState([]);
+
   // TODO: Use real Tone types
   const sequencer = useRef<{
     start: Function;
     stop: Function;
-    remove: Function;
-    add: Function;
+    events: SequencerStep[];
     dispose: Function;
     removeAll: Function;
     loop: boolean;
@@ -84,52 +88,59 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   /*
   Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
   */
-  const sequencerSteps = steps.map(buildSequencerStep);
-  const prevSequencerSteps: SequencerStep[] = usePrevious(sequencerSteps);
+  // const sequencerSteps = steps.map(buildSequencerStep);
+  // const prevSequencerSteps: SequencerStep[] = usePrevious(sequencerSteps);
 
-  const newNotes = convertStepsToNotes(steps, 1, 4);
-
-  // console.log('newNotes', newNotes);
-
-  // console.log('steps', steps);
-
-  const currentStepIndex = useRef(0);
+  // const newNotes = convertStepsToNotes(steps, 1, 4);
+  // const currentStepIndex = useRef(null);
 
   useEffect(() => {
-    // -------------------------------------------------------------------------
-    // STEPS
-    // -------------------------------------------------------------------------
+    const sequencerSteps = steps.map(buildSequencerStep);
 
-    // Start/Stop sequencer!
-    if (isPlaying) {
-      sequencer.current = new Tone.Part((time, step) => {
-        instrumentsRef.current.forEach((instrument) => {
-          instrument.triggerAttackRelease(
-            step.name,
-            step.duration || 0.5,
-            time,
-            step.velocity,
-          );
+    sequencer.current = new Tone.Sequence(
+      (time, step: SequencerStep) => {
+        step.notes.forEach((note: StepNoteType) => {
+          instrumentsRef.current.forEach((instrument) => {
+            instrument.triggerAttackRelease(
+              note.name,
+              note.duration || 0.5,
+              time,
+              note.velocity,
+            );
+          });
         });
 
-        if (
-          typeof onStepPlay === 'function' &&
-          currentStepIndex.current !== step.index
-        ) {
-          onStepPlay(steps[step.index], step.index);
+        if (typeof onStepPlay === 'function') {
+          onStepPlay(step.notes, step.index);
         }
+      },
+      sequencerSteps,
+      subdivision,
+    );
 
-        currentStepIndex.current = step.index;
-      }, newNotes);
+    sequencer.current.loop = true;
 
-      sequencer.current.loop = true;
-      sequencer.current?.start(0);
+    return function cleanup() {
+      if (sequencer.current) {
+        sequencer.current.dispose();
+      }
+    };
+    /* eslint-disable-next-line */
+  }, []);
 
+  // -------------------------------------------------------------------------
+  // STEPS
+  // -------------------------------------------------------------------------
+
+  useEffect(() => {
+    // Start/Stop sequencer!
+    if (isPlaying) {
+      const sequencerSteps = steps.map(buildSequencerStep);
+
+      // TODO: Try to reuse Sequence
       // sequencer.current = new Tone.Sequence(
-      //   (time, step) => {
-      //     console.log(time, step);
-
-      //     step.notes.forEach((note) => {
+      //   (time, step: SequencerStep) => {
+      //     step.notes.forEach((note: StepNoteType) => {
       //       instrumentsRef.current.forEach((instrument) => {
       //         instrument.triggerAttackRelease(
       //           note.name,
@@ -148,11 +159,11 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
       //   subdivision,
       // );
 
-      // sequencer.current?.start(0);
+      sequencer.current.events = sequencerSteps;
+      sequencer.current?.start(0);
     } else {
       if (sequencer.current) {
         sequencer.current.stop();
-        currentStepIndex.current = 0;
       }
     }
     /* eslint-disable-next-line */
@@ -160,39 +171,13 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
 
   useEffect(() => {
     if (sequencer.current) {
-      if (prevSequencerSteps?.length === sequencerSteps.length) {
-        // When steps length is the same, update steps in a more efficient way
-        sequencerSteps.forEach((step, i) => {
-          const isEqual = equal(
-            sequencerSteps[i].notes,
-            prevSequencerSteps && prevSequencerSteps[i]
-              ? prevSequencerSteps[i].notes
-              : [],
-          );
+      const sequencerSteps = steps.map(buildSequencerStep);
 
-          if (!isEqual) {
-            sequencer.current?.remove(i);
-            sequencer.current?.add(i, step);
-          }
-        });
-      } else {
-        // When new steps are less or more then prev, remove all and add new steps
-        sequencer.current.removeAll();
-        sequencerSteps.forEach((step, i) => {
-          sequencer.current.add(i, step);
-        });
-      }
+      // Update new sequencer steps
+      sequencer.current.events = sequencerSteps;
     }
     /* eslint-disable-next-line */
-  }, [JSON.stringify(sequencerSteps)]);
-
-  useEffect(() => {
-    return function cleanup() {
-      if (sequencer.current) {
-        sequencer.current.dispose();
-      }
-    };
-  }, []);
+  }, [JSON.stringify(steps)]);
 
   const handleAddToEffectsChain = (effect) => {
     // console.log('<Track />', 'onAddToEffectsChain');

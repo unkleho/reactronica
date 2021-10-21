@@ -16,7 +16,7 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "reactronica": ["../src"]
+      "reactronica": ["../dist"]
     }
   },
   "include": ["./src"]
