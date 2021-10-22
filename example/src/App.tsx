@@ -1,29 +1,53 @@
 import React, { useState } from 'react';
-import { Song, Track, Instrument } from 'reactronica';
+import { Song, Track, Instrument, StepType } from 'reactronica';
 import './App.css';
 
 const snareSample = '/snare-top-off17.wav';
 const kickSample = '/st2_kick_one_shot_low_punch_basic.wav';
 
+const clips: {
+  steps: StepType[];
+  note: string;
+}[] = [
+  {
+    steps: ['C3', null, ['G#3', 'G#2'], null],
+    note: 'String notes and chords',
+  },
+  {
+    steps: [{ name: 'F3' }, null, [{ name: 'G3' }, { name: 'G2' }], null],
+    note: 'Object notes and chords',
+  },
+  {
+    steps: [
+      'C3',
+      null,
+      ['G#3', 'G#2'],
+      null,
+      { name: 'F3' },
+      null,
+      // TODO: Fix this type
+      [{ name: 'G3' }, 'G2'],
+      null,
+    ],
+    note: 'More steps than others',
+  },
+];
+
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [samples, setSamples] = useState<object | null>(null);
-  const [steps, setSteps] = useState(['C3', null, ['G#3', 'G#2'], null]);
+  const [steps, setSteps] = useState(clips[0].steps);
   const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
 
   return (
     <div className="App">
       <header className="App-header">
         <p>
-          <button onClick={() => setSteps(['C3', null, ['G#3', 'G#2'], null])}>
-            ['C3', null, ['G#3', 'G#2'], null]
-          </button>
-          <button onClick={() => setSteps([null, null, ['G#3'], 'C3'])}>
-            [null, null, ['G#3'], 'C3']
-          </button>
-          <button onClick={() => setSteps([null, null, ['G#3'], null, 'C3'])}>
-            [null, null, ['G#3'], null, 'C3']
-          </button>
+          {clips.map((clip, i) => (
+            <button onClick={() => setSteps(clip.steps)} key={i}>
+              {JSON.stringify(clip.steps)}
+            </button>
+          ))}
         </p>
         <p>currentStepIndex: {currentStepIndex}</p>
         <p>
@@ -50,7 +74,7 @@ function App() {
         </p>
       </header>
 
-      <Song isPlaying={isPlaying} bpm={90}>
+      <Song isPlaying={isPlaying} bpm={90} swing={0.5}>
         <Track
           steps={steps}
           onStepPlay={(steps, i) => {
@@ -61,7 +85,7 @@ function App() {
           <Instrument type="synth"></Instrument>
         </Track>
 
-        {/* <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
+        <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
           <Instrument
             type="sampler"
             samples={samples || {}}
@@ -70,7 +94,7 @@ function App() {
             //   console.log(buffers);
             // }}
           ></Instrument>
-        </Track> */}
+        </Track>
       </Song>
     </div>
   );

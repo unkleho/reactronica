@@ -10,12 +10,14 @@ import { MidiNote } from '../types/midi-notes';
 // import { convertStepsToNotes } from '../lib/step-utils';
 
 export interface StepNoteType {
-  name: MidiNote;
+  name: MidiNote | string;
   duration?: number | string;
   velocity?: number;
 }
 
 export type StepType =
+  | string
+  | string[]
   | StepNoteType
   | StepNoteType[]
   | MidiNote
@@ -85,40 +87,9 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     instrumentsRef.current = instruments;
   }, [instruments]);
 
-  /*
-  Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
-  */
-  // const sequencerSteps = steps.map(buildSequencerStep);
-  // const prevSequencerSteps: SequencerStep[] = usePrevious(sequencerSteps);
-
-  // const newNotes = convertStepsToNotes(steps, 1, 4);
-  // const currentStepIndex = useRef(null);
-
   useEffect(() => {
-    const sequencerSteps = steps.map(buildSequencerStep);
-
-    sequencer.current = new Tone.Sequence(
-      (time, step: SequencerStep) => {
-        step.notes.forEach((note: StepNoteType) => {
-          instrumentsRef.current.forEach((instrument) => {
-            instrument.triggerAttackRelease(
-              note.name,
-              note.duration || 0.5,
-              time,
-              note.velocity,
-            );
-          });
-        });
-
-        if (typeof onStepPlay === 'function') {
-          onStepPlay(step.notes, step.index);
-        }
-      },
-      sequencerSteps,
-      subdivision,
-    );
-
-    sequencer.current.loop = true;
+    // Tried putting new Tone.Sequence to reuse instance, but stops looping after a while.
+    // So need to put it in isPlaying useEffect.
 
     return function cleanup() {
       if (sequencer.current) {
@@ -133,34 +104,42 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   // -------------------------------------------------------------------------
 
   useEffect(() => {
-    // Start/Stop sequencer!
     if (isPlaying) {
+      // ----------------------------------------------------------------------
+      // Tone.Sequence can't easily play chords. By default, arrays within
+      // steps are flattened out and subdivided.
+      // However an array of notes is our preferred way of representing chords.
+      // To get around this, buildSequencerStep() will transform notes and put
+      // them in a notes field as an array. We can then loop through and run
+      // triggerAttackRelease() to play the note/s.
+      // ----------------------------------------------------------------------
+
       const sequencerSteps = steps.map(buildSequencerStep);
 
-      // TODO: Try to reuse Sequence
-      // sequencer.current = new Tone.Sequence(
-      //   (time, step: SequencerStep) => {
-      //     step.notes.forEach((note: StepNoteType) => {
-      //       instrumentsRef.current.forEach((instrument) => {
-      //         instrument.triggerAttackRelease(
-      //           note.name,
-      //           note.duration || 0.5,
-      //           time,
-      //           note.velocity,
-      //         );
-      //       });
-      //     });
+      sequencer.current = new Tone.Sequence(
+        (time, step: SequencerStep) => {
+          step.notes.forEach((note: StepNoteType) => {
+            instrumentsRef.current.forEach((instrument) => {
+              instrument.triggerAttackRelease(
+                note.name,
+                note.duration || 0.5,
+                time,
+                note.velocity,
+              );
+            });
+          });
 
-      //     if (typeof onStepPlay === 'function') {
-      //       onStepPlay(step.notes, step.index);
-      //     }
-      //   },
-      //   sequencerSteps,
-      //   subdivision,
-      // );
+          if (typeof onStepPlay === 'function') {
+            onStepPlay(step.notes, step.index);
+          }
+        },
+        sequencerSteps,
+        subdivision,
+      );
 
       sequencer.current.events = sequencerSteps;
-      sequencer.current?.start(0);
+      sequencer.current.loop = true;
+      sequencer.current.start(0);
     } else {
       if (sequencer.current) {
         sequencer.current.stop();
@@ -175,6 +154,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
 
       // Update new sequencer steps
       sequencer.current.events = sequencerSteps;
+      sequencer.current.loop = true;
     }
     /* eslint-disable-next-line */
   }, [JSON.stringify(steps)]);

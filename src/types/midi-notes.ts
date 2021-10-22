@@ -1,6 +1,5 @@
 // TODO: Add flats, eg. Bb2
 export type MidiNote =
-  | string
   | 'C-2'
   | 'C#-2'
   | 'D-2'
