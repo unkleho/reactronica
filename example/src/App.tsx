@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Song, Track, Instrument, StepType } from 'reactronica';
+import { Song, Track, Instrument, StepType, config } from 'reactronica';
 import './App.css';
 
 const snareSample = '/snare-top-off17.wav';
@@ -25,7 +25,7 @@ const clips: {
       null,
       { name: 'F3' },
       null,
-      // TODO: Fix this type
+      // TODO: Fix this type?
       [{ name: 'G3' }, 'G2'],
       null,
     ],
@@ -38,6 +38,7 @@ function App() {
   const [samples, setSamples] = useState<object | null>(null);
   const [steps, setSteps] = useState(clips[0].steps);
   const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
+  const [synth, setSynth] = useState('synth');
 
   return (
     <div className="App">
@@ -69,9 +70,22 @@ function App() {
               }
             }}
           >
-            {samples ? 'Remove' : 'Add'} samples
+            {samples ? 'Remove' : 'Add'} drum samples
           </button>
         </p>
+        <select
+          onChange={(option) => {
+            console.log(option.target.value);
+            setSynth(option.target.value);
+          }}
+          value={synth}
+        >
+          {config.instruments.map((instrument) => (
+            <option value={instrument.id} key={instrument.id}>
+              {instrument.name}
+            </option>
+          ))}
+        </select>
       </header>
 
       <Song isPlaying={isPlaying} bpm={90} swing={0.5}>
@@ -82,7 +96,7 @@ function App() {
             setCurrentStepIndex(i);
           }}
         >
-          <Instrument type="synth"></Instrument>
+          <Instrument type={synth}></Instrument>
         </Track>
 
         <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>

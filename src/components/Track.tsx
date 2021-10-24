@@ -16,12 +16,12 @@ export interface StepNoteType {
 }
 
 export type StepType =
-  | string
-  | string[]
   | StepNoteType
   | StepNoteType[]
   | MidiNote
   | MidiNote[]
+  | string
+  | string[]
   | null;
 
 export interface TrackProps {
@@ -117,13 +117,13 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
       const sequencerSteps = steps.map(buildSequencerStep);
 
       sequencer.current = new Tone.Sequence(
-        (time, step: SequencerStep) => {
+        (_, step: SequencerStep) => {
           step.notes.forEach((note: StepNoteType) => {
             instrumentsRef.current.forEach((instrument) => {
               instrument.triggerAttackRelease(
                 note.name,
                 note.duration || 0.5,
-                time,
+                // time,
                 note.velocity,
               );
             });

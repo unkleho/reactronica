@@ -98,6 +98,9 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       chain: Function;
       dispose: Function;
       disconnect: Function;
+      disposed: boolean;
+      releaseAll: Function;
+      _voices: any;
     }>
   >();
   // const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
@@ -128,6 +131,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   const prevType = usePrevious<InstrumentType>(type);
 
   useEffect(() => {
+    console.log('new synth', 'synth');
+
     if (type === 'sampler') {
       instrumentRef.current = new Tone.Sampler(samples, onLoad);
 
@@ -195,7 +200,19 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
     return function cleanup() {
       if (instrumentRef.current) {
-        instrumentRef.current.dispose();
+        console.log(
+          'cleanup',
+          type,
+          // 'disposed',
+          instrumentRef.current,
+        );
+
+        // instrumentRef.current.dispose();
+        // if (!instrumentRef.current?._voices?.length) {
+        // setTimeout(() => {
+        //   instrumentRef.current.releaseAll();
+        // }, 1000);
+        // }
       }
     };
     /* eslint-disable-next-line */
