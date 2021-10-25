@@ -33,6 +33,12 @@ export type InstrumentType =
   | 'synth'
   | 'sampler';
 
+export type InstrumentSamples = {
+  [k: string]: string;
+  // TODO: Add in next version
+  // [key in MidiNote]?: string;
+};
+
 export interface InstrumentProps {
   type: InstrumentType;
   notes?: NoteType[];
@@ -48,13 +54,7 @@ export interface InstrumentProps {
     sustain?: number;
     release?: number;
   };
-  samples?: {
-    [k: string]: string;
-  };
-  // TODO: Add in next version
-  // samples?: {
-  //   [key in MidiNote]?: string;
-  // };
+  samples?: InstrumentSamples;
   mute?: boolean;
   solo?: boolean;
   /** TODO: Type properly and consider loading status */
@@ -131,8 +131,6 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   const prevType = usePrevious<InstrumentType>(type);
 
   useEffect(() => {
-    console.log('new synth', 'synth');
-
     if (type === 'sampler') {
       instrumentRef.current = new Tone.Sampler(samples, onLoad);
 
@@ -206,7 +204,6 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
           // 'disposed',
           instrumentRef.current,
         );
-
         // instrumentRef.current.dispose();
         // if (!instrumentRef.current?._voices?.length) {
         // setTimeout(() => {

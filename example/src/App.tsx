@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Song, Track, Instrument, StepType, config } from 'reactronica';
+import {
+  Song,
+  Track,
+  Instrument,
+  StepType,
+  config,
+  Effect,
+  InstrumentType,
+  InstrumentSamples,
+} from 'reactronica';
 import './App.css';
 
 const snareSample = '/snare-top-off17.wav';
@@ -35,10 +44,10 @@ const clips: {
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [samples, setSamples] = useState<object | null>(null);
+  const [samples, setSamples] = useState<InstrumentSamples | null>(null);
   const [steps, setSteps] = useState(clips[0].steps);
   const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
-  const [synth, setSynth] = useState('synth');
+  const [synth, setSynth] = useState<InstrumentType>('synth');
 
   return (
     <div className="App">
@@ -76,7 +85,7 @@ function App() {
         <select
           onChange={(option) => {
             console.log(option.target.value);
-            setSynth(option.target.value);
+            setSynth(option.target.value as InstrumentType);
           }}
           value={synth}
         >
@@ -88,7 +97,7 @@ function App() {
         </select>
       </header>
 
-      <Song isPlaying={isPlaying} bpm={90} swing={0.5}>
+      <Song isPlaying={isPlaying} bpm={70} swing={0.5}>
         <Track
           steps={steps}
           onStepPlay={(steps, i) => {
@@ -97,9 +106,10 @@ function App() {
           }}
         >
           <Instrument type={synth}></Instrument>
+          {/* <Effect type="feedbackDelay" wet={1} /> */}
         </Track>
 
-        <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
+        <Track steps={samples ? ['C3', 'D3', 'C3', 'D3'] : []}>
           <Instrument
             type="sampler"
             samples={samples || {}}

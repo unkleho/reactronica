@@ -9,6 +9,7 @@ export {
   default as Instrument,
   InstrumentProps,
   InstrumentType,
+  InstrumentSamples,
 } from './components/Instrument';
 export {
   default as Effect,
