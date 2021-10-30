@@ -116,14 +116,18 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
 
       const sequencerSteps = steps.map(buildSequencerStep);
 
+      console.log('sequencerSteps', sequencerSteps);
+
       sequencer.current = new Tone.Sequence(
-        (_, step: SequencerStep) => {
-          step.notes.forEach((note: StepNoteType) => {
+        (time, step: SequencerStep) => {
+          step.notes.forEach((note: StepNoteType, i) => {
             instrumentsRef.current.forEach((instrument) => {
               instrument.triggerAttackRelease(
                 note.name,
                 note.duration || 0.5,
-                // time,
+                // Nudge time to avoid:
+                // `Start time must be strictly greater than previous start time` error
+                time + i / 1000,
                 note.velocity,
               );
             });

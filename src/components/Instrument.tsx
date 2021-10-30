@@ -323,6 +323,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
   const prevSamples = usePrevious(samples);
 
+  // console.log(prevSamples, samples);
+
   useEffect(() => {
     // When sampler is initiated, it already loads samples.
     // We'll use !isFirstSamplerInit to skip adding samples if sampler has been
