@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import StartAudioContext from 'startaudiocontext';
 
-import Tone from '../lib/tone';
+// import Tone from '../lib/tone';
+import Tone from 'tone';
 
 type SongContextProps = {
   isPlaying: boolean;
@@ -45,9 +46,13 @@ const Song: React.FC<SongProps> = ({
     );
   }, []);
 
+  // console.log(Tone.Transport);
+
   useEffect(() => {
     Tone.Transport.bpm.value = bpm;
     Tone.Transport.swing = swing;
+    // TODO
+    // @ts-ignore
     Tone.Transport.swingSubdivision = swingSubdivision;
   }, [bpm, swing, swingSubdivision]);
 
@@ -56,6 +61,8 @@ const Song: React.FC<SongProps> = ({
       // Hack to get Tone to NOT use same settings from another instance
       Tone.Transport.bpm.value = bpm;
       Tone.Transport.swing = swing;
+      // TODO
+      // @ts-ignore
       Tone.Transport.swingSubdivision = swingSubdivision;
 
       Tone.Transport.start();

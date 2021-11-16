@@ -13,6 +13,8 @@ import {
 import './App.css';
 import { useKeyPress } from './hooks';
 
+// TODO: Test oscilator and envelopes
+
 const snareSample = '/snare-top-off17.wav';
 const kickSample = '/st2_kick_one_shot_low_punch_basic.wav';
 

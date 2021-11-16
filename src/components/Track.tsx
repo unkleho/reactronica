@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 // import equal from 'fast-deep-equal';
 
 import { SongContext } from './Song';
-import Tone from '../lib/tone';
-// import * as Tone from 'tone';
+// import Tone from '../lib/tone';
+import Tone from 'tone';
 import buildSequencerStep, { SequencerStep } from '../lib/buildSequencerStep';
 // import { usePrevious } from '../lib/hooks';
 import { MidiNote } from '../types/midi-notes';
@@ -73,14 +73,15 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   const [effectsChain, setEffectsChain] = useState([]);
 
   // TODO: Use real Tone types
-  const sequencer = useRef<{
-    start: Function;
-    stop: Function;
-    events: SequencerStep[];
-    dispose: Function;
-    removeAll: Function;
-    loop: boolean;
-  }>();
+  // const sequencer = useRef<{
+  //   start: Function;
+  //   stop: Function;
+  //   events: SequencerStep[];
+  //   dispose: Function;
+  //   // removeAll: Function;
+  //   loop: boolean;
+  // }>();
+  const sequencer = useRef<Tone.Sequence>();
   const instrumentsRef = useRef(instruments);
 
   useEffect(() => {
@@ -116,7 +117,7 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
 
       const sequencerSteps = steps.map(buildSequencerStep);
 
-      console.log('sequencerSteps', sequencerSteps);
+      // console.log('sequencerSteps', sequencerSteps);
 
       sequencer.current = new Tone.Sequence(
         (time, step: SequencerStep) => {

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /**
  * Tone JS Mock
  *
@@ -44,6 +42,10 @@ export const mockChannelPan = jest.fn();
 export const mockChannelDispose = jest.fn();
 
 class Channel {
+  volume;
+  pan;
+  dispose;
+
   constructor(volume, pan) {
     mockChannelConstructor(volume, pan);
 
@@ -75,15 +77,15 @@ export const mockPolySynthChain = jest.fn();
 export const mockPolySynthSet = jest.fn();
 
 class PolySynth {
-  constructor(polyphony, voice, voiceArgs) {
-    mockPolySynthConstructor(polyphony, voice, voiceArgs);
+  triggerAttack = mockPolySynthTriggerAttack;
+  triggerRelease = mockPolySynthTriggerRelease;
+  dispose = mockPolySynthDispose;
+  chain = mockPolySynthChain;
+  set = mockPolySynthSet;
+  disconnect = jest.fn();
 
-    this.triggerAttack = mockPolySynthTriggerAttack;
-    this.triggerRelease = mockPolySynthTriggerRelease;
-    this.dispose = mockPolySynthDispose;
-    this.chain = mockPolySynthChain;
-    this.set = mockPolySynthSet;
-    this.disconnect = jest.fn();
+  constructor(voice, voiceArgs) {
+    mockPolySynthConstructor(voice, voiceArgs);
   }
 }
 
@@ -124,14 +126,14 @@ const MonoSynth = 'MonoSynth';
 export const mockMembraneSynthConstructor = jest.fn();
 
 class MembraneSynth {
+  triggerAttack = jest.fn();
+  triggerRelease = jest.fn();
+  dispose = jest.fn();
+  chain = jest.fn();
+  disconnect = jest.fn();
+
   constructor(options) {
     mockMembraneSynthConstructor(options);
-
-    this.triggerAttack = jest.fn();
-    this.triggerRelease = jest.fn();
-    this.dispose = jest.fn();
-    this.chain = jest.fn();
-    this.disconnect = jest.fn();
   }
 }
 
@@ -142,14 +144,14 @@ class MembraneSynth {
 export const mockMetalSynthConstructor = jest.fn();
 
 class MetalSynth {
+  triggerAttack = jest.fn();
+  triggerRelease = jest.fn();
+  dispose = jest.fn();
+  chain = jest.fn();
+  disconnect = jest.fn();
+
   constructor(options) {
     mockMetalSynthConstructor(options);
-
-    this.triggerAttack = jest.fn();
-    this.triggerRelease = jest.fn();
-    this.dispose = jest.fn();
-    this.chain = jest.fn();
-    this.disconnect = jest.fn();
   }
 }
 
@@ -160,14 +162,14 @@ class MetalSynth {
 export const mockNoiseSynthConstructor = jest.fn();
 
 class NoiseSynth {
+  triggerAttack = jest.fn();
+  triggerRelease = jest.fn();
+  dispose = jest.fn();
+  chain = jest.fn();
+  disconnect = jest.fn();
+
   constructor(options) {
     mockNoiseSynthConstructor(options);
-
-    this.triggerAttack = jest.fn();
-    this.triggerRelease = jest.fn();
-    this.dispose = jest.fn();
-    this.chain = jest.fn();
-    this.disconnect = jest.fn();
   }
 }
 
@@ -178,14 +180,14 @@ class NoiseSynth {
 export const mockPluckSynthConstructor = jest.fn();
 
 class PluckSynth {
+  triggerAttack = jest.fn();
+  triggerRelease = jest.fn();
+  dispose = jest.fn();
+  chain = jest.fn();
+  disconnect = jest.fn();
+
   constructor(options) {
     mockPluckSynthConstructor(options);
-
-    this.triggerAttack = jest.fn();
-    this.triggerRelease = jest.fn();
-    this.dispose = jest.fn();
-    this.chain = jest.fn();
-    this.disconnect = jest.fn();
   }
 }
 
@@ -198,13 +200,13 @@ export const mockSamplerDispose = jest.fn();
 export const mockSamplerAdd = jest.fn();
 
 class Sampler {
+  add = mockSamplerAdd;
+  dispose = mockSamplerDispose;
+  chain = jest.fn();
+  disconnect = jest.fn();
+
   constructor(samples) {
     mockSamplerConstructor(samples);
-
-    this.add = mockSamplerAdd;
-    this.dispose = mockSamplerDispose;
-    this.chain = jest.fn();
-    this.disconnect = jest.fn();
   }
 }
 
@@ -217,15 +219,15 @@ export const mockAutoFilterConstructor = jest.fn();
 // export const mockAutoFilterDispose = jest.fn();
 
 class AutoFilter {
+  wet = {
+    value: 1,
+  };
+  // dispose = mockAutoFilterDispose;
+  // chain = jest.fn();
+  // disconnect = jest.fn();
+
   constructor() {
     mockAutoFilterConstructor();
-
-    this.wet = {
-      value: 1,
-    };
-    // this.dispose = mockAutoFilterDispose;
-    // this.chain = jest.fn();
-    // this.disconnect = jest.fn();
   }
 }
 
@@ -248,6 +250,12 @@ class AutoPanner {
 export const mockEQ3Constructor = jest.fn();
 
 class EQ3 {
+  low;
+  mid;
+  high;
+  lowFrequency;
+  highFrequency;
+
   constructor(low, mid, high) {
     mockEQ3Constructor(low, mid, high);
 
@@ -281,17 +289,23 @@ export const mockSequenceConstructor = jest.fn();
 export const mockSequenceAdd = jest.fn();
 export const mockSequenceRemove = jest.fn();
 export const mockSequenceRemoveAll = jest.fn();
+export const mockSequenceEvents = jest.fn();
 
 class Sequence {
-  constructor(callback, steps) {
-    mockSequenceConstructor(steps);
+  start = jest.fn();
+  stop = jest.fn();
+  add = mockSequenceAdd;
+  remove = mockSequenceRemove;
+  removeAll = mockSequenceRemoveAll;
+  dispose = jest.fn();
 
-    this.start = jest.fn();
-    this.stop = jest.fn();
-    this.add = mockSequenceAdd;
-    this.remove = mockSequenceRemove;
-    this.removeAll = mockSequenceRemoveAll;
-    this.dispose = jest.fn();
+  set events(events) {
+    // console.log(events);
+    mockSequenceEvents(events);
+  }
+
+  constructor(_, steps) {
+    mockSequenceConstructor(steps);
   }
 }
 

@@ -11,7 +11,7 @@ import { TrackContext } from './Track';
 // import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
 // import { MidiNote } from '../types/midi-notes';
-import * as Tone from 'tone';
+import Tone from 'tone';
 
 type NoteType = {
   name: string;
@@ -132,6 +132,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
   useEffect(() => {
     if (type === 'sampler') {
+      // @ts-ignore
       instrumentRef.current = new Tone.Sampler(samples, onLoad);
 
       if (options && options.curve) {
@@ -153,6 +154,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     } else if (type === 'noiseSynth') {
       instrumentRef.current = new Tone.NoiseSynth();
     } else if (type === 'pluckSynth') {
+      // @ts-ignore
       instrumentRef.current = new Tone.PluckSynth();
     } else {
       let synth;
@@ -177,6 +179,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
        * via PolySynth. Monophonic synths can easily be created by setting the
        * `polyphony` prop to 1.
        */
+      // @ts-ignore
       instrumentRef.current = new Tone.PolySynth(
         // polyphony,
         synth,
@@ -198,12 +201,12 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
     return function cleanup() {
       if (instrumentRef.current) {
-        console.log(
-          'cleanup',
-          type,
-          // 'disposed',
-          instrumentRef.current,
-        );
+        // console.log(
+        //   'cleanup',
+        //   type,
+        //   // 'disposed',
+        //   instrumentRef.current,
+        // );
         // instrumentRef.current.dispose();
         // if (!instrumentRef.current?._voices?.length) {
         // setTimeout(() => {
