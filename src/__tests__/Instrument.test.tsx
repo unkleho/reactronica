@@ -41,84 +41,142 @@ describe('Instrument', () => {
     expect(mockPolySynthDispose).toBeCalledTimes(1);
   });
 
-  it('should add and remove sampler from Song', () => {
-    const { rerender } = render(
-      <Song isPlaying={true}>
-        <Track steps={['C3']}>
-          <Instrument
-            type="sampler"
-            samples={{
-              C3: '../audio/file.mp3',
-            }}
-          />
-        </Track>
-      </Song>,
-    );
+  describe('Sampler', () => {
+    it('should add and remove sampler from Song', () => {
+      const { rerender } = render(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              type="sampler"
+              samples={{
+                C3: '../audio/file.mp3',
+              }}
+            />
+          </Track>
+        </Song>,
+      );
 
-    expect(mockSamplerConstructor).toBeCalledWith({
-      C3: '../audio/file.mp3',
+      expect(mockSamplerConstructor).toBeCalledWith({
+        C3: '../audio/file.mp3',
+      });
+
+      rerender(<Song isPlaying={true}></Song>);
+
+      expect(mockSamplerDispose).toBeCalledTimes(1);
     });
 
-    rerender(<Song isPlaying={true}></Song>);
+    it('should add and remove samples', () => {
+      const { rerender } = render(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              type="sampler"
+              samples={{
+                C3: '../audio/file1.mp3',
+              }}
+            />
+          </Track>
+        </Song>,
+      );
 
-    expect(mockSamplerDispose).toBeCalledTimes(1);
-  });
+      rerender(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              type="sampler"
+              samples={{
+                C3: '../audio/file1.mp3',
+                D3: '../audio/file2.mp3',
+              }}
+            />
+          </Track>
+        </Song>,
+      );
 
-  it('should add and remove samples from sampler Instrument', () => {
-    const { rerender } = render(
-      <Song isPlaying={true}>
-        <Track steps={['C3']}>
-          <Instrument
-            type="sampler"
-            samples={{
-              C3: '../audio/file1.mp3',
-            }}
-          />
-        </Track>
-      </Song>,
-    );
+      // TODO: Figure out what to do in this scenario
+      rerender(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              type="sampler"
+              samples={{
+                D3: '../audio/file2.mp3',
+                E3: '../audio/file3.mp3',
+              }}
+            />
+          </Track>
+        </Song>,
+      );
 
-    rerender(
-      <Song isPlaying={true}>
-        <Track steps={['C3']}>
-          <Instrument
-            type="sampler"
-            samples={{
-              C3: '../audio/file1.mp3',
-              D3: '../audio/file2.mp3',
-            }}
-          />
-        </Track>
-      </Song>,
-    );
+      expect(mockSamplerAdd).toHaveBeenNthCalledWith(
+        1,
+        'D3',
+        '../audio/file2.mp3',
+        expect.any(Function),
+      );
+      expect(mockSamplerAdd).toHaveBeenNthCalledWith(
+        2,
+        'E3',
+        '../audio/file3.mp3',
+        expect.any(Function),
+      );
+    });
 
-    // TODO: Figure out what to do in this scenario
-    rerender(
-      <Song isPlaying={true}>
-        <Track steps={['C3']}>
-          <Instrument
-            type="sampler"
-            samples={{
-              D3: '../audio/file2.mp3',
-              E3: '../audio/file3.mp3',
-            }}
-          />
-        </Track>
-      </Song>,
-    );
+    it('should run onLoading on initial render', () => {
+      const mockOnLoading = jest.fn();
+      render(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              onLoading={mockOnLoading}
+              samples={{
+                C3: '../audio/file1.mp3',
+              }}
+              type="sampler"
+            />
+          </Track>
+        </Song>,
+      );
 
-    expect(mockSamplerAdd).toHaveBeenNthCalledWith(
-      1,
-      'D3',
-      '../audio/file2.mp3',
-      expect.any(Function),
-    );
-    expect(mockSamplerAdd).toHaveBeenNthCalledWith(
-      2,
-      'E3',
-      '../audio/file3.mp3',
-      expect.any(Function),
-    );
+      expect(mockOnLoading).toBeCalled();
+    });
+
+    it('should run onLoading when rerendered with new samples', () => {
+      const initialSamples = {
+        C3: '../audio/file1.mp3',
+      };
+      const updatedSamples = {
+        ...initialSamples,
+        D3: '../audio/file2.mp3',
+      };
+
+      const mockOnLoading = jest.fn();
+      const { rerender } = render(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              onLoading={mockOnLoading}
+              samples={initialSamples}
+              type="sampler"
+            />
+          </Track>
+        </Song>,
+      );
+
+      rerender(
+        <Song isPlaying={true}>
+          <Track steps={['C3']}>
+            <Instrument
+              onLoading={mockOnLoading}
+              samples={updatedSamples}
+              type="sampler"
+            />
+          </Track>
+        </Song>,
+      );
+
+      expect(mockOnLoading).toHaveBeenCalledTimes(2);
+    });
   });
 
   it('should trigger and release note', () => {
