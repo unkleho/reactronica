@@ -1,7 +1,7 @@
 {
   "package": {
     "dependencies": {
-      "reactronica": "^0.3.5"
+      "reactronica": "^0.7.0"
     }
   }
 }
