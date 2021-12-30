@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useRef,
   useContext,
+  useCallback,
   // useLayoutEffect
 } from 'react';
 // import equal from 'fast-deep-equal';
@@ -56,8 +57,12 @@ export interface InstrumentProps {
   // };
   mute?: boolean;
   solo?: boolean;
-  /** TODO: Type properly and consider loading status */
+  /** @deprecated Use `onLoaded` instead */
   onLoad?: (buffers: any[]) => void;
+  /** Callback fired when samples finish loading */
+  onLoaded?: (buffers: any[]) => void;
+  /** Callback fired when samples begin loading */
+  onLoading?: () => void;
 }
 
 interface InstrumentConsumerProps extends InstrumentProps {
@@ -77,6 +82,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   notes = [],
   samples,
   onLoad,
+  onLoaded,
+  onLoading,
   // <Track /> Props
   volume,
   pan,
@@ -99,6 +106,15 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       disconnect: Function;
     }>
   >();
+
+  const handleSamplesLoaded = useCallback(
+    (buffers: any[]) => {
+      onLoad?.(buffers);
+      onLoaded?.(buffers);
+    },
+    [onLoad, onLoaded],
+  );
+
   // const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
   // const trackChannelBase = useRef(new Tone.Channel(volume, pan));
   const trackChannelBase = useRef(null);
@@ -128,7 +144,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
   useEffect(() => {
     if (type === 'sampler') {
-      instrumentRef.current = new Tone.Sampler(samples, onLoad);
+      onLoading?.();
+      instrumentRef.current = new Tone.Sampler(samples, handleSamplesLoaded);
 
       if (options && options.curve) {
         instrumentRef.current.curve = options.curve;
@@ -332,6 +349,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       // console.log(addSampleKeys, removeSampleKeys);
 
       if (addSampleKeys.length) {
+        onLoading?.();
+
         // Create an array of promises from `samples`
         const loadSamplePromises = addSampleKeys.map((key) => {
           return new Promise((resolve: (buffer: any) => void) => {
@@ -350,10 +369,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         });
 
         // Once all promises in array resolve, run onLoad callback
-        Promise.all(loadSamplePromises).then((event) => {
-          if (typeof onLoad === 'function') {
-            onLoad(event);
-          }
+        Promise.all(loadSamplePromises).then((buffers) => {
+          handleSamplesLoaded?.(buffers);
         });
 
         // TODO: Work out a way to remove samples. Below doesn't work
@@ -377,6 +394,8 @@ const Instrument: React.FC<InstrumentProps> = ({
   envelope,
   samples,
   onLoad,
+  onLoaded,
+  onLoading,
 }) => {
   const {
     volume,
@@ -402,6 +421,8 @@ const Instrument: React.FC<InstrumentProps> = ({
       envelope={envelope}
       samples={samples}
       onLoad={onLoad}
+      onLoaded={onLoaded}
+      onLoading={onLoading}
       // <Track /> Props
       volume={volume}
       pan={pan}
