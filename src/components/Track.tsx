@@ -133,12 +133,14 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
           );
 
           if (!isEqual) {
+            sequencer.current.stop();
             sequencer.current?.remove(i);
             sequencer.current?.add(i, step);
           }
         });
       } else {
         // When new steps are less or more then prev, remove all and add new steps
+        sequencer.current.stop();
         sequencer.current.removeAll();
         sequencerSteps.forEach((step, i) => {
           sequencer.current.add(i, step);
