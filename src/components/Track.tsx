@@ -18,6 +18,7 @@ export type StepType =
   | StepNoteType[]
   | MidiNote
   | MidiNote[]
+  | (StepNoteType | MidiNote)[]
   | null;
 
 export interface TrackProps {

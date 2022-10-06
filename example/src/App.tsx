@@ -47,7 +47,9 @@ function App() {
           <Instrument type="amSynth"></Instrument>
         </Track>
 
-        <Track steps={samples ? ['C3', null, 'D3', 'C3'] : []}>
+        <Track
+          steps={samples ? ['C3', null, 'D3', ['C3', { name: 'A#0' }]] : []}
+        >
           <Instrument
             type="sampler"
             samples={samples || {}}

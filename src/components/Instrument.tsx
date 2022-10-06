@@ -10,6 +10,7 @@ import React, {
 import { TrackContext } from './Track';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
+import { MidiNote } from 'types/midi-notes';
 // import { MidiNote } from '../types/midi-notes';
 
 type NoteType = {
@@ -48,12 +49,8 @@ export interface InstrumentProps {
     release?: number;
   };
   samples?: {
-    [k: string]: string;
+    [key in MidiNote]?: string;
   };
-  // TODO: Add in next version
-  // samples?: {
-  //   [key in MidiNote]?: string;
-  // };
   mute?: boolean;
   solo?: boolean;
   /** TODO: Type properly and consider loading status */
