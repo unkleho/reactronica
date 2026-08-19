@@ -1,13 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Tone from 'tone';
+import * as Tone from 'tone';
 
 import { Song, Track, Instrument, Effect } from '..';
 import {
   mockAutoFilterConstructor,
   mockAutoPannerConstructor,
   mockPolySynthChain,
-  mockChannelConstructor,
+  mockChannelDispose,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -15,8 +15,7 @@ beforeEach(() => {
 });
 
 describe('Effect', () => {
-  // TODO: Fix theses tests after upgrading Tone JS to v14
-  xit('should add and remove effects from Instrument', () => {
+  it('should add and remove effects from Instrument', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track
@@ -34,13 +33,11 @@ describe('Effect', () => {
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-1', wet: { value: 1 } },
       {
-        dispose: mockChannelConstructor,
-        mute: undefined,
-        solo: undefined,
+        dispose: mockChannelDispose,
         pan: { value: 0 },
         volume: { value: 0 },
       },
-      Tone.Master,
+      Tone.getDestination(),
     );
 
     rerender(
@@ -65,8 +62,8 @@ describe('Effect', () => {
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-2' },
       { id: 'effect-1', wet: { value: 1 } },
-      { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
+      Tone.getDestination(),
     );
 
     rerender(
@@ -87,8 +84,8 @@ describe('Effect', () => {
 
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-2' },
-      { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
+      Tone.getDestination(),
     );
 
     rerender(
@@ -101,15 +98,15 @@ describe('Effect', () => {
 
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       {
+        dispose: mockChannelDispose,
         pan: { value: 0 },
         volume: { value: 0 },
       },
-      Tone.Master,
+      Tone.getDestination(),
     );
   });
 
-  // TODO: Fix these tests after upgrading Tone JS to v14
-  xit('should update wet prop', () => {
+  it('should update wet prop', () => {
     render(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
@@ -121,13 +118,12 @@ describe('Effect', () => {
 
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
       { id: 'effect-1', wet: { value: 0.5 } },
-      { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
+      Tone.getDestination(),
     );
   });
 
-  // TODO: Fix these tests after upgrading Tone JS to v14
-  xit('should add EQ3 effect and then update frequency', () => {
+  it('should add EQ3 effect and then update frequency', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
@@ -146,8 +142,8 @@ describe('Effect', () => {
         lowFrequency: { value: 400 },
         highFrequency: { value: 2500 },
       },
-      { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
+      Tone.getDestination(),
     );
 
     rerender(
@@ -176,8 +172,8 @@ describe('Effect', () => {
         lowFrequency: { value: 100 },
         highFrequency: { value: 3000 },
       },
-      { pan: { value: 0 }, volume: { value: 0 } },
-      Tone.Master,
+      { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
+      Tone.getDestination(),
     );
   });
 });

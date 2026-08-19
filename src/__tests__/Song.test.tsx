@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Tone from 'tone';
+import * as Tone from 'tone';
 
 import { Song, Track, Instrument } from '..';
 
@@ -18,10 +18,10 @@ describe('Song', () => {
       </Song>,
     );
 
-    expect(Tone.Transport.bpm.value).toEqual(100);
-    expect(Tone.Transport.start).toBeCalledTimes(0);
-    expect(Tone.Master.volume.value).toEqual(0);
-    expect(Tone.Master.mute).toEqual(true);
+    expect(Tone.getTransport().bpm.value).toEqual(100);
+    expect(Tone.getTransport().start).toBeCalledTimes(0);
+    expect(Tone.getDestination().volume.value).toEqual(0);
+    expect(Tone.getDestination().mute).toEqual(true);
 
     rerender(
       <Song isPlaying={true} bpm={100} volume={-3} isMuted={false}>
@@ -31,8 +31,8 @@ describe('Song', () => {
       </Song>,
     );
 
-    expect(Tone.Transport.start).toBeCalledTimes(1);
-    expect(Tone.Master.volume.value).toEqual(-3);
-    expect(Tone.Master.mute).toEqual(false);
+    expect(Tone.getTransport().start).toBeCalledTimes(1);
+    expect(Tone.getDestination().volume.value).toEqual(-3);
+    expect(Tone.getDestination().mute).toEqual(false);
   });
 });

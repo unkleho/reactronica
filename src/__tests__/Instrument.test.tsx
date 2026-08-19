@@ -32,7 +32,11 @@ describe('Instrument', () => {
     );
 
     expect(mockPolySynthConstructor).toBeCalledTimes(1);
-    expect(mockPolySynthConstructor).toBeCalledWith(4, 'Synth', undefined);
+    expect(mockPolySynthConstructor).toBeCalledWith({
+      maxPolyphony: 4,
+      voice: 'Synth',
+      options: undefined,
+    });
     expect(mockPolySynthDispose).toBeCalledTimes(0);
 
     // @ts-ignore
@@ -163,9 +167,13 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(5, 'Synth', {
-      oscillator: {
-        type: 'square',
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 5,
+      voice: 'Synth',
+      options: {
+        oscillator: {
+          type: 'square',
+        },
       },
     });
 
@@ -181,9 +189,13 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(3, 'Synth', {
-      oscillator: {
-        type: 'square',
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 3,
+      voice: 'Synth',
+      options: {
+        oscillator: {
+          type: 'square',
+        },
       },
     });
 
@@ -213,11 +225,11 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
-      4,
-      'Synth',
-      undefined,
-    );
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'Synth',
+      options: undefined,
+    });
 
     rerender(
       <Song isPlaying={true}>
@@ -227,11 +239,11 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
-      4,
-      'AMSynth',
-      undefined,
-    );
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'AMSynth',
+      options: undefined,
+    });
 
     rerender(
       <Song isPlaying={true}>
@@ -241,11 +253,11 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
-      4,
-      'DuoSynth',
-      undefined,
-    );
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'DuoSynth',
+      options: undefined,
+    });
 
     rerender(
       <Song isPlaying={true}>
@@ -255,11 +267,11 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
-      4,
-      'FMSynth',
-      undefined,
-    );
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'FMSynth',
+      options: undefined,
+    });
 
     rerender(
       <Song isPlaying={true}>
@@ -293,11 +305,11 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(
-      4,
-      'MonoSynth',
-      undefined,
-    );
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'MonoSynth',
+      options: undefined,
+    });
 
     // rerender(
     //   <Song isPlaying={true}>
@@ -329,9 +341,13 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith(4, 'Synth', {
-      envelope: {
-        attack: 0.02,
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'Synth',
+      options: {
+        envelope: {
+          attack: 0.02,
+        },
       },
     });
   });

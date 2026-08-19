@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import StartAudioContext from 'startaudiocontext';
 
 import Tone from '../lib/tone';
 
@@ -36,8 +35,8 @@ const Song: React.FC<SongProps> = ({
     document.body.addEventListener(
       'click',
       () => {
-        // iOS Web Audio API requires this library.
-        StartAudioContext(Tone.context);
+        // iOS Web Audio API requires a user gesture to start the context.
+        Tone.start();
       },
       {
         once: true,
@@ -46,31 +45,35 @@ const Song: React.FC<SongProps> = ({
   }, []);
 
   useEffect(() => {
-    Tone.Transport.bpm.value = bpm;
-    Tone.Transport.swing = swing;
-    Tone.Transport.swingSubdivision = swingSubdivision;
+    const transport = Tone.getTransport();
+
+    transport.bpm.value = bpm;
+    transport.swing = swing;
+    transport.swingSubdivision = swingSubdivision;
   }, [bpm, swing, swingSubdivision]);
 
   useEffect(() => {
+    const transport = Tone.getTransport();
+
     if (isPlaying) {
       // Hack to get Tone to NOT use same settings from another instance
-      Tone.Transport.bpm.value = bpm;
-      Tone.Transport.swing = swing;
-      Tone.Transport.swingSubdivision = swingSubdivision;
+      transport.bpm.value = bpm;
+      transport.swing = swing;
+      transport.swingSubdivision = swingSubdivision;
 
-      Tone.Transport.start();
+      transport.start();
     } else {
-      Tone.Transport.stop();
+      transport.stop();
     }
     /* eslint-disable-next-line */
   }, [isPlaying]);
 
   useEffect(() => {
-    Tone.Master.volume.value = volume;
+    Tone.getDestination().volume.value = volume;
   }, [volume]);
 
   useEffect(() => {
-    Tone.Master.mute = isMuted;
+    Tone.getDestination().mute = isMuted;
   }, [isMuted]);
 
   if (typeof window === 'undefined') {

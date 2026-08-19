@@ -10,10 +10,10 @@
  */
 
 // ----------------------------------------------------------------------------
-// Tone.Master
+// Tone.getDestination()
 // ----------------------------------------------------------------------------
 
-const Master = {
+const Destination = {
   volume: {
     value: 0,
   },
@@ -22,8 +22,13 @@ const Master = {
   dispose: jest.fn(),
 };
 
+// NOTE: Deliberately not jest.fn() — tests call jest.resetAllMocks(), which
+// strips implementations from jest.fn() mocks, and this needs to keep
+// returning the same Destination singleton across the whole test file.
+export const getDestination = () => Destination;
+
 // ----------------------------------------------------------------------------
-// Tone.Transport
+// Tone.getTransport()
 // ----------------------------------------------------------------------------
 
 const Transport = {
@@ -34,6 +39,15 @@ const Transport = {
   stop: jest.fn(),
 };
 
+export const getTransport = () => Transport;
+
+// ----------------------------------------------------------------------------
+// Tone.start()
+// ----------------------------------------------------------------------------
+
+// NOTE: Also deliberately not jest.fn(), see getDestination() above.
+export const start = () => Promise.resolve();
+
 // ----------------------------------------------------------------------------
 // Tone.Channel
 // ----------------------------------------------------------------------------
@@ -43,7 +57,7 @@ export const mockChannelVolume = jest.fn();
 export const mockChannelPan = jest.fn();
 export const mockChannelDispose = jest.fn();
 
-class Channel {
+export class Channel {
   constructor(volume, pan) {
     mockChannelConstructor(volume, pan);
 
@@ -56,7 +70,6 @@ class Channel {
     };
 
     this.dispose = mockChannelDispose;
-    // console.log(this.mute);
 
     mockChannelVolume(this.volume.value);
     mockChannelPan(this.pan.value);
@@ -74,9 +87,9 @@ export const mockPolySynthDispose = jest.fn();
 export const mockPolySynthChain = jest.fn();
 export const mockPolySynthSet = jest.fn();
 
-class PolySynth {
-  constructor(polyphony, voice, voiceArgs) {
-    mockPolySynthConstructor(polyphony, voice, voiceArgs);
+export class PolySynth {
+  constructor(options) {
+    mockPolySynthConstructor(options);
 
     this.triggerAttack = mockPolySynthTriggerAttack;
     this.triggerRelease = mockPolySynthTriggerRelease;
@@ -91,31 +104,31 @@ class PolySynth {
 // Tone.Synth
 // ----------------------------------------------------------------------------
 
-const Synth = 'Synth';
+export const Synth = 'Synth';
 
 // ----------------------------------------------------------------------------
 // Tone.AMSynth
 // ----------------------------------------------------------------------------
 
-const AMSynth = 'AMSynth';
+export const AMSynth = 'AMSynth';
 
 // ----------------------------------------------------------------------------
 // Tone.DuoSynth
 // ----------------------------------------------------------------------------
 
-const DuoSynth = 'DuoSynth';
+export const DuoSynth = 'DuoSynth';
 
 // ----------------------------------------------------------------------------
 // Tone.FMSynth
 // ----------------------------------------------------------------------------
 
-const FMSynth = 'FMSynth';
+export const FMSynth = 'FMSynth';
 
 // ----------------------------------------------------------------------------
 // Tone.MonoSynth
 // ----------------------------------------------------------------------------
 
-const MonoSynth = 'MonoSynth';
+export const MonoSynth = 'MonoSynth';
 
 // ----------------------------------------------------------------------------
 // Tone.MembraneSynth
@@ -123,7 +136,7 @@ const MonoSynth = 'MonoSynth';
 
 export const mockMembraneSynthConstructor = jest.fn();
 
-class MembraneSynth {
+export class MembraneSynth {
   constructor(options) {
     mockMembraneSynthConstructor(options);
 
@@ -141,7 +154,7 @@ class MembraneSynth {
 
 export const mockMetalSynthConstructor = jest.fn();
 
-class MetalSynth {
+export class MetalSynth {
   constructor(options) {
     mockMetalSynthConstructor(options);
 
@@ -159,7 +172,7 @@ class MetalSynth {
 
 export const mockNoiseSynthConstructor = jest.fn();
 
-class NoiseSynth {
+export class NoiseSynth {
   constructor(options) {
     mockNoiseSynthConstructor(options);
 
@@ -177,7 +190,7 @@ class NoiseSynth {
 
 export const mockPluckSynthConstructor = jest.fn();
 
-class PluckSynth {
+export class PluckSynth {
   constructor(options) {
     mockPluckSynthConstructor(options);
 
@@ -197,7 +210,7 @@ export const mockSamplerConstructor = jest.fn();
 export const mockSamplerDispose = jest.fn();
 export const mockSamplerAdd = jest.fn();
 
-class Sampler {
+export class Sampler {
   constructor(samples) {
     mockSamplerConstructor(samples);
 
@@ -213,19 +226,14 @@ class Sampler {
 // ----------------------------------------------------------------------------
 
 export const mockAutoFilterConstructor = jest.fn();
-// export const mockAutoFilterWet = jest.fn();
-// export const mockAutoFilterDispose = jest.fn();
 
-class AutoFilter {
+export class AutoFilter {
   constructor() {
     mockAutoFilterConstructor();
 
     this.wet = {
       value: 1,
     };
-    // this.dispose = mockAutoFilterDispose;
-    // this.chain = jest.fn();
-    // this.disconnect = jest.fn();
   }
 }
 
@@ -235,9 +243,101 @@ class AutoFilter {
 
 export const mockAutoPannerConstructor = jest.fn();
 
-class AutoPanner {
+export class AutoPanner {
   constructor() {
     mockAutoPannerConstructor();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.AutoWah
+// ----------------------------------------------------------------------------
+
+export const mockAutoWahConstructor = jest.fn();
+
+export class AutoWah {
+  constructor() {
+    mockAutoWahConstructor();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.BitCrusher
+// ----------------------------------------------------------------------------
+
+export const mockBitCrusherConstructor = jest.fn();
+
+export class BitCrusher {
+  constructor() {
+    mockBitCrusherConstructor();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.Distortion
+// ----------------------------------------------------------------------------
+
+export const mockDistortionConstructor = jest.fn();
+
+export class Distortion {
+  constructor(distortion) {
+    mockDistortionConstructor(distortion);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.FeedbackDelay
+// ----------------------------------------------------------------------------
+
+export const mockFeedbackDelayConstructor = jest.fn();
+
+export class FeedbackDelay {
+  constructor(delayTime, feedback) {
+    mockFeedbackDelayConstructor(delayTime, feedback);
+
+    this.feedback = {
+      value: feedback,
+    };
+
+    this.delayTime = {
+      value: delayTime,
+    };
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.Freeverb
+// ----------------------------------------------------------------------------
+
+export const mockFreeverbConstructor = jest.fn();
+
+export class Freeverb {
+  constructor() {
+    mockFreeverbConstructor();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.PanVol
+// ----------------------------------------------------------------------------
+
+export const mockPanVolConstructor = jest.fn();
+
+export class PanVol {
+  constructor() {
+    mockPanVolConstructor();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.Tremolo
+// ----------------------------------------------------------------------------
+
+export const mockTremoloConstructor = jest.fn();
+
+export class Tremolo {
+  constructor() {
+    mockTremoloConstructor();
   }
 }
 
@@ -247,7 +347,7 @@ class AutoPanner {
 
 export const mockEQ3Constructor = jest.fn();
 
-class EQ3 {
+export class EQ3 {
   constructor(low, mid, high) {
     mockEQ3Constructor(low, mid, high);
 
@@ -282,7 +382,7 @@ export const mockSequenceAdd = jest.fn();
 export const mockSequenceRemove = jest.fn();
 export const mockSequenceRemoveAll = jest.fn();
 
-class Sequence {
+export class Sequence {
   constructor(callback, steps) {
     mockSequenceConstructor(steps);
 
@@ -294,26 +394,3 @@ class Sequence {
     this.dispose = jest.fn();
   }
 }
-
-const MockTone = {
-  Master,
-  Transport,
-  Channel,
-  PolySynth,
-  Synth,
-  AMSynth,
-  DuoSynth,
-  FMSynth,
-  MembraneSynth,
-  MetalSynth,
-  MonoSynth,
-  NoiseSynth,
-  PluckSynth,
-  Sampler,
-  AutoFilter,
-  AutoPanner,
-  EQ3,
-  Sequence,
-};
-
-export default MockTone;
