@@ -165,25 +165,25 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       }
 
       /**
-       * PolySynth accepts other Synth types as second param, making them
+       * PolySynth accepts other Synth types as its `voice` option, making them
        * polyphonic. As this is a common use case, all Synths will be created
        * via PolySynth. Monophonic synths can easily be created by setting the
        * `polyphony` prop to 1.
        */
-      instrumentRef.current = new Tone.PolySynth(
-        polyphony,
-        synth,
-        buildSynthOptions({
+      instrumentRef.current = new Tone.PolySynth({
+        maxPolyphony: polyphony,
+        voice: synth,
+        options: buildSynthOptions({
           oscillator,
           envelope,
         }),
-      );
+      });
     }
 
     instrumentRef.current.chain(
       ...effectsChain,
       trackChannelBase.current,
-      Tone.Master,
+      Tone.getDestination(),
     );
 
     // Add this Instrument to Track Context
@@ -292,7 +292,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     instrumentRef.current.chain(
       ...effectsChain,
       trackChannelBase.current,
-      Tone.Master,
+      Tone.getDestination(),
     );
   }, [effectsChain]);
 

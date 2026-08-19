@@ -8,9 +8,7 @@ import {
   // mockChannelPan,
   mockPolySynthDispose,
   mockSequenceConstructor,
-  mockSequenceAdd,
-  mockSequenceRemove,
-  mockSequenceRemoveAll,
+  mockSequenceSetEvents,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -71,7 +69,7 @@ describe('Track', () => {
     expect(mockPolySynthDispose).toBeCalledTimes(1);
   });
 
-  it('should add and remove steps from sequencer', () => {
+  it('should update sequencer steps', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
@@ -88,10 +86,10 @@ describe('Track', () => {
       </Song>,
     );
 
-    expect(mockSequenceAdd).toHaveBeenLastCalledWith(1, {
-      index: 1,
-      notes: [{ name: 'D3' }],
-    });
+    expect(mockSequenceSetEvents).toHaveBeenLastCalledWith([
+      { index: 0, notes: [{ name: 'C3' }] },
+      { index: 1, notes: [{ name: 'D3' }] },
+    ]);
 
     rerender(
       <Song isPlaying={true}>
@@ -101,10 +99,11 @@ describe('Track', () => {
       </Song>,
     );
 
-    expect(mockSequenceAdd).toHaveBeenLastCalledWith(2, {
-      index: 2,
-      notes: [{ name: 'C3' }],
-    });
+    expect(mockSequenceSetEvents).toHaveBeenLastCalledWith([
+      { index: 0, notes: [{ name: 'C3' }] },
+      { index: 1, notes: [{ name: 'D3' }] },
+      { index: 2, notes: [{ name: 'C3' }] },
+    ]);
 
     rerender(
       <Song isPlaying={true}>
@@ -114,7 +113,11 @@ describe('Track', () => {
       </Song>,
     );
 
-    expect(mockSequenceRemove).toHaveBeenLastCalledWith(1);
+    expect(mockSequenceSetEvents).toHaveBeenLastCalledWith([
+      { index: 0, notes: [{ name: 'C3' }] },
+      { index: 1, notes: [] },
+      { index: 2, notes: [{ name: 'C3' }] },
+    ]);
 
     rerender(
       <Song isPlaying={true}>
@@ -124,14 +127,9 @@ describe('Track', () => {
       </Song>,
     );
 
-    expect(mockSequenceRemoveAll).toHaveBeenLastCalledWith();
-    expect(mockSequenceAdd).toHaveBeenCalledWith(0, {
-      index: 0,
-      notes: [{ name: 'C3' }],
-    });
-    expect(mockSequenceAdd).toHaveBeenCalledWith(1, {
-      index: 1,
-      notes: [],
-    });
+    expect(mockSequenceSetEvents).toHaveBeenLastCalledWith([
+      { index: 0, notes: [{ name: 'C3' }] },
+      { index: 1, notes: [] },
+    ]);
   });
 });

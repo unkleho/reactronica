@@ -27,9 +27,7 @@
     "prepare": "tsdx build"
   },
   "dependencies": {
-    "fast-deep-equal": "^3.1.3",
-    "startaudiocontext": "^1.2.1",
-    "tone": "^13.8.34"
+    "tone": "^15.5.36"
   },
   "peerDependencies": {
     "react": ">=16"
