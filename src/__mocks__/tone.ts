@@ -378,19 +378,24 @@ export class EQ3 {
 // ----------------------------------------------------------------------------
 
 export const mockSequenceConstructor = jest.fn();
-export const mockSequenceAdd = jest.fn();
-export const mockSequenceRemove = jest.fn();
-export const mockSequenceRemoveAll = jest.fn();
+export const mockSequenceSetEvents = jest.fn();
 
 export class Sequence {
-  constructor(callback, steps) {
-    mockSequenceConstructor(steps);
+  constructor(callback, events) {
+    mockSequenceConstructor(events);
 
     this.start = jest.fn();
     this.stop = jest.fn();
-    this.add = mockSequenceAdd;
-    this.remove = mockSequenceRemove;
-    this.removeAll = mockSequenceRemoveAll;
     this.dispose = jest.fn();
+    this._events = events;
+  }
+
+  get events() {
+    return this._events;
+  }
+
+  set events(value) {
+    this._events = value;
+    mockSequenceSetEvents(value);
   }
 }
