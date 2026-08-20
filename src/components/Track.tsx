@@ -9,6 +9,9 @@ export interface StepNoteType {
   name: MidiNote;
   duration?: number | string;
   velocity?: number;
+  /** Nudges the note's start time by this amount (seconds, or Tone notation
+   * like '32n'). A per-note alternative to Song's global `swing` prop. */
+  delay?: number | string;
 }
 
 export type StepType =
@@ -89,11 +92,15 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
       sequencer.current = new Tone.Sequence(
         (time, step) => {
           step.notes.forEach((note) => {
+            const noteTime = note.delay
+              ? time + Tone.Time(note.delay).toSeconds()
+              : time;
+
             instrumentsRef.current.forEach((instrument) => {
               instrument.triggerAttackRelease(
                 note.name,
                 note.duration || 0.5,
-                time,
+                noteTime,
                 note.velocity,
               );
             });

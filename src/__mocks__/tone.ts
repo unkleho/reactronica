@@ -42,6 +42,16 @@ const Transport = {
 export const getTransport = () => Transport;
 
 // ----------------------------------------------------------------------------
+// Tone.Time()
+// ----------------------------------------------------------------------------
+
+// NOTE: Real Tone.Time() converts notation strings (e.g. '32n') using the
+// current tempo; that's not needed for tests, which only pass plain numbers.
+export const Time = (value) => ({
+  toSeconds: () => value,
+});
+
+// ----------------------------------------------------------------------------
 // Tone.start()
 // ----------------------------------------------------------------------------
 

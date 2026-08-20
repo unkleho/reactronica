@@ -21,35 +21,41 @@ function expandToRests(steps: StepType[]): StepType[] {
   return steps.reduce<StepType[]>((acc, step) => [...acc, step, null], []);
 }
 
-const stepPatterns: StepType[][] = [
-  // Dark chords: Cm - Ab - Fm - G, a i-VI-iv-V cadence in C minor. The G
-  // major triad (with its raised 7th, B) pulls back toward Cm without ever
-  // landing somewhere comfortable. (Ab/Eb spelled as G#/D# - MidiNote only
-  // supports sharps.)
-  expandToRests([
-    ['C3', 'D#3', 'G3'],
-    null,
-    ['G#2', 'C3', 'D#3'],
-    null,
-    ['F2', 'G#2', 'C3'],
-    null,
-    ['G2', 'B2', 'D3'],
-    null,
-  ]),
-  // Dark arpeggio: a Cm(maj7) broken chord, up and down. The major 7th (B)
-  // against the minor 3rd (D#) is what keeps it unresolved rather than sad.
-  // Each note is doubled into two 16th-note slots (instead of padded with a
-  // rest like the chords above) so it keeps the same real-world length while
-  // still landing a real note on every 16th - that's what gives 16th-note
-  // swing something to actually shift. Duration is half a 16th note so the
-  // doubled notes stay short and plucky rather than blurring together.
-  (['C3', 'D#3', 'G3', 'B3', 'C4', 'B3', 'G3', 'D#3'] as MidiNote[])
+// Dark chords: Cm - Ab - Fm - G, a i-VI-iv-V cadence in C minor. The G major
+// triad (with its raised 7th, B) pulls back toward Cm without ever landing
+// somewhere comfortable. (Ab/Eb spelled as G#/D# - MidiNote only supports
+// sharps.)
+const chordSteps = expandToRests([
+  ['C3', 'D#3', 'G3'],
+  null,
+  ['G#2', 'C3', 'D#3'],
+  null,
+  ['F2', 'G#2', 'C3'],
+  null,
+  ['G2', 'B2', 'D3'],
+  null,
+]);
+
+// Dark arpeggio: a Cm(maj7) broken chord, up and down. The major 7th (B)
+// against the minor 3rd (D#) is what keeps it unresolved rather than sad.
+// Each note is doubled into two 16th-note slots (instead of padded with a
+// rest like the chords above) so it keeps the same real-world length while
+// still landing a real note on every 16th - that's what gives 16th-note
+// swing something to actually shift. Duration is half a 16th note so the
+// doubled notes stay short and plucky rather than blurring together.
+//
+// When manualDelay is on, the off-beat (second) note of each doubled pair
+// gets a `delay` instead - a per-note alternative to Song's global `swing`
+// prop, so it can be compared against (or combined with) the swing slider.
+function buildArpeggioSteps(manualDelay: boolean) {
+  return (['C3', 'D#3', 'G3', 'B3', 'C4', 'B3', 'G3', 'D#3'] as MidiNote[])
     .flatMap((name) => [name, name])
-    .map((name) => ({
+    .map((name, index) => ({
       name,
       duration: '32n',
-    })),
-];
+      ...(manualDelay && index % 2 === 1 ? { delay: '64n' } : {}),
+    }));
+}
 
 const samplerPatternSteps = expandToRests([
   'C3',
@@ -98,6 +104,12 @@ function App() {
   const [swingSubdivision, setSwingSubdivision] = useState('8n');
   const [subdivision, setSubdivision] = useState('16n');
   const [bpm, setBpm] = useState(70);
+  const [manualDelay, setManualDelay] = useState(false);
+
+  const stepPatterns: StepType[][] = [
+    chordSteps,
+    buildArpeggioSteps(manualDelay),
+  ];
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -125,7 +137,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>Hello Vite + React + Reactronica!</p>
-        <p>
+        <div className="controls">
           <button type="button" onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? 'Stop' : 'Play'}
           </button>
@@ -154,31 +166,37 @@ function App() {
           >
             Toggle pattern
           </button>
-          <select
-            value={synthType}
-            onChange={(event) =>
-              setSynthType(event.target.value as InstrumentType)
-            }
-          >
-            {synthTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-          <select
-            value={effectType}
-            onChange={(event) =>
-              setEffectType(event.target.value as EffectType | '')
-            }
-          >
-            <option value="">No effect</option>
-            {effectTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <label>
+            Synth type
+            <select
+              value={synthType}
+              onChange={(event) =>
+                setSynthType(event.target.value as InstrumentType)
+              }
+            >
+              {synthTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Effect
+            <select
+              value={effectType}
+              onChange={(event) =>
+                setEffectType(event.target.value as EffectType | '')
+              }
+            >
+              <option value="">No effect</option>
+              {effectTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </label>
           <label>
             Tempo
             <input
@@ -226,6 +244,14 @@ function App() {
             </select>
           </label>
           <label>
+            Manual delay (arpeggio, per-note)
+            <input
+              type="checkbox"
+              checked={manualDelay}
+              onChange={(event) => setManualDelay(event.target.checked)}
+            />
+          </label>
+          <label>
             Subdivision
             <select
               value={subdivision}
@@ -238,7 +264,7 @@ function App() {
               ))}
             </select>
           </label>
-        </p>
+        </div>
       </header>
 
       <Song
