@@ -40,3 +40,23 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  width: 90vw;
+  max-width: 960px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.controls button {
+  font-size: 16px;
+}

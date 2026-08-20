@@ -23,6 +23,7 @@ export default function buildSequencerStep(step: StepType, i): SequencerStep {
           name: (step as StepNoteType).name,
           duration: (step as StepNoteType).duration,
           velocity: (step as StepNoteType).velocity,
+          delay: (step as StepNoteType).delay,
         },
       ],
       index: i,
