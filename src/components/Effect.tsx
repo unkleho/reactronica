@@ -33,6 +33,37 @@ export interface EffectConsumerProps extends EffectProps {
   onRemoveFromEffectsChain?: Function;
 }
 
+type EffectInstance = {
+  id?: string | number;
+  feedback?: {
+    value: number;
+  };
+  delay?: {
+    value: number;
+  };
+  delayTime?: {
+    value: string;
+  };
+  wet?: {
+    value: number;
+  };
+  low?: {
+    value: number;
+  };
+  mid?: {
+    value: number;
+  };
+  high?: {
+    value: number;
+  };
+  lowFrequency?: {
+    value: number;
+  };
+  highFrequency?: {
+    value: number;
+  };
+};
+
 const EffectConsumer: React.FC<EffectConsumerProps> = ({
   type,
   id,
@@ -47,67 +78,45 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
   onAddToEffectsChain,
   onRemoveFromEffectsChain,
 }) => {
-  const effect = useRef<{
-    id: string | number;
-    feedback?: {
-      value: number;
-    };
-    delay?: {
-      value: number;
-    };
-    delayTime?: {
-      value: string;
-    };
-    wet?: {
-      value: number;
-    };
-    low?: {
-      value: number;
-    };
-    mid?: {
-      value: number;
-    };
-    high?: {
-      value: number;
-    };
-    lowFrequency?: {
-      value: number;
-    };
-    highFrequency?: {
-      value: number;
-    };
-  }>();
+  const effect = useRef<EffectInstance>();
 
   useEffect(() => {
     // console.log('<Effect /> mount');
     // console.log(`id: ${id}`);
 
     if (type === 'autoFilter') {
-      effect.current = new Tone.AutoFilter();
+      effect.current = (new Tone.AutoFilter() as unknown) as EffectInstance;
     } else if (type === 'autoPanner') {
-      effect.current = new Tone.AutoPanner();
+      effect.current = (new Tone.AutoPanner() as unknown) as EffectInstance;
     } else if (type === 'autoWah') {
-      effect.current = new Tone.AutoWah();
+      effect.current = (new Tone.AutoWah() as unknown) as EffectInstance;
     } else if (type === 'bitCrusher') {
-      effect.current = new Tone.BitCrusher();
+      effect.current = (new Tone.BitCrusher() as unknown) as EffectInstance;
       // Removed for now because delayTime has to be in ms
       // } else if (type === 'chorus') {
       //   effect.current = new Tone.Chorus();
     } else if (type === 'distortion') {
-      effect.current = new Tone.Distortion(0.5);
+      effect.current = (new Tone.Distortion(0.5) as unknown) as EffectInstance;
     } else if (type === 'feedbackDelay') {
-      effect.current = new Tone.FeedbackDelay(delayTime, feedback);
+      effect.current = (new Tone.FeedbackDelay(
+        delayTime,
+        feedback,
+      ) as unknown) as EffectInstance;
     } else if (type === 'freeverb') {
-      effect.current = new Tone.Freeverb();
+      effect.current = (new Tone.Freeverb() as unknown) as EffectInstance;
     } else if (type === 'panVol') {
-      effect.current = new Tone.PanVol();
+      effect.current = (new Tone.PanVol() as unknown) as EffectInstance;
       // Needs generate()
       // } else if (type === 'reverb') {
       //   effect.current = new Tone.Reverb();
     } else if (type === 'tremolo') {
-      effect.current = new Tone.Tremolo();
+      effect.current = (new Tone.Tremolo() as unknown) as EffectInstance;
     } else if (type === 'eq3') {
-      effect.current = new Tone.EQ3(low, mid, high);
+      effect.current = (new Tone.EQ3(
+        low,
+        mid,
+        high,
+      ) as unknown) as EffectInstance;
     }
 
     if (effect.current) {

@@ -49,7 +49,7 @@ const Song: React.FC<SongProps> = ({
 
     transport.bpm.value = bpm;
     transport.swing = swing;
-    transport.swingSubdivision = swingSubdivision;
+    transport.swingSubdivision = swingSubdivision as typeof transport.swingSubdivision;
   }, [bpm, swing, swingSubdivision]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const Song: React.FC<SongProps> = ({
       // Hack to get Tone to NOT use same settings from another instance
       transport.bpm.value = bpm;
       transport.swing = swing;
-      transport.swingSubdivision = swingSubdivision;
+      transport.swingSubdivision = swingSubdivision as typeof transport.swingSubdivision;
 
       transport.start();
     } else {

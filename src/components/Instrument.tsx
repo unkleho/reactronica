@@ -64,6 +64,19 @@ interface InstrumentConsumerProps extends InstrumentProps {
   onInstrumentsUpdate?: Function;
 }
 
+type InstrumentInstance = Partial<{
+  curve: number;
+  release: number;
+  triggerAttack: Function;
+  triggerAttackRelease: Function;
+  triggerRelease: Function;
+  add: Function;
+  set: Function;
+  chain: Function;
+  dispose: Function;
+  disconnect: Function;
+}>;
+
 const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // <Instrument /> Props
   type = 'synth',
@@ -82,20 +95,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   effectsChain,
   onInstrumentsUpdate,
 }) => {
-  const instrumentRef = useRef<
-    Partial<{
-      curve: number;
-      release: number;
-      triggerAttack: Function;
-      triggerAttackRelease: Function;
-      triggerRelease: Function;
-      add: Function;
-      set: Function;
-      chain: Function;
-      dispose: Function;
-      disconnect: Function;
-    }>
-  >();
+  const instrumentRef = useRef<InstrumentInstance>();
   // const trackChannelBase = useRef(new Tone.PanVol(pan, volume));
   // const trackChannelBase = useRef(new Tone.Channel(volume, pan));
   const trackChannelBase = useRef(null);
@@ -125,7 +125,10 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
   useEffect(() => {
     if (type === 'sampler') {
-      instrumentRef.current = new Tone.Sampler(samples, onLoad);
+      instrumentRef.current = (new Tone.Sampler(
+        samples,
+        (onLoad as unknown) as () => void,
+      ) as unknown) as InstrumentInstance;
 
       if (options && options.curve) {
         instrumentRef.current.curve = options.curve;
@@ -146,7 +149,7 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
     } else if (type === 'noiseSynth') {
       instrumentRef.current = new Tone.NoiseSynth();
     } else if (type === 'pluckSynth') {
-      instrumentRef.current = new Tone.PluckSynth();
+      instrumentRef.current = (new Tone.PluckSynth() as unknown) as InstrumentInstance;
     } else {
       let synth;
 
