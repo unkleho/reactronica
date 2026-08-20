@@ -37,6 +37,8 @@ export const isEqual = function(value, other) {
 				if (item1 !== item2) return false;
 			}
 		}
+
+		return true;
 	};
 
 	// Compare properties
