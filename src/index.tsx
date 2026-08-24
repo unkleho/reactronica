@@ -9,12 +9,23 @@ export {
   default as Instrument,
   InstrumentProps,
   InstrumentType,
+  InstrumentOscillator,
+  InstrumentOscillatorType,
+  instrumentOscillatorTypes,
 } from './components/Instrument';
 export {
   default as Effect,
   EffectProps,
   EffectType,
+  EffectLfoType,
 } from './components/Effect';
 
-export { default as config, midiNotes } from './config';
+export {
+  default as config,
+  midiNotes,
+  InstrumentConfig,
+  InstrumentConfigProp,
+  EffectConfig,
+  EffectConfigProp,
+} from './config';
 export { MidiNote } from './types/midi-notes';

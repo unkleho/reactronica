@@ -33,15 +33,82 @@ export type InstrumentType =
   | 'synth'
   | 'sampler';
 
+/**
+ * The waveform that an am-/fm-modulated oscillator's modulator runs at.
+ * Restricted to the 4 basic waveforms (rather than Tone's full
+ * AllNonCustomOscillatorType) for the same reason InstrumentOscillator
+ * excludes 'custom' - anything needing a `partials` array isn't exposed here.
+ */
+type ModulatorOscillatorType = 'sine' | 'square' | 'triangle' | 'sawtooth';
+
+interface AmFmOscillatorParams {
+  /** Ratio between the oscillator and its modulator's frequency. */
+  harmonicity?: number;
+  modulationType?: ModulatorOscillatorType;
+}
+
+/**
+ * The basic waveforms, plus Tone.js's amplitude-modulation (am-), frequency-
+ * modulation (fm-), and detuned-unison (fat-) variants of each - each
+ * variant's tunable params are only assignable when `type` matches it, e.g.
+ * `spread`/`count` require a 'fat...' type and won't type-check otherwise.
+ * Excludes 'custom' and the fat/am/fm 'custom' variants, which need a
+ * `partials` array to produce a distinct sound - not something this prop
+ * exposes.
+ */
+export type InstrumentOscillator =
+  | { type: 'sine' | 'square' | 'triangle' | 'sawtooth' }
+  | { type: 'pulse'; width?: number }
+  | { type: 'pwm'; modulationFrequency?: number }
+  | ({
+      type: 'amsine' | 'amsquare' | 'amtriangle' | 'amsawtooth';
+    } & AmFmOscillatorParams)
+  | ({
+      type: 'fmsine' | 'fmsquare' | 'fmtriangle' | 'fmsawtooth';
+      modulationIndex?: number;
+    } & AmFmOscillatorParams)
+  | {
+      type: 'fatsine' | 'fatsquare' | 'fattriangle' | 'fatsawtooth';
+      count?: number;
+      spread?: number;
+    };
+
+export type InstrumentOscillatorType = InstrumentOscillator['type'];
+
+/**
+ * Every value InstrumentOscillatorType allows, for config/UI code that needs
+ * to enumerate them at runtime (e.g. a waveform picker). Kept next to the
+ * type it mirrors - if InstrumentOscillator's members change, update this
+ * list too.
+ */
+export const instrumentOscillatorTypes: InstrumentOscillatorType[] = [
+  'sine',
+  'square',
+  'triangle',
+  'sawtooth',
+  'pwm',
+  'pulse',
+  'amsine',
+  'amsquare',
+  'amtriangle',
+  'amsawtooth',
+  'fmsine',
+  'fmsquare',
+  'fmtriangle',
+  'fmsawtooth',
+  'fatsine',
+  'fatsquare',
+  'fattriangle',
+  'fatsawtooth',
+];
+
 export interface InstrumentProps {
   type: InstrumentType;
   notes?: NoteType[];
   /** Should deprecate */
   options?: any;
   polyphony?: number;
-  oscillator?: {
-    type: 'triangle' | 'sine' | 'square';
-  };
+  oscillator?: InstrumentOscillator;
   envelope?: {
     attack?: number;
     decay?: number;
@@ -76,6 +143,20 @@ type InstrumentInstance = Partial<{
   dispose: Function;
   disconnect: Function;
 }>;
+
+/**
+ * Every type that is actually built with `oscillator`/`envelope` options in
+ * the construction effect below. duoSynth is included, but needs a different
+ * options shape than the rest - see buildDuoSynthVoiceOptions.
+ */
+const SUPPORTS_LIVE_OSCILLATOR_AND_ENVELOPE_UPDATE: InstrumentType[] = [
+  'amSynth',
+  'duoSynth',
+  'fmSynth',
+  'membraneSynth',
+  'monoSynth',
+  'synth',
+];
 
 const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // <Instrument /> Props
@@ -176,10 +257,16 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       instrumentRef.current = new Tone.PolySynth({
         maxPolyphony: polyphony,
         voice: synth,
-        options: buildSynthOptions({
-          oscillator,
-          envelope,
-        }),
+        // `synth` (the voice class) is resolved dynamically above, so Tone's
+        // PolySynth<Voice> generic can't narrow `options` to the right shape
+        // per voice - duoSynth genuinely needs a different shape
+        // (voice0/voice1) than the rest, which Tone's default Synth-typed
+        // overload doesn't know about.
+        options: (type === 'duoSynth'
+          ? buildDuoSynthVoiceOptions(
+              buildSynthOptions({ oscillator, envelope }),
+            )
+          : buildSynthOptions({ oscillator, envelope })) as any,
       });
     }
 
@@ -202,16 +289,38 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
   useEffect(() => {
     if (
-      // TODO: Add other synth types
-      type === 'synth' &&
+      SUPPORTS_LIVE_OSCILLATOR_AND_ENVELOPE_UPDATE.includes(type) &&
       instrumentRef &&
       instrumentRef.current &&
       oscillator
     ) {
-      instrumentRef.current.set('oscillator', oscillator);
+      // Tone's real `.set()` takes a single options object, not a
+      // (key, value) pair - passing them separately makes the second
+      // argument silently vanish and breaks Tone's internal `Reflect.has`
+      // call on what's left.
+      instrumentRef.current.set(
+        type === 'duoSynth'
+          ? buildDuoSynthVoiceOptions({ oscillator })
+          : { oscillator },
+      );
       // console.log(oscillator);
     }
   }, [oscillator, type]);
+
+  useEffect(() => {
+    if (
+      SUPPORTS_LIVE_OSCILLATOR_AND_ENVELOPE_UPDATE.includes(type) &&
+      instrumentRef &&
+      instrumentRef.current &&
+      envelope
+    ) {
+      instrumentRef.current.set(
+        type === 'duoSynth'
+          ? buildDuoSynthVoiceOptions({ envelope })
+          : { envelope },
+      );
+    }
+  }, [envelope, type]);
 
   // -------------------------------------------------------------------------
   // VOLUME / PAN / MUTE / SOLO
@@ -425,6 +534,18 @@ const buildSynthOptions = ({ oscillator, envelope }) => {
   }
 
   return undefined;
+};
+
+/**
+ * Tone.DuoSynth has no top-level `oscillator`/`envelope` field - it's built
+ * from two parallel MonoSynth voices, each with their own. Since <Instrument
+ * /> only exposes a single oscillator/envelope prop (not one per voice),
+ * this applies the same options to both voice0 and voice1.
+ */
+const buildDuoSynthVoiceOptions = (voiceOptions) => {
+  return voiceOptions
+    ? { voice0: voiceOptions, voice1: voiceOptions }
+    : undefined;
 };
 
 export default Instrument;

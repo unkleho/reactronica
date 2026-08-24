@@ -8,6 +8,7 @@ import {
   mockPolySynthTriggerRelease,
   mockPolySynthDispose,
   mockMembraneSynthConstructor,
+  mockMembraneSynthSet,
   mockMetalSynthConstructor,
   // mockNoiseSynthConstructor,
   mockPluckSynthConstructor,
@@ -211,8 +212,211 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPolySynthSet).toHaveBeenLastCalledWith('oscillator', {
-      type: 'sine',
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      oscillator: { type: 'sine' },
+    });
+  });
+
+  it('should update oscillator live for amSynth, fmSynth and monoSynth too, not just synth', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="amSynth" oscillator={{ type: 'square' }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="amSynth" oscillator={{ type: 'sawtooth' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      oscillator: { type: 'sawtooth' },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="fmSynth" oscillator={{ type: 'square' }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="fmSynth" oscillator={{ type: 'triangle' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      oscillator: { type: 'triangle' },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="monoSynth" oscillator={{ type: 'square' }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="monoSynth" oscillator={{ type: 'pulse' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      oscillator: { type: 'pulse' },
+    });
+  });
+
+  it('should update oscillator live for membraneSynth too', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="membraneSynth" oscillator={{ type: 'square' }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="membraneSynth" oscillator={{ type: 'sine' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockMembraneSynthSet).toHaveBeenLastCalledWith({
+      oscillator: { type: 'sine' },
+    });
+  });
+
+  it('should update envelope live for amSynth and membraneSynth', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="amSynth" envelope={{ attack: 0.01 }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="amSynth" envelope={{ attack: 0.5 }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      envelope: { attack: 0.5 },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="membraneSynth" envelope={{ attack: 0.01 }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument type="membraneSynth" envelope={{ attack: 0.5 }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockMembraneSynthSet).toHaveBeenLastCalledWith({
+      envelope: { attack: 0.5 },
+    });
+  });
+
+  it('should apply oscillator/envelope to both voices when constructing duoSynth', () => {
+    render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="duoSynth"
+            oscillator={{ type: 'square' }}
+            envelope={{ attack: 0.01 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'DuoSynth',
+      options: {
+        voice0: {
+          oscillator: { type: 'square' },
+          envelope: { attack: 0.01 },
+        },
+        voice1: {
+          oscillator: { type: 'square' },
+          envelope: { attack: 0.01 },
+        },
+      },
+    });
+  });
+
+  it('should update oscillator/envelope live for duoSynth on both voices', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="duoSynth"
+            oscillator={{ type: 'square' }}
+            envelope={{ attack: 0.01 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="duoSynth"
+            oscillator={{ type: 'sawtooth' }}
+            envelope={{ attack: 0.01 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenCalledWith({
+      voice0: { oscillator: { type: 'sawtooth' } },
+      voice1: { oscillator: { type: 'sawtooth' } },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="duoSynth"
+            oscillator={{ type: 'sawtooth' }}
+            envelope={{ attack: 0.5 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      voice0: { envelope: { attack: 0.5 } },
+      voice1: { envelope: { attack: 0.5 } },
     });
   });
 

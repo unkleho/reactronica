@@ -145,6 +145,7 @@ export const MonoSynth = 'MonoSynth';
 // ----------------------------------------------------------------------------
 
 export const mockMembraneSynthConstructor = jest.fn();
+export const mockMembraneSynthSet = jest.fn();
 
 export class MembraneSynth {
   constructor(options) {
@@ -155,6 +156,7 @@ export class MembraneSynth {
     this.dispose = jest.fn();
     this.chain = jest.fn();
     this.disconnect = jest.fn();
+    this.set = mockMembraneSynthSet;
   }
 }
 
@@ -236,14 +238,22 @@ export class Sampler {
 // ----------------------------------------------------------------------------
 
 export const mockAutoFilterConstructor = jest.fn();
+// A prototype method, not an instance property set in the constructor - so
+// it isn't picked up by toHaveBeenCalledWith's structural equality checks
+// against the effect instance (see the AutoFilter tests in Effect.test.tsx).
+export const mockAutoFilterStart = jest.fn();
 
 export class AutoFilter {
-  constructor() {
-    mockAutoFilterConstructor();
+  constructor(options) {
+    mockAutoFilterConstructor(options);
 
     this.wet = {
       value: 1,
     };
+  }
+
+  start() {
+    mockAutoFilterStart();
   }
 }
 
@@ -252,10 +262,15 @@ export class AutoFilter {
 // ----------------------------------------------------------------------------
 
 export const mockAutoPannerConstructor = jest.fn();
+export const mockAutoPannerStart = jest.fn();
 
 export class AutoPanner {
-  constructor() {
-    mockAutoPannerConstructor();
+  constructor(options) {
+    mockAutoPannerConstructor(options);
+  }
+
+  start() {
+    mockAutoPannerStart();
   }
 }
 
@@ -266,8 +281,8 @@ export class AutoPanner {
 export const mockAutoWahConstructor = jest.fn();
 
 export class AutoWah {
-  constructor() {
-    mockAutoWahConstructor();
+  constructor(options) {
+    mockAutoWahConstructor(options);
   }
 }
 
@@ -278,8 +293,8 @@ export class AutoWah {
 export const mockBitCrusherConstructor = jest.fn();
 
 export class BitCrusher {
-  constructor() {
-    mockBitCrusherConstructor();
+  constructor(options) {
+    mockBitCrusherConstructor(options);
   }
 }
 
@@ -322,8 +337,8 @@ export class FeedbackDelay {
 export const mockFreeverbConstructor = jest.fn();
 
 export class Freeverb {
-  constructor() {
-    mockFreeverbConstructor();
+  constructor(options) {
+    mockFreeverbConstructor(options);
   }
 }
 
@@ -334,8 +349,8 @@ export class Freeverb {
 export const mockPanVolConstructor = jest.fn();
 
 export class PanVol {
-  constructor() {
-    mockPanVolConstructor();
+  constructor(options) {
+    mockPanVolConstructor(options);
   }
 }
 
@@ -344,10 +359,15 @@ export class PanVol {
 // ----------------------------------------------------------------------------
 
 export const mockTremoloConstructor = jest.fn();
+export const mockTremoloStart = jest.fn();
 
 export class Tremolo {
-  constructor() {
-    mockTremoloConstructor();
+  constructor(options) {
+    mockTremoloConstructor(options);
+  }
+
+  start() {
+    mockTremoloStart();
   }
 }
 
