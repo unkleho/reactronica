@@ -5,9 +5,15 @@ import {
   Instrument,
   Effect,
   StepType,
+  StepNoteType,
   EffectType,
+  EffectProps,
+  EffectConfig,
   InstrumentType,
+  InstrumentProps,
+  InstrumentConfig,
   MidiNote,
+  config,
 } from 'reactronica';
 import './App.css';
 
@@ -93,6 +99,137 @@ const synthTypes: InstrumentType[] = [
   'synth',
 ];
 
+type RangeControl = {
+  type: 'range';
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+};
+
+type SelectControl = {
+  type: 'select';
+  label: string;
+  options: string[];
+};
+
+/**
+ * How to render each <Effect /> prop that config.effectConfigs lists as
+ * applicable to a given effect type - every EffectConfigProp maps to a
+ * single numeric or enum value, unlike <Instrument />'s 'envelope' and
+ * 'oscillatorType', which are nested/dynamic and rendered inline below
+ * instead of through this generic map.
+ */
+const EFFECT_PROP_CONTROLS: Record<string, RangeControl | SelectControl> = {
+  wet: { type: 'range', label: 'Wet', min: 0, max: 1, step: 0.01 },
+  frequency: {
+    type: 'range',
+    label: 'Frequency (Hz)',
+    min: 0.1,
+    max: 20,
+    step: 0.1,
+  },
+  depth: { type: 'range', label: 'Depth', min: 0, max: 1, step: 0.01 },
+  lfoType: {
+    type: 'select',
+    label: 'LFO type',
+    options: ['sine', 'square', 'triangle', 'sawtooth'],
+  },
+  baseFrequency: {
+    type: 'range',
+    label: 'Base frequency (Hz)',
+    min: 20,
+    max: 2000,
+    step: 10,
+  },
+  octaves: { type: 'range', label: 'Octaves', min: 0.5, max: 8, step: 0.5 },
+  sensitivity: {
+    type: 'range',
+    label: 'Sensitivity (dB)',
+    min: -40,
+    max: 0,
+    step: 1,
+  },
+  Q: { type: 'range', label: 'Q', min: 0.1, max: 20, step: 0.1 },
+  bits: { type: 'range', label: 'Bits', min: 1, max: 16, step: 1 },
+  distortion: {
+    type: 'range',
+    label: 'Distortion',
+    min: 0,
+    max: 1,
+    step: 0.01,
+  },
+  feedback: { type: 'range', label: 'Feedback', min: 0, max: 1, step: 0.01 },
+  delayTime: { type: 'select', label: 'Delay time', options: subdivisions },
+  roomSize: { type: 'range', label: 'Room size', min: 0, max: 1, step: 0.01 },
+  dampening: {
+    type: 'range',
+    label: 'Dampening (Hz)',
+    min: 100,
+    max: 8000,
+    step: 100,
+  },
+  spread: { type: 'range', label: 'Spread (deg)', min: 0, max: 180, step: 1 },
+  pan: { type: 'range', label: 'Pan', min: -1, max: 1, step: 0.01 },
+  volume: { type: 'range', label: 'Volume (dB)', min: -40, max: 6, step: 1 },
+  low: { type: 'range', label: 'Low (dB)', min: -24, max: 24, step: 1 },
+  mid: { type: 'range', label: 'Mid (dB)', min: -24, max: 24, step: 1 },
+  high: { type: 'range', label: 'High (dB)', min: -24, max: 24, step: 1 },
+  lowFrequency: {
+    type: 'range',
+    label: 'Low frequency (Hz)',
+    min: 20,
+    max: 2000,
+    step: 10,
+  },
+  highFrequency: {
+    type: 'range',
+    label: 'High frequency (Hz)',
+    min: 1000,
+    max: 10000,
+    step: 100,
+  },
+};
+
+const DEFAULT_EFFECT_PROP_VALUES: Omit<EffectProps, 'type' | 'id'> = {
+  wet: 1,
+  frequency: 1,
+  depth: 1,
+  lfoType: 'sine',
+  baseFrequency: 200,
+  octaves: 3,
+  sensitivity: 0,
+  Q: 2,
+  bits: 4,
+  distortion: 0.5,
+  feedback: 0.5,
+  delayTime: '8n',
+  roomSize: 0.7,
+  dampening: 3000,
+  spread: 180,
+  pan: 0,
+  volume: 0,
+  low: 0,
+  mid: 0,
+  high: 0,
+  lowFrequency: 400,
+  highFrequency: 2500,
+};
+
+const DEFAULT_INSTRUMENT_PROP_VALUES: Pick<
+  InstrumentProps,
+  'polyphony' | 'oscillator' | 'envelope'
+> = {
+  polyphony: 4,
+  oscillator: undefined,
+  // Tone's default release is 1s - a voice only frees up for reuse once
+  // it's fully silent, so at the arpeggio's pace (a note every ~0.1s) the
+  // default polyphony gets exhausted and notes get silently dropped. This
+  // short release fixes that and suits the plucky arpeggio note duration -
+  // moved here (from a hardcoded prop) now that envelope is user-adjustable.
+  envelope: { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.1 },
+};
+
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [samples, setSamples] = useState<object | null>(null);
@@ -105,11 +242,50 @@ function App() {
   const [subdivision, setSubdivision] = useState('16n');
   const [bpm, setBpm] = useState(70);
   const [manualDelay, setManualDelay] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
+  const [instrumentPropValues, setInstrumentPropValues] = useState(
+    DEFAULT_INSTRUMENT_PROP_VALUES,
+  );
+  const [effectPropValues, setEffectPropValues] = useState(
+    DEFAULT_EFFECT_PROP_VALUES,
+  );
 
   const stepPatterns: StepType[][] = [
     chordSteps,
     buildArpeggioSteps(manualDelay),
   ];
+
+  const instrumentConfig = config.instrumentConfigs.find(
+    (instrument: InstrumentConfig) => instrument.id === synthType,
+  );
+  const effectConfig = effectType
+    ? config.effectConfigs.find(
+        (effect: EffectConfig) => effect.id === effectType,
+      )
+    : undefined;
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setCurrentStepIndex(null);
+    }
+  }, [isPlaying]);
+
+  // Clears a selected oscillator waveform that isn't valid for the newly
+  // selected instrument (e.g. switching to amSynth while 'amsine' is picked -
+  // amSynth's oscillatorTypes excludes its own am- family, see config).
+  useEffect(() => {
+    const validTypes = instrumentConfig?.oscillatorTypes;
+    const currentType = instrumentPropValues.oscillator?.type;
+
+    if (
+      currentType &&
+      validTypes &&
+      !(validTypes as string[]).includes(currentType)
+    ) {
+      setInstrumentPropValues((prev) => ({ ...prev, oscillator: undefined }));
+    }
+    /* eslint-disable-next-line */
+  }, [synthType]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -132,6 +308,60 @@ function App() {
 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  function updateEffectProp<Key extends keyof EffectProps>(
+    key: Key,
+    value: EffectProps[Key],
+  ) {
+    setEffectPropValues((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function renderEffectPropControl(propName: string) {
+    const propControl = EFFECT_PROP_CONTROLS[propName];
+
+    if (!propControl) {
+      return null;
+    }
+
+    const value = effectPropValues[propName as keyof typeof effectPropValues];
+
+    return (
+      <label key={propName}>
+        {propControl.label}
+        {propControl.type === 'select' ? (
+          <select
+            value={value as string}
+            onChange={(event) =>
+              updateEffectProp(
+                propName as keyof EffectProps,
+                event.target.value as never,
+              )
+            }
+          >
+            {propControl.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type="range"
+            min={propControl.min}
+            max={propControl.max}
+            step={propControl.step}
+            value={value as number}
+            onChange={(event) =>
+              updateEffectProp(
+                propName as keyof EffectProps,
+                Number(event.target.value) as never,
+              )
+            }
+          />
+        )}
+      </label>
+    );
+  }
 
   return (
     <div className="App">
@@ -265,6 +495,116 @@ function App() {
             </select>
           </label>
         </div>
+
+        {instrumentConfig && (
+          <div className="controls">
+            <p className="controls-heading">{instrumentConfig.name} params</p>
+
+            {instrumentConfig.props.includes('polyphony') && (
+              <label>
+                Polyphony
+                <input
+                  type="range"
+                  min={1}
+                  max={16}
+                  step={1}
+                  value={instrumentPropValues.polyphony}
+                  onChange={(event) =>
+                    setInstrumentPropValues((prev) => ({
+                      ...prev,
+                      polyphony: Number(event.target.value),
+                    }))
+                  }
+                />
+              </label>
+            )}
+
+            {instrumentConfig.props.includes('oscillatorType') && (
+              <label>
+                Oscillator type
+                <select
+                  value={instrumentPropValues.oscillator?.type || ''}
+                  onChange={(event) =>
+                    setInstrumentPropValues((prev) => ({
+                      ...prev,
+                      oscillator: event.target.value
+                        ? // Cast needed since InstrumentOscillator is a
+                          // discriminated union keyed on `type` with params
+                          // specific to each waveform family (e.g. `count`
+                          // only applies to fat* types) - not expressible
+                          // from a single flat <select>.
+                          ({
+                            type: event.target.value,
+                          } as InstrumentProps['oscillator'])
+                        : undefined,
+                    }))
+                  }
+                >
+                  <option value="">(instrument default)</option>
+                  {instrumentConfig.oscillatorTypes?.map(
+                    (oscillatorType: string) => (
+                      <option key={oscillatorType} value={oscillatorType}>
+                        {oscillatorType}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+            )}
+
+            {instrumentConfig.props.includes('envelope') && (
+              <>
+                {(['attack', 'decay', 'sustain', 'release'] as const).map(
+                  (stage) => (
+                    <label key={stage}>
+                      Envelope {stage}
+                      <input
+                        type="range"
+                        min={0}
+                        max={stage === 'sustain' ? 1 : 2}
+                        step={0.01}
+                        value={instrumentPropValues.envelope![stage]}
+                        onChange={(event) =>
+                          setInstrumentPropValues((prev) => ({
+                            ...prev,
+                            envelope: {
+                              ...prev.envelope,
+                              [stage]: Number(event.target.value),
+                            },
+                          }))
+                        }
+                      />
+                    </label>
+                  ),
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {effectConfig && (
+          <div className="controls">
+            <p className="controls-heading">{effectConfig.name} params</p>
+            {effectConfig.props.map((propName: string) =>
+              renderEffectPropControl(propName),
+            )}
+          </div>
+        )}
+
+        <div className="step-indicator">
+          {stepPatterns[patternIndex].map((step, index) => (
+            <span
+              key={index}
+              className={[
+                'step-dot',
+                step === null && 'step-dot--rest',
+                index === currentStepIndex && 'step-dot--active',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            />
+          ))}
+        </div>
       </header>
 
       <Song
@@ -277,20 +617,12 @@ function App() {
         <Track
           steps={stepPatterns[patternIndex]}
           subdivision={subdivision}
-          // onStepPlay={(steps) => {
-          //   console.log(steps);
-          // }}
+          onStepPlay={(_stepNotes: StepNoteType[], index: number) =>
+            setCurrentStepIndex(index)
+          }
         >
-          <Instrument
-            type={synthType}
-            // Tone's default envelope release is 1s - a voice only frees up
-            // for reuse once it's fully silent, so at the arpeggio's pace
-            // (a note every ~0.1s) the default polyphony gets exhausted and
-            // notes get silently dropped. A short release fixes that and
-            // also suits the plucky duration set on the arpeggio notes.
-            envelope={{ release: 0.1 }}
-          ></Instrument>
-          {effectType && <Effect type={effectType} />}
+          <Instrument type={synthType} {...instrumentPropValues}></Instrument>
+          {effectType && <Effect type={effectType} {...effectPropValues} />}
         </Track>
 
         <Track
