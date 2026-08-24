@@ -60,3 +60,32 @@ button {
 .controls button {
   font-size: 16px;
 }
+
+.controls-heading {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.step-dot--rest {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.step-dot--active {
+  background-color: #61dafb;
+}
