@@ -12,6 +12,10 @@ import {
   InstrumentType,
   InstrumentProps,
   InstrumentConfig,
+  InstrumentFilterType,
+  InstrumentFilterRolloff,
+  instrumentFilterTypes,
+  instrumentFilterRolloffs,
   MidiNote,
   config,
 } from 'reactronica';
@@ -250,7 +254,17 @@ const DEFAULT_EFFECT_PROP_VALUES: Omit<EffectProps, 'type' | 'id'> = {
 
 const DEFAULT_INSTRUMENT_PROP_VALUES: Pick<
   InstrumentProps,
-  'polyphony' | 'oscillator' | 'envelope'
+  | 'polyphony'
+  | 'oscillator'
+  | 'envelope'
+  | 'filter'
+  | 'filterEnvelope'
+  | 'harmonicity'
+  | 'modulationIndex'
+  | 'resonance'
+  | 'octaves'
+  | 'attackNoise'
+  | 'dampening'
 > = {
   polyphony: 4,
   oscillator: undefined,
@@ -260,7 +274,75 @@ const DEFAULT_INSTRUMENT_PROP_VALUES: Pick<
   // short release fixes that and suits the plucky arpeggio note duration -
   // moved here (from a hardcoded prop) now that envelope is user-adjustable.
   envelope: { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.1 },
+  filter: undefined,
+  filterEnvelope: undefined,
+  // Matches Tone.MetalSynth's own defaults, so selecting it sounds the same
+  // as before these became adjustable.
+  harmonicity: 5.1,
+  modulationIndex: 32,
+  // resonance means something different for metalSynth (a filter cutoff in
+  // Hz) vs pluckSynth (a 0-1 sustain amount) - this starting value matches
+  // metalSynth's own default; switching synthType resets it, see below.
+  resonance: 4000,
+  octaves: 1.5,
+  attackNoise: 1,
+  dampening: 4000,
 };
+
+/**
+ * How to render each simple scalar <Instrument /> prop - config.instrumentConfigs
+ * lists which of these apply to a given instrument type. 'filter'/'filterEnvelope'
+ * are nested/dynamic like 'envelope'/'oscillatorType', and rendered inline
+ * instead of through this map.
+ */
+const INSTRUMENT_PROP_CONTROLS: Record<string, RangeControl> = {
+  harmonicity: {
+    type: 'range',
+    label: 'Harmonicity',
+    min: 0.1,
+    max: 10,
+    step: 0.1,
+  },
+  modulationIndex: {
+    type: 'range',
+    label: 'Modulation index',
+    min: 1,
+    max: 50,
+    step: 1,
+  },
+  octaves: { type: 'range', label: 'Octaves', min: 0.1, max: 4, step: 0.1 },
+  attackNoise: {
+    type: 'range',
+    label: 'Attack noise',
+    min: 0.1,
+    max: 20,
+    step: 0.1,
+  },
+  dampening: {
+    type: 'range',
+    label: 'Dampening (Hz)',
+    min: 0,
+    max: 7000,
+    step: 100,
+  },
+};
+
+/**
+ * resonance's own control isn't in the static map above - metalSynth reads it
+ * as a filter cutoff in Hz, pluckSynth as a 0-1 sustain amount, so the slider's
+ * range has to follow whichever instrument is currently selected.
+ */
+function getResonanceControl(synthType: InstrumentType): RangeControl {
+  return synthType === 'pluckSynth'
+    ? { type: 'range', label: 'Resonance', min: 0, max: 1, step: 0.01 }
+    : {
+        type: 'range',
+        label: 'Resonance (Hz)',
+        min: 100,
+        max: 7000,
+        step: 100,
+      };
+}
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -317,6 +399,17 @@ function App() {
       setInstrumentPropValues((prev) => ({ ...prev, oscillator: undefined }));
     }
     /* eslint-disable-next-line */
+  }, [synthType]);
+
+  // resonance has a wildly different valid range depending on the type -
+  // reset it to a sensible starting point for whichever one was just
+  // selected, instead of carrying over a value from the other range.
+  useEffect(() => {
+    if (synthType === 'metalSynth') {
+      setInstrumentPropValues((prev) => ({ ...prev, resonance: 4000 }));
+    } else if (synthType === 'pluckSynth') {
+      setInstrumentPropValues((prev) => ({ ...prev, resonance: 0.7 }));
+    }
   }, [synthType]);
 
   useEffect(() => {
@@ -391,6 +484,46 @@ function App() {
             }
           />
         )}
+      </label>
+    );
+  }
+
+  function updateInstrumentProp<Key extends keyof InstrumentProps>(
+    key: Key,
+    value: InstrumentProps[Key],
+  ) {
+    setInstrumentPropValues((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function renderInstrumentPropControl(propName: string) {
+    const propControl =
+      propName === 'resonance'
+        ? getResonanceControl(synthType)
+        : INSTRUMENT_PROP_CONTROLS[propName];
+
+    if (!propControl) {
+      return null;
+    }
+
+    const value =
+      instrumentPropValues[propName as keyof typeof instrumentPropValues];
+
+    return (
+      <label key={propName}>
+        {propControl.label}
+        <input
+          type="range"
+          min={propControl.min}
+          max={propControl.max}
+          step={propControl.step}
+          value={value as number}
+          onChange={(event) =>
+            updateInstrumentProp(
+              propName as keyof InstrumentProps,
+              Number(event.target.value) as never,
+            )
+          }
+        />
       </label>
     );
   }
@@ -610,6 +743,170 @@ function App() {
                   ),
                 )}
               </>
+            )}
+
+            {instrumentConfig.props.includes('filter') && (
+              <>
+                <label>
+                  Filter type
+                  <select
+                    value={instrumentPropValues.filter?.type || ''}
+                    onChange={(event) =>
+                      setInstrumentPropValues((prev) => ({
+                        ...prev,
+                        filter: {
+                          ...prev.filter,
+                          type:
+                            (event.target.value as InstrumentFilterType) ||
+                            undefined,
+                        },
+                      }))
+                    }
+                  >
+                    <option value="">(instrument default)</option>
+                    {instrumentFilterTypes.map((filterType) => (
+                      <option key={filterType} value={filterType}>
+                        {filterType}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Filter frequency (Hz)
+                  <input
+                    type="range"
+                    min={20}
+                    max={5000}
+                    step={10}
+                    value={instrumentPropValues.filter?.frequency ?? 350}
+                    onChange={(event) =>
+                      setInstrumentPropValues((prev) => ({
+                        ...prev,
+                        filter: {
+                          ...prev.filter,
+                          frequency: Number(event.target.value),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  Filter Q
+                  <input
+                    type="range"
+                    min={0.1}
+                    max={20}
+                    step={0.1}
+                    value={instrumentPropValues.filter?.Q ?? 1}
+                    onChange={(event) =>
+                      setInstrumentPropValues((prev) => ({
+                        ...prev,
+                        filter: {
+                          ...prev.filter,
+                          Q: Number(event.target.value),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  Filter rolloff (dB/oct)
+                  <select
+                    value={instrumentPropValues.filter?.rolloff ?? -12}
+                    onChange={(event) =>
+                      setInstrumentPropValues((prev) => ({
+                        ...prev,
+                        filter: {
+                          ...prev.filter,
+                          rolloff: Number(
+                            event.target.value,
+                          ) as InstrumentFilterRolloff,
+                        },
+                      }))
+                    }
+                  >
+                    {instrumentFilterRolloffs.map((rolloff) => (
+                      <option key={rolloff} value={rolloff}>
+                        {rolloff}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
+
+            {instrumentConfig.props.includes('filterEnvelope') && (
+              <>
+                {(['attack', 'decay', 'sustain', 'release'] as const).map(
+                  (stage) => (
+                    <label key={`filterEnvelope-${stage}`}>
+                      Filter envelope {stage}
+                      <input
+                        type="range"
+                        min={0}
+                        max={stage === 'sustain' ? 1 : 2}
+                        step={0.01}
+                        value={
+                          instrumentPropValues.filterEnvelope?.[stage] ?? 0
+                        }
+                        onChange={(event) =>
+                          setInstrumentPropValues((prev) => ({
+                            ...prev,
+                            filterEnvelope: {
+                              ...prev.filterEnvelope,
+                              [stage]: Number(event.target.value),
+                            },
+                          }))
+                        }
+                      />
+                    </label>
+                  ),
+                )}
+                <label>
+                  Filter envelope base frequency (Hz)
+                  <input
+                    type="range"
+                    min={20}
+                    max={2000}
+                    step={10}
+                    value={
+                      instrumentPropValues.filterEnvelope?.baseFrequency ?? 200
+                    }
+                    onChange={(event) =>
+                      setInstrumentPropValues((prev) => ({
+                        ...prev,
+                        filterEnvelope: {
+                          ...prev.filterEnvelope,
+                          baseFrequency: Number(event.target.value),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  Filter envelope octaves
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={8}
+                    step={0.5}
+                    value={instrumentPropValues.filterEnvelope?.octaves ?? 4}
+                    onChange={(event) =>
+                      setInstrumentPropValues((prev) => ({
+                        ...prev,
+                        filterEnvelope: {
+                          ...prev.filterEnvelope,
+                          octaves: Number(event.target.value),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+              </>
+            )}
+
+            {instrumentConfig.props.map((propName: string) =>
+              renderInstrumentPropControl(propName),
             )}
           </div>
         )}

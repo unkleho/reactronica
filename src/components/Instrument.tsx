@@ -89,6 +89,26 @@ export type InstrumentFilterType =
 /** monoSynth's filter rolloff, in dB/octave - the only slopes a BiquadFilterNode-based filter can produce. */
 export type InstrumentFilterRolloff = -12 | -24 | -48 | -96;
 
+/** Every value InstrumentFilterType allows, for config/UI code enumerating them at runtime. */
+export const instrumentFilterTypes: InstrumentFilterType[] = [
+  'lowpass',
+  'highpass',
+  'bandpass',
+  'notch',
+  'allpass',
+  'peaking',
+  'lowshelf',
+  'highshelf',
+];
+
+/** Every value InstrumentFilterRolloff allows, for config/UI code enumerating them at runtime. */
+export const instrumentFilterRolloffs: InstrumentFilterRolloff[] = [
+  -12,
+  -24,
+  -48,
+  -96,
+];
+
 /**
  * Every value InstrumentOscillatorType allows, for config/UI code that needs
  * to enumerate them at runtime (e.g. a waveform picker). Kept next to the
