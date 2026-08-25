@@ -425,6 +425,150 @@ export class EQ3 {
 }
 
 // ----------------------------------------------------------------------------
+// Tone.Phaser
+// ----------------------------------------------------------------------------
+
+export const mockPhaserConstructor = jest.fn();
+
+export class Phaser {
+  constructor(options) {
+    mockPhaserConstructor(options);
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.PingPongDelay
+// ----------------------------------------------------------------------------
+
+export const mockPingPongDelayConstructor = jest.fn();
+
+export class PingPongDelay {
+  constructor(delayTime, feedback) {
+    mockPingPongDelayConstructor(delayTime, feedback);
+
+    this.delayTime = {
+      value: delayTime,
+    };
+
+    this.feedback = {
+      value: feedback,
+    };
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.Vibrato
+// ----------------------------------------------------------------------------
+
+export const mockVibratoConstructor = jest.fn();
+
+export class Vibrato {
+  constructor(options) {
+    mockVibratoConstructor(options);
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.Chebyshev
+// ----------------------------------------------------------------------------
+
+export const mockChebyshevConstructor = jest.fn();
+
+export class Chebyshev {
+  constructor(order) {
+    mockChebyshevConstructor(order);
+
+    this.order = order;
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.StereoWidener
+// ----------------------------------------------------------------------------
+
+export const mockStereoWidenerConstructor = jest.fn();
+
+export class StereoWidener {
+  constructor(width) {
+    mockStereoWidenerConstructor(width);
+
+    this.width = {
+      value: width,
+    };
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.FrequencyShifter
+// ----------------------------------------------------------------------------
+
+export const mockFrequencyShifterConstructor = jest.fn();
+
+export class FrequencyShifter {
+  constructor(frequency) {
+    mockFrequencyShifterConstructor(frequency);
+
+    this.frequency = {
+      value: frequency,
+    };
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.PitchShift
+// ----------------------------------------------------------------------------
+
+export const mockPitchShiftConstructor = jest.fn();
+
+export class PitchShift {
+  constructor(options) {
+    mockPitchShiftConstructor(options);
+
+    this.pitch = (options && options.pitch) || 0;
+    this.windowSize = (options && options.windowSize) || 0.1;
+
+    this.delayTime = {
+      value: options ? options.delayTime : undefined,
+    };
+
+    this.feedback = {
+      value: options ? options.feedback : undefined,
+    };
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tone.JCReverb
+// ----------------------------------------------------------------------------
+
+export const mockJCReverbConstructor = jest.fn();
+
+export class JCReverb {
+  constructor(roomSize) {
+    mockJCReverbConstructor(roomSize);
+
+    this.roomSize = {
+      value: roomSize,
+    };
+
+    this.dispose = jest.fn();
+  }
+}
+
+// ----------------------------------------------------------------------------
 // Tone.Sequence
 // ----------------------------------------------------------------------------
 

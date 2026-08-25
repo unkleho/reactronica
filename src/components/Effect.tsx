@@ -8,11 +8,19 @@ export type EffectType =
   | 'autoPanner'
   | 'autoWah'
   | 'bitCrusher'
+  | 'chebyshev'
   | 'distortion'
   | 'feedbackDelay'
   | 'freeverb'
+  | 'frequencyShifter'
+  | 'jcReverb'
   | 'panVol'
+  | 'phaser'
+  | 'pingPongDelay'
+  | 'pitchShift'
+  | 'stereoWidener'
   | 'tremolo'
+  | 'vibrato'
   | 'eq3';
 
 /**
@@ -56,6 +64,16 @@ export interface EffectProps {
   // panVol
   pan?: number;
   volume?: number;
+  // phaser (number of allpass filter stages)
+  stages?: number;
+  // stereoWidener (0 = all mid, 1 = all side)
+  width?: number;
+  // chebyshev (waveshaping order - odd/even orders sound very different)
+  order?: number;
+  // pitchShift (in semitones)
+  pitch?: number;
+  // pitchShift (the size of the pitch-shifting window, in seconds)
+  windowSize?: number;
 }
 
 export interface EffectConsumerProps extends EffectProps {
@@ -125,6 +143,13 @@ type EffectInstance = {
   volume?: {
     value: number;
   };
+  width?: {
+    value: number;
+  };
+  // Direct getter/setter on the Tone instance, not a Param - no `.value`.
+  order?: number;
+  pitch?: number;
+  windowSize?: number;
 };
 
 /**
@@ -171,6 +196,11 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
   spread,
   pan,
   volume,
+  stages,
+  width,
+  order,
+  pitch,
+  windowSize,
   onAddToEffectsChain,
   onRemoveFromEffectsChain,
 }) => {
@@ -237,6 +267,40 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
         low,
         mid,
         high,
+      ) as unknown) as EffectInstance;
+    } else if (type === 'phaser') {
+      effect.current = (new Tone.Phaser(
+        withDefined({ frequency, octaves, baseFrequency, Q, stages }),
+      ) as unknown) as EffectInstance;
+      // Phaser autostarts its LFO once the audio context is running -
+      // unlike autoFilter/autoPanner/tremolo, no explicit start() needed.
+    } else if (type === 'pingPongDelay') {
+      effect.current = (new Tone.PingPongDelay(
+        delayTime,
+        feedback,
+      ) as unknown) as EffectInstance;
+    } else if (type === 'vibrato') {
+      effect.current = (new Tone.Vibrato(
+        withDefined({ frequency, depth, type: lfoType }),
+      ) as unknown) as EffectInstance;
+      // Also autostarts once the audio context is running.
+    } else if (type === 'chebyshev') {
+      effect.current = (new Tone.Chebyshev(order) as unknown) as EffectInstance;
+    } else if (type === 'stereoWidener') {
+      effect.current = (new Tone.StereoWidener(
+        width,
+      ) as unknown) as EffectInstance;
+    } else if (type === 'frequencyShifter') {
+      effect.current = (new Tone.FrequencyShifter(
+        frequency,
+      ) as unknown) as EffectInstance;
+    } else if (type === 'pitchShift') {
+      effect.current = (new Tone.PitchShift(
+        withDefined({ pitch, windowSize, delayTime, feedback }),
+      ) as unknown) as EffectInstance;
+    } else if (type === 'jcReverb') {
+      effect.current = (new Tone.JCReverb(
+        roomSize,
       ) as unknown) as EffectInstance;
     }
 
@@ -440,6 +504,46 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
       effect.current.volume.value = volume;
     }
   }, [volume]);
+
+  useEffect(() => {
+    if (
+      typeof width !== 'undefined' &&
+      effect.current &&
+      effect.current.width
+    ) {
+      effect.current.width.value = width;
+    }
+  }, [width]);
+
+  useEffect(() => {
+    if (
+      typeof order !== 'undefined' &&
+      effect.current &&
+      typeof effect.current.order !== 'undefined'
+    ) {
+      effect.current.order = order;
+    }
+  }, [order]);
+
+  useEffect(() => {
+    if (
+      typeof pitch !== 'undefined' &&
+      effect.current &&
+      typeof effect.current.pitch !== 'undefined'
+    ) {
+      effect.current.pitch = pitch;
+    }
+  }, [pitch]);
+
+  useEffect(() => {
+    if (
+      typeof windowSize !== 'undefined' &&
+      effect.current &&
+      typeof effect.current.windowSize !== 'undefined'
+    ) {
+      effect.current.windowSize = windowSize;
+    }
+  }, [windowSize]);
 
   return null;
 };
