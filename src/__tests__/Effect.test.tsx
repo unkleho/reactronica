@@ -40,7 +40,7 @@ describe('Effect', () => {
 
     expect(mockAutoFilterConstructor).toBeCalled();
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
-      { id: 'effect-1', wet: { value: 1 } },
+      { id: 'effect-1', wet: { value: 1 }, dispose: expect.any(Function) },
       {
         dispose: mockChannelDispose,
         pan: { value: 0 },
@@ -69,8 +69,8 @@ describe('Effect', () => {
 
     expect(mockAutoPannerConstructor).toBeCalled();
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
-      { id: 'effect-2' },
-      { id: 'effect-1', wet: { value: 1 } },
+      { id: 'effect-2', dispose: expect.any(Function) },
+      { id: 'effect-1', wet: { value: 1 }, dispose: expect.any(Function) },
       { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
       Tone.getDestination(),
     );
@@ -92,7 +92,7 @@ describe('Effect', () => {
     );
 
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
-      { id: 'effect-2' },
+      { id: 'effect-2', dispose: expect.any(Function) },
       { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
       Tone.getDestination(),
     );
@@ -126,7 +126,7 @@ describe('Effect', () => {
     );
 
     expect(mockPolySynthChain).toHaveBeenLastCalledWith(
-      { id: 'effect-1', wet: { value: 0.5 } },
+      { id: 'effect-1', wet: { value: 0.5 }, dispose: expect.any(Function) },
       { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
       Tone.getDestination(),
     );
@@ -150,6 +150,7 @@ describe('Effect', () => {
         high: { value: 1 },
         lowFrequency: { value: 400 },
         highFrequency: { value: 2500 },
+        dispose: expect.any(Function),
       },
       { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
       Tone.getDestination(),
@@ -180,6 +181,7 @@ describe('Effect', () => {
         high: { value: 0 },
         lowFrequency: { value: 100 },
         highFrequency: { value: 3000 },
+        dispose: expect.any(Function),
       },
       { dispose: mockChannelDispose, pan: { value: 0 }, volume: { value: 0 } },
       Tone.getDestination(),
