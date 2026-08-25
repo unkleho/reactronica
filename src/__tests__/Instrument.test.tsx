@@ -10,8 +10,10 @@ import {
   mockMembraneSynthConstructor,
   mockMembraneSynthSet,
   mockMetalSynthConstructor,
+  mockMetalSynthSet,
   // mockNoiseSynthConstructor,
   mockPluckSynthConstructor,
+  mockPluckSynthSet,
   mockSamplerConstructor,
   mockSamplerDispose,
   mockPolySynthSet,
@@ -499,7 +501,9 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockMetalSynthConstructor).toHaveBeenLastCalledWith(undefined);
+    // withDefined() always builds an options object now (even if empty),
+    // so unset props no longer overwrite Tone's own defaults with undefined.
+    expect(mockMetalSynthConstructor).toHaveBeenLastCalledWith({});
 
     rerender(
       <Song isPlaying={true}>
@@ -533,7 +537,7 @@ describe('Synth', () => {
       </Song>,
     );
 
-    expect(mockPluckSynthConstructor).toHaveBeenLastCalledWith(undefined);
+    expect(mockPluckSynthConstructor).toHaveBeenLastCalledWith({});
   });
 
   it('should render synth envelopes', () => {
@@ -553,6 +557,138 @@ describe('Synth', () => {
           attack: 0.02,
         },
       },
+    });
+  });
+
+  it('should pass filter/filterEnvelope to monoSynth on construction and live-update', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="monoSynth"
+            filter={{ type: 'lowpass', frequency: 800, Q: 2 }}
+            filterEnvelope={{ attack: 0.01, baseFrequency: 200, octaves: 3 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'MonoSynth',
+      options: {
+        filter: { type: 'lowpass', frequency: 800, Q: 2 },
+        filterEnvelope: { attack: 0.01, baseFrequency: 200, octaves: 3 },
+      },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="monoSynth"
+            filter={{ type: 'highpass', frequency: 1200, Q: 4 }}
+            filterEnvelope={{ attack: 0.05, baseFrequency: 400, octaves: 4 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthSet).toHaveBeenCalledWith({
+      filter: { type: 'highpass', frequency: 1200, Q: 4 },
+    });
+    expect(mockPolySynthSet).toHaveBeenCalledWith({
+      filterEnvelope: { attack: 0.05, baseFrequency: 400, octaves: 4 },
+    });
+  });
+
+  it('should pass harmonicity/modulationIndex/resonance/octaves/envelope to metalSynth on construction and live-update', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="metalSynth"
+            harmonicity={3.1}
+            modulationIndex={16}
+            resonance={2000}
+            octaves={1.2}
+            envelope={{ attack: 0.002 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockMetalSynthConstructor).toHaveBeenLastCalledWith({
+      harmonicity: 3.1,
+      modulationIndex: 16,
+      resonance: 2000,
+      octaves: 1.2,
+      envelope: { attack: 0.002 },
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="metalSynth"
+            harmonicity={4}
+            modulationIndex={20}
+            resonance={3000}
+            octaves={2}
+            envelope={{ attack: 0.005 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockMetalSynthSet).toHaveBeenCalledWith({
+      harmonicity: 4,
+      modulationIndex: 20,
+      resonance: 3000,
+      octaves: 2,
+    });
+    expect(mockMetalSynthSet).toHaveBeenCalledWith({
+      envelope: { attack: 0.005 },
+    });
+  });
+
+  it('should pass attackNoise/dampening/resonance to pluckSynth on construction and live-update', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="pluckSynth"
+            attackNoise={2}
+            dampening={3000}
+            resonance={0.9}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPluckSynthConstructor).toHaveBeenLastCalledWith({
+      attackNoise: 2,
+      dampening: 3000,
+      resonance: 0.9,
+    });
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track>
+          <Instrument
+            type="pluckSynth"
+            attackNoise={5}
+            dampening={5000}
+            resonance={0.5}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPluckSynthSet).toHaveBeenLastCalledWith({
+      attackNoise: 5,
+      dampening: 5000,
+      resonance: 0.5,
     });
   });
 });

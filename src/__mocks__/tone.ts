@@ -165,6 +165,7 @@ export class MembraneSynth {
 // ----------------------------------------------------------------------------
 
 export const mockMetalSynthConstructor = jest.fn();
+export const mockMetalSynthSet = jest.fn();
 
 export class MetalSynth {
   constructor(options) {
@@ -175,6 +176,7 @@ export class MetalSynth {
     this.dispose = jest.fn();
     this.chain = jest.fn();
     this.disconnect = jest.fn();
+    this.set = mockMetalSynthSet;
   }
 }
 
@@ -202,6 +204,7 @@ export class NoiseSynth {
 // ----------------------------------------------------------------------------
 
 export const mockPluckSynthConstructor = jest.fn();
+export const mockPluckSynthSet = jest.fn();
 
 export class PluckSynth {
   constructor(options) {
@@ -212,6 +215,7 @@ export class PluckSynth {
     this.dispose = jest.fn();
     this.chain = jest.fn();
     this.disconnect = jest.fn();
+    this.set = mockPluckSynthSet;
   }
 }
 
