@@ -75,11 +75,19 @@ const effectTypes: EffectType[] = [
   'autoPanner',
   'autoWah',
   'bitCrusher',
+  'chebyshev',
   'distortion',
   'feedbackDelay',
   'freeverb',
+  'frequencyShifter',
+  'jcReverb',
   'panVol',
+  'phaser',
+  'pingPongDelay',
+  'pitchShift',
+  'stereoWidener',
   'tremolo',
+  'vibrato',
   'eq3',
 ];
 
@@ -189,6 +197,23 @@ const EFFECT_PROP_CONTROLS: Record<string, RangeControl | SelectControl> = {
     max: 10000,
     step: 100,
   },
+  stages: { type: 'range', label: 'Stages', min: 1, max: 24, step: 1 },
+  width: { type: 'range', label: 'Width', min: 0, max: 1, step: 0.01 },
+  order: { type: 'range', label: 'Order', min: 1, max: 100, step: 1 },
+  pitch: {
+    type: 'range',
+    label: 'Pitch (semitones)',
+    min: -24,
+    max: 24,
+    step: 1,
+  },
+  windowSize: {
+    type: 'range',
+    label: 'Window size (s)',
+    min: 0.01,
+    max: 0.1,
+    step: 0.01,
+  },
 };
 
 const DEFAULT_EFFECT_PROP_VALUES: Omit<EffectProps, 'type' | 'id'> = {
@@ -214,6 +239,13 @@ const DEFAULT_EFFECT_PROP_VALUES: Omit<EffectProps, 'type' | 'id'> = {
   high: 0,
   lowFrequency: 400,
   highFrequency: 2500,
+  stages: 10,
+  width: 0.5,
+  // Tone's own default (1) means "no change" for Chebyshev - a higher
+  // order so the effect is actually audible as soon as it's selected.
+  order: 50,
+  pitch: 0,
+  windowSize: 0.1,
 };
 
 const DEFAULT_INSTRUMENT_PROP_VALUES: Pick<
