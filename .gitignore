@@ -24,3 +24,5 @@ yarn-error.log*
 *.code-workspace
 
 .vscode
+
+.npmrc
