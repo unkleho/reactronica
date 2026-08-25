@@ -8,6 +8,7 @@ import {
   // mockChannelPan,
   mockPolySynthDispose,
   mockSequenceConstructor,
+  mockSequenceDispose,
   mockSequenceSetEvents,
 } from '../__mocks__/tone';
 
@@ -44,11 +45,10 @@ describe('Track', () => {
     // expect(mockChannelVolume).toBeCalledWith(0);
     // expect(mockChannelPan).toBeCalledWith(0);
 
-    // The sequencer is constructed once (subdivision hasn't changed) and
-    // reused across the isPlaying toggle - steps update via its `events`
-    // setter instead, asserted here rather than a second constructor call.
-    expect(mockSequenceConstructor).toBeCalledTimes(1);
-    expect(mockSequenceSetEvents).toHaveBeenLastCalledWith([
+    // The sequencer is reconstructed when isPlaying flips to true, with
+    // whatever steps are current at that point - see Track.tsx for why it
+    // can't just reuse the previous instance and start()/stop() it.
+    expect(mockSequenceConstructor).toBeCalledWith([
       { index: 0, notes: [{ name: 'C3' }] },
       { index: 1, notes: [] },
       { index: 2, notes: [{ name: 'C3' }, { name: 'G3' }] },
@@ -72,6 +72,45 @@ describe('Track', () => {
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockPolySynthDispose).toBeCalledTimes(1);
+  });
+
+  it('should dispose and reconstruct the sequencer on every play, not reuse it across a stop', () => {
+    // Regression test: a Tone.Sequence delegates start()/stop() to an
+    // internal Part whose started/stopped state is an absolute-tick
+    // timeline that's never reset, so reusing one instance across a
+    // stop-then-play cycle silently breaks playback (Transport resets to
+    // tick 0 on stop, and start(0) becomes a no-op against a Part that
+    // already recorded "started at tick 0" from the first play). See
+    // Track.tsx's isPlaying effect for the full explanation.
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSequenceConstructor).toBeCalledTimes(1);
+    expect(mockSequenceDispose).not.toBeCalled();
+
+    rerender(
+      <Song isPlaying={false}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="synth" />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSequenceDispose).toBeCalledTimes(1);
+    expect(mockSequenceConstructor).toBeCalledTimes(2);
   });
 
   it('should update sequencer steps', () => {

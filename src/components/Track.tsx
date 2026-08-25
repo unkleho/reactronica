@@ -73,7 +73,6 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   }>();
   const instrumentsRef = useRef(instruments);
   const onStepPlayRef = useRef(onStepPlay);
-  const isPlayingRef = useRef(isPlaying);
 
   useEffect(() => {
     instrumentsRef.current = instruments;
@@ -82,10 +81,6 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
   useEffect(() => {
     onStepPlayRef.current = onStepPlay;
   }, [onStepPlay]);
-
-  useEffect(() => {
-    isPlayingRef.current = isPlaying;
-  }, [isPlaying]);
 
   /*
   Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
@@ -97,69 +92,73 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     // STEPS
     // -------------------------------------------------------------------------
 
-    // Tone.Sequence's subdivision can only be set at construction time, so
-    // this only (re)constructs when `subdivision` changes - not on every
-    // isPlaying toggle, which instead starts/stops this same instance below.
-    // instruments/onStepPlay are read through refs so this callback never
-    // goes stale, even though it's only created once per subdivision.
-    sequencer.current = new Tone.Sequence(
-      (time, step) => {
-        step.notes.forEach((note) => {
-          const noteTime = note.delay
-            ? time + Tone.Time(note.delay).toSeconds()
-            : time;
-
-          instrumentsRef.current.forEach((instrument) => {
-            // NoiseSynth is unpitched - its triggerAttackRelease is
-            // (duration, time, velocity), with no note name.
-            if (instrument instanceof Tone.NoiseSynth) {
-              instrument.triggerAttackRelease(
-                note.duration || 0.5,
-                noteTime,
-                note.velocity,
-              );
-            } else {
-              instrument.triggerAttackRelease(
-                note.name,
-                note.duration || 0.5,
-                noteTime,
-                note.velocity,
-              );
-            }
-          });
-        });
-
-        if (typeof onStepPlayRef.current === 'function') {
-          onStepPlayRef.current(step.notes, step.index);
-        }
-      },
-      sequencerSteps,
-      subdivision,
-    );
-
-    if (isPlayingRef.current) {
-      sequencer.current.start(0);
-    }
-
-    return function cleanup() {
-      sequencer.current.dispose();
-    };
-    /* eslint-disable-next-line */
-  }, [subdivision]);
-
-  useEffect(() => {
-    // Start/Stop the same sequencer instance - Tone.Sequence's start()/stop()
-    // are idempotent, so no need to check its current state first.
-    if (!sequencer.current) {
-      return;
-    }
-
+    // Start/Stop sequencer!
+    //
+    // A single Tone.Sequence can't be reused across play/stop cycles: it
+    // delegates start()/stop() straight to an internal Tone.Part, which
+    // tracks started/stopped state as an absolute Transport-tick timeline
+    // that's never reset. Song's Transport.stop() resets the Transport's
+    // position back to tick 0 on every stop, so a reused instance's next
+    // start(0) lands on a tick that's already marked "started" from the
+    // very first play - Tone's own guard then skips rescheduling every
+    // note, and nothing plays. Constructing fresh each time this becomes true
+    // sidesteps it entirely, since a new Part has no history. instruments/
+    // onStepPlay are read through refs so this callback can't go stale
+    // between construction and playback.
     if (isPlaying) {
+      if (sequencer.current) {
+        sequencer.current.dispose();
+      }
+
+      sequencer.current = new Tone.Sequence(
+        (time, step) => {
+          step.notes.forEach((note) => {
+            const noteTime = note.delay
+              ? time + Tone.Time(note.delay).toSeconds()
+              : time;
+
+            instrumentsRef.current.forEach((instrument) => {
+              // NoiseSynth is unpitched - its triggerAttackRelease is
+              // (duration, time, velocity), with no note name.
+              if (instrument instanceof Tone.NoiseSynth) {
+                instrument.triggerAttackRelease(
+                  note.duration || 0.5,
+                  noteTime,
+                  note.velocity,
+                );
+              } else {
+                instrument.triggerAttackRelease(
+                  note.name,
+                  note.duration || 0.5,
+                  noteTime,
+                  note.velocity,
+                );
+              }
+            });
+          });
+
+          if (typeof onStepPlayRef.current === 'function') {
+            onStepPlayRef.current(step.notes, step.index);
+          }
+        },
+        sequencerSteps,
+        subdivision,
+      );
+
       sequencer.current.start(0);
-    } else {
+    } else if (sequencer.current) {
       sequencer.current.stop();
     }
+    /* eslint-disable-next-line */
   }, [isPlaying]);
+
+  useEffect(() => {
+    return function cleanup() {
+      if (sequencer.current) {
+        sequencer.current.dispose();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (sequencer.current) {

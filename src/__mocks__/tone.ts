@@ -430,6 +430,7 @@ export class EQ3 {
 
 export const mockSequenceConstructor = jest.fn();
 export const mockSequenceSetEvents = jest.fn();
+export const mockSequenceDispose = jest.fn();
 
 export class Sequence {
   constructor(callback, events) {
@@ -437,7 +438,7 @@ export class Sequence {
 
     this.start = jest.fn();
     this.stop = jest.fn();
-    this.dispose = jest.fn();
+    this.dispose = mockSequenceDispose;
     this._events = events;
   }
 
