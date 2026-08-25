@@ -189,6 +189,7 @@ export class NoiseSynth {
     mockNoiseSynthConstructor(options);
 
     this.triggerAttack = jest.fn();
+    this.triggerAttackRelease = jest.fn();
     this.triggerRelease = jest.fn();
     this.dispose = jest.fn();
     this.chain = jest.fn();
@@ -250,6 +251,8 @@ export class AutoFilter {
     this.wet = {
       value: 1,
     };
+
+    this.dispose = jest.fn();
   }
 
   start() {
@@ -267,6 +270,8 @@ export const mockAutoPannerStart = jest.fn();
 export class AutoPanner {
   constructor(options) {
     mockAutoPannerConstructor(options);
+
+    this.dispose = jest.fn();
   }
 
   start() {
@@ -283,6 +288,8 @@ export const mockAutoWahConstructor = jest.fn();
 export class AutoWah {
   constructor(options) {
     mockAutoWahConstructor(options);
+
+    this.dispose = jest.fn();
   }
 }
 
@@ -295,6 +302,8 @@ export const mockBitCrusherConstructor = jest.fn();
 export class BitCrusher {
   constructor(options) {
     mockBitCrusherConstructor(options);
+
+    this.dispose = jest.fn();
   }
 }
 
@@ -307,6 +316,8 @@ export const mockDistortionConstructor = jest.fn();
 export class Distortion {
   constructor(distortion) {
     mockDistortionConstructor(distortion);
+
+    this.dispose = jest.fn();
   }
 }
 
@@ -327,6 +338,8 @@ export class FeedbackDelay {
     this.delayTime = {
       value: delayTime,
     };
+
+    this.dispose = jest.fn();
   }
 }
 
@@ -339,6 +352,8 @@ export const mockFreeverbConstructor = jest.fn();
 export class Freeverb {
   constructor(options) {
     mockFreeverbConstructor(options);
+
+    this.dispose = jest.fn();
   }
 }
 
@@ -351,6 +366,8 @@ export const mockPanVolConstructor = jest.fn();
 export class PanVol {
   constructor(options) {
     mockPanVolConstructor(options);
+
+    this.dispose = jest.fn();
   }
 }
 
@@ -364,6 +381,8 @@ export const mockTremoloStart = jest.fn();
 export class Tremolo {
   constructor(options) {
     mockTremoloConstructor(options);
+
+    this.dispose = jest.fn();
   }
 
   start() {
@@ -400,6 +419,8 @@ export class EQ3 {
     this.highFrequency = {
       value: 2500,
     };
+
+    this.dispose = jest.fn();
   }
 }
 

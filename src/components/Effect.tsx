@@ -68,6 +68,7 @@ type EffectInstance = {
   // LFO-based effects (autoFilter, autoPanner, tremolo) need this called
   // once after construction or their modulation never actually runs.
   start?: () => void;
+  dispose?: () => void;
   feedback?: {
     value: number;
   };
@@ -250,6 +251,12 @@ const EffectConsumer: React.FC<EffectConsumerProps> = ({
     return () => {
       // console.log('<Effect /> unmount');
       onRemoveFromEffectsChain(effect.current);
+
+      // LFO-based effects (autoFilter, autoPanner, tremolo) leave their
+      // internal clock running otherwise, even once removed from the chain.
+      if (effect.current) {
+        effect.current.dispose();
+      }
     };
     /* eslint-disable-next-line */
   }, [type]);

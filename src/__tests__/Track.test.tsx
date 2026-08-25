@@ -43,7 +43,12 @@ describe('Track', () => {
     // TODO: Fix both of these, still getting called with original values
     // expect(mockChannelVolume).toBeCalledWith(0);
     // expect(mockChannelPan).toBeCalledWith(0);
-    expect(mockSequenceConstructor).toBeCalledWith([
+
+    // The sequencer is constructed once (subdivision hasn't changed) and
+    // reused across the isPlaying toggle - steps update via its `events`
+    // setter instead, asserted here rather than a second constructor call.
+    expect(mockSequenceConstructor).toBeCalledTimes(1);
+    expect(mockSequenceSetEvents).toHaveBeenLastCalledWith([
       { index: 0, notes: [{ name: 'C3' }] },
       { index: 1, notes: [] },
       { index: 2, notes: [{ name: 'C3' }, { name: 'G3' }] },

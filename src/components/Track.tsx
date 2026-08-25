@@ -72,10 +72,20 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     events: unknown[];
   }>();
   const instrumentsRef = useRef(instruments);
+  const onStepPlayRef = useRef(onStepPlay);
+  const isPlayingRef = useRef(isPlaying);
 
   useEffect(() => {
     instrumentsRef.current = instruments;
   }, [instruments]);
+
+  useEffect(() => {
+    onStepPlayRef.current = onStepPlay;
+  }, [onStepPlay]);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
 
   /*
   Tone.Sequence can't easily play chords. By default, arrays within steps are flattened out and subdivided. However an array of notes is our preferred way of representing chords. To get around this, buildSequencerStep() will transform notes and put them in a notes field as an array. We can then loop through and run triggerAttackRelease() to play the note/s.
@@ -87,40 +97,68 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     // STEPS
     // -------------------------------------------------------------------------
 
-    // Start/Stop sequencer!
-    if (isPlaying) {
-      sequencer.current = new Tone.Sequence(
-        (time, step) => {
-          step.notes.forEach((note) => {
-            const noteTime = note.delay
-              ? time + Tone.Time(note.delay).toSeconds()
-              : time;
+    // Tone.Sequence's subdivision can only be set at construction time, so
+    // this only (re)constructs when `subdivision` changes - not on every
+    // isPlaying toggle, which instead starts/stops this same instance below.
+    // instruments/onStepPlay are read through refs so this callback never
+    // goes stale, even though it's only created once per subdivision.
+    sequencer.current = new Tone.Sequence(
+      (time, step) => {
+        step.notes.forEach((note) => {
+          const noteTime = note.delay
+            ? time + Tone.Time(note.delay).toSeconds()
+            : time;
 
-            instrumentsRef.current.forEach((instrument) => {
+          instrumentsRef.current.forEach((instrument) => {
+            // NoiseSynth is unpitched - its triggerAttackRelease is
+            // (duration, time, velocity), with no note name.
+            if (instrument instanceof Tone.NoiseSynth) {
+              instrument.triggerAttackRelease(
+                note.duration || 0.5,
+                noteTime,
+                note.velocity,
+              );
+            } else {
               instrument.triggerAttackRelease(
                 note.name,
                 note.duration || 0.5,
                 noteTime,
                 note.velocity,
               );
-            });
+            }
           });
+        });
 
-          if (typeof onStepPlay === 'function') {
-            onStepPlay(step.notes, step.index);
-          }
-        },
-        sequencerSteps,
-        subdivision,
-      );
+        if (typeof onStepPlayRef.current === 'function') {
+          onStepPlayRef.current(step.notes, step.index);
+        }
+      },
+      sequencerSteps,
+      subdivision,
+    );
 
-      sequencer.current?.start(0);
-    } else {
-      if (sequencer.current) {
-        sequencer.current.stop();
-      }
+    if (isPlayingRef.current) {
+      sequencer.current.start(0);
     }
+
+    return function cleanup() {
+      sequencer.current.dispose();
+    };
     /* eslint-disable-next-line */
+  }, [subdivision]);
+
+  useEffect(() => {
+    // Start/Stop the same sequencer instance - Tone.Sequence's start()/stop()
+    // are idempotent, so no need to check its current state first.
+    if (!sequencer.current) {
+      return;
+    }
+
+    if (isPlaying) {
+      sequencer.current.start(0);
+    } else {
+      sequencer.current.stop();
+    }
   }, [isPlaying]);
 
   useEffect(() => {
@@ -131,14 +169,6 @@ const TrackConsumer: React.FC<TrackConsumerProps> = ({
     }
     /* eslint-disable-next-line */
   }, [JSON.stringify(sequencerSteps)]);
-
-  useEffect(() => {
-    return function cleanup() {
-      if (sequencer.current) {
-        sequencer.current.dispose();
-      }
-    };
-  }, []);
 
   const handleAddToEffectsChain = (effect) => {
     // console.log('<Track />', 'onAddToEffectsChain');

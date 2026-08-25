@@ -78,7 +78,7 @@ export const instrumentConfigs: InstrumentConfig[] = [
     props: ['polyphony', 'oscillatorType', 'envelope'],
     oscillatorTypes: instrumentOscillatorTypes,
   },
-  // { id: 'noiseSynth', name: 'Noise Synth' }, // No sound, disabled for now
+  { id: 'noiseSynth', name: 'Noise Synth', props: [] },
   { id: 'pluckSynth', name: 'Pluck Synth', props: [] },
   { id: 'sampler', name: 'Sampler', props: ['samples'] },
   {

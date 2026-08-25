@@ -364,7 +364,18 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
 
         // Only play note is it isn't already playing
         if (!isPlaying) {
-          if (note.duration) {
+          // NoiseSynth is unpitched - its trigger methods take no note name.
+          if (type === 'noiseSynth') {
+            if (note.duration) {
+              instrumentRef.current.triggerAttackRelease(
+                note.duration,
+                undefined,
+                note.velocity,
+              );
+            } else {
+              instrumentRef.current.triggerAttack(undefined, note.velocity);
+            }
+          } else if (note.duration) {
             instrumentRef.current.triggerAttackRelease(
               note.name,
               note.duration,
@@ -389,10 +400,14 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
           notes && notes.filter((n) => n.name === note.name).length > 0;
 
         if (!isPlaying) {
-          instrumentRef.current.triggerRelease(note.name);
+          if (type === 'noiseSynth') {
+            instrumentRef.current.triggerRelease();
+          } else {
+            instrumentRef.current.triggerRelease(note.name);
+          }
         }
       });
-  }, [notes, prevNotes]);
+  }, [notes, prevNotes, type]);
 
   // -------------------------------------------------------------------------
   // EFFECTS CHAIN
