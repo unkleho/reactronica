@@ -10,14 +10,26 @@ import { EffectType } from '../components/Effect';
  * Names of the <Instrument /> props that a given instrument type actually
  * reads, per the construction logic in components/Instrument.tsx: only the
  * PolySynth-wrapped types and MembraneSynth are built with `oscillator` and
- * `envelope`, only PolySynth-wrapped types get `polyphony`, and only Sampler
- * takes `samples`.
+ * `envelope` (metalSynth also reads `envelope`, despite having no
+ * `oscillator`), only PolySynth-wrapped types get `polyphony`, only Sampler
+ * takes `samples`, only monoSynth reads `filter`/`filterEnvelope`, only
+ * metalSynth reads `harmonicity`/`modulationIndex`/`octaves`, and
+ * `resonance` means something different depending on whether it's read by
+ * metalSynth or pluckSynth - see the doc comment on InstrumentProps.resonance.
  */
 export type InstrumentConfigProp =
   | 'polyphony'
   | 'oscillatorType'
   | 'envelope'
-  | 'samples';
+  | 'samples'
+  | 'filter'
+  | 'filterEnvelope'
+  | 'harmonicity'
+  | 'modulationIndex'
+  | 'resonance'
+  | 'octaves'
+  | 'attackNoise'
+  | 'dampening';
 
 export interface InstrumentConfig {
   id: InstrumentType;
@@ -71,15 +83,35 @@ export const instrumentConfigs: InstrumentConfig[] = [
     props: ['oscillatorType', 'envelope'],
     oscillatorTypes: instrumentOscillatorTypes,
   },
-  { id: 'metalSynth', name: 'Metal Synth', props: [] },
+  {
+    id: 'metalSynth',
+    name: 'Metal Synth',
+    props: [
+      'envelope',
+      'harmonicity',
+      'modulationIndex',
+      'resonance',
+      'octaves',
+    ],
+  },
   {
     id: 'monoSynth',
     name: 'Mono Synth',
-    props: ['polyphony', 'oscillatorType', 'envelope'],
+    props: [
+      'polyphony',
+      'oscillatorType',
+      'envelope',
+      'filter',
+      'filterEnvelope',
+    ],
     oscillatorTypes: instrumentOscillatorTypes,
   },
   { id: 'noiseSynth', name: 'Noise Synth', props: [] },
-  { id: 'pluckSynth', name: 'Pluck Synth', props: [] },
+  {
+    id: 'pluckSynth',
+    name: 'Pluck Synth',
+    props: ['attackNoise', 'dampening', 'resonance'],
+  },
   { id: 'sampler', name: 'Sampler', props: ['samples'] },
   {
     id: 'synth',

@@ -12,6 +12,10 @@ export {
   InstrumentOscillator,
   InstrumentOscillatorType,
   instrumentOscillatorTypes,
+  InstrumentFilterType,
+  InstrumentFilterRolloff,
+  instrumentFilterTypes,
+  instrumentFilterRolloffs,
 } from './components/Instrument';
 export {
   default as Effect,

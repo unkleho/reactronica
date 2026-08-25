@@ -75,6 +75,40 @@ export type InstrumentOscillator =
 
 export type InstrumentOscillatorType = InstrumentOscillator['type'];
 
+/** monoSynth's filter type - the standard BiquadFilterNode types Tone.Filter supports. */
+export type InstrumentFilterType =
+  | 'lowpass'
+  | 'highpass'
+  | 'bandpass'
+  | 'notch'
+  | 'allpass'
+  | 'peaking'
+  | 'lowshelf'
+  | 'highshelf';
+
+/** monoSynth's filter rolloff, in dB/octave - the only slopes a BiquadFilterNode-based filter can produce. */
+export type InstrumentFilterRolloff = -12 | -24 | -48 | -96;
+
+/** Every value InstrumentFilterType allows, for config/UI code enumerating them at runtime. */
+export const instrumentFilterTypes: InstrumentFilterType[] = [
+  'lowpass',
+  'highpass',
+  'bandpass',
+  'notch',
+  'allpass',
+  'peaking',
+  'lowshelf',
+  'highshelf',
+];
+
+/** Every value InstrumentFilterRolloff allows, for config/UI code enumerating them at runtime. */
+export const instrumentFilterRolloffs: InstrumentFilterRolloff[] = [
+  -12,
+  -24,
+  -48,
+  -96,
+];
+
 /**
  * Every value InstrumentOscillatorType allows, for config/UI code that needs
  * to enumerate them at runtime (e.g. a waveform picker). Kept next to the
@@ -118,6 +152,43 @@ export interface InstrumentProps {
   samples?: {
     [key in MidiNote]?: string;
   };
+  /** monoSynth only - the filter that shapes its oscillator, modulated by filterEnvelope. */
+  filter?: {
+    type?: InstrumentFilterType;
+    frequency?: number;
+    Q?: number;
+    rolloff?: InstrumentFilterRolloff;
+    gain?: number;
+  };
+  /**
+   * monoSynth only - ramps filter.frequency between filterEnvelope.baseFrequency
+   * and baseFrequency * 2^octaves, the same way envelope shapes volume.
+   */
+  filterEnvelope?: {
+    attack?: number;
+    decay?: number;
+    sustain?: number;
+    release?: number;
+    baseFrequency?: number;
+    octaves?: number;
+    exponent?: number;
+  };
+  /** metalSynth only - ratio between its oscillators' frequencies. */
+  harmonicity?: number;
+  /** metalSynth only - the amount of frequency modulation. */
+  modulationIndex?: number;
+  /**
+   * metalSynth: the lower bound (Hz) of the highpass filter attached to its envelope.
+   * pluckSynth: the amount of resonance/sustain of the pluck (0-1) - Tone uses the
+   * same prop name for both, but the two are otherwise unrelated.
+   */
+  resonance?: number;
+  /** metalSynth only - the highpass filter's range above resonance, in octaves. */
+  octaves?: number;
+  /** pluckSynth only - the amount of noise at the attack. */
+  attackNoise?: number;
+  /** pluckSynth only - the lowpass filter frequency (Hz) of its comb filter. */
+  dampening?: number;
   mute?: boolean;
   solo?: boolean;
   /** TODO: Type properly and consider loading status */
@@ -165,6 +236,14 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   polyphony = 4,
   oscillator,
   envelope,
+  filter,
+  filterEnvelope,
+  harmonicity,
+  modulationIndex,
+  resonance,
+  octaves,
+  attackNoise,
+  dampening,
   notes = [],
   samples,
   onLoad,
@@ -226,11 +305,21 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         }),
       );
     } else if (type === 'metalSynth') {
-      instrumentRef.current = new Tone.MetalSynth();
+      instrumentRef.current = new Tone.MetalSynth(
+        withDefined({
+          harmonicity,
+          modulationIndex,
+          resonance,
+          octaves,
+          envelope,
+        }),
+      );
     } else if (type === 'noiseSynth') {
       instrumentRef.current = new Tone.NoiseSynth();
     } else if (type === 'pluckSynth') {
-      instrumentRef.current = (new Tone.PluckSynth() as unknown) as InstrumentInstance;
+      instrumentRef.current = (new Tone.PluckSynth(
+        withDefined({ attackNoise, dampening, resonance }),
+      ) as unknown) as InstrumentInstance;
     } else {
       let synth;
 
@@ -266,6 +355,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
           ? buildDuoSynthVoiceOptions(
               buildSynthOptions({ oscillator, envelope }),
             )
+          : type === 'monoSynth'
+          ? buildSynthOptions({ oscillator, envelope, filter, filterEnvelope })
           : buildSynthOptions({ oscillator, envelope })) as any,
       });
     }
@@ -308,8 +399,12 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   }, [oscillator, type]);
 
   useEffect(() => {
+    // metalSynth has no top-level `oscillator`, but does have `envelope` -
+    // included here rather than in the shared array above, which also
+    // gates the oscillator effect this one's grouped with.
     if (
-      SUPPORTS_LIVE_OSCILLATOR_AND_ENVELOPE_UPDATE.includes(type) &&
+      (SUPPORTS_LIVE_OSCILLATOR_AND_ENVELOPE_UPDATE.includes(type) ||
+        type === 'metalSynth') &&
       instrumentRef &&
       instrumentRef.current &&
       envelope
@@ -321,6 +416,47 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       );
     }
   }, [envelope, type]);
+
+  useEffect(() => {
+    if (type === 'monoSynth' && instrumentRef.current && filter) {
+      instrumentRef.current.set({ filter });
+    }
+  }, [filter, type]);
+
+  useEffect(() => {
+    if (type === 'monoSynth' && instrumentRef.current && filterEnvelope) {
+      instrumentRef.current.set({ filterEnvelope });
+    }
+  }, [filterEnvelope, type]);
+
+  useEffect(() => {
+    if (
+      type === 'metalSynth' &&
+      instrumentRef.current &&
+      (typeof harmonicity !== 'undefined' ||
+        typeof modulationIndex !== 'undefined' ||
+        typeof resonance !== 'undefined' ||
+        typeof octaves !== 'undefined')
+    ) {
+      instrumentRef.current.set(
+        withDefined({ harmonicity, modulationIndex, resonance, octaves }),
+      );
+    }
+  }, [harmonicity, modulationIndex, resonance, octaves, type]);
+
+  useEffect(() => {
+    if (
+      type === 'pluckSynth' &&
+      instrumentRef.current &&
+      (typeof attackNoise !== 'undefined' ||
+        typeof dampening !== 'undefined' ||
+        typeof resonance !== 'undefined')
+    ) {
+      instrumentRef.current.set(
+        withDefined({ attackNoise, dampening, resonance }),
+      );
+    }
+  }, [attackNoise, dampening, resonance, type]);
 
   // -------------------------------------------------------------------------
   // VOLUME / PAN / MUTE / SOLO
@@ -499,6 +635,14 @@ const Instrument: React.FC<InstrumentProps> = ({
   polyphony,
   oscillator,
   envelope,
+  filter,
+  filterEnvelope,
+  harmonicity,
+  modulationIndex,
+  resonance,
+  octaves,
+  attackNoise,
+  dampening,
   samples,
   onLoad,
 }) => {
@@ -524,6 +668,14 @@ const Instrument: React.FC<InstrumentProps> = ({
       polyphony={polyphony}
       oscillator={oscillator}
       envelope={envelope}
+      filter={filter}
+      filterEnvelope={filterEnvelope}
+      harmonicity={harmonicity}
+      modulationIndex={modulationIndex}
+      resonance={resonance}
+      octaves={octaves}
+      attackNoise={attackNoise}
+      dampening={dampening}
       samples={samples}
       onLoad={onLoad}
       // <Track /> Props
@@ -538,13 +690,42 @@ const Instrument: React.FC<InstrumentProps> = ({
 };
 
 /**
+ * Tone's constructors apply their own defaults for any field left out of a
+ * partial options object, so this strips `undefined` entries rather than
+ * hardcoding a value here that might drift from Tone's actual default.
+ */
+function withDefined<T extends object>(fields: T): Partial<T> {
+  const defined: Partial<T> = {};
+
+  (Object.keys(fields) as (keyof T)[]).forEach((key) => {
+    if (typeof fields[key] !== 'undefined') {
+      defined[key] = fields[key];
+    }
+  });
+
+  return defined;
+}
+
+/**
  * Use Instrument's flattened synth props to create options object for Tone JS
  */
-const buildSynthOptions = ({ oscillator, envelope }) => {
-  if (oscillator || envelope) {
+const buildSynthOptions = ({
+  oscillator,
+  envelope,
+  filter,
+  filterEnvelope,
+}: {
+  oscillator?: InstrumentOscillator;
+  envelope?: InstrumentProps['envelope'];
+  filter?: InstrumentProps['filter'];
+  filterEnvelope?: InstrumentProps['filterEnvelope'];
+}) => {
+  if (oscillator || envelope || filter || filterEnvelope) {
     return {
       ...(envelope ? { envelope } : {}),
       ...(oscillator ? { oscillator } : {}),
+      ...(filter ? { filter } : {}),
+      ...(filterEnvelope ? { filterEnvelope } : {}),
     };
   }
 
