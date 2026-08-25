@@ -124,7 +124,12 @@ export type EffectConfigProp =
   | 'mid'
   | 'high'
   | 'lowFrequency'
-  | 'highFrequency';
+  | 'highFrequency'
+  | 'stages'
+  | 'width'
+  | 'order'
+  | 'pitch'
+  | 'windowSize';
 
 export interface EffectConfig {
   id: EffectType;
@@ -152,6 +157,11 @@ export const effectConfigs: EffectConfig[] = [
     props: ['wet', 'baseFrequency', 'octaves', 'sensitivity', 'Q'],
   },
   { id: 'bitCrusher', name: 'Bit Crusher', props: ['wet', 'bits'] },
+  {
+    id: 'chebyshev',
+    name: 'Chebyshev',
+    props: ['wet', 'order'],
+  },
   // { id: 'chorus', name: 'Chorus' },
   { id: 'distortion', name: 'Distortion', props: ['wet', 'distortion'] },
   {
@@ -164,13 +174,57 @@ export const effectConfigs: EffectConfig[] = [
     name: 'Freeverb',
     props: ['wet', 'roomSize', 'dampening'],
   },
+  {
+    id: 'frequencyShifter',
+    name: 'Frequency Shifter',
+    props: ['wet', 'frequency'],
+  },
+  {
+    id: 'jcReverb',
+    name: 'JC Reverb',
+    props: ['wet', 'roomSize'],
+  },
   // Tone.PanVol has no wet/dry mix - see the EffectConfigProp doc comment.
   { id: 'panVol', name: 'Volume/Pan', props: ['pan', 'volume'] },
+  {
+    id: 'phaser',
+    name: 'Phaser',
+    props: [
+      'wet',
+      'frequency',
+      'depth',
+      'lfoType',
+      'baseFrequency',
+      'octaves',
+      'Q',
+      'stages',
+    ],
+  },
+  {
+    id: 'pingPongDelay',
+    name: 'Ping Pong Delay',
+    props: ['wet', 'delayTime', 'feedback'],
+  },
+  {
+    id: 'pitchShift',
+    name: 'Pitch Shift',
+    props: ['wet', 'pitch', 'windowSize', 'delayTime', 'feedback'],
+  },
   // { id: 'reverb', name: 'Reverb' },
+  {
+    id: 'stereoWidener',
+    name: 'Stereo Widener',
+    props: ['wet', 'width'],
+  },
   {
     id: 'tremolo',
     name: 'Tremolo',
     props: ['wet', 'frequency', 'depth', 'lfoType', 'spread'],
+  },
+  {
+    id: 'vibrato',
+    name: 'Vibrato',
+    props: ['wet', 'frequency', 'depth', 'lfoType'],
   },
   // --------------------------------------------------------------------------
   // Tone JS Components
