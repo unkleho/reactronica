@@ -426,7 +426,10 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // -------------------------------------------------------------------------
   // SAMPLES
   // Run whenever `samples` change, using Tone.Sampler's `add` method to load
-  // more samples after initial mount
+  // more samples after initial mount. Tone.Sampler (and the ToneAudioBuffers
+  // it wraps) has no API to actually forget a loaded buffer - `_buffers` is a
+  // plain additive Map with no public delete - so a key that disappears from
+  // `samples` is "removed" by overwriting it with a silent buffer instead.
   // TODO: Check if first mount, as sampler constructor has already loaded samples
   // -------------------------------------------------------------------------
 
@@ -449,11 +452,9 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       );
 
       // Samples to remove
-      // const removeSampleKeys = prevSampleKeys.filter(
-      //   (key) => !sampleKeys.includes(key),
-      // );
-
-      // console.log(addSampleKeys, removeSampleKeys);
+      const removeSampleKeys = prevSampleKeys.filter(
+        (key) => !sampleKeys.includes(key),
+      );
 
       if (addSampleKeys.length) {
         // Create an array of promises from `samples`
@@ -479,11 +480,18 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
             onLoad(event);
           }
         });
+      }
 
-        // TODO: Work out a way to remove samples. Below doesn't work
-        // removeSampleKeys.forEach((key) => {
-        //   instrumentRef.current.add(key, null);
-        // });
+      if (removeSampleKeys.length) {
+        // A zero-length buffer is built synchronously (no network/decode
+        // wait, unlike `add()` above with a url), so this silences the note
+        // immediately rather than the old, non-working `add(key, null)`.
+        removeSampleKeys.forEach((key) => {
+          instrumentRef.current.add(
+            key,
+            Tone.ToneAudioBuffer.fromArray(new Float32Array([0])),
+          );
+        });
       }
     }
     /* eslint-disable-next-line */

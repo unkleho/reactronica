@@ -216,6 +216,21 @@ export class PluckSynth {
 }
 
 // ----------------------------------------------------------------------------
+// Tone.ToneAudioBuffer
+// ----------------------------------------------------------------------------
+
+export const mockToneAudioBufferFromArray = jest.fn();
+export const SILENT_BUFFER = 'SILENT_BUFFER';
+
+export class ToneAudioBuffer {
+  static fromArray(array) {
+    mockToneAudioBufferFromArray(array);
+
+    return SILENT_BUFFER;
+  }
+}
+
+// ----------------------------------------------------------------------------
 // Tone.Sampler
 // ----------------------------------------------------------------------------
 

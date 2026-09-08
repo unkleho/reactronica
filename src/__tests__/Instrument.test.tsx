@@ -16,6 +16,7 @@ import {
   mockSamplerDispose,
   mockPolySynthSet,
   mockSamplerAdd,
+  SILENT_BUFFER,
 } from '../__mocks__/tone';
 
 beforeEach(() => {
@@ -97,7 +98,8 @@ describe('Instrument', () => {
       </Song>,
     );
 
-    // TODO: Figure out what to do in this scenario
+    // C3 drops out here (replaced by E3) - Tone.Sampler has no way to
+    // actually forget a loaded buffer, so it should be silenced instead.
     rerender(
       <Song isPlaying={true}>
         <Track steps={['C3']}>
@@ -124,6 +126,7 @@ describe('Instrument', () => {
       '../audio/file3.mp3',
       expect.any(Function),
     );
+    expect(mockSamplerAdd).toHaveBeenNthCalledWith(3, 'C3', SILENT_BUFFER);
   });
 
   it('should trigger and release note', () => {
