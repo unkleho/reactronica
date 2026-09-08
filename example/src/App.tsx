@@ -236,7 +236,7 @@ const DEFAULT_INSTRUMENT_PROP_VALUES: Pick<
   // A longer decay/release than Tone's plucky default so the synth
   // sequencer's chord stabs ring out and overlap a little into the next
   // chord, rather than cutting off abruptly.
-  envelope: { attack: 0.01, decay: 0.2, sustain: 0.4, release: 0.6 },
+  envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.3 },
 };
 
 function App() {
@@ -263,7 +263,7 @@ function App() {
   const [synthSeqEffectPropValues, setSynthSeqEffectPropValues] = useState(
     DEFAULT_EFFECT_PROP_VALUES,
   );
-  const [synthSeqVolume, setSynthSeqVolume] = useState(0);
+  const [synthSeqVolume, setSynthSeqVolume] = useState(-12);
   const [synthSeqPan, setSynthSeqPan] = useState(0);
   const [drumEffectType, setDrumEffectType] = useState<EffectType | ''>('');
   const [drumEffectPropValues, setDrumEffectPropValues] = useState(
@@ -279,13 +279,8 @@ function App() {
   const drumTrackSteps: StepType[] = Array.from(
     { length: DRUM_STEP_COUNT },
     (_, stepIndex) => {
-      // Gate on drumLaneSounds too, not just the click pattern: reactronica's
-      // sampler can add a sample after mount but can't remove one (see its
-      // Instrument.tsx TODO), so a lane cleared back to '' would otherwise
-      // keep playing whatever sample it last had loaded.
       const activeNotes = DRUM_NOTES.filter(
-        (_, laneIndex) =>
-          drumLaneSounds[laneIndex] !== '' && drumPattern[laneIndex][stepIndex],
+        (_, laneIndex) => drumPattern[laneIndex][stepIndex],
       );
 
       if (activeNotes.length === 0) {
