@@ -8,9 +8,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "lucide-react": "^1.45.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "reactronica": "file:.."
+    "reactronica": "file:..",
+    "tonal": "^6.4.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

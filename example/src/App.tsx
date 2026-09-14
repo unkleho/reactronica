@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Chord, Note, Interval, Scale } from 'tonal';
 import {
   Song,
   Track,
@@ -10,19 +11,25 @@ import {
   EffectProps,
   EffectConfig,
   InstrumentType,
-  InstrumentProps,
   InstrumentConfig,
   MidiNote,
   config,
 } from 'reactronica';
 import './App.css';
+import { subdivisions, DEFAULT_EFFECT_PROP_VALUES } from './effectControls';
+import DrumControls from './DrumControls';
+import SynthControls from './SynthControls';
+import { DEFAULT_INSTRUMENT_PROP_VALUES } from './instrumentDefaults';
+import StepSequencer from './StepSequencer';
+import ChordSlotInput from './ChordSlotInput';
+import Icon from './Icon';
 
 const snareSample = '/snare-top-off17.wav';
 const kickSample = '/st2_kick_one_shot_low_punch_basic.wav';
 
-// Editable drum machine grid, driving the sampler Track below. Each lane is a
-// fixed MIDI note slot; which sample (if any) is loaded at that note is
-// picked per-lane via a dropdown (see `drumLaneSounds` state).
+// Every drum part shares this fixed lane layout - which sample (if any) is
+// loaded at each lane is picked per-lane via a dropdown (see `laneSounds` on
+// DrumPart below).
 const DRUM_STEP_COUNT = 16;
 const DRUM_NOTES: MidiNote[] = ['C3', 'D3'];
 
@@ -41,9 +48,8 @@ const DEFAULT_DRUM_PATTERN: boolean[][] = DRUM_NOTES.map((_, laneIndex) =>
   ),
 );
 
-// Editable synth step grid, driving its own additional synth Track below -
-// same style as the drum grid above, but each lane is a note of one octave
-// (rendered high to low, like a piano roll) rather than a different voice.
+// Every synth part shares this fixed lane layout - one octave, rendered high
+// to low like a piano roll.
 const SYNTH_STEP_COUNT = 16;
 const SYNTH_LANES: MidiNote[] = [
   'B4',
@@ -60,334 +66,531 @@ const SYNTH_LANES: MidiNote[] = [
   'C4',
 ];
 
-// A darker i-VI-iv-V turnaround in C minor - Cm7, Abmaj7, Fm7, G7(b9) - one
-// chord stab per beat. The minor tonic and altered dominant (5th dropped,
-// b9 added) give it more tension than a major cadence; close-position
-// voicings within the single available octave, so the sequencer makes sound
-// immediately rather than starting silent, and loops cleanly since the V
-// resolves straight back into the i. (Eb/Ab/Bb spelled as D#/G#/A# - MidiNote
-// only supports sharps.)
-const DEFAULT_SYNTH_CHORDS: { step: number; notes: MidiNote[] }[] = [
-  { step: 0, notes: ['C4', 'D#4', 'G4', 'A#4'] }, // Cm7 (i)
-  { step: 4, notes: ['G#4', 'C4', 'D#4', 'G4'] }, // Abmaj7 (VI)
-  { step: 8, notes: ['F4', 'G#4', 'C4', 'D#4'] }, // Fm7 (iv)
-  { step: 12, notes: ['G4', 'B4', 'F4', 'G#4'] }, // G7(b9) (V)
-];
-const DEFAULT_SYNTH_PATTERN: boolean[][] = SYNTH_LANES.map((note) =>
-  Array.from({ length: SYNTH_STEP_COUNT }, (_, stepIndex) =>
-    DEFAULT_SYNTH_CHORDS.some(
-      (chord) => chord.step === stepIndex && chord.notes.includes(note),
-    ),
-  ),
+function createEmptyPattern(laneCount: number, stepCount: number): boolean[][] {
+  return Array.from({ length: laneCount }, () =>
+    Array.from({ length: stepCount }, () => false),
+  );
+}
+
+// Sharp-only spelling to match MidiNote, indexed by Tonal's pitch chroma
+// (0 = C, 1 = C#, ... 11 = B) - sidesteps flat vs sharp spelling entirely,
+// since a chord like Abmaj7 comes back from Tonal as ["Ab", "C", "Eb", "G"].
+const CHROMATIC_SHARP_NAMES = [
+  'C',
+  'C#',
+  'D',
+  'D#',
+  'E',
+  'F',
+  'F#',
+  'G',
+  'G#',
+  'A',
+  'A#',
+  'B',
+] as const;
+
+// Looks up a chord symbol (e.g. "Cm7", "G7b9") via Tonal and folds its notes
+// onto the synth sequencer's fixed single-octave lane layout. An unrecognised
+// symbol resolves to no notes rather than throwing.
+function chordSymbolToLaneNotes(symbol: string): MidiNote[] {
+  return Chord.get(symbol).notes.map(
+    (pitchClass) =>
+      `${CHROMATIC_SHARP_NAMES[Note.chroma(pitchClass)]}4` as MidiNote,
+  );
+}
+
+// Spreads a chord progression evenly across the pattern's steps - one stab
+// per chord, not sustained - and loops cleanly since the last chord leads
+// back into the first on repeat.
+function buildChordProgressionPattern(
+  chordSymbols: string[],
+  stepCount: number,
+): boolean[][] {
+  const pattern = createEmptyPattern(SYNTH_LANES.length, stepCount);
+
+  if (chordSymbols.length === 0) {
+    return pattern;
+  }
+
+  const stepsPerChord = Math.max(
+    1,
+    Math.floor(stepCount / chordSymbols.length),
+  );
+
+  chordSymbols.forEach((symbol, chordIndex) => {
+    const stepIndex = chordIndex * stepsPerChord;
+
+    if (stepIndex >= stepCount) {
+      return;
+    }
+
+    chordSymbolToLaneNotes(symbol).forEach((note) => {
+      const laneIndex = SYNTH_LANES.indexOf(note);
+
+      if (laneIndex !== -1) {
+        pattern[laneIndex][stepIndex] = true;
+      }
+    });
+  });
+
+  return pattern;
+}
+
+// A darker i-VI-iv-V turnaround in C minor - the minor tonic and altered
+// dominant (5th dropped, b9 added) give it more tension than a major
+// cadence, and it loops cleanly since the V resolves straight back into the i.
+const DEFAULT_SYNTH_CHORD_PROGRESSION = ['Cm7', 'Abmaj7', 'Fm7', 'G7b9'];
+const DEFAULT_SYNTH_PATTERN: boolean[][] = buildChordProgressionPattern(
+  DEFAULT_SYNTH_CHORD_PROGRESSION,
+  SYNTH_STEP_COUNT,
 );
 
-const effectTypes: EffectType[] = [
-  'autoFilter',
-  'autoPanner',
-  'autoWah',
-  'bitCrusher',
-  'distortion',
-  'feedbackDelay',
-  'freeverb',
-  'panVol',
-  'tremolo',
-  'eq3',
-];
+// The synth sequencer is split into four chord slots (one text box each,
+// above the grid) - each spanning an equal share of the steps, anchored at
+// its first step.
+const CHORD_SLOT_COUNT = 4;
+const STEPS_PER_CHORD_SLOT = SYNTH_STEP_COUNT / CHORD_SLOT_COUNT;
 
-// Shared by both the step subdivision and swing subdivision dropdowns.
-const subdivisions = ['4n', '8n', '16n', '8t', '16t'];
+function chordSlotAnchorStep(slotIndex: number): number {
+  return slotIndex * STEPS_PER_CHORD_SLOT;
+}
 
-// Excludes 'sampler' - that type belongs to the dedicated sampler Track below.
-const synthTypes: InstrumentType[] = [
-  'amSynth',
-  'duoSynth',
-  'fmSynth',
-  'membraneSynth',
-  'metalSynth',
-  'monoSynth',
-  'noiseSynth',
-  'pluckSynth',
-  'synth',
-];
+// The reverse of chordSymbolToLaneNotes - given the notes actually active in
+// the sequencer (e.g. after the user toggles a step by hand), names the
+// chord they form so a chord slot's input can stay in sync either way.
+//
+// Chord.detect treats the first note it's given as the assumed bass, so the
+// same set of notes can come back as a plain chord or a slash chord purely
+// based on incidental ordering - and SYNTH_LANES lists lanes high-to-low for
+// display, not root-first. Sorting by actual pitch first means the note
+// Chord.detect assumes is the bass really is the lowest-sounding one, which
+// at least gives a consistent, principled answer (though since every chord
+// here is voiced within one fixed octave, a chord's tones don't always land
+// with its true root as the lowest note - so an inversion can still surface
+// as an enharmonic alternative rather than the exact symbol typed in).
+function detectChordLabel(notes: MidiNote[]): string {
+  if (notes.length === 0) {
+    return '';
+  }
 
-type RangeControl = {
-  type: 'range';
-  label: string;
-  min: number;
-  max: number;
-  step: number;
-};
-
-type SelectControl = {
-  type: 'select';
-  label: string;
-  options: string[];
-};
-
-/**
- * How to render each <Effect /> prop that config.effectConfigs lists as
- * applicable to a given effect type - every EffectConfigProp maps to a
- * single numeric or enum value, unlike <Instrument />'s 'envelope' and
- * 'oscillatorType', which are nested/dynamic and rendered inline below
- * instead of through this generic map.
- */
-const EFFECT_PROP_CONTROLS: Record<string, RangeControl | SelectControl> = {
-  wet: { type: 'range', label: 'Wet', min: 0, max: 1, step: 0.01 },
-  frequency: {
-    type: 'range',
-    label: 'Frequency (Hz)',
-    min: 0.1,
-    max: 20,
-    step: 0.1,
-  },
-  depth: { type: 'range', label: 'Depth', min: 0, max: 1, step: 0.01 },
-  lfoType: {
-    type: 'select',
-    label: 'LFO type',
-    options: ['sine', 'square', 'triangle', 'sawtooth'],
-  },
-  baseFrequency: {
-    type: 'range',
-    label: 'Base frequency (Hz)',
-    min: 20,
-    max: 2000,
-    step: 10,
-  },
-  octaves: { type: 'range', label: 'Octaves', min: 0.5, max: 8, step: 0.5 },
-  sensitivity: {
-    type: 'range',
-    label: 'Sensitivity (dB)',
-    min: -40,
-    max: 0,
-    step: 1,
-  },
-  Q: { type: 'range', label: 'Q', min: 0.1, max: 20, step: 0.1 },
-  bits: { type: 'range', label: 'Bits', min: 1, max: 16, step: 1 },
-  distortion: {
-    type: 'range',
-    label: 'Distortion',
-    min: 0,
-    max: 1,
-    step: 0.01,
-  },
-  feedback: { type: 'range', label: 'Feedback', min: 0, max: 1, step: 0.01 },
-  delayTime: { type: 'select', label: 'Delay time', options: subdivisions },
-  roomSize: { type: 'range', label: 'Room size', min: 0, max: 1, step: 0.01 },
-  dampening: {
-    type: 'range',
-    label: 'Dampening (Hz)',
-    min: 100,
-    max: 8000,
-    step: 100,
-  },
-  spread: { type: 'range', label: 'Spread (deg)', min: 0, max: 180, step: 1 },
-  pan: { type: 'range', label: 'Pan', min: -1, max: 1, step: 0.01 },
-  volume: { type: 'range', label: 'Volume (dB)', min: -40, max: 6, step: 1 },
-  low: { type: 'range', label: 'Low (dB)', min: -24, max: 24, step: 1 },
-  mid: { type: 'range', label: 'Mid (dB)', min: -24, max: 24, step: 1 },
-  high: { type: 'range', label: 'High (dB)', min: -24, max: 24, step: 1 },
-  lowFrequency: {
-    type: 'range',
-    label: 'Low frequency (Hz)',
-    min: 20,
-    max: 2000,
-    step: 10,
-  },
-  highFrequency: {
-    type: 'range',
-    label: 'High frequency (Hz)',
-    min: 1000,
-    max: 10000,
-    step: 100,
-  },
-};
-
-const DEFAULT_EFFECT_PROP_VALUES: Omit<EffectProps, 'type' | 'id'> = {
-  wet: 1,
-  frequency: 1,
-  depth: 1,
-  lfoType: 'sine',
-  baseFrequency: 200,
-  octaves: 3,
-  sensitivity: 0,
-  Q: 2,
-  bits: 4,
-  distortion: 0.5,
-  feedback: 0.5,
-  delayTime: '8n',
-  roomSize: 0.7,
-  dampening: 3000,
-  spread: 180,
-  pan: 0,
-  volume: 0,
-  low: 0,
-  mid: 0,
-  high: 0,
-  lowFrequency: 400,
-  highFrequency: 2500,
-};
-
-const DEFAULT_INSTRUMENT_PROP_VALUES: Pick<
-  InstrumentProps,
-  'polyphony' | 'oscillator' | 'envelope'
-> = {
-  polyphony: 4,
-  oscillator: undefined,
-  // A longer decay/release than Tone's plucky default so the synth
-  // sequencer's chord stabs ring out and overlap a little into the next
-  // chord, rather than cutting off abruptly.
-  envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.3 },
-};
-
-function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [drumLaneSounds, setDrumLaneSounds] = useState<(DrumSoundId | '')[]>(
-    DEFAULT_DRUM_LANE_SOUNDS,
+  const sortedByPitch = [...notes].sort(
+    (a, b) => Note.midi(a)! - Note.midi(b)!,
   );
-  const [drumPattern, setDrumPattern] = useState<boolean[][]>(
-    DEFAULT_DRUM_PATTERN,
-  );
-  const [drumStepIndex, setDrumStepIndex] = useState<number | null>(null);
-  const [synthPattern, setSynthPattern] = useState<boolean[][]>(
-    DEFAULT_SYNTH_PATTERN,
-  );
-  const [synthStepIndex, setSynthStepIndex] = useState<number | null>(null);
-  const [synthSeqType, setSynthSeqType] = useState<InstrumentType>('synth');
-  const [
-    synthSeqInstrumentPropValues,
-    setSynthSeqInstrumentPropValues,
-  ] = useState(DEFAULT_INSTRUMENT_PROP_VALUES);
-  const [synthSeqEffectType, setSynthSeqEffectType] = useState<EffectType | ''>(
-    '',
-  );
-  const [synthSeqEffectPropValues, setSynthSeqEffectPropValues] = useState(
-    DEFAULT_EFFECT_PROP_VALUES,
-  );
-  const [synthSeqVolume, setSynthSeqVolume] = useState(-12);
-  const [synthSeqPan, setSynthSeqPan] = useState(0);
-  const [drumEffectType, setDrumEffectType] = useState<EffectType | ''>('');
-  const [drumEffectPropValues, setDrumEffectPropValues] = useState(
-    DEFAULT_EFFECT_PROP_VALUES,
-  );
-  const [drumVolume, setDrumVolume] = useState(0);
-  const [drumPan, setDrumPan] = useState(0);
-  const [volume, setVolume] = useState(0);
-  const [swing, setSwing] = useState(0);
-  const [swingSubdivision, setSwingSubdivision] = useState('8n');
-  const [bpm, setBpm] = useState(70);
-
-  const drumTrackSteps: StepType[] = Array.from(
-    { length: DRUM_STEP_COUNT },
-    (_, stepIndex) => {
-      const activeNotes = DRUM_NOTES.filter(
-        (_, laneIndex) => drumPattern[laneIndex][stepIndex],
-      );
-
-      if (activeNotes.length === 0) {
-        return null;
-      }
-
-      return activeNotes.length === 1 ? activeNotes[0] : activeNotes;
-    },
+  const [bestMatch] = Chord.detect(
+    sortedByPitch.map((note) => Note.pitchClass(note)),
   );
 
-  // Only lanes with a sound picked contribute a sample - an empty lane's note
-  // is left unmapped, so triggering it plays nothing.
-  const drumSamples: Record<string, string> = Object.fromEntries(
-    DRUM_NOTES.map((note, laneIndex) => [note, drumLaneSounds[laneIndex]])
+  return bestMatch ?? '';
+}
+
+// Every root, major and minor - e.g. "C", "Cm", "C#", "C#m", ... - offered by
+// the header's Key select.
+const KEYS = CHROMATIC_SHARP_NAMES.flatMap((root) => [root, `${root}m`]);
+
+// A classic ii-V-I-vi turnaround, used as the seed progression for new synth
+// parts when the selected key is major.
+const MAJOR_KEY_PROGRESSION = ['Dm7', 'G7', 'Cmaj7', 'Am7'];
+
+function parseKey(key: string): { root: string; isMinor: boolean } {
+  const isMinor = key.endsWith('m');
+  return { root: isMinor ? key.slice(0, -1) : key, isMinor };
+}
+
+// Both canonical progressions above are written in C (major/minor) - this
+// transposes whichever one applies onto the selected key's root, so e.g.
+// picking "Gm" yields the same darker turnaround shape a fifth up.
+function progressionForKey(key: string): string[] {
+  const { root, isMinor } = parseKey(key);
+  const baseProgression = isMinor
+    ? DEFAULT_SYNTH_CHORD_PROGRESSION
+    : MAJOR_KEY_PROGRESSION;
+  const interval = Interval.distance('C', root);
+
+  return baseProgression.map((chordSymbol) =>
+    Chord.transpose(chordSymbol, interval),
+  );
+}
+
+// Chromas (0-11) of every note in the selected key's scale - used to
+// highlight the synth sequencer's in-key lanes.
+function scaleChromasForKey(key: string): Set<number> {
+  const { root, isMinor } = parseKey(key);
+
+  return new Set(
+    Scale.get(`${root} ${isMinor ? 'minor' : 'major'}`).notes.map((note) =>
+      Note.chroma(note),
+    ),
+  );
+}
+
+type PartKind = 'drum' | 'synth';
+
+interface PartBase {
+  id: string;
+  name: string;
+  pattern: boolean[][];
+  volume: number;
+  pan: number;
+  muted: boolean;
+  soloed: boolean;
+  effectType: EffectType | '';
+  effectPropValues: typeof DEFAULT_EFFECT_PROP_VALUES;
+}
+
+interface DrumPart extends PartBase {
+  kind: 'drum';
+  laneSounds: (DrumSoundId | '')[];
+}
+
+interface SynthPart extends PartBase {
+  kind: 'synth';
+  instrumentType: InstrumentType;
+  instrumentPropValues: typeof DEFAULT_INSTRUMENT_PROP_VALUES;
+}
+
+type Part = DrumPart | SynthPart;
+
+// Every Track is driven by a fixed lane layout (drum lanes or a synth
+// octave), so the note->StepType folding logic is shared across kinds -
+// only which lane list is passed in differs.
+function computeTrackSteps(
+  lanes: MidiNote[],
+  pattern: boolean[][],
+): StepType[] {
+  const stepCount = pattern[0]?.length ?? 0;
+
+  return Array.from({ length: stepCount }, (_, stepIndex) => {
+    const activeNotes = lanes.filter(
+      (_, laneIndex) => pattern[laneIndex][stepIndex],
+    );
+
+    if (activeNotes.length === 0) {
+      return null;
+    }
+
+    return activeNotes.length === 1 ? activeNotes[0] : activeNotes;
+  });
+}
+
+// Only lanes with a sound picked contribute a sample - an empty lane's note
+// is left unmapped, so triggering it plays nothing.
+function computeDrumSamples(
+  laneSounds: (DrumSoundId | '')[],
+): Record<string, string> {
+  return Object.fromEntries(
+    DRUM_NOTES.map((note, laneIndex) => [note, laneSounds[laneIndex]])
       .filter((entry): entry is [MidiNote, DrumSoundId] => entry[1] !== '')
       .map(([note, soundId]) => [
         note,
         DRUM_SOUNDS.find((sound) => sound.id === soundId)!.sample,
       ]),
   );
+}
 
-  function updateDrumLaneSound(laneIndex: number, soundId: DrumSoundId | '') {
-    setDrumLaneSounds((prev) =>
-      prev.map((current, index) => (index === laneIndex ? soundId : current)),
+const DEFAULT_PARTS: Part[] = [
+  {
+    id: 'part-1',
+    kind: 'drum',
+    name: 'Drum 1',
+    laneSounds: DEFAULT_DRUM_LANE_SOUNDS,
+    pattern: DEFAULT_DRUM_PATTERN,
+    volume: 0,
+    pan: 0,
+    muted: false,
+    soloed: false,
+    effectType: '',
+    effectPropValues: DEFAULT_EFFECT_PROP_VALUES,
+  },
+  {
+    id: 'part-2',
+    kind: 'synth',
+    name: 'Synth 1',
+    pattern: DEFAULT_SYNTH_PATTERN,
+    instrumentType: 'synth',
+    instrumentPropValues: DEFAULT_INSTRUMENT_PROP_VALUES,
+    volume: -12,
+    pan: 0,
+    muted: false,
+    soloed: false,
+    effectType: '',
+    effectPropValues: DEFAULT_EFFECT_PROP_VALUES,
+  },
+];
+
+function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [parts, setParts] = useState<Part[]>(DEFAULT_PARTS);
+  const [selectedPartId, setSelectedPartId] = useState('part-1');
+  const [stepIndexes, setStepIndexes] = useState<Record<string, number | null>>(
+    {},
+  );
+  const [collapsedPartIds, setCollapsedPartIds] = useState<Set<string>>(
+    new Set(),
+  );
+  const [chordSlotLabels, setChordSlotLabels] = useState<
+    Record<string, string[]>
+  >({ 'part-2': DEFAULT_SYNTH_CHORD_PROGRESSION });
+  const nextPartNumberRef = useRef(3);
+
+  const [volume, setVolume] = useState(0);
+  const [swing, setSwing] = useState(0);
+  const [swingSubdivision, setSwingSubdivision] = useState('8n');
+  const [bpm, setBpm] = useState(70);
+  const [songKey, setSongKey] = useState('Cm');
+
+  function updatePart(id: string, updater: (part: Part) => Part) {
+    setParts((prev) =>
+      prev.map((part) => (part.id === id ? updater(part) : part)),
     );
   }
 
-  function toggleDrumStep(laneIndex: number, stepIndex: number) {
-    setDrumPattern((prev) =>
-      prev.map((lane, currentLaneIndex) =>
-        currentLaneIndex === laneIndex
-          ? lane.map((active, laneStepIndex) =>
-              laneStepIndex === stepIndex ? !active : active,
-            )
-          : lane,
-      ),
-    );
+  function addPart(kind: PartKind) {
+    const id = `part-${nextPartNumberRef.current++}`;
+    const countOfKind = parts.filter((part) => part.kind === kind).length;
+    const name = `${kind === 'drum' ? 'Drum' : 'Synth'} ${countOfKind + 1}`;
+
+    const newPart: Part =
+      kind === 'drum'
+        ? {
+            id,
+            kind: 'drum',
+            name,
+            laneSounds: DEFAULT_DRUM_LANE_SOUNDS,
+            pattern: createEmptyPattern(DRUM_NOTES.length, DRUM_STEP_COUNT),
+            volume: 0,
+            pan: 0,
+            muted: false,
+            soloed: false,
+            effectType: '',
+            effectPropValues: DEFAULT_EFFECT_PROP_VALUES,
+          }
+        : {
+            id,
+            kind: 'synth',
+            name,
+            pattern: buildChordProgressionPattern(
+              progressionForKey(songKey),
+              SYNTH_STEP_COUNT,
+            ),
+            instrumentType: 'synth',
+            instrumentPropValues: DEFAULT_INSTRUMENT_PROP_VALUES,
+            volume: -12,
+            pan: 0,
+            muted: false,
+            soloed: false,
+            effectType: '',
+            effectPropValues: DEFAULT_EFFECT_PROP_VALUES,
+          };
+
+    if (kind === 'synth') {
+      setChordSlotLabels((prev) => ({
+        ...prev,
+        [id]: progressionForKey(songKey),
+      }));
+    }
+
+    setParts((prev) => [...prev, newPart]);
+    setSelectedPartId(id);
   }
 
-  const synthTrackSteps: StepType[] = Array.from(
-    { length: SYNTH_STEP_COUNT },
-    (_, stepIndex) => {
-      const activeNotes = SYNTH_LANES.filter(
-        (_, laneIndex) => synthPattern[laneIndex][stepIndex],
-      );
-
-      if (activeNotes.length === 0) {
-        return null;
+  function removePart(id: string) {
+    setParts((prev) => prev.filter((part) => part.id !== id));
+    setStepIndexes((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setChordSlotLabels((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setSelectedPartId((prev) => {
+      if (prev !== id) {
+        return prev;
       }
 
-      return activeNotes.length === 1 ? activeNotes[0] : activeNotes;
-    },
-  );
+      const remaining = parts.filter((part) => part.id !== id);
+      return remaining[0]?.id ?? '';
+    });
+  }
 
-  function toggleSynthStep(laneIndex: number, stepIndex: number) {
-    setSynthPattern((prev) =>
-      prev.map((lane, currentLaneIndex) =>
-        currentLaneIndex === laneIndex
-          ? lane.map((active, laneStepIndex) =>
-              laneStepIndex === stepIndex ? !active : active,
-            )
-          : lane,
-      ),
+  // Typing a chord symbol into a slot writes its notes into the pattern at
+  // that slot's anchor step - the reverse of detectChordLabel, which keeps
+  // the slot's displayed text in sync when the notes change some other way
+  // (manual step toggles below).
+  function commitChordSlot(id: string, slotIndex: number, chordSymbol: string) {
+    setChordSlotLabels((prev) => {
+      const labels = [...(prev[id] ?? Array(CHORD_SLOT_COUNT).fill(''))];
+      labels[slotIndex] = chordSymbol;
+      return { ...prev, [id]: labels };
+    });
+
+    const laneNotes = new Set(chordSymbolToLaneNotes(chordSymbol));
+
+    if (laneNotes.size === 0) {
+      return;
+    }
+
+    const stepIndex = chordSlotAnchorStep(slotIndex);
+
+    updatePart(id, (part) =>
+      part.kind === 'synth'
+        ? {
+            ...part,
+            pattern: part.pattern.map((lane, laneIndex) =>
+              lane.map((active, currentStepIndex) =>
+                currentStepIndex === stepIndex
+                  ? laneNotes.has(SYNTH_LANES[laneIndex])
+                  : active,
+              ),
+            ),
+          }
+        : part,
     );
   }
 
-  const synthSeqInstrumentConfig = config.instrumentConfigs.find(
-    (instrument: InstrumentConfig) => instrument.id === synthSeqType,
-  );
-  const synthSeqEffectConfig = synthSeqEffectType
-    ? config.effectConfigs.find(
-        (effect: EffectConfig) => effect.id === synthSeqEffectType,
-      )
-    : undefined;
+  function togglePartStep(id: string, laneIndex: number, stepIndex: number) {
+    const part = parts.find((candidate) => candidate.id === id);
 
-  const drumEffectConfig = drumEffectType
-    ? config.effectConfigs.find(
-        (effect: EffectConfig) => effect.id === drumEffectType,
-      )
-    : undefined;
-
-  useEffect(() => {
-    if (!isPlaying) {
-      setDrumStepIndex(null);
-      setSynthStepIndex(null);
+    if (!part) {
+      return;
     }
-  }, [isPlaying]);
+
+    const nextPattern = part.pattern.map((lane, currentLaneIndex) =>
+      currentLaneIndex === laneIndex
+        ? lane.map((active, laneStepIndex) =>
+            laneStepIndex === stepIndex ? !active : active,
+          )
+        : lane,
+    );
+
+    updatePart(id, (current) => ({ ...current, pattern: nextPattern }));
+
+    // Only a slot's own anchor step defines its chord - toggling any other
+    // step doesn't change what that slot represents, so leave every other
+    // slot's label untouched (recomputing them all here would spuriously
+    // re-label chords whose notes never actually changed - Chord.detect can
+    // pick a different, enharmonically-equivalent name for the exact same
+    // notes on every call, see detectChordLabel).
+    if (part.kind !== 'synth' || stepIndex % STEPS_PER_CHORD_SLOT !== 0) {
+      return;
+    }
+
+    const activeNotes = SYNTH_LANES.filter(
+      (_, currentLaneIndex) => nextPattern[currentLaneIndex][stepIndex],
+    );
+    const slotIndex = stepIndex / STEPS_PER_CHORD_SLOT;
+
+    setChordSlotLabels((prev) => {
+      const labels = [...(prev[id] ?? Array(CHORD_SLOT_COUNT).fill(''))];
+      labels[slotIndex] = detectChordLabel(activeNotes);
+      return { ...prev, [id]: labels };
+    });
+  }
+
+  function updateDrumLaneSound(
+    id: string,
+    laneIndex: number,
+    soundId: DrumSoundId | '',
+  ) {
+    updatePart(id, (part) =>
+      part.kind === 'drum'
+        ? {
+            ...part,
+            laneSounds: part.laneSounds.map((current, index) =>
+              index === laneIndex ? soundId : current,
+            ),
+          }
+        : part,
+    );
+  }
 
   // Clears a selected oscillator waveform that isn't valid for the newly
   // selected instrument (e.g. switching to amSynth while 'amsine' is picked -
   // amSynth's oscillatorTypes excludes its own am- family, see config).
-  useEffect(() => {
-    const validTypes = synthSeqInstrumentConfig?.oscillatorTypes;
-    const currentType = synthSeqInstrumentPropValues.oscillator?.type;
+  function updateSynthPartType(id: string, instrumentType: InstrumentType) {
+    updatePart(id, (part) => {
+      if (part.kind !== 'synth') {
+        return part;
+      }
 
-    if (
-      currentType &&
-      validTypes &&
-      !(validTypes as string[]).includes(currentType)
-    ) {
-      setSynthSeqInstrumentPropValues((prev) => ({
-        ...prev,
-        oscillator: undefined,
-      }));
+      const validTypes = config.instrumentConfigs.find(
+        (instrument: InstrumentConfig) => instrument.id === instrumentType,
+      )?.oscillatorTypes as string[] | undefined;
+      const currentOscillatorType = part.instrumentPropValues.oscillator?.type;
+      const oscillatorStillValid =
+        currentOscillatorType && validTypes?.includes(currentOscillatorType);
+
+      return {
+        ...part,
+        instrumentType,
+        instrumentPropValues: oscillatorStillValid
+          ? part.instrumentPropValues
+          : { ...part.instrumentPropValues, oscillator: undefined },
+      };
+    });
+  }
+
+  function toggleCollapse(id: string) {
+    setCollapsedPartIds((prev) => {
+      const next = new Set(prev);
+
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+
+      return next;
+    });
+  }
+
+  function toggleMute(id: string) {
+    updatePart(id, (part) => ({ ...part, muted: !part.muted }));
+  }
+
+  function toggleSolo(id: string) {
+    updatePart(id, (part) => ({ ...part, soloed: !part.soloed }));
+  }
+
+  function updatePartEffectProp<Key extends keyof EffectProps>(
+    id: string,
+    key: Key,
+    value: EffectProps[Key],
+  ) {
+    updatePart(id, (part) => ({
+      ...part,
+      effectPropValues: { ...part.effectPropValues, [key]: value },
+    }));
+  }
+
+  const selectedPart = parts.find((part) => part.id === selectedPartId);
+  const selectedEffectConfig = selectedPart?.effectType
+    ? config.effectConfigs.find(
+        (effect: EffectConfig) => effect.id === selectedPart.effectType,
+      )
+    : undefined;
+  const selectedInstrumentConfig =
+    selectedPart?.kind === 'synth'
+      ? config.instrumentConfigs.find(
+          (instrument: InstrumentConfig) =>
+            instrument.id === selectedPart.instrumentType,
+        )
+      : undefined;
+
+  const anyPartSoloed = parts.some((part) => part.soloed);
+
+  const synthScaleChromas = scaleChromasForKey(songKey);
+  const isSynthLaneInKey = (laneIndex: number) =>
+    synthScaleChromas.has(Note.chroma(SYNTH_LANES[laneIndex]));
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setStepIndexes({});
     }
-    /* eslint-disable-next-line */
-  }, [synthSeqType]);
+  }, [isPlaying]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -411,201 +614,9 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  function updateSynthSeqEffectProp<Key extends keyof EffectProps>(
-    key: Key,
-    value: EffectProps[Key],
-  ) {
-    setSynthSeqEffectPropValues((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function updateDrumEffectProp<Key extends keyof EffectProps>(
-    key: Key,
-    value: EffectProps[Key],
-  ) {
-    setDrumEffectPropValues((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function renderEffectPropControl(
-    propName: string,
-    values: typeof DEFAULT_EFFECT_PROP_VALUES,
-    onChange: <Key extends keyof EffectProps>(
-      key: Key,
-      value: EffectProps[Key],
-    ) => void,
-  ) {
-    const propControl = EFFECT_PROP_CONTROLS[propName];
-
-    if (!propControl) {
-      return null;
-    }
-
-    const value = values[propName as keyof typeof values];
-
-    return (
-      <label key={propName} className="flex flex-col gap-1">
-        {propControl.label}
-        {propControl.type === 'select' ? (
-          <select
-            value={value as string}
-            onChange={(event) =>
-              onChange(
-                propName as keyof EffectProps,
-                event.target.value as never,
-              )
-            }
-          >
-            {propControl.options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type="range"
-            min={propControl.min}
-            max={propControl.max}
-            step={propControl.step}
-            value={value as number}
-            onChange={(event) =>
-              onChange(
-                propName as keyof EffectProps,
-                Number(event.target.value) as never,
-              )
-            }
-          />
-        )}
-      </label>
-    );
-  }
-
-  function renderEffectParamsPanel(
-    effectConfigForType: EffectConfig | undefined,
-    values: typeof DEFAULT_EFFECT_PROP_VALUES,
-    onChange: <Key extends keyof EffectProps>(
-      key: Key,
-      value: EffectProps[Key],
-    ) => void,
-  ) {
-    if (!effectConfigForType) {
-      return null;
-    }
-
-    return (
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4 w-[90vw] max-w-240 text-base text-left">
-        <p className="col-span-full m-0 font-bold capitalize">
-          {effectConfigForType.name} params
-        </p>
-        {effectConfigForType.props.map((propName: string) =>
-          renderEffectPropControl(propName, values, onChange),
-        )}
-      </div>
-    );
-  }
-
-  function renderInstrumentParamsPanel(
-    instrumentConfigForType: InstrumentConfig | undefined,
-    values: typeof DEFAULT_INSTRUMENT_PROP_VALUES,
-    onChange: React.Dispatch<
-      React.SetStateAction<typeof DEFAULT_INSTRUMENT_PROP_VALUES>
-    >,
-  ) {
-    if (!instrumentConfigForType) {
-      return null;
-    }
-
-    return (
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4 w-[90vw] max-w-240 text-base text-left">
-        <p className="col-span-full m-0 font-bold capitalize">
-          {instrumentConfigForType.name} params
-        </p>
-
-        {instrumentConfigForType.props.includes('polyphony') && (
-          <label className="flex flex-col gap-1">
-            Polyphony
-            <input
-              type="range"
-              min={1}
-              max={16}
-              step={1}
-              value={values.polyphony}
-              onChange={(event) =>
-                onChange((prev) => ({
-                  ...prev,
-                  polyphony: Number(event.target.value),
-                }))
-              }
-            />
-          </label>
-        )}
-
-        {instrumentConfigForType.props.includes('oscillatorType') && (
-          <label className="flex flex-col gap-1">
-            Oscillator type
-            <select
-              value={values.oscillator?.type || ''}
-              onChange={(event) =>
-                onChange((prev) => ({
-                  ...prev,
-                  oscillator: event.target.value
-                    ? // Cast needed since InstrumentOscillator is a
-                      // discriminated union keyed on `type` with params
-                      // specific to each waveform family (e.g. `count`
-                      // only applies to fat* types) - not expressible
-                      // from a single flat <select>.
-                      ({
-                        type: event.target.value,
-                      } as InstrumentProps['oscillator'])
-                    : undefined,
-                }))
-              }
-            >
-              <option value="">(instrument default)</option>
-              {instrumentConfigForType.oscillatorTypes?.map(
-                (oscillatorType: string) => (
-                  <option key={oscillatorType} value={oscillatorType}>
-                    {oscillatorType}
-                  </option>
-                ),
-              )}
-            </select>
-          </label>
-        )}
-
-        {instrumentConfigForType.props.includes('envelope') && (
-          <>
-            {(['attack', 'decay', 'sustain', 'release'] as const).map(
-              (stage) => (
-                <label key={stage} className="flex flex-col gap-1">
-                  Envelope {stage}
-                  <input
-                    type="range"
-                    min={0}
-                    max={stage === 'sustain' ? 1 : 2}
-                    step={0.01}
-                    value={values.envelope![stage]}
-                    onChange={(event) =>
-                      onChange((prev) => ({
-                        ...prev,
-                        envelope: {
-                          ...prev.envelope,
-                          [stage]: Number(event.target.value),
-                        },
-                      }))
-                    }
-                  />
-                </label>
-              ),
-            )}
-          </>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div className="text-center">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-6 py-3 bg-[#1c1f26] border-b border-white/10 text-white text-base">
+    <div className="grid grid-rows-[auto_1fr_auto] h-screen">
+      <header className="flex flex-wrap items-center gap-x-6 gap-y-3 px-6 py-3 bg-[#1c1f26] border-b border-white/10 text-white text-base">
         <button type="button" onClick={() => setIsPlaying(!isPlaying)}>
           {isPlaying ? 'Stop' : 'Play'}
         </button>
@@ -658,208 +669,292 @@ function App() {
             ))}
           </select>
         </label>
-      </div>
+        <label className="flex items-center gap-2">
+          Key
+          <select
+            value={songKey}
+            onChange={(event) => setSongKey(event.target.value)}
+          >
+            {KEYS.map((key) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+        </label>
+      </header>
 
-      <div className="px-6 py-4 bg-[#20242c] border-b border-white/10 text-white text-base">
-        <div className="flex flex-col gap-2 w-[90vw] max-w-240 mx-auto">
-          <p className="text-left text-sm font-bold uppercase tracking-wide text-white/60">
-            Drum sequencer
-          </p>
-          {DRUM_NOTES.map((note, laneIndex) => (
-            <div key={note} className="flex items-center gap-3">
-              <select
-                value={drumLaneSounds[laneIndex]}
-                onChange={(event) =>
-                  updateDrumLaneSound(
-                    laneIndex,
-                    event.target.value as DrumSoundId | '',
-                  )
-                }
-                className="w-20 shrink-0"
-              >
-                <option value="">—</option>
-                {DRUM_SOUNDS.map((sound) => (
-                  <option key={sound.id} value={sound.id}>
-                    {sound.label}
-                  </option>
-                ))}
-              </select>
-              <div className="flex gap-1">
-                {drumPattern[laneIndex].map((active, stepIndex) => (
+      <main className="min-h-0 overflow-y-auto bg-[#282c34] text-white">
+        {parts.map((part) => (
+          <div
+            key={part.id}
+            className="px-6 py-4 bg-[#20242c] border-b border-white/10 text-base"
+          >
+            <div className="flex flex-col gap-2 w-[90vw] max-w-240 mx-auto">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
                   <button
-                    key={stepIndex}
                     type="button"
-                    aria-pressed={active}
-                    aria-label={`Lane ${laneIndex + 1} step ${stepIndex + 1}`}
-                    onClick={() => toggleDrumStep(laneIndex, stepIndex)}
+                    onClick={() => toggleCollapse(part.id)}
+                    aria-label={
+                      collapsedPartIds.has(part.id)
+                        ? `Expand ${part.name}`
+                        : `Collapse ${part.name}`
+                    }
+                    className="w-4 flex items-center justify-center text-white/40 hover:text-white/80"
+                  >
+                    <Icon
+                      name={
+                        collapsedPartIds.has(part.id) ? 'expand' : 'collapse'
+                      }
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleMute(part.id)}
+                    aria-pressed={part.muted}
+                    aria-label={`Mute ${part.name}`}
                     className={[
-                      'w-6 h-6 rounded',
-                      active ? 'bg-[#61dafb]' : 'bg-white/10 hover:bg-white/20',
-                      stepIndex === drumStepIndex ? 'ring-2 ring-white' : '',
-                      stepIndex !== 0 && stepIndex % 4 === 0 ? 'ml-2' : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                  />
-                ))}
+                      'w-7 h-6 rounded flex items-center justify-center',
+                      part.muted
+                        ? 'bg-yellow-500 text-black'
+                        : 'bg-white/10 hover:bg-white/20',
+                    ].join(' ')}
+                  >
+                    <Icon name="mute" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleSolo(part.id)}
+                    aria-pressed={part.soloed}
+                    aria-label={`Solo ${part.name}`}
+                    className={[
+                      'w-7 h-6 rounded flex items-center justify-center',
+                      part.soloed
+                        ? 'bg-[#61dafb] text-black'
+                        : 'bg-white/10 hover:bg-white/20',
+                    ].join(' ')}
+                  >
+                    <Icon name="solo" />
+                  </button>
+                  <p className="text-left text-sm font-bold uppercase tracking-wide text-white/60">
+                    {part.name}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removePart(part.id)}
+                  aria-label={`Remove ${part.name}`}
+                  className="w-6 h-6 flex items-center justify-center text-white/40 hover:text-white/80"
+                >
+                  <Icon name="remove" />
+                </button>
               </div>
-            </div>
-          ))}
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-2">
-            <label className="flex items-center gap-2">
-              Volume
-              <input
-                type="range"
-                min={-40}
-                max={6}
-                step={1}
-                value={drumVolume}
-                onChange={(event) => setDrumVolume(Number(event.target.value))}
-                className="w-[120px]"
-              />
-            </label>
-            <label className="flex items-center gap-2">
-              Pan
-              <input
-                type="range"
-                min={-1}
-                max={1}
-                step={0.01}
-                value={drumPan}
-                onChange={(event) => setDrumPan(Number(event.target.value))}
-                className="w-[120px]"
-              />
-            </label>
-            <label className="flex items-center gap-2">
-              Effect
-              <select
-                value={drumEffectType}
-                onChange={(event) =>
-                  setDrumEffectType(event.target.value as EffectType | '')
-                }
-              >
-                <option value="">No effect</option>
-                {effectTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
+              {!collapsedPartIds.has(part.id) &&
+                (part.kind === 'drum' ? (
+                  <StepSequencer
+                    pattern={part.pattern}
+                    currentStepIndex={stepIndexes[part.id] ?? null}
+                    onToggleStep={(laneIndex, stepIndex) =>
+                      togglePartStep(part.id, laneIndex, stepIndex)
+                    }
+                    laneKey={(laneIndex) => DRUM_NOTES[laneIndex]}
+                    ariaLabel={(laneIndex, stepIndex) =>
+                      `${part.name} lane ${laneIndex + 1} step ${stepIndex + 1}`
+                    }
+                    renderLaneLabel={(laneIndex) => (
+                      <select
+                        value={part.laneSounds[laneIndex]}
+                        onChange={(event) =>
+                          updateDrumLaneSound(
+                            part.id,
+                            laneIndex,
+                            event.target.value as DrumSoundId | '',
+                          )
+                        }
+                        className="w-20 shrink-0"
+                      >
+                        <option value="">—</option>
+                        {DRUM_SOUNDS.map((sound) => (
+                          <option key={sound.id} value={sound.id}>
+                            {sound.label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  />
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3">
+                      {/* Matches a step row's lane-label column so the chord
+                      slots below line up with the four-step groups they
+                      drive. */}
+                      <div className="w-20 shrink-0" />
+                      <div className="flex gap-1">
+                        {Array.from(
+                          { length: CHORD_SLOT_COUNT },
+                          (_, slotIndex) => (
+                            <ChordSlotInput
+                              key={slotIndex}
+                              label={`Chord ${slotIndex + 1}`}
+                              value={
+                                chordSlotLabels[part.id]?.[slotIndex] ?? ''
+                              }
+                              onCommit={(chordSymbol) =>
+                                commitChordSlot(part.id, slotIndex, chordSymbol)
+                              }
+                              className={slotIndex !== 0 ? 'ml-2' : ''}
+                            />
+                          ),
+                        )}
+                      </div>
+                    </div>
+                    <StepSequencer
+                      pattern={part.pattern}
+                      currentStepIndex={stepIndexes[part.id] ?? null}
+                      onToggleStep={(laneIndex, stepIndex) =>
+                        togglePartStep(part.id, laneIndex, stepIndex)
+                      }
+                      laneKey={(laneIndex) => SYNTH_LANES[laneIndex]}
+                      ariaLabel={(laneIndex, stepIndex) =>
+                        `${part.name} ${
+                          SYNTH_LANES[laneIndex]
+                        } step ${stepIndex + 1}`
+                      }
+                      isLaneInKey={isSynthLaneInKey}
+                      renderLaneLabel={(laneIndex) => (
+                        <span
+                          className={[
+                            'w-20 shrink-0 text-left',
+                            isSynthLaneInKey(laneIndex) ? '' : 'text-white/30',
+                          ].join(' ')}
+                        >
+                          {SYNTH_LANES[laneIndex]}
+                        </span>
+                      )}
+                    />
+                  </>
                 ))}
-              </select>
-            </label>
+            </div>
           </div>
+        ))}
 
-          {renderEffectParamsPanel(
-            drumEffectConfig,
-            drumEffectPropValues,
-            updateDrumEffectProp,
+        <div className="px-6 py-4 flex gap-2">
+          <button
+            type="button"
+            onClick={() => addPart('drum')}
+            className="px-3 py-1 rounded bg-white/10 hover:bg-white/20"
+          >
+            + Drum part
+          </button>
+          <button
+            type="button"
+            onClick={() => addPart('synth')}
+            className="px-3 py-1 rounded bg-white/10 hover:bg-white/20"
+          >
+            + Synth part
+          </button>
+        </div>
+      </main>
+
+      <footer className="min-w-0 border-t border-white/10 bg-[#1c1f26] text-white text-base">
+        <div className="flex gap-2 px-6 pt-3">
+          {parts.map((part) => (
+            <button
+              key={part.id}
+              type="button"
+              onClick={() => setSelectedPartId(part.id)}
+              className={[
+                'px-3 py-1 rounded',
+                selectedPartId === part.id
+                  ? 'bg-white/20 font-bold'
+                  : 'bg-white/5',
+              ].join(' ')}
+            >
+              {part.name}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex min-w-0 flex-nowrap items-start gap-x-6 gap-y-2 px-6 py-3 overflow-x-auto">
+          {selectedPart?.kind === 'drum' && (
+            <DrumControls
+              volume={selectedPart.volume}
+              onVolumeChange={(value) =>
+                updatePart(selectedPart.id, (part) => ({
+                  ...part,
+                  volume: value,
+                }))
+              }
+              pan={selectedPart.pan}
+              onPanChange={(value) =>
+                updatePart(selectedPart.id, (part) => ({ ...part, pan: value }))
+              }
+              effectType={selectedPart.effectType}
+              onEffectTypeChange={(value) =>
+                updatePart(selectedPart.id, (part) => ({
+                  ...part,
+                  effectType: value,
+                }))
+              }
+              effectPropValues={selectedPart.effectPropValues}
+              onEffectPropChange={(key, value) =>
+                updatePartEffectProp(selectedPart.id, key, value)
+              }
+              effectConfig={selectedEffectConfig}
+            />
+          )}
+
+          {selectedPart?.kind === 'synth' && (
+            <SynthControls
+              synthType={selectedPart.instrumentType}
+              onSynthTypeChange={(type) =>
+                updateSynthPartType(selectedPart.id, type)
+              }
+              instrumentConfig={selectedInstrumentConfig}
+              instrumentPropValues={selectedPart.instrumentPropValues}
+              onInstrumentPropValuesChange={(update) =>
+                updatePart(selectedPart.id, (part) => {
+                  if (part.kind !== 'synth') {
+                    return part;
+                  }
+
+                  const nextValues =
+                    typeof update === 'function'
+                      ? update(part.instrumentPropValues)
+                      : update;
+
+                  return { ...part, instrumentPropValues: nextValues };
+                })
+              }
+              volume={selectedPart.volume}
+              onVolumeChange={(value) =>
+                updatePart(selectedPart.id, (part) => ({
+                  ...part,
+                  volume: value,
+                }))
+              }
+              pan={selectedPart.pan}
+              onPanChange={(value) =>
+                updatePart(selectedPart.id, (part) => ({ ...part, pan: value }))
+              }
+              effectType={selectedPart.effectType}
+              onEffectTypeChange={(value) =>
+                updatePart(selectedPart.id, (part) => ({
+                  ...part,
+                  effectType: value,
+                }))
+              }
+              effectPropValues={selectedPart.effectPropValues}
+              onEffectPropChange={(key, value) =>
+                updatePartEffectProp(selectedPart.id, key, value)
+              }
+              effectConfig={selectedEffectConfig}
+            />
           )}
         </div>
-      </div>
-
-      <div className="px-6 py-4 bg-[#20242c] border-b border-white/10 text-white text-base">
-        <div className="flex flex-col gap-2 w-[90vw] max-w-240 mx-auto">
-          <p className="text-left text-sm font-bold uppercase tracking-wide text-white/60">
-            Synth sequencer
-          </p>
-          {SYNTH_LANES.map((note, laneIndex) => (
-            <div key={note} className="flex items-center gap-3">
-              <span className="w-14 shrink-0 text-left">{note}</span>
-              <div className="flex gap-1">
-                {synthPattern[laneIndex].map((active, stepIndex) => (
-                  <button
-                    key={stepIndex}
-                    type="button"
-                    aria-pressed={active}
-                    aria-label={`${note} step ${stepIndex + 1}`}
-                    onClick={() => toggleSynthStep(laneIndex, stepIndex)}
-                    className={[
-                      'w-6 h-6 rounded',
-                      active ? 'bg-[#61dafb]' : 'bg-white/10 hover:bg-white/20',
-                      stepIndex === synthStepIndex ? 'ring-2 ring-white' : '',
-                      stepIndex !== 0 && stepIndex % 4 === 0 ? 'ml-2' : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-2">
-            <label className="flex items-center gap-2">
-              Synth type
-              <select
-                value={synthSeqType}
-                onChange={(event) =>
-                  setSynthSeqType(event.target.value as InstrumentType)
-                }
-              >
-                {synthTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex items-center gap-2">
-              Volume
-              <input
-                type="range"
-                min={-40}
-                max={6}
-                step={1}
-                value={synthSeqVolume}
-                onChange={(event) =>
-                  setSynthSeqVolume(Number(event.target.value))
-                }
-                className="w-[120px]"
-              />
-            </label>
-            <label className="flex items-center gap-2">
-              Pan
-              <input
-                type="range"
-                min={-1}
-                max={1}
-                step={0.01}
-                value={synthSeqPan}
-                onChange={(event) => setSynthSeqPan(Number(event.target.value))}
-                className="w-[120px]"
-              />
-            </label>
-            <label className="flex items-center gap-2">
-              Effect
-              <select
-                value={synthSeqEffectType}
-                onChange={(event) =>
-                  setSynthSeqEffectType(event.target.value as EffectType | '')
-                }
-              >
-                <option value="">No effect</option>
-                {effectTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          {renderInstrumentParamsPanel(
-            synthSeqInstrumentConfig,
-            synthSeqInstrumentPropValues,
-            setSynthSeqInstrumentPropValues,
-          )}
-
-          {renderEffectParamsPanel(
-            synthSeqEffectConfig,
-            synthSeqEffectPropValues,
-            updateSynthSeqEffectProp,
-          )}
-        </div>
-      </div>
+      </footer>
 
       <Song
         isPlaying={isPlaying}
@@ -868,38 +963,49 @@ function App() {
         swing={swing}
         swingSubdivision={swingSubdivision}
       >
-        <Track
-          steps={synthTrackSteps}
-          subdivision="16n"
-          volume={synthSeqVolume}
-          pan={synthSeqPan}
-          onStepPlay={(_stepNotes: StepNoteType[], index: number) =>
-            setSynthStepIndex(index)
-          }
-        >
-          <Instrument
-            type={synthSeqType}
-            {...synthSeqInstrumentPropValues}
-          ></Instrument>
-          {synthSeqEffectType && (
-            <Effect type={synthSeqEffectType} {...synthSeqEffectPropValues} />
-          )}
-        </Track>
-
-        <Track
-          steps={drumTrackSteps}
-          subdivision="16n"
-          volume={drumVolume}
-          pan={drumPan}
-          onStepPlay={(_stepNotes: StepNoteType[], index: number) =>
-            setDrumStepIndex(index)
-          }
-        >
-          <Instrument type="sampler" samples={drumSamples}></Instrument>
-          {drumEffectType && (
-            <Effect type={drumEffectType} {...drumEffectPropValues} />
-          )}
-        </Track>
+        {parts.map((part) =>
+          part.kind === 'drum' ? (
+            <Track
+              key={part.id}
+              steps={computeTrackSteps(DRUM_NOTES, part.pattern)}
+              subdivision="16n"
+              volume={part.volume}
+              pan={part.pan}
+              mute={part.muted || (anyPartSoloed && !part.soloed)}
+              onStepPlay={(_stepNotes: StepNoteType[], index: number) =>
+                setStepIndexes((prev) => ({ ...prev, [part.id]: index }))
+              }
+            >
+              <Instrument
+                type="sampler"
+                samples={computeDrumSamples(part.laneSounds)}
+              ></Instrument>
+              {part.effectType && (
+                <Effect type={part.effectType} {...part.effectPropValues} />
+              )}
+            </Track>
+          ) : (
+            <Track
+              key={part.id}
+              steps={computeTrackSteps(SYNTH_LANES, part.pattern)}
+              subdivision="16n"
+              volume={part.volume}
+              pan={part.pan}
+              mute={part.muted || (anyPartSoloed && !part.soloed)}
+              onStepPlay={(_stepNotes: StepNoteType[], index: number) =>
+                setStepIndexes((prev) => ({ ...prev, [part.id]: index }))
+              }
+            >
+              <Instrument
+                type={part.instrumentType}
+                {...part.instrumentPropValues}
+              ></Instrument>
+              {part.effectType && (
+                <Effect type={part.effectType} {...part.effectPropValues} />
+              )}
+            </Track>
+          ),
+        )}
       </Song>
     </div>
   );

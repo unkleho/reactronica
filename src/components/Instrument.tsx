@@ -10,8 +10,7 @@ import React, {
 import { TrackContext } from './Track';
 import Tone from '../lib/tone';
 import { usePrevious } from '../lib/hooks';
-import { MidiNote } from 'types/midi-notes';
-// import { MidiNote } from '../types/midi-notes';
+import { MidiNote } from '../types/midi-notes';
 
 type NoteType = {
   name: string;
