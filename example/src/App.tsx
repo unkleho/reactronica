@@ -26,26 +26,36 @@ import Icon from './Icon';
 
 const snareSample = '/snare-top-off17.wav';
 const kickSample = '/st2_kick_one_shot_low_punch_basic.wav';
+const hatSample = '/chh2.wav';
 
 // Every drum part shares this fixed lane layout - which sample (if any) is
 // loaded at each lane is picked per-lane via a dropdown (see `laneSounds` on
 // DrumPart below).
 const DRUM_STEP_COUNT = 16;
-const DRUM_NOTES: MidiNote[] = ['C3', 'D3'];
+const DRUM_NOTES: MidiNote[] = ['C3', 'D3', 'E3'];
 
-type DrumSoundId = 'kick' | 'snare';
+type DrumSoundId = 'kick' | 'snare' | 'hat';
 const DRUM_SOUNDS: { id: DrumSoundId; label: string; sample: string }[] = [
   { id: 'kick', label: 'Kick', sample: kickSample },
   { id: 'snare', label: 'Snare', sample: snareSample },
+  { id: 'hat', label: 'Hat', sample: hatSample },
 ];
-const DEFAULT_DRUM_LANE_SOUNDS: (DrumSoundId | '')[] = ['kick', 'snare'];
+const DEFAULT_DRUM_LANE_SOUNDS: (DrumSoundId | '')[] = ['kick', 'snare', 'hat'];
 
-// A basic four-on-the-floor kick with a backbeat snare, so the sequencer
-// makes sound immediately rather than starting silent.
+// A basic four-on-the-floor kick with a backbeat snare and steady eighth-note
+// hats, so the sequencer makes sound immediately rather than starting silent.
 const DEFAULT_DRUM_PATTERN: boolean[][] = DRUM_NOTES.map((_, laneIndex) =>
-  Array.from({ length: DRUM_STEP_COUNT }, (_, stepIndex) =>
-    laneIndex === 0 ? stepIndex % 8 === 0 : stepIndex % 8 === 4,
-  ),
+  Array.from({ length: DRUM_STEP_COUNT }, (_, stepIndex) => {
+    if (laneIndex === 0) {
+      return stepIndex % 8 === 0;
+    }
+
+    if (laneIndex === 1) {
+      return stepIndex % 8 === 4;
+    }
+
+    return stepIndex % 2 === 0;
+  }),
 );
 
 // Every synth part shares this fixed lane layout - one octave, rendered high
