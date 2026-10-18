@@ -446,9 +446,11 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       const prevSampleKeys = Object.keys(prevSamples);
       const sampleKeys = Object.keys(samples);
 
-      // Samples to add
+      // Samples to add - new keys, or existing keys pointing at a new file.
+      // Tone.Sampler.add() replaces the buffer for a key that already exists.
       const addSampleKeys = sampleKeys.filter(
-        (key) => !prevSampleKeys.includes(key),
+        (key) =>
+          !prevSampleKeys.includes(key) || samples[key] !== prevSamples[key],
       );
 
       // Samples to remove
@@ -460,17 +462,9 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         // Create an array of promises from `samples`
         const loadSamplePromises = addSampleKeys.map((key) => {
           return new Promise((resolve: (buffer: any) => void) => {
-            const sample = samples[key];
-            const prevSample = prevSamples ? (prevSamples as object)[key] : '';
-
-            // Only update sample if different than before
-            if (sample !== prevSample) {
-              // Pass `resolve` to `onLoad` parameter of Tone.Sampler
-              // When sample loads, this promise will resolve
-              instrumentRef.current.add(key, sample, resolve);
-            } else {
-              resolve(null);
-            }
+            // Pass `resolve` to `onLoad` parameter of Tone.Sampler
+            // When sample loads, this promise will resolve
+            instrumentRef.current.add(key, samples[key], resolve);
           });
         });
 

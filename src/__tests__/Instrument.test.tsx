@@ -129,6 +129,65 @@ describe('Instrument', () => {
     expect(mockSamplerAdd).toHaveBeenNthCalledWith(3, 'C3', SILENT_BUFFER);
   });
 
+  it('should replace sample when an existing key points at a new file', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: '../audio/file1.mp3',
+              D3: '../audio/file2.mp3',
+            }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument
+            type="sampler"
+            samples={{
+              C3: '../audio/file3.mp3',
+              D3: '../audio/file2.mp3',
+            }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    // Only C3 changed, so D3 shouldn't be reloaded
+    expect(mockSamplerAdd).toHaveBeenCalledTimes(1);
+    expect(mockSamplerAdd).toHaveBeenCalledWith(
+      'C3',
+      '../audio/file3.mp3',
+      expect.any(Function),
+    );
+  });
+
+  it('should not reload samples when rerendered with the same files', () => {
+    const { rerender } = render(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="sampler" samples={{ C3: '../audio/file1.mp3' }} />
+        </Track>
+      </Song>,
+    );
+
+    // New object, same contents
+    rerender(
+      <Song isPlaying={true}>
+        <Track steps={['C3']}>
+          <Instrument type="sampler" samples={{ C3: '../audio/file1.mp3' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSamplerAdd).not.toHaveBeenCalled();
+  });
+
   it('should trigger and release note', () => {
     const { rerender } = render(
       <Song isPlaying={true}>
