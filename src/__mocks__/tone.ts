@@ -237,10 +237,16 @@ export class ToneAudioBuffer {
 export const mockSamplerConstructor = jest.fn();
 export const mockSamplerDispose = jest.fn();
 export const mockSamplerAdd = jest.fn();
+/** Every Sampler built, so tests can check its attack and release */
+export const mockSamplerInstances: Sampler[] = [];
 
 export class Sampler {
+  attack = 0;
+  release = 0.1;
+
   constructor(samples) {
     mockSamplerConstructor(samples);
+    mockSamplerInstances.push(this);
 
     this.add = mockSamplerAdd;
     this.dispose = mockSamplerDispose;

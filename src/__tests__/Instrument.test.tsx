@@ -16,6 +16,7 @@ import {
   mockSamplerDispose,
   mockPolySynthSet,
   mockSamplerAdd,
+  mockSamplerInstances,
   SILENT_BUFFER,
 } from '../__mocks__/tone';
 
@@ -68,6 +69,58 @@ describe('Instrument', () => {
     rerender(<Song isPlaying={true}></Song>);
 
     expect(mockSamplerDispose).toBeCalledTimes(1);
+  });
+
+  it('should set and update sampler attack and release from envelope', () => {
+    mockSamplerInstances.length = 0;
+    const samples = { C3: '../audio/file1.mp3' };
+    const { rerender } = render(
+      <Song>
+        <Track>
+          <Instrument
+            type="sampler"
+            samples={samples}
+            envelope={{ attack: 0.02, release: 0.5 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSamplerInstances).toHaveLength(1);
+    const sampler = mockSamplerInstances[0];
+    expect(sampler.attack).toBe(0.02);
+    expect(sampler.release).toBe(0.5);
+
+    rerender(
+      <Song>
+        <Track>
+          <Instrument
+            type="sampler"
+            samples={samples}
+            envelope={{ attack: 0.1, release: 1 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    // Updated in place, not rebuilt (which would reload the samples)
+    expect(mockSamplerConstructor).toHaveBeenCalledTimes(1);
+    expect(sampler.attack).toBe(0.1);
+    expect(sampler.release).toBe(1);
+  });
+
+  it('should keep Tone sampler defaults without an envelope', () => {
+    mockSamplerInstances.length = 0;
+    render(
+      <Song>
+        <Track>
+          <Instrument type="sampler" samples={{ C3: '../audio/file1.mp3' }} />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockSamplerInstances[0].attack).toBe(0);
+    expect(mockSamplerInstances[0].release).toBe(0.1);
   });
 
   it('should add and remove samples from sampler Instrument', () => {
