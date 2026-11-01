@@ -133,6 +133,7 @@ interface InstrumentConsumerProps extends InstrumentProps {
 
 type InstrumentInstance = Partial<{
   curve: number;
+  attack: number;
   release: number;
   triggerAttack: Function;
   triggerAttackRelease: Function;
@@ -321,6 +322,26 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       );
     }
   }, [envelope, type]);
+
+  // Tone.Sampler has no envelope of its own, just `attack` and `release`
+  // times (seconds), which can change while it plays. Runs after the
+  // construction effect above, so a newly built sampler gets them too.
+  const samplerAttack = envelope && envelope.attack;
+  const samplerRelease = envelope && envelope.release;
+
+  useEffect(() => {
+    if (type !== 'sampler' || !instrumentRef.current) {
+      return;
+    }
+
+    if (typeof samplerAttack === 'number') {
+      instrumentRef.current.attack = samplerAttack;
+    }
+
+    if (typeof samplerRelease === 'number') {
+      instrumentRef.current.release = samplerRelease;
+    }
+  }, [samplerAttack, samplerRelease, type, polyphony]);
 
   // -------------------------------------------------------------------------
   // VOLUME / PAN / MUTE / SOLO
