@@ -102,6 +102,33 @@ export const instrumentOscillatorTypes: InstrumentOscillatorType[] = [
   'fatsawtooth',
 ];
 
+/**
+ * Tone.MonoSynth's filter, which every note goes through. Only monoSynth and
+ * duoSynth (two MonoSynth voices) have one.
+ */
+export type InstrumentFilter = {
+  type?: 'lowpass' | 'highpass' | 'bandpass' | 'notch' | 'allpass';
+  /** Hz. With a filterEnvelope, the envelope sets it instead. */
+  frequency?: number;
+  Q?: number;
+  rolloff?: -12 | -24 | -48 | -96;
+};
+
+/**
+ * Tone.MonoSynth's filter envelope: each note sweeps the filter from
+ * `baseFrequency` (Hz) up `octaves` octaves and back, with its own ADSR
+ * (seconds, and sustain 0-1). monoSynth and duoSynth only.
+ */
+export type InstrumentFilterEnvelope = {
+  attack?: number;
+  decay?: number;
+  sustain?: number;
+  release?: number;
+  baseFrequency?: number;
+  octaves?: number;
+  exponent?: number;
+};
+
 export interface InstrumentProps {
   type: InstrumentType;
   notes?: NoteType[];
@@ -115,6 +142,10 @@ export interface InstrumentProps {
     sustain?: number;
     release?: number;
   };
+  /** monoSynth and duoSynth only */
+  filter?: InstrumentFilter;
+  /** monoSynth and duoSynth only */
+  filterEnvelope?: InstrumentFilterEnvelope;
   samples?: {
     [key in MidiNote]?: string;
   };
@@ -159,6 +190,9 @@ const SUPPORTS_LIVE_OSCILLATOR_AND_ENVELOPE_UPDATE: InstrumentType[] = [
   'synth',
 ];
 
+/** Types built from Tone.MonoSynth voices, which have a filter and filter envelope */
+const SUPPORTS_FILTER: InstrumentType[] = ['duoSynth', 'monoSynth'];
+
 const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   // <Instrument /> Props
   type = 'synth',
@@ -166,6 +200,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
   polyphony = 4,
   oscillator,
   envelope,
+  filter,
+  filterEnvelope,
   notes = [],
   samples,
   onLoad,
@@ -255,6 +291,12 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
        * via PolySynth. Monophonic synths can easily be created by setting the
        * `polyphony` prop to 1.
        */
+      const voiceOptions = buildSynthOptions({
+        oscillator,
+        envelope,
+        ...(SUPPORTS_FILTER.includes(type) ? { filter, filterEnvelope } : {}),
+      });
+
       instrumentRef.current = new Tone.PolySynth({
         maxPolyphony: polyphony,
         voice: synth,
@@ -264,10 +306,8 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
         // (voice0/voice1) than the rest, which Tone's default Synth-typed
         // overload doesn't know about.
         options: (type === 'duoSynth'
-          ? buildDuoSynthVoiceOptions(
-              buildSynthOptions({ oscillator, envelope }),
-            )
-          : buildSynthOptions({ oscillator, envelope })) as any,
+          ? buildDuoSynthVoiceOptions(voiceOptions)
+          : voiceOptions) as any,
       });
     }
 
@@ -322,6 +362,21 @@ const InstrumentConsumer: React.FC<InstrumentConsumerProps> = ({
       );
     }
   }, [envelope, type]);
+
+  useEffect(() => {
+    if (
+      SUPPORTS_FILTER.includes(type) &&
+      instrumentRef.current &&
+      (filter || filterEnvelope)
+    ) {
+      const voiceOptions = buildSynthOptions({ filter, filterEnvelope });
+      instrumentRef.current.set(
+        type === 'duoSynth'
+          ? buildDuoSynthVoiceOptions(voiceOptions)
+          : voiceOptions,
+      );
+    }
+  }, [filter, filterEnvelope, type]);
 
   // Tone.Sampler has no envelope of its own, just `attack` and `release`
   // times (seconds), which can change while it plays. Runs after the
@@ -522,6 +577,8 @@ const Instrument: React.FC<InstrumentProps> = ({
   polyphony,
   oscillator,
   envelope,
+  filter,
+  filterEnvelope,
   samples,
   onLoad,
 }) => {
@@ -547,6 +604,8 @@ const Instrument: React.FC<InstrumentProps> = ({
       polyphony={polyphony}
       oscillator={oscillator}
       envelope={envelope}
+      filter={filter}
+      filterEnvelope={filterEnvelope}
       samples={samples}
       onLoad={onLoad}
       // <Track /> Props
@@ -563,11 +622,21 @@ const Instrument: React.FC<InstrumentProps> = ({
 /**
  * Use Instrument's flattened synth props to create options object for Tone JS
  */
-const buildSynthOptions = ({ oscillator, envelope }) => {
-  if (oscillator || envelope) {
+const buildSynthOptions = ({
+  oscillator,
+  envelope,
+  filter,
+  filterEnvelope,
+}: Pick<
+  InstrumentProps,
+  'oscillator' | 'envelope' | 'filter' | 'filterEnvelope'
+>) => {
+  if (oscillator || envelope || filter || filterEnvelope) {
     return {
       ...(envelope ? { envelope } : {}),
       ...(oscillator ? { oscillator } : {}),
+      ...(filter ? { filter } : {}),
+      ...(filterEnvelope ? { filterEnvelope } : {}),
     };
   }
 
