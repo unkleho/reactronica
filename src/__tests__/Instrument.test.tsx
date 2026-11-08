@@ -394,6 +394,108 @@ describe('Synth', () => {
     });
   });
 
+  it('should build monoSynth and duoSynth with a filter and filter envelope', () => {
+    const filter = { type: 'lowpass' as const, Q: 2, rolloff: -24 as const };
+    const filterEnvelope = {
+      attack: 0.005,
+      decay: 0.2,
+      baseFrequency: 60,
+      octaves: 3,
+    };
+    const { rerender } = render(
+      <Song>
+        <Track>
+          <Instrument
+            type="monoSynth"
+            filter={filter}
+            filterEnvelope={filterEnvelope}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'MonoSynth',
+      options: { filter, filterEnvelope },
+    });
+
+    rerender(
+      <Song>
+        <Track>
+          <Instrument
+            type="duoSynth"
+            filter={filter}
+            filterEnvelope={filterEnvelope}
+          />
+        </Track>
+      </Song>,
+    );
+
+    // Both of duoSynth's MonoSynth voices get them
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'DuoSynth',
+      options: {
+        voice0: { filter, filterEnvelope },
+        voice1: { filter, filterEnvelope },
+      },
+    });
+  });
+
+  it('should update the filter and filter envelope live', () => {
+    const { rerender } = render(
+      <Song>
+        <Track>
+          <Instrument type="monoSynth" filterEnvelope={{ decay: 0.2 }} />
+        </Track>
+      </Song>,
+    );
+
+    rerender(
+      <Song>
+        <Track>
+          <Instrument
+            type="monoSynth"
+            filter={{ Q: 4 }}
+            filterEnvelope={{ decay: 0.5 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    // Updated in place, not rebuilt
+    expect(mockPolySynthConstructor).toHaveBeenCalledTimes(1);
+    expect(mockPolySynthSet).toHaveBeenLastCalledWith({
+      filter: { Q: 4 },
+      filterEnvelope: { decay: 0.5 },
+    });
+  });
+
+  it('should leave filter props out of synths without a filter', () => {
+    render(
+      <Song>
+        <Track>
+          <Instrument
+            type="synth"
+            oscillator={{ type: 'sawtooth' }}
+            filter={{ Q: 4 }}
+            filterEnvelope={{ decay: 0.5 }}
+          />
+        </Track>
+      </Song>,
+    );
+
+    expect(mockPolySynthConstructor).toHaveBeenLastCalledWith({
+      maxPolyphony: 4,
+      voice: 'Synth',
+      options: { oscillator: { type: 'sawtooth' } },
+    });
+    expect(mockPolySynthSet).not.toHaveBeenCalledWith(
+      expect.objectContaining({ filter: { Q: 4 } }),
+    );
+  });
+
   it('should update oscillator live for membraneSynth too', () => {
     const { rerender } = render(
       <Song isPlaying={true}>

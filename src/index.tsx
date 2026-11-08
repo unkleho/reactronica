@@ -11,6 +11,8 @@ export {
   InstrumentType,
   InstrumentOscillator,
   InstrumentOscillatorType,
+  InstrumentFilter,
+  InstrumentFilterEnvelope,
   instrumentOscillatorTypes,
 } from './components/Instrument';
 export {
